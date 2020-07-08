@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.CardWithTextAndNumericEntry"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            <Entry Grid.Column="0" Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Start" FontSize="30" TextColor="Black" Margin="0,0,10,10" />
+            <Entry Grid.Column="1" Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardEntry}" Margin="0,0,10,10" Keyboard="Numeric" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="Black" FontSize="25" FontAttributes="Bold"/>
+        </Grid>
+    </Frame>
+</ContentView>

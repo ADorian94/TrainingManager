@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.ExerciseTimer"
+             Title="Exercise timer">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <StackLayout >
+        <!--<Label Text="Timer" Style="{StaticResource Title}"/>-->
+        <controls:SimpleCard CardMainText=" " CardSecondaryText="{Binding ElapsedTime}"/>
+        <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartCommand}" IsVisible="{Binding TimerStopped}" />
+        <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Text="Stop" Style="{StaticResource RedButton}" Command="{Binding StopCommand}"  IsVisible="{Binding TimerStarted}"/>
+            <Button Grid.Column="1" Text="Pause" Style="{StaticResource BlueButton}" Command="{Binding PauseCommand}" IsVisible="{Binding TimerStarted}"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>

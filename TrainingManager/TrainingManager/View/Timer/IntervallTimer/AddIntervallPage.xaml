@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.Timer.IntervallTimer.AddIntervallPage"
+             Title="Add intervall">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <StackLayout>
+        <!--<Label Text="Add intervall" Style="{StaticResource Title}"/>-->
+        <controls:CardWithTextAndNumericEntry CardMainText="{Binding NewIntervallName, Mode=TwoWay}" CardEntry="{Binding NewIntervallTime, Mode=TwoWay}"/>
+        <Button Text="Add" Command="{Binding AddNewIntervallCommand}" Style="{StaticResource RedButton}"/>
+    </StackLayout>
+</ContentPage>

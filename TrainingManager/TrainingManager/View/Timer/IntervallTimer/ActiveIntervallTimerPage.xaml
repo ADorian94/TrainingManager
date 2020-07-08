@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.Timer.IntervallTimer.ActiveIntervallTimerPage">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <StackLayout>
+        <Label Text="{Binding SelectedWorkout.WorkoutName}" Style="{StaticResource Title}"/>
+        <controls:SimpleCard CardMainText="{Binding ActiveIntervallName}" CardSecondaryText="{Binding ActiveIntervallTime}"/>
+        <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartIntervallTimerCommand}" IsVisible="{Binding TimerStopped}" />
+        <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Text="Stop" Style="{StaticResource RedButton}" Command="{Binding StopIntervallTimerCommand}"  IsVisible="{Binding TimerStarted}"/>
+            <Button Grid.Column="1" Text="Pause" Style="{StaticResource BlueButton}" Command="{Binding PauseIntervallTimerCommand}" IsVisible="{Binding TimerStarted}"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.MainPage"
+             Title="1RM Calculation">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <StackLayout>
+        <!--<Label Text="1RM Calculation" Style="{StaticResource Title}"/>-->
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <controls:CardWithEntry Grid.Row="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}"/>
+            <controls:CardWithEntry Grid.Row="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}"/>
+        </Grid>
+        <Button Text="Calculate" Command="{Binding CalculateMaximumCommand}" Style="{StaticResource BlueButton}"/>
+    </StackLayout>
+</ContentPage>

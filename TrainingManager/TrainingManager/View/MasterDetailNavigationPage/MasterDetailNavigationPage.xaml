@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<MasterDetailPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrainingManager.View.MasterDetailNavigationPage.MasterDetailNavigationPage"
+             xmlns:pages="clr-namespace:TrainingManager.View.MasterDetailNavigationPage"
+             xmlns:pages1="clr-namespace:TrainingManager.View"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles">
+    <MasterDetailPage.Resources>
+        <local:Style/>
+    </MasterDetailPage.Resources>
+    <MasterDetailPage.Master>
+        <pages:MasterDetailNavigationPageMaster x:Name="MasterPage" />
+    </MasterDetailPage.Master>
+    <MasterDetailPage.Detail>
+        <NavigationPage BackgroundColor="{StaticResource AppBackgroundColor}">
+            <x:Arguments>
+                <pages1:MainPage />
+            </x:Arguments>
+        </NavigationPage>
+    </MasterDetailPage.Detail>
+</MasterDetailPage>
