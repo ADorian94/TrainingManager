@@ -50,6 +50,17 @@ namespace TrainingManager.ViewModel
             }
         }
 
+        private ObservableCollection<IntervallExercise> _neweWorkoutIntervalls;
+        public ObservableCollection<IntervallExercise> NewWorkoutIntervalls
+        {
+            get => _neweWorkoutIntervalls;
+            set
+            {
+                _neweWorkoutIntervalls = value;
+                OnPropertyChanged();
+            }
+        }
+
         private IntervallExercise _newIntervall;
         public IntervallExercise NewIntervall
         {
@@ -169,6 +180,7 @@ namespace TrainingManager.ViewModel
             TimerStopped = true;
             _intervallWorkoutManager = new IntervallWorkoutManager();
             AllIntervallWorkouts = new ObservableCollection<IntervallWorkout>(_intervallWorkoutManager.GetWorkouts());
+            NewWorkoutIntervalls = new ObservableCollection<IntervallExercise>();
             InitializeCommands();
         }
 
@@ -233,7 +245,7 @@ namespace TrainingManager.ViewModel
             };
 
             _intervallWorkoutManager.AddExerciseToWorkoutById(NewIntervallWorkout.WorkoutId, NewIntervall);
-            //_intervallWorkoutManager.GetIntervallById(NewIntervall.IntervallId);
+            NewWorkoutIntervalls.Add(NewIntervall);
             NewIntervallWorkout.Exercises.Add(NewIntervall);
             CloseAddNewIntervallPage?.Invoke(this, EventArgs.Empty);
         }
@@ -262,6 +274,7 @@ namespace TrainingManager.ViewModel
                 Exercises = new List<IntervallExercise>()
             };
 
+            NewWorkoutIntervalls.Clear();
             NewWorkoutName = string.Empty;
             _intervallWorkoutManager.AddNewWorkout(NewIntervallWorkout);
             OpenNewIntervallWorkoutPage?.Invoke(this, EventArgs.Empty);

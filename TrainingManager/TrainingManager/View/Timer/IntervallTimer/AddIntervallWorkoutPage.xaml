@@ -12,7 +12,7 @@
         <StackLayout >
             <!--<Label Text="New workout" Style="{StaticResource Title}"/>-->
             <controls:CardWithTextEntry CardMainText="Name" CardEntry="{Binding NewWorkoutName, Mode=TwoWay}"/>
-            <ListView ItemsSource="{Binding NewIntervallWorkout.Intervalls}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
+            <ListView ItemsSource="{Binding NewWorkoutIntervalls}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
