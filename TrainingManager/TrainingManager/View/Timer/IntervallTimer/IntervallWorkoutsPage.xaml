@@ -3,21 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
-             x:Class="TrainingManager.View.Timer.IntervallTimer.IntervallWorkoutsPage">
+             x:Class="TrainingManager.View.Timer.IntervallTimer.IntervallWorkoutsPage" >
     <ContentView.Resources>
         <local:Style/>
     </ContentView.Resources>
     <StackLayout>
         <Label Text="Workouts" Style="{StaticResource Title}"/>
-        <ListView ItemsSource="{Binding AllIntervallWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectedItem="{Binding SelectedWorkout}" >
+        <ListView x:Name="WorkoutList" ItemsSource="{Binding AllIntervallWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectedItem="{Binding SelectedWorkout}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <controls:SimpleCard CardMainText="{Binding WorkoutName}" CardTappedCommand="{Binding CardButtonsCommand}" CardTappedCommandParameter="{Binding WorkoutIdString}">
-                            <!--<controls:SimpleCard.GestureRecognizers>
-                                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
-                            </controls:SimpleCard.GestureRecognizers>-->
-                        </controls:SimpleCard>
+                        <!--<controls:SimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.CardButtonsCommand, Source={x:Reference WorkoutList}}" CardTappedCommandParameter="{Binding WorkoutIdString}"/>-->
+                        <controls:LowSimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.CardButtonsCommand, Source={x:Reference WorkoutList}}" ButtonCommandParameter="{Binding WorkoutIdString}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

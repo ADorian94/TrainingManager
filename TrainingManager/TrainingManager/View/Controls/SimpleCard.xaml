@@ -16,7 +16,6 @@
             </Grid.RowDefinitions>
             <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="StartAndExpand" FontSize="30" TextColor="White"/>
             <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}" HorizontalOptions="Center" FontSize="35" TextColor="White"/>
-            <Button Text="btn" Command="{x:Binding Source={x:Reference this}, Path=CardTappedCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=CardTappedCommandParameter}" />
         </Grid>
     </Frame>
 </ContentView>

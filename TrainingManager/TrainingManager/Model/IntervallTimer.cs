@@ -15,8 +15,6 @@ namespace TrainingManager.Model
         public event EventHandler IntervallTimeChanged;
         public event EventHandler IntervallChanged;
         public event EventHandler IntervallFinished;
-        public event EventHandler<MessageEventArgs> StartError;
-
 
         public IntervallTimerManager()
         {
