@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace TrainingManager.ViewModel
+namespace TrainingManager.Model
 {
     public class MessageEventArgs : EventArgs
     {
@@ -13,9 +13,6 @@ namespace TrainingManager.ViewModel
         /// Üzenet eseményargumentum példányosítása.
         /// </summary>
         /// <param name="message">Üzenet.</param>
-        public MessageEventArgs(String message)
-        {
-            Message = message;
-        }
+        public MessageEventArgs(String message) => Message = message;
     }
 }

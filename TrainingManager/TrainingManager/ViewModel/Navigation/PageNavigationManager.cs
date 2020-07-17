@@ -68,10 +68,33 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerVM.CloseAddNewIntervallPage += OnCliseNavigationPage;
             _intervallTimerVM.CloseNewIntervallWorkoutPage += OnCliseNavigationPage;
             _intervallTimerVM.WorkoutSelected += OnWorkoutSelected;
+            _intervallTimerVM.ExceptionOccured += OnExceptionOccured;
+            _intervallTimerVM.MessageApplication += OnMessageApplication;
+        }
+
+        private async void OnMessageApplication(object sender, Model.MessageEventArgs e)
+        {
+            string action = await _masterDetailNavigationPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
+            string x = action;
+        }
+
+        /// <summary>
+        /// Alapvetá hibakezelés.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OnExceptionOccured(object sender, Model.ExceptionArgs e)
+        {
+            _masterDetailNavigationPage.DisplayAlert("Error during start workout.", e.Message, "Ok");
         }
 
         public Page GetMainPage() => _masterDetailNavigationPage;
 
+        /// <summary>
+        /// Alapvető oldal váltás.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnDetailPageSelected(object sender, EventArgs e)
         {
             var item = ((SelectedItemChangedEventArgs)e).SelectedItem as MasterDetailNavigationPageMenuItem;
@@ -88,8 +111,6 @@ namespace TrainingManager.ViewModel.Navigation
                 _navigationPage = new NavigationPage(_intervallTimerTabbedPage);
 
             _masterDetailNavigationPage.Detail = _navigationPage;
-            //if (item.TargetType == typeof(IntervallTimerPage))
-            //    _masterDetailNavigationPage.Detail = _intervallTimerTabbedPage;
 
             _masterDetailNavigationPage.IsPresented = false;
         }

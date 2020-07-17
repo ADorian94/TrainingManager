@@ -11,7 +11,6 @@ namespace TrainingManager.ViewModel
     {
         private readonly Action<Object> _execute; // a tevékenységet végrehajtó lambda-kifejezés
         private readonly Func<Object, Boolean> _canExecute; // a tevékenység feltételét ellenőző lambda-kifejezés
-        private Action<object, SelectedItemChangedEventArgs> workoutSelected;
 
         /// <summary>
         /// Parancs létrehozása.
@@ -19,10 +18,7 @@ namespace TrainingManager.ViewModel
         /// <param name="execute">Végrehajtandó tevékenység.</param>
         public DelegateCommand(Action<Object> execute) : this(null, execute) { }
 
-        public DelegateCommand(Action<object, SelectedItemChangedEventArgs> workoutSelected)
-        {
-            this.workoutSelected = workoutSelected;
-        }
+        public DelegateCommand(Action<object, SelectedItemChangedEventArgs> workoutSelected) { }
 
         /// <summary>
         /// Parancs létrehozása.
@@ -31,12 +27,7 @@ namespace TrainingManager.ViewModel
         /// <param name="execute">Végrehajtandó tevékenység.</param>
         public DelegateCommand(Func<Object, Boolean> canExecute, Action<Object> execute)
         {
-            if (execute == null)
-            {
-                throw new ArgumentNullException("execute");
-            }
-
-            _execute = execute;
+            _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
         }
 
@@ -62,19 +53,20 @@ namespace TrainingManager.ViewModel
         public void Execute(Object parameter)
         {
             if (!CanExecute(parameter))
-            {
                 throw new InvalidOperationException("Command execution is disabled.");
+            try
+            {
+                _execute(parameter);
             }
-            _execute(parameter);
+            catch
+            {
+                Console.WriteLine("Fatal error.");
+            }
         }
 
         /// <summary>
         /// Végrehajthatóság változásának eseménykiváltása.
         /// </summary>
-        public void RaiseCanExecuteChanged()
-        {
-            if (CanExecuteChanged != null)
-                CanExecuteChanged(this, EventArgs.Empty);
-        }
+        public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }

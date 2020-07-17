@@ -9,7 +9,7 @@
     </ContentView.Resources>
     <StackLayout>
         <Label Text="{Binding SelectedWorkout.WorkoutName}" Style="{StaticResource Title}"/>
-        <controls:SimpleCard CardMainText="{Binding ActiveIntervallName}" CardSecondaryText="{Binding ActiveIntervallTime}"/>
+        <controls:SimpleCard CardMainText="{Binding ActiveIntervallName}" CardSecondaryText="{Binding ActiveIntervallTime}" VerticalOptions="CenterAndExpand"/>
         <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartIntervallTimerCommand}" IsVisible="{Binding TimerStopped}" />
         <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
             <Grid.ColumnDefinitions>

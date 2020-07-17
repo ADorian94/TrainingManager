@@ -1,4 +1,6 @@
-﻿using Xamarin.Forms;
+﻿using System;
+using TrainingManager.ViewModel;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TrainingManager.View.Controls
@@ -6,6 +8,8 @@ namespace TrainingManager.View.Controls
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class SimpleCard : ContentView
     {
+        public event EventHandler ButtonClickHandler;
+
         public SimpleCard()
         {
             InitializeComponent();
@@ -29,22 +33,31 @@ namespace TrainingManager.View.Controls
         public static readonly BindableProperty CardSecondaryTextProperty =
             BindableProperty.Create("CardSecondaryText", typeof(string), typeof(SimpleCard), string.Empty);
 
-        //public TapGestureRecognizer CardTappedCommand
-        //{
-        //    get { return (TapGestureRecognizer)GetValue(CardTappedCommandProperty); }
-        //    set { SetValue(CardTappedCommandProperty, value); }
-        //}
+        public DelegateCommand CardTappedCommand
+        {
+            get { return (DelegateCommand)GetValue(CardTappedCommandProperty); }
+            set { SetValue(CardTappedCommandProperty, value); }
+        }
 
-        //public static readonly BindableProperty CardTappedCommandProperty =
-        //    BindableProperty.Create("CardTappedCommand", typeof(TapGestureRecognizer), typeof(SimpleCard), null);
+        public static readonly BindableProperty CardTappedCommandProperty =
+            BindableProperty.Create("CardTappedCommand", typeof(DelegateCommand), typeof(SimpleCard), defaultValue: default(DelegateCommand), propertyChanged: OnTapCommandPropertyChanged);
 
-        //public DelegateCommand CardTappedCommand
-        //{
-        //    get { return (DelegateCommand)GetValue(CardTappedCommandProperty); }
-        //    set { SetValue(CardTappedCommandProperty, value); }
-        //}
+        private static void OnTapCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is SimpleCard headerTemplate && newValue is DelegateCommand command)
+            {
+                headerTemplate.CardTappedCommand = command;
+            }
+        }
 
-        //public static readonly BindableProperty CardTappedCommandProperty =
-        //    BindableProperty.Create("CardTappedCommand", typeof(DelegateCommand), typeof(SimpleCard), null);
+        public string CardTappedCommandParameter
+        {
+            get { return (string)GetValue(CardTappedCommandParameterProperty); }
+            set { SetValue(CardTappedCommandParameterProperty, value); }
+        }
+
+        public static readonly BindableProperty CardTappedCommandParameterProperty =
+            BindableProperty.Create("CardTappedCommandParameter", typeof(string), typeof(SimpleCard), string.Empty);
+
     }
 }

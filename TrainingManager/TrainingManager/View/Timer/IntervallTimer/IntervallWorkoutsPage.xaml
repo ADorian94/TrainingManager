@@ -13,7 +13,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <controls:SimpleCard CardMainText="{Binding WorkoutName}">
+                        <controls:SimpleCard CardMainText="{Binding WorkoutName}" CardTappedCommand="{Binding CardButtonsCommand}" CardTappedCommandParameter="{Binding WorkoutIdString}">
                             <!--<controls:SimpleCard.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
                             </controls:SimpleCard.GestureRecognizers>-->

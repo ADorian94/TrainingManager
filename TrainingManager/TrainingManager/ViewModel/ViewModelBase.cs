@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using TrainingManager.Model;
 
 namespace TrainingManager.ViewModel
 {
@@ -19,6 +20,8 @@ namespace TrainingManager.ViewModel
         /// </summary>
         public event EventHandler<MessageEventArgs> MessageApplication;
 
+        public event EventHandler<ExceptionArgs> ExceptionOccured;
+
         /// <summary>
         /// Tulajdonság változása ellenőrzéssel.
         /// </summary>
@@ -32,10 +35,9 @@ namespace TrainingManager.ViewModel
         /// Üzenet küldésének eseménykiváltása.
         /// </summary>
         /// <param name="message">Az üzenet.</param>
-        protected void OnMessageApplication(String message)
-        {
-            MessageApplication?.Invoke(this, new MessageEventArgs(message));
-        }
+        protected void OnMessageApplication(string message) => MessageApplication?.Invoke(this, new MessageEventArgs(message));
+
+        protected void OnExeptionoccured(ExceptionArgs exception) => ExceptionOccured?.Invoke(this, exception);
 
         protected abstract void InitializeCommands();
     }

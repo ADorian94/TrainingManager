@@ -84,7 +84,6 @@ namespace TrainingManager.ViewModel
             }
         }
 
-
         private bool _timerStarted;
         public bool TimerStarted
         {
@@ -169,13 +168,14 @@ namespace TrainingManager.ViewModel
         public DelegateCommand AddNewIntervallCommand { get; private set; }
         public DelegateCommand OpenNewIntervallWorkoutCommand { get; private set; }
         public DelegateCommand AddNewIntervallWorkoutCommand { get; private set; }
+        public DelegateCommand CardButtonsCommand { get; private set; }
 
         public IntervallTimerManagerVM()
         {
             _intervallTimerManager = new IntervallTimerManager();
             _intervallTimerManager.IntervallTimeChanged += new EventHandler(OnIntervallTimeChanged);
             _intervallTimerManager.IntervallChanged += new EventHandler(OnIntervallChanged);
-            _intervallTimerManager.IntervallFinished += new EventHandler(IntervallFinished);
+            _intervallTimerManager.IntervallFinished += new EventHandler(OnIntervallFinished);
             TimerStarted = false;
             TimerStopped = true;
             _intervallWorkoutManager = new IntervallWorkoutManager();
@@ -193,9 +193,12 @@ namespace TrainingManager.ViewModel
             AddNewIntervallWorkoutCommand = new DelegateCommand(AddNewIntervallWorkout);
             OpenNewIntervallPageCommand = new DelegateCommand(OpenNewIntervall);
             AddNewIntervallCommand = new DelegateCommand(AddNewIntervall);
+            CardButtonsCommand = new DelegateCommand(CardButtons);
         }
 
-        private void IntervallFinished(object sender, EventArgs e)
+        private void CardButtons(object obj) => OnMessageApplication((string)obj);
+
+        private void OnIntervallFinished(object sender, EventArgs e)
         {
             ActiveIntervallTime = _intervallTimerManager.GetRemainingTimeOfActiveIntervall();
             ActiveIntervallName = _intervallTimerManager.GetNameOfActiveintervall();
@@ -213,12 +216,19 @@ namespace TrainingManager.ViewModel
 
         private void StartIntervallTimer(object obj)
         {
-            _intervallTimerManager.SetActiveWorkout(SelectedWorkout.Exercises);
-            _intervallTimerManager.StartIntervallTimer();
-            ActiveIntervallName = _intervallTimerManager.GetNameOfActiveintervall();
-            ActiveIntervallTime = _intervallTimerManager.GetRemainingTimeOfActiveIntervall();
-            TimerStarted = true;
-            TimerStopped = false;
+            try
+            {
+                _intervallTimerManager.SetActiveWorkout(SelectedWorkout.Exercises);
+                _intervallTimerManager.StartIntervallTimer();
+                ActiveIntervallName = _intervallTimerManager.GetNameOfActiveintervall();
+                ActiveIntervallTime = _intervallTimerManager.GetRemainingTimeOfActiveIntervall();
+                TimerStarted = true;
+                TimerStopped = false;
+            }
+            catch (Exception ex)
+            {
+                OnExeptionoccured(new ExceptionArgs(ex.Message));
+            }
         }
 
         private void StopIntervallTimer(object obj)
