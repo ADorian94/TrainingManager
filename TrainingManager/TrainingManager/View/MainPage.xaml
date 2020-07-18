@@ -9,7 +9,7 @@
         <local:Style/>
     </ContentView.Resources>
     <StackLayout>
-        <!--<Label Text="1RM Calculation" Style="{StaticResource Title}"/>-->
+        <Label Text=" " Style="{StaticResource Title}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

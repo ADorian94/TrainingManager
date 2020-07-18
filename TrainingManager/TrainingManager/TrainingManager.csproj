@@ -36,7 +36,13 @@
     <EmbeddedResource Update="View\Controls\LowSimpleCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\Controls\RoundCard.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\Controls\SimpleCard.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\Controls\SimpleRoundCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\MasterDetailNavigationPage\MasterDetailNavigationPage.xaml">
@@ -71,9 +77,6 @@
   <ItemGroup>
     <None Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Update="Resources\Images\open-menu.png">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="View\Controls\CardWithEntry.xaml">
       <Generator>MSBuild:Compile</Generator>

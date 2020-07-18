@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using TrainingManager.Model.Interfaces;
 using TrainingManager.Model.Persistence;
 using TrainingManager.Model.Workouts;
@@ -77,5 +79,31 @@ namespace TrainingManager.Model
         /// </summary>
         /// <param name="workoutId">Workout id</param>
         public void SaveWorkoutById(Guid workoutId) => _xmlHandler.SaveToXml(_workouts.Single(x => x.WorkoutId == workoutId));
+
+        /// <summary>
+        /// Remove selected workout by guid.
+        /// </summary>
+        /// <param name="stringGuid">Workout id</param>
+        public void DeleteWorkoutById(string stringGuid)
+        {
+            _workouts.Remove(_workouts.Single(x => x.WorkoutIdString == stringGuid));
+            string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"{stringGuid}.xml");
+            int tryCount = 5;
+
+            try
+            {
+                if (File.Exists(filePath))
+                    File.Delete(filePath);
+            }
+            catch
+            {
+                if (tryCount > 0)
+                {
+                    --tryCount;
+                    Thread.Sleep(100);
+                    File.Delete(filePath);
+                }
+            }
+        }
     }
 }

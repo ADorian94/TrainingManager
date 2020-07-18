@@ -8,12 +8,11 @@
         <local:Style/>
     </ContentView.Resources>
     <StackLayout>
-        <Label Text="Workouts" Style="{StaticResource Title}"/>
+        <!--<Label Text="" Style="{StaticResource Title}"/>-->
         <ListView x:Name="WorkoutList" ItemsSource="{Binding AllIntervallWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectedItem="{Binding SelectedWorkout}" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <!--<controls:SimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.CardButtonsCommand, Source={x:Reference WorkoutList}}" CardTappedCommandParameter="{Binding WorkoutIdString}"/>-->
                         <controls:LowSimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.CardButtonsCommand, Source={x:Reference WorkoutList}}" ButtonCommandParameter="{Binding WorkoutIdString}"/>
                     </ViewCell>
                 </DataTemplate>

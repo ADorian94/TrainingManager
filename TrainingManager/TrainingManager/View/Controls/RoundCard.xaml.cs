@@ -1,12 +1,13 @@
-﻿using Xamarin.Forms;
+﻿
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace TrainingManager.View.Controls
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class SimpleCard : ContentView
+    public partial class RoundCard : ContentView
     {
-        public SimpleCard()
+        public RoundCard()
         {
             InitializeComponent();
         }

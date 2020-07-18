@@ -16,12 +16,12 @@
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
-                            <controls:SimpleCard CardMainText="{Binding IntervallName}" CardSecondaryText="{Binding IntervallTime}"/>
+                            <controls:SimpleCard CardMainText="{Binding ExerciseName}" CardSecondaryText="{Binding IntervallTime}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <Grid VerticalOptions="EndAndExpand">
+            <Grid VerticalOptions="End">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>

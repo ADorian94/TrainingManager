@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.RoundCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+
+    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" HeightRequest="200" WidthRequest="200" CornerRadius="200">
+        <Grid VerticalOptions="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="2"/>
+                <RowDefinition Height="40"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Center" FontSize="30" TextColor="White"/>
+            <Frame Grid.Row="1" WidthRequest="100" HeightRequest="2" BackgroundColor="White"/>
+            <Label Grid.Row="2" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}" HorizontalOptions="Center" FontSize="35" TextColor="White"/>
+        </Grid>
+    </Frame>
+</ContentView>

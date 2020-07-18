@@ -10,14 +10,13 @@
     </ContentView.Resources>
     <StackLayout >
         <!--<Label Text="Timer" Style="{StaticResource Title}"/>-->
-        <controls:SimpleCard CardMainText=" " CardSecondaryText="{Binding ElapsedTime}"/>
+        <controls:SimpleRoundCard CardMainText="{Binding ElapsedTime}" HorizontalOptions="Center" VerticalOptions="Center"/>
         <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartCommand}" IsVisible="{Binding TimerStopped}" />
         <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
             <Button Grid.Column="0" Text="Stop" Style="{StaticResource RedButton}" Command="{Binding StopCommand}"  IsVisible="{Binding TimerStarted}"/>
             <Button Grid.Column="1" Text="Pause" Style="{StaticResource BlueButton}" Command="{Binding PauseCommand}" IsVisible="{Binding TimerStarted}"/>
         </Grid>

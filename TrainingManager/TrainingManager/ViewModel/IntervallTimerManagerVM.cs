@@ -16,6 +16,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler OpenNewIntervallWorkoutPage;
         public event EventHandler CloseNewIntervallWorkoutPage;
         public event EventHandler WorkoutSelected;
+        public event EventHandler<MessageEventArgs> WorkoutMenuSelected;
 
         private ObservableCollection<IntervallExercise> _activeWorkoutIntervalls;
         public ObservableCollection<IntervallExercise> ActiveWorkoutIntervalls
@@ -140,6 +141,7 @@ namespace TrainingManager.ViewModel
         }
 
         private string _activeIntervallName;
+
         public string ActiveIntervallName
         {
             get => _activeIntervallName;
@@ -196,7 +198,27 @@ namespace TrainingManager.ViewModel
             CardButtonsCommand = new DelegateCommand(CardButtons);
         }
 
-        private void CardButtons(object obj) => OnMessageApplication((string)obj);
+        public void DeleteWorkout(string stringGuid)
+        {
+            _intervallWorkoutManager.DeleteWorkoutById(stringGuid);
+
+            if (SelectedWorkout?.WorkoutIdString == stringGuid)
+                SelectedWorkout = new IntervallWorkout();
+
+            UpdateIntervallWorkouts();
+        }
+
+        public void EditWorkout(string stringGuid)
+        {
+            NewIntervallWorkout = _intervallWorkoutManager.GetWorkoutById(new Guid(stringGuid));
+            NewWorkoutIntervalls = new ObservableCollection<IntervallExercise>(NewIntervallWorkout.Exercises);
+            OpenNewIntervallWorkoutPage?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void UpdateIntervallWorkouts() =>
+            AllIntervallWorkouts = new ObservableCollection<IntervallWorkout>(_intervallWorkoutManager.GetWorkouts());
+
+        private void CardButtons(object obj) => WorkoutMenuSelected?.Invoke(this, new MessageEventArgs((string)obj));
 
         private void OnIntervallFinished(object sender, EventArgs e)
         {

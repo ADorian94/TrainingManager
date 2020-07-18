@@ -1,4 +1,5 @@
 ﻿using System;
+using TrainingManager.Model;
 using TrainingManager.Model.Navigation.MasterDetailPageItem;
 using TrainingManager.View;
 using TrainingManager.View.MasterDetailNavigationPage;
@@ -70,13 +71,23 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerVM.WorkoutSelected += OnWorkoutSelected;
             _intervallTimerVM.ExceptionOccured += OnExceptionOccured;
             _intervallTimerVM.MessageApplication += OnMessageApplication;
+            _intervallTimerVM.WorkoutMenuSelected += OnWorkoutMenuSelected; ;
+
         }
 
-        private async void OnMessageApplication(object sender, Model.MessageEventArgs e)
+        private async void OnWorkoutMenuSelected(object sender, MessageEventArgs e)
         {
             string action = await _masterDetailNavigationPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
-            string x = action;
+
+            if (action == "Delete")
+                _intervallTimerVM.DeleteWorkout(e.Message);
+
+            if (action == "Edit")
+                _intervallTimerVM.EditWorkout(e.Message);
         }
+
+        private async void OnMessageApplication(object sender, MessageEventArgs e) =>
+            await _masterDetailNavigationPage.DisplayAlert(e.Message, e.Message, "Ok");
 
         /// <summary>
         /// Alapvetá hibakezelés.
