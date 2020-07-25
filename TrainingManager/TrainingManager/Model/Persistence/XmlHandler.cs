@@ -21,6 +21,10 @@ namespace TrainingManager.Model.Persistence
         {
             string fileName = $"{workoutToSave.WorkoutId}.xml";
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), fileName);
+
+            if (!File.Exists(filePath))
+                File.Delete(filePath);
+
             FileStream fileStream = File.Create(filePath);
             _xmlSerializer = new XmlSerializer(typeof(T));
             _xmlSerializer.Serialize(fileStream, workoutToSave);

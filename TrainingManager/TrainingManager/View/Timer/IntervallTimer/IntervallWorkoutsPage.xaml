@@ -13,7 +13,7 @@
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <controls:LowSimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.CardButtonsCommand, Source={x:Reference WorkoutList}}" ButtonCommandParameter="{Binding WorkoutIdString}"/>
+                        <controls:LowSimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.WorkoutMenuSelectedCommand, Source={x:Reference WorkoutList}}" ButtonCommandParameter="{Binding WorkoutIdString}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

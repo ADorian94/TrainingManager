@@ -41,6 +41,33 @@ namespace TrainingManager.Model
             _workouts.Single(w => w.WorkoutId == workoutId).Exercises.Add(exercise);
 
         /// <summary>
+        /// Remove specified exercise from the specified workout
+        /// </summary>
+        /// <param name="workoutId"></param>
+        /// <param name="exerciseId"></param>
+        public void DeleteExerciseFromWorkoutById(Guid workoutId, Guid exerciseId)
+        {
+            foreach (var workout in _workouts)
+            {
+                ExerciseTemplate tempExercise = null;
+
+                if (workout.WorkoutId.Equals(workoutId))
+                {
+                    foreach (var exercise in workout.Exercises)
+                    {
+                        if (exercise.ExerciseId.Equals(exerciseId))
+                            tempExercise = exercise;
+                    }
+                }
+
+                if (tempExercise != null)
+                    workout.Exercises.Remove(tempExercise);
+            }
+        }
+
+        //_workouts.First(w => w.WorkoutId == workoutId).Exercises.Remove(_workouts.First(w => w.WorkoutId.Equals(workoutId)).Exercises.First(e => e.ExerciseId.Equals(exerciseId)));
+
+        /// <summary>
         /// Set the name of the secified workout.
         /// </summary>
         /// <param name="workoutId">Unique workout id</param>
@@ -105,5 +132,8 @@ namespace TrainingManager.Model
                 }
             }
         }
+
+        public ExerciseTemplate GetExerciseInWorkoutById(Guid workoutId, Guid exerciseId) =>
+            (_workouts.Single(x => x.WorkoutId.Equals(workoutId))).Exercises.Single(x => x.ExerciseId.Equals(exerciseId));
     }
 }

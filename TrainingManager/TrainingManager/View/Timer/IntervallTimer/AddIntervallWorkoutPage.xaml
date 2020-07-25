@@ -12,11 +12,11 @@
         <StackLayout >
             <!--<Label Text="New workout" Style="{StaticResource Title}"/>-->
             <controls:CardWithTextEntry CardMainText="Name" CardEntry="{Binding NewWorkoutName, Mode=TwoWay}"/>
-            <ListView ItemsSource="{Binding NewWorkoutIntervalls}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
+            <ListView x:Name="IntervallList" ItemsSource="{Binding NewWorkoutIntervalls}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
-                            <controls:SimpleCard CardMainText="{Binding ExerciseName}" CardSecondaryText="{Binding IntervallTime}"/>
+                            <controls:SimpleCard CardMainText="{Binding ExerciseName}" CardSecondaryText="{Binding IntervallTime}" ButtonCommand="{Binding BindingContext.IntervallMenuSelectedCommand, Source={x:Reference IntervallList}}" ButtonCommandParameter="{Binding ExerciseIdString}" ButtonVisibility="True"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

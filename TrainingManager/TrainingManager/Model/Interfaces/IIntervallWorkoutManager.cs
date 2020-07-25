@@ -19,8 +19,10 @@ namespace TrainingManager.Model.Interfaces
         void SetWorkoutNameById(Guid workoutId, string workoutName);
         void AddExerciseToWorkoutById(Guid workoutId, ExerciseTemplate exercise);
         List<ExerciseTemplate> GetWorkoutExercisesById(Guid workoutId);
+        ExerciseTemplate GetExerciseInWorkoutById(Guid workoutId, Guid exerciseId);
         void SaveWorkoutById(Guid workoutId);
         List<WorkoutTemplate> GetWorkouts();
         void DeleteWorkoutById(string stringGuid);
+        void DeleteExerciseFromWorkoutById(Guid workoutId, Guid exerciseId);
     }
 }

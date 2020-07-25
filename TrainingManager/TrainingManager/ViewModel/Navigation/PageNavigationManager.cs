@@ -71,8 +71,20 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerVM.WorkoutSelected += OnWorkoutSelected;
             _intervallTimerVM.ExceptionOccured += OnExceptionOccured;
             _intervallTimerVM.MessageApplication += OnMessageApplication;
-            _intervallTimerVM.WorkoutMenuSelected += OnWorkoutMenuSelected; ;
+            _intervallTimerVM.WorkoutMenuSelected += OnWorkoutMenuSelected;
+            _intervallTimerVM.IntervallMenuSelected += OnIntervallMenuelected;
 
+        }
+
+        private async void OnIntervallMenuelected(object sender, MessageEventArgs e)
+        {
+            string action = await _masterDetailNavigationPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
+
+            if (action == "Delete")
+                _intervallTimerVM.DeleteIntervall(e.Message);
+
+            if (action == "Edit")
+                _intervallTimerVM.EditIntervall(e.Message);
         }
 
         private async void OnWorkoutMenuSelected(object sender, MessageEventArgs e)
