@@ -1,14 +1,22 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
              x:Class="TrainingManager.View.Timer.IntervallTimer.ActiveIntervallTimerPage">
+    <!--<ContentPage.Resources>
+        <ResourceDictionary>
+            -->
+    <!--<converter:IntToTimeConverter x:Key="intToTimeConverter" />-->
+    <!--
+        </ResourceDictionary>-->
     <ContentView.Resources>
         <local:Style/>
     </ContentView.Resources>
     <StackLayout>
         <Label Text="{Binding SelectedWorkout.WorkoutName}" Style="{StaticResource Title}"/>
+        <!--<controls:RoundCard CardMainText="{Binding ActiveIntervallName}" CardSecondaryText="{Binding ActiveIntervallTime, Converter={StaticResource intToTimeConverter}}" VerticalOptions="Center" HorizontalOptions="Center"/>-->
         <controls:RoundCard CardMainText="{Binding ActiveIntervallName}" CardSecondaryText="{Binding ActiveIntervallTime}" VerticalOptions="Center" HorizontalOptions="Center"/>
         <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartIntervallTimerCommand}" IsVisible="{Binding TimerStopped}" />
         <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">

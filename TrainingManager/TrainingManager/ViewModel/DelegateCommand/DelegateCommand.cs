@@ -58,9 +58,9 @@ namespace TrainingManager.ViewModel
             {
                 _execute(parameter);
             }
-            catch
+            catch (Exception ex)
             {
-                Console.WriteLine("Fatal error.");
+                Console.WriteLine($"Fatal error. {ex.Message}");
             }
         }
 

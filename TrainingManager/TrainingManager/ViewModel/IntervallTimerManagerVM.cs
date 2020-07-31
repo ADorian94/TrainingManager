@@ -348,6 +348,13 @@ namespace TrainingManager.ViewModel
 
         private void OpenNewIntervall(object obj)
         {
+            NewIntervall = new IntervallExercise()
+            {
+                ExerciseId = Guid.NewGuid(),
+                ExerciseName = string.Empty,
+                IntervallTime = 0,
+            };
+
             NewIntervallName = string.Empty;
             NewIntervallTime = 0;
             OpenNewIntervallPage?.Invoke(this, EventArgs.Empty);

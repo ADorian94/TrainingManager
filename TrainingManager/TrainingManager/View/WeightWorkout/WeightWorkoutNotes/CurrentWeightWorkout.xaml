@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.WeightWorkout.WeightWorkoutNotes.CurrentWeightWorkout"
+             Title="Note">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <StackLayout>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <ScrollView Grid.Row="0">
+                <StackLayout >
+                    <Label Text="{Binding Today}" Style="{StaticResource Title}"/>
+                    <ListView x:Name="ExerciseList" ItemsSource="{Binding WeightWorkout}" SeparatorVisibility="None" HasUnevenRows="False">
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <ViewCell>
+                                    <controls:LowSimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.WorkoutMenuSelectedCommand, Source={x:Reference WorkoutList}}" ButtonCommandParameter="{Binding WorkoutIdString}"/>
+                                </ViewCell>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackLayout>
+            </ScrollView>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Text="Save" Style="{StaticResource RedButton}" />
+                <Button Grid.Column="1" Text="New" Command="{Binding OpenAddWeightExerciseCommand}" Style="{StaticResource BlueButton}" />
+            </Grid>
+        </Grid>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.WeightWorkout.WeightWorkoutNotes.AddWeightExercise"
+             Title="Add exercise">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <!--<ScrollView>-->
+    <StackLayout>
+        <Label Text=" " Style="{StaticResource Title}"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <controls:CardWithTextEntry Grid.Row="0" CardMainText="Name" CardEntry="{Binding ExerciseName, Mode=TwoWay}"/>
+            <controls:CardWithEntry Grid.Row="1" CardMainText="Weight" CardEntry="{Binding ExerciseWeight, Mode=TwoWay}"/>
+            <controls:CardWithEntry Grid.Row="2" CardMainText="Reps" CardEntry="{Binding ExerciseReps, Mode=TwoWay}"/>
+            <controls:CardWithTextEditor Grid.Row="3" CardMainText="Comment" EditorText="{Binding ExercieNote, Mode=TwoWay}" CardFrameTapped="{Binding OpenNoteEditorCommand}"/>
+        </Grid>
+        <Button Text="Add" Command="{Binding AddWeightExerciseToWorkoutCommand}" Style="{StaticResource BlueButton}"/>
+    </StackLayout>
+    <!--</ScrollView>-->
+</ContentPage>

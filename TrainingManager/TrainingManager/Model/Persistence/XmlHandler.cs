@@ -32,18 +32,26 @@ namespace TrainingManager.Model.Persistence
 
         public List<T> LoadWorkoutXmls()
         {
-            string[] files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
-            StreamReader fileStream;
-            _xmlSerializer = new XmlSerializer(typeof(T));
-            List<T> loadedWorkout = new List<T>();
-
-            foreach (var file in files)
+            try
             {
-                fileStream = new StreamReader(file);
-                loadedWorkout.Add((T)_xmlSerializer.Deserialize(fileStream));
-            }
+                string[] files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+                StreamReader fileStream;
+                _xmlSerializer = new XmlSerializer(typeof(T));
+                List<T> loadedWorkout = new List<T>();
 
-            return loadedWorkout;
+                foreach (var file in files)
+                {
+                    //File.Delete(file);
+                    fileStream = new StreamReader(file);
+                    loadedWorkout.Add((T)_xmlSerializer.Deserialize(fileStream));
+                }
+
+                return loadedWorkout;
+            }
+            catch (Exception ex)
+            {
+                return new List<T>();
+            }
         }
     }
 }

@@ -10,7 +10,7 @@
     </ContentView.Resources>
     <StackLayout >
         <!--<Label Text="Timer" Style="{StaticResource Title}"/>-->
-        <controls:SimpleRoundCard CardMainText="{Binding ElapsedTime}" HorizontalOptions="Center" VerticalOptions="Center"/>
+        <controls:SimpleRoundCard CardMainText="{Binding ElapsedTime}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
         <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartCommand}" IsVisible="{Binding TimerStopped}" />
         <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
             <Grid.ColumnDefinitions>

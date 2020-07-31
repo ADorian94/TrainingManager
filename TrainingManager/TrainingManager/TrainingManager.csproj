@@ -30,6 +30,9 @@
     <EmbeddedResource Update="View\Controls\CardWithTextAndNumericEntry.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\Controls\CardWithTextEditor.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\Controls\CardWithTextEntry.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
@@ -72,6 +75,15 @@
     <EmbeddedResource Update="View\Timer\IntervallTimer\IntervallWorkoutsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutNotes\AddWeightExercise.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutNotes\CurrentWeightWorkout.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutNotes\NoteEditor.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
   </ItemGroup>
 
   <ItemGroup>
@@ -90,5 +102,10 @@
     <None Update="View\Styles\Styles.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="View\WeightWorkout\WeightWorkoutExercises\" />
+    <Folder Include="View\WeightWorkout\WeightWorkoutHistory\" />
   </ItemGroup>
 </Project>
