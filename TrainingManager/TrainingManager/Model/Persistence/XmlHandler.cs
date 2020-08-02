@@ -17,12 +17,17 @@ namespace TrainingManager.Model.Persistence
 
         }
 
-        public void SaveToXml(T workoutToSave)
+        public void SaveToXml(T workoutToSave, WorkoutType workoutType)
         {
-            string fileName = $"{workoutToSave.WorkoutId}.xml";
+            string folder = GetFolderByWorkoutType(workoutType);
+            string fileName = $@"{folder}\{workoutToSave.WorkoutId}.xml";
+
+            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder)))
+                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
+
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), fileName);
 
-            if (!File.Exists(filePath))
+            if (File.Exists(filePath))
                 File.Delete(filePath);
 
             FileStream fileStream = File.Create(filePath);
@@ -30,11 +35,12 @@ namespace TrainingManager.Model.Persistence
             _xmlSerializer.Serialize(fileStream, workoutToSave);
         }
 
-        public List<T> LoadWorkoutXmls()
+        public List<T> LoadWorkoutXmls(WorkoutType workoutType)
         {
             try
             {
-                string[] files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+                string folder = workoutType == WorkoutType.IntervallWorkout ? "Intervall" : "Weight";
+                string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
                 StreamReader fileStream;
                 _xmlSerializer = new XmlSerializer(typeof(T));
                 List<T> loadedWorkout = new List<T>();
@@ -51,6 +57,19 @@ namespace TrainingManager.Model.Persistence
             catch (Exception ex)
             {
                 return new List<T>();
+            }
+        }
+
+        private string GetFolderByWorkoutType(WorkoutType workoutType)
+        {
+            switch (workoutType)
+            {
+                case WorkoutType.IntervallWorkout:
+                    return UsedFolders.INTERVALL;
+                case WorkoutType.WeightWorkout:
+                    return UsedFolders.WEIGHT;
+                default:
+                    throw new NotImplementedException();
             }
         }
     }

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.WeightWorkout.WeightWorkoutMenu"
+             Title="Notes">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <StackLayout>
+        <controls:SimpleCard CardMainText="Training log" CardFrameTapped="{Binding OpenTrainingLogOpenCommand}"/>
+        <!--<controls:SimpleCard CardMainText="Workout" />-->
+        <controls:SimpleCard CardMainText="History" />
+    </StackLayout>
+</ContentPage>

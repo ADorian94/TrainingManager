@@ -323,7 +323,7 @@ namespace TrainingManager.ViewModel
             };
 
             _intervallWorkoutManager.SetWorkoutNameById(NewIntervallWorkout.WorkoutId, NewWorkoutName);
-            _intervallWorkoutManager.SaveWorkoutById(NewIntervallWorkout.WorkoutId);
+            _intervallWorkoutManager.SaveWorkoutById(NewIntervallWorkout.WorkoutId, WorkoutType.IntervallWorkout);
 
             if (!AllIntervallWorkouts.Any(x => x.WorkoutIdString == NewIntervallWorkout.WorkoutIdString))
                 AllIntervallWorkouts.Add(_intervallWorkoutManager.GetWorkoutById(NewIntervallWorkout.WorkoutId));

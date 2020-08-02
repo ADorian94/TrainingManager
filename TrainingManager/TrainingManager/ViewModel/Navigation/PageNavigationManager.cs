@@ -4,6 +4,8 @@ using TrainingManager.Model.Navigation.MasterDetailPageItem;
 using TrainingManager.View;
 using TrainingManager.View.MasterDetailNavigationPage;
 using TrainingManager.View.Timer.IntervallTimer;
+using TrainingManager.View.WeightWorkout;
+using TrainingManager.View.WeightWorkout.WeightTrainingLog;
 using TrainingManager.View.WeightWorkout.WeightWorkoutNotes;
 using Xamarin.Forms;
 
@@ -22,9 +24,12 @@ namespace TrainingManager.ViewModel.Navigation
         private ActiveIntervallTimerPage _activeIntervallTimerPage;
         private IntervallTimerPage _intervallTimerTabbedPage;
         private CurrentWeightWorkout _currentWeightWorkout;
+        private AddExerciseCaruselPage _addExerciseCaruselPage;
         private AddWeightExercise _addWeightExercise;
+        private SavedWEightExercises _savedWEightExercises;
         private NoteEditor _noteEditor;
         private NavigationPage _navigationPage;
+        private WeightWorkoutMenu _weightWorkoutMenu;
 
         //VIEWMODELLS
         private MasterDetailNavigationPageMasterViewModel _masterDetailNavigationPageMasterVM;
@@ -55,8 +60,14 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerTabbedPage.Children.Add(_activeIntervallTimerPage);
             _intervallTimerTabbedPage.Children.Add(_intervallWorkoutsPage);
             _currentWeightWorkout = new CurrentWeightWorkout();
+            _addExerciseCaruselPage = new AddExerciseCaruselPage();
+            _addExerciseCaruselPage.Title = "Workout log";
             _addWeightExercise = new AddWeightExercise();
+            _savedWEightExercises = new SavedWEightExercises();
+            _addExerciseCaruselPage.Children.Add(_savedWEightExercises);
+            _addExerciseCaruselPage.Children.Add(_addWeightExercise);
             _noteEditor = new NoteEditor();
+            _weightWorkoutMenu = new WeightWorkoutMenu();
 
             _navigationPage = new NavigationPage(_mainPage);
             _masterDetailNavigationPage = new MasterDetailNavigationPage();
@@ -72,6 +83,7 @@ namespace TrainingManager.ViewModel.Navigation
             _currentWeightWorkout.BindingContext = _weightWorkoutManagerVM;
             _addWeightExercise.BindingContext = _weightWorkoutManagerVM;
             _noteEditor.BindingContext = _weightWorkoutManagerVM;
+            _weightWorkoutMenu.BindingContext = _weightWorkoutManagerVM;
 
             //EVENT SUBSCRIBE
             _masterDetailNavigationPage.DetailPageSelected += OnDetailPageSelected;
@@ -88,6 +100,7 @@ namespace TrainingManager.ViewModel.Navigation
             _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
             _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
             _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
+            _weightWorkoutManagerVM.OpenTrainingLog += OnOpenTrainingLog;
         }
 
         private async void OnIntervallMenuelected(object sender, MessageEventArgs e)
@@ -147,8 +160,8 @@ namespace TrainingManager.ViewModel.Navigation
             if (item.TargetType == typeof(IntervallTimerPage))
                 _navigationPage = new NavigationPage(_intervallTimerTabbedPage);
 
-            if (item.TargetType == typeof(CurrentWeightWorkout))
-                _navigationPage = new NavigationPage(_currentWeightWorkout);
+            if (item.TargetType == typeof(WeightWorkoutMenu))
+                _navigationPage = new NavigationPage(_weightWorkoutMenu);
 
             _masterDetailNavigationPage.Detail = _navigationPage;
 
@@ -190,13 +203,19 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void OnOpenAddWeightExercise(object sender, EventArgs e)
         {
-            _navigationPage.PushAsync(_addWeightExercise);
+            _navigationPage.PushAsync(_addExerciseCaruselPage);
             _masterDetailNavigationPage.Detail = _navigationPage;
         }
 
         private void OnOpenNoteEditor(object sender, EventArgs e)
         {
             _navigationPage.PushAsync(_noteEditor);
+            _masterDetailNavigationPage.Detail = _navigationPage;
+        }
+
+        private void OnOpenTrainingLog(object sender, EventArgs e)
+        {
+            _navigationPage.PushAsync(_currentWeightWorkout);
             _masterDetailNavigationPage.Detail = _navigationPage;
         }
     }

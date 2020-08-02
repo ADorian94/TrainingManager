@@ -3,22 +3,39 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.ExerciseTimer"
              Title="Exercise timer">
-    <ContentView.Resources>
-        <local:Style/>
-    </ContentView.Resources>
-    <StackLayout >
-        <!--<Label Text="Timer" Style="{StaticResource Title}"/>-->
-        <controls:SimpleRoundCard CardMainText="{Binding ElapsedTime}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
-        <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartCommand}" IsVisible="{Binding TimerStopped}" />
-        <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <Button Grid.Column="0" Text="Stop" Style="{StaticResource RedButton}" Command="{Binding StopCommand}"  IsVisible="{Binding TimerStarted}"/>
-            <Button Grid.Column="1" Text="Pause" Style="{StaticResource BlueButton}" Command="{Binding PauseCommand}" IsVisible="{Binding TimerStarted}"/>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:IntToTimeConverter x:Key="IntToTimeConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout>
+        <Grid VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <StackLayout Grid.Row="0" VerticalOptions="Fill">
+                <controls:SimpleRoundCard CardMainText="{Binding ElapsedTime, Converter={StaticResource IntToTimeConverter}}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            </StackLayout>
+            <StackLayout Grid.Row="1">
+                <Button Text="Start" Style="{StaticResource BlueButton}" Command="{Binding StartCommand}" IsVisible="{Binding TimerStopped}" />
+                <Grid VerticalOptions="EndAndExpand" IsVisible="{Binding TimerStarted}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Text="Stop" Style="{StaticResource RedButton}" Command="{Binding StopCommand}"  IsVisible="{Binding TimerStarted}"/>
+                    <Button Grid.Column="1" Text="Pause" Style="{StaticResource BlueButton}" Command="{Binding PauseCommand}" IsVisible="{Binding TimerStarted}"/>
+                </Grid>
+            </StackLayout>
         </Grid>
     </StackLayout>
 </ContentPage>

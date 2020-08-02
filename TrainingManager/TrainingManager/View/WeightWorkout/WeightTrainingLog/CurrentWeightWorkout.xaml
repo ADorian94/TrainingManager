@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.WeightWorkout.WeightWorkoutNotes.CurrentWeightWorkout"
-             Title="Note">
+             Title="Logs">
     <ContentView.Resources>
         <local:Style/>
     </ContentView.Resources>
@@ -33,8 +33,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Text="Save" Style="{StaticResource RedButton}" />
-                <Button Grid.Column="1" Text="New" Command="{Binding OpenAddWeightExerciseCommand}" Style="{StaticResource BlueButton}" />
+                <Button Grid.Column="0" Text="Save" Style="{StaticResource BlueButton}" />
+                <Button Grid.Column="1" Text="Add" Command="{Binding OpenAddWeightExerciseCommand}" Style="{StaticResource BlueButton}" />
             </Grid>
         </Grid>
     </StackLayout>

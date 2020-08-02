@@ -25,4 +25,16 @@
         IntervallTimerStarted,
         IntervallTimerPaused
     }
+
+    public enum WorkoutType
+    {
+        IntervallWorkout,
+        WeightWorkout,
+    }
+
+    public static class UsedFolders
+    {
+        public const string INTERVALL = "Intervall";
+        public const string WEIGHT = "Weight";
+    }
 }

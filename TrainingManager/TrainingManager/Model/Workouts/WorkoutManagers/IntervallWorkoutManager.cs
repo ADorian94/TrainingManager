@@ -8,7 +8,7 @@ namespace TrainingManager.Model
     {
         public IntervallWorkoutManager()
         {
-            var workouts = _xmlHandler.LoadWorkoutXmls();
+            var workouts = _xmlHandler.LoadWorkoutXmls(WorkoutType.IntervallWorkout);
 
             if (workouts.Count() > 0)
                 _workouts = new List<IntervallWorkout>(workouts);

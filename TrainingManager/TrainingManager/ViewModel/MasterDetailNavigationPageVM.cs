@@ -2,7 +2,7 @@
 using TrainingManager.Model.Navigation.MasterDetailPageItem;
 using TrainingManager.View;
 using TrainingManager.View.Timer.IntervallTimer;
-using TrainingManager.View.WeightWorkout.WeightWorkoutNotes;
+using TrainingManager.View.WeightWorkout;
 
 namespace TrainingManager.ViewModel
 {
@@ -17,7 +17,7 @@ namespace TrainingManager.ViewModel
                     new MasterDetailNavigationPageMenuItem { Id = 0, Title = "1RM Calculation", TargetType = typeof(MainPage)},
                     new MasterDetailNavigationPageMenuItem { Id = 1, Title = "Intervall timer", TargetType = typeof(IntervallTimerPage)},
                     new MasterDetailNavigationPageMenuItem { Id = 2, Title = "Exercise timer", TargetType = typeof(ExerciseTimer)},
-                    new MasterDetailNavigationPageMenuItem { Id = 3, Title = "Workout notes", TargetType = typeof(CurrentWeightWorkout)},
+                    new MasterDetailNavigationPageMenuItem { Id = 3, Title = "Workout notes", TargetType = typeof(WeightWorkoutMenu)},
             });
         }
 

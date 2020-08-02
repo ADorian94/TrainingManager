@@ -76,12 +76,14 @@ namespace TrainingManager.ViewModel
         public DelegateCommand OpenAddWeightExerciseCommand { get; private set; }
         public DelegateCommand AddWeightExerciseToWorkoutCommand { get; private set; }
         public DelegateCommand OpenNoteEditorCommand { get; private set; }
+        public DelegateCommand OpenTrainingLogOpenCommand { get; private set; }
 
 
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
         public event EventHandler CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
+        public event EventHandler OpenTrainingLog;
 
         public WeightWorkoutManagerVM()
         {
@@ -95,6 +97,7 @@ namespace TrainingManager.ViewModel
             OpenAddWeightExerciseCommand = new DelegateCommand(OpenAddWeightExerciseFunction);
             AddWeightExerciseToWorkoutCommand = new DelegateCommand(AddWeightExerciseToWorkoutFunction);
             OpenNoteEditorCommand = new DelegateCommand(OpenNoteEditorFuncton);
+            OpenTrainingLogOpenCommand = new DelegateCommand(OpenTrainingLogOpenFunction);
         }
 
         private void AddWeightExerciseToWorkoutFunction(object obj)
@@ -113,7 +116,7 @@ namespace TrainingManager.ViewModel
         }
 
         private void OpenAddWeightExerciseFunction(object obj) => OpenAddWeightExercise?.Invoke(this, null);
-
         private void OpenNoteEditorFuncton(object obj) => OpenNoteEditor?.Invoke(this, null);
+        private void OpenTrainingLogOpenFunction(object obj) => OpenTrainingLog?.Invoke(this, null);
     }
 }

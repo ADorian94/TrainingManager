@@ -21,6 +21,9 @@
     <Compile Update="ViewModel\Navigation\MasterDetailPageItem\MasterDetailNavigationPageMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\WeightWorkout\WeightTrainingLog\AddExerciseCaruselPage.xaml.cs">
+      <DependentUpon>AddExerciseCaruselPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -75,13 +78,22 @@
     <EmbeddedResource Update="View\Timer\IntervallTimer\IntervallWorkoutsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutNotes\AddWeightExercise.xaml">
+    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\AddWeightExercise.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutNotes\CurrentWeightWorkout.xaml">
+    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\CurrentWeightWorkout.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutNotes\NoteEditor.xaml">
+    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\NoteEditor.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\AddExerciseCaruselPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\SavedWEightExercises.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutMenu.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -105,7 +117,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="View\WeightWorkout\WeightWorkoutExercises\" />
-    <Folder Include="View\WeightWorkout\WeightWorkoutHistory\" />
+    <Folder Include="View\WeightWorkout\WeightWorkout\" />
+    <Folder Include="View\WeightWorkout\WeightHistory\" />
   </ItemGroup>
 </Project>

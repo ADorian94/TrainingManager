@@ -4,13 +4,11 @@
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.WeightWorkout.WeightWorkoutNotes.AddWeightExercise"
-             Title="Add exercise">
+             Title="New exercise">
     <ContentView.Resources>
         <local:Style/>
     </ContentView.Resources>
-    <!--<ScrollView>-->
     <StackLayout>
-        <Label Text=" " Style="{StaticResource Title}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
@@ -21,9 +19,8 @@
             <controls:CardWithTextEntry Grid.Row="0" CardMainText="Name" CardEntry="{Binding ExerciseName, Mode=TwoWay}"/>
             <controls:CardWithEntry Grid.Row="1" CardMainText="Weight" CardEntry="{Binding ExerciseWeight, Mode=TwoWay}"/>
             <controls:CardWithEntry Grid.Row="2" CardMainText="Reps" CardEntry="{Binding ExerciseReps, Mode=TwoWay}"/>
-            <controls:CardWithTextEditor Grid.Row="3" CardMainText="Comment" EditorText="{Binding ExercieNote, Mode=TwoWay}" CardFrameTapped="{Binding OpenNoteEditorCommand}"/>
+            <controls:SimpleCard Grid.Row="3" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}"/>
         </Grid>
-        <Button Text="Add" Command="{Binding AddWeightExerciseToWorkoutCommand}" Style="{StaticResource BlueButton}"/>
+        <Button Text="Add" Command="{Binding AddWeightExerciseToWorkoutCommand}" Style="{StaticResource RedButton}"/>
     </StackLayout>
-    <!--</ScrollView>-->
 </ContentPage>

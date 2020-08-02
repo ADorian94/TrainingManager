@@ -9,8 +9,10 @@
     </ContentView.Resources>
 
     <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}"/>
+        </Frame.GestureRecognizers>
         <Grid>
-
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>

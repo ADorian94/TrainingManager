@@ -5,11 +5,10 @@
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.MainPage"
              Title="1RM Calculation">
-    <ContentView.Resources>
-        <local:Style/>
-    </ContentView.Resources>
+    <ContentPage.Resources>
+        <ResourceDictionary Source="Styles/Style.xaml" />
+    </ContentPage.Resources>
     <StackLayout>
-        <Label Text=" " Style="{StaticResource Title}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>

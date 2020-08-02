@@ -105,7 +105,10 @@ namespace TrainingManager.Model
         /// Save data to xml.
         /// </summary>
         /// <param name="workoutId">Workout id</param>
-        public void SaveWorkoutById(Guid workoutId) => _xmlHandler.SaveToXml(_workouts.Single(x => x.WorkoutId == workoutId));
+        public void SaveWorkoutById(Guid workoutId, WorkoutType workoutType)
+        {
+            _xmlHandler.SaveToXml(_workouts.Single(x => x.WorkoutId == workoutId), workoutType);
+        }
 
         /// <summary>
         /// Remove selected workout by guid.

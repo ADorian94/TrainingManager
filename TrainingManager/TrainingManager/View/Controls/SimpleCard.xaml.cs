@@ -64,5 +64,22 @@ namespace TrainingManager.View.Controls
 
         public static readonly BindableProperty ButtonVisibilityProperty =
             BindableProperty.Create("ButtonVisibility", typeof(bool), typeof(SimpleCard), false);
+
+        public DelegateCommand CardFrameTapped
+        {
+            get { return (DelegateCommand)GetValue(CardFrameTappedProperty); }
+            set { SetValue(CardFrameTappedProperty, value); }
+        }
+
+        public static readonly BindableProperty CardFrameTappedProperty =
+            BindableProperty.Create("CardFrameTapped", typeof(DelegateCommand), typeof(SimpleCard), defaultValue: default(DelegateCommand), propertyChanged: OnFrameTapCommandPropertyChanged);
+
+        private static void OnFrameTapCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is SimpleCard headerTemplate && newValue is DelegateCommand command)
+            {
+                headerTemplate.CardFrameTapped = command;
+            }
+        }
     }
 }
