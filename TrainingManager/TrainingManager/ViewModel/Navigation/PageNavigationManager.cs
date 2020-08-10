@@ -23,7 +23,6 @@ namespace TrainingManager.ViewModel.Navigation
         private AddIntervallWorkoutPage _intervallWorkoutPage;
         private ActiveIntervallTimerPage _activeIntervallTimerPage;
         private IntervallTimerPage _intervallTimerTabbedPage;
-        //private CurrentWeightWorkout _currentWeightWorkout;
         private TodayWeightWorkout _todayWeightWorkout;
         private AddExerciseCaruselPage _addExerciseCaruselPage;
         private AddWeightExercise _addWeightExercise;
@@ -60,7 +59,6 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerTabbedPage.Title = "Intervall timer";
             _intervallTimerTabbedPage.Children.Add(_activeIntervallTimerPage);
             _intervallTimerTabbedPage.Children.Add(_intervallWorkoutsPage);
-            //_currentWeightWorkout = new CurrentWeightWorkout();
             _todayWeightWorkout = new TodayWeightWorkout();
             _addExerciseCaruselPage = new AddExerciseCaruselPage();
             _addExerciseCaruselPage.Title = "Workout log";
@@ -71,7 +69,6 @@ namespace TrainingManager.ViewModel.Navigation
             _noteEditor = new NoteEditor();
             _weightWorkoutMenu = new WeightWorkoutMenu();
 
-            //_navigationPage = new NavigationPage(_currentWeightWorkout);
             _navigationPage = new NavigationPage(_todayWeightWorkout);
             _masterDetailNavigationPage = new MasterDetailNavigationPage();
             _masterDetailNavigationPage.Detail = _navigationPage;
@@ -83,7 +80,6 @@ namespace TrainingManager.ViewModel.Navigation
             _exerciseTimer.BindingContext = _exerciseTimerVM;
             _activeIntervallTimerPage.BindingContext = _intervallTimerVM;
             _intervallWorkoutsPage.BindingContext = _intervallTimerVM;
-            //_currentWeightWorkout.BindingContext = _weightWorkoutManagerVM;
             _todayWeightWorkout.BindingContext = _weightWorkoutManagerVM;
             _addWeightExercise.BindingContext = _weightWorkoutManagerVM;
             _noteEditor.BindingContext = _weightWorkoutManagerVM;
@@ -239,7 +235,6 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void OnOpenTrainingLog(object sender, EventArgs e)
         {
-            //_navigationPage.PushAsync(_currentWeightWorkout);
             _navigationPage.PushAsync(_todayWeightWorkout);
             _masterDetailNavigationPage.Detail = _navigationPage;
         }

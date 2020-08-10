@@ -81,9 +81,6 @@
     <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\AddWeightExercise.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\CurrentWeightWorkout.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\NoteEditor.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
