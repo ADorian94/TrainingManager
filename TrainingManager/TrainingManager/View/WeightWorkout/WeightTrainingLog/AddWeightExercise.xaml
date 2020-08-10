@@ -5,15 +5,19 @@
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.WeightWorkout.WeightWorkoutNotes.AddWeightExercise"
              Title="New exercise">
-    <ContentView.Resources>
-        <local:Style/>
-    </ContentView.Resources>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <StackLayout>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <controls:CardWithTextEntry Grid.Row="0" CardMainText="Name" CardEntry="{Binding ExerciseName, Mode=TwoWay}"/>

@@ -138,5 +138,7 @@ namespace TrainingManager.Model
 
         public ExerciseTemplate GetExerciseInWorkoutById(Guid workoutId, Guid exerciseId) =>
             (_workouts.Single(x => x.WorkoutId.Equals(workoutId))).Exercises.Single(x => x.ExerciseId.Equals(exerciseId));
+
+        public bool IsWorkoutExist(Guid workoutId) => _workouts.Any(x => x.WorkoutId.Equals(workoutId));
     }
 }

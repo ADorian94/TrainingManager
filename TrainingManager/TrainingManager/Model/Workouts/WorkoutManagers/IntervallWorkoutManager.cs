@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using TrainingManager.Model.Workouts.IntervallWorkout;
 
 namespace TrainingManager.Model
@@ -9,11 +8,7 @@ namespace TrainingManager.Model
         public IntervallWorkoutManager()
         {
             var workouts = _xmlHandler.LoadWorkoutXmls(WorkoutType.IntervallWorkout);
-
-            if (workouts.Count() > 0)
-                _workouts = new List<IntervallWorkout>(workouts);
-            else
-                _workouts = new List<IntervallWorkout>();
+            _workouts = workouts.Count > 0 ? new List<IntervallWorkout>(workouts) : new List<IntervallWorkout>();
         }
     }
 }

@@ -33,13 +33,15 @@ namespace TrainingManager.Model.Persistence
             FileStream fileStream = File.Create(filePath);
             _xmlSerializer = new XmlSerializer(typeof(T));
             _xmlSerializer.Serialize(fileStream, workoutToSave);
+
+            string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
         }
 
         public List<T> LoadWorkoutXmls(WorkoutType workoutType)
         {
             try
             {
-                string folder = workoutType == WorkoutType.IntervallWorkout ? "Intervall" : "Weight";
+                string folder = GetFolderByWorkoutType(workoutType);
                 string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
                 StreamReader fileStream;
                 _xmlSerializer = new XmlSerializer(typeof(T));

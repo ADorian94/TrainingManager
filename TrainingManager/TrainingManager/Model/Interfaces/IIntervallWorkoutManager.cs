@@ -1,15 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using TrainingManager.Model.Workouts.WeightWorkout;
 
 namespace TrainingManager.Model.Interfaces
 {
     public interface IIntervallWorkoutManager
     {
-        void SaveWorkoutById(Guid workoutId);
+        //void SaveWorkoutById(Guid workoutId);
     }
 
-    public interface IWeightWorkoutManager
+    public interface IWeightWorkoutManager : IWorkoutManager<WeightWorkout, WeightExercise>
     {
+        double GetTotalWeightById(Guid workoutId);
     }
 
     public interface IWorkoutManager<WorkoutTemplate, ExerciseTemplate>
@@ -24,5 +26,6 @@ namespace TrainingManager.Model.Interfaces
         List<WorkoutTemplate> GetWorkouts();
         void DeleteWorkoutById(string stringGuid);
         void DeleteExerciseFromWorkoutById(Guid workoutId, Guid exerciseId);
+        bool IsWorkoutExist(Guid workoutId);
     }
 }

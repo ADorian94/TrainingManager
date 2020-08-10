@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Globalization;
+using TrainingManager.Model.Workouts.WeightWorkout;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel
@@ -15,6 +17,39 @@ namespace TrainingManager.ViewModel
         {
             return (bool)value ? 1 : 0;
         }
+    }
+
+    public class DateToStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return string.Empty;
+
+            var dateTime = (DateTime)value;
+
+            return dateTime.Date.ToString("yyyy.MM.dd");
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
+
+    public class CollectionToBoolConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return false;
+
+            var collection = (ObservableCollection<WeightExercise>)value;
+
+            if (collection.Count == 0)
+                return false;
+
+            return true;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
     public class IntToTimeConverter : IValueConverter

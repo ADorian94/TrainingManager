@@ -93,6 +93,9 @@
     <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\SavedWEightExercises.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\TodayWeightWorkout.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutMenu.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

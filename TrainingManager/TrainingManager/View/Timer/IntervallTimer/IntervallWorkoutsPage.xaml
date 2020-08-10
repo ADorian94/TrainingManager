@@ -4,9 +4,13 @@
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.Timer.IntervallTimer.IntervallWorkoutsPage" >
-    <ContentView.Resources>
-        <local:Style/>
-    </ContentView.Resources>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <StackLayout>
         <ListView x:Name="WorkoutList" ItemsSource="{Binding AllIntervallWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectedItem="{Binding SelectedWorkout}" Margin="0,5,0,0" >
             <ListView.ItemTemplate>
