@@ -11,6 +11,6 @@
     <StackLayout>
         <controls:SimpleCard CardMainText="Training log" CardFrameTapped="{Binding OpenTrainingLogOpenCommand}"/>
         <!--<controls:SimpleCard CardMainText="Workout" />-->
-        <controls:SimpleCard CardMainText="History" />
+        <controls:SimpleCard CardMainText="History" CardFrameTapped="{Binding OpenHistoryViewOpenCommand}"/>
     </StackLayout>
 </ContentPage>

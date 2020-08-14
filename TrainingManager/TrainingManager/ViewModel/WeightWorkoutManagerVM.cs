@@ -97,6 +97,7 @@ namespace TrainingManager.ViewModel
         public DelegateCommand AddWeightExerciseToWorkoutCommand { get; private set; }
         public DelegateCommand OpenNoteEditorCommand { get; private set; }
         public DelegateCommand OpenTrainingLogOpenCommand { get; private set; }
+        public DelegateCommand OpenHistoryViewOpenCommand { get; private set; }
         public DelegateCommand WeightExerciseMenuSelectedCommand { get; private set; }
 
         //EVENTS
@@ -105,6 +106,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
         public event EventHandler OpenTrainingLog;
+        public event EventHandler OpenHistoryView;
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
 
         public WeightWorkoutManagerVM()
@@ -128,7 +130,9 @@ namespace TrainingManager.ViewModel
                     WorkoutId = Guid.NewGuid(),
                     WorkoutDate = DateTime.Now,
                     Exercises = new List<WeightExercise>(),
-                    TotalWeight = 0.0
+                    TotalWeight = 0.0,
+                    WorkoutType = WorkoutType.WeightWorkout,
+                    WorkoutName = DateTime.Now.Date.ToString("yyyy.MM.dd"),
                 };
         }
 
@@ -139,6 +143,7 @@ namespace TrainingManager.ViewModel
             AddWeightExerciseToWorkoutCommand = new DelegateCommand(AddWeightExerciseToWorkoutFunction);
             OpenNoteEditorCommand = new DelegateCommand(OpenNoteEditorFuncton);
             OpenTrainingLogOpenCommand = new DelegateCommand(OpenTrainingLogOpenFunction);
+            OpenHistoryViewOpenCommand = new DelegateCommand(OpenHistoryViewOpenFunction);
             WeightExerciseMenuSelectedCommand = new DelegateCommand(WeightExerciseMenuSelectedFunction);
         }
 
@@ -150,6 +155,7 @@ namespace TrainingManager.ViewModel
                 _weightWorkoutManager.DeleteWorkoutById(tmpTodayWorkout.WorkoutIdString);
             }
 
+            TodayWeightWorkout.TotalWeight = TotalWeight;
             _weightWorkoutManager.AddNewWorkout(TodayWeightWorkout);
             _weightWorkoutManager.SaveWorkoutById(TodayWeightWorkout.WorkoutId, WorkoutType.WeightWorkout);
         }
@@ -217,6 +223,7 @@ namespace TrainingManager.ViewModel
 
         private void OpenNoteEditorFuncton(object obj) => OpenNoteEditor?.Invoke(this, null);
         private void OpenTrainingLogOpenFunction(object obj) => OpenTrainingLog?.Invoke(this, null);
+        private void OpenHistoryViewOpenFunction(object obj) => OpenHistoryView?.Invoke(this, null);
         private void WeightExerciseMenuSelectedFunction(object obj) => WeightExerciseMenuSelected?.Invoke(this, new MessageEventArgs((string)obj));
         private double CountTotalWeightOfWorkout() => _weightWorkoutManager.GetTotalWeightById(TodayWeightWorkout.WorkoutId);
     }

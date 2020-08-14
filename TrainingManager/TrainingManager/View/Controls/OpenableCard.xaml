@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.OpenableCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+
+    <StackLayout BackgroundColor="Transparent">
+        <Frame x:Name="ClosedCard" IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
+            </Frame.GestureRecognizers>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CloseCardMainLabel}" HorizontalOptions="StartAndExpand" FontSize="30" TextColor="White"/>
+                <Label Grid.Row="0" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=CloseCardMainValue}" HorizontalOptions="Center" FontSize="35" TextColor="White"/>
+                <ImageButton Padding="0,10,0,10" Grid.Row="0" Grid.Column="2" BackgroundColor="Transparent" Source="sharp_more_vert_white_24.png" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
+            </Grid>
+        </Frame>
+        <Frame x:Name="OpenedCard" IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
+            </Frame.GestureRecognizers>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=OpenCardMainLabel}" HorizontalOptions="StartAndExpand" FontSize="30" TextColor="White"/>
+                    <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="sharp_more_vert_white_24.png" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="50"/>
+                        <RowDefinition Height="50"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=OpenCardFirstLabel}" HorizontalOptions="StartAndExpand" FontSize="25" TextColor="White" Margin="15, 0, 0, 0"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=OpenCardFirstValue}" HorizontalOptions="Center" FontSize="25" TextColor="White" />
+                    <Label Grid.Row="1" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=OpenCardSecondLabel}" HorizontalOptions="StartAndExpand" FontSize="25" TextColor="White" Margin="15, 5, 0, 0"/>
+                    <Label Grid.Row="1" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=OpenCardSecondValue}" HorizontalOptions="Center" FontSize="25" TextColor="White" Margin="0, 5, 0, 0"/>
+                </Grid>
+            </Grid>
+        </Frame>
+    </StackLayout>
+</ContentView>

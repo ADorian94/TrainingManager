@@ -31,7 +31,11 @@
                         <ListView.ItemTemplate >
                             <DataTemplate>
                                 <ViewCell>
-                                    <controls:SimpleCard CardMainText="{Binding ExerciseName}" CardSecondaryText="{Binding WeightOfExercise}" ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference ExerciseList}}" ButtonCommandParameter="{Binding ExerciseIdString}" ButtonVisibility="True"/>
+                                    <controls:OpenableCard CloseCardMainLabel="{Binding ExerciseName}" CloseCardMainValue="{Binding WeightOfExercise}" OpenCardMainLabel="{Binding ExerciseName}"
+                                                           OpenCardFirstLabel="Weight" OpenCardFirstValue="{Binding WeightOfExercise}"
+                                                           OpenCardSecondLabel="Reps" OpenCardSecondValue="{Binding Reps}"
+                                                           ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference ExerciseList}}"
+                                                           ButtonCommandParameter="{Binding ExerciseIdString}" ButtonVisibility="True"/>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>

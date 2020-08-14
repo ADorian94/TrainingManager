@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 using TrainingManager.Model.Interfaces;
 using TrainingManager.Model.Workouts;
+using TrainingManager.Model.Workouts.IntervallWorkout;
+using TrainingManager.Model.Workouts.WeightWorkout;
 
 namespace TrainingManager.Model.Persistence
 {
@@ -19,11 +22,11 @@ namespace TrainingManager.Model.Persistence
 
         public void SaveToXml(T workoutToSave, WorkoutType workoutType)
         {
-            string folder = GetFolderByWorkoutType(workoutType);
-            string fileName = $@"{folder}\{workoutToSave.WorkoutId}.xml";
+            //string folder = GetFolderByWorkoutType(workoutType);
+            string fileName = $@"{workoutToSave.WorkoutId}.xml";
 
-            if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder)))
-                Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
+            //if (!Directory.Exists(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder)))
+            //    Directory.CreateDirectory(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
 
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), fileName);
 
@@ -34,15 +37,17 @@ namespace TrainingManager.Model.Persistence
             _xmlSerializer = new XmlSerializer(typeof(T));
             _xmlSerializer.Serialize(fileStream, workoutToSave);
 
-            string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
+            //string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
         }
 
         public List<T> LoadWorkoutXmls(WorkoutType workoutType)
         {
             try
             {
-                string folder = GetFolderByWorkoutType(workoutType);
-                string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
+                //string folder = GetFolderByWorkoutType(workoutType);
+                //string[] files = Directory.GetFiles(Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), folder));
+                string[] files = Directory.GetFiles(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+
                 StreamReader fileStream;
                 _xmlSerializer = new XmlSerializer(typeof(T));
                 List<T> loadedWorkout = new List<T>();
@@ -51,10 +56,18 @@ namespace TrainingManager.Model.Persistence
                 {
                     //File.Delete(file);
                     fileStream = new StreamReader(file);
-                    loadedWorkout.Add((T)_xmlSerializer.Deserialize(fileStream));
+                    try
+                    {
+                        loadedWorkout.Add((T)_xmlSerializer.Deserialize(fileStream));
+                    }
+                    catch (Exception ex)
+                    {
+                        if (!(typeof(T) == typeof(WeightWorkout) && workoutType == WorkoutType.WeightWorkout) && !(typeof(T) == typeof(IntervallWorkout) && workoutType == WorkoutType.IntervallWorkout))
+                            throw;
+                    }
                 }
 
-                return loadedWorkout;
+                return loadedWorkout.Where(x => x.WorkoutType == workoutType).ToList();
             }
             catch (Exception ex)
             {

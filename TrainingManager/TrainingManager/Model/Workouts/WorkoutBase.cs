@@ -22,5 +22,6 @@ namespace TrainingManager.Model.Workouts
         /// Exercises of the workout. For example: intervall, weightexercise
         /// </summary>
         public List<ExerciseTemplate> Exercises { get; set; }
+        public WorkoutType WorkoutType { get; set; }
     }
 }

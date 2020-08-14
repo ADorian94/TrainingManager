@@ -83,7 +83,6 @@ namespace TrainingManager.ViewModel
             {
                 _selectedWorkout = value;
                 OnPropertyChanged();
-                WorkoutSelected?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -173,6 +172,7 @@ namespace TrainingManager.ViewModel
         public DelegateCommand OpenNewIntervallWorkoutCommand { get; private set; }
         public DelegateCommand AddNewIntervallWorkoutCommand { get; private set; }
         public DelegateCommand WorkoutMenuSelectedCommand { get; private set; }
+        public DelegateCommand WorkoutSelectedCommand { get; private set; }
         public DelegateCommand IntervallMenuSelectedCommand { get; private set; }
 
 
@@ -201,6 +201,7 @@ namespace TrainingManager.ViewModel
             AddNewIntervallCommand = new DelegateCommand(AddNewIntervall);
             WorkoutMenuSelectedCommand = new DelegateCommand(WorkoutMenuSelectedFunction);
             IntervallMenuSelectedCommand = new DelegateCommand(IntervallMenuSelectedFunction);
+            WorkoutSelectedCommand = new DelegateCommand(WorkoutSelectedFunction);
         }
 
         public void DeleteWorkout(string stringGuid)
@@ -247,6 +248,11 @@ namespace TrainingManager.ViewModel
         private void WorkoutMenuSelectedFunction(object obj) => WorkoutMenuSelected?.Invoke(this, new MessageEventArgs((string)obj));
         private void IntervallMenuSelectedFunction(object obj) => IntervallMenuSelected?.Invoke(this, new MessageEventArgs((string)obj));
 
+        private void WorkoutSelectedFunction(object obj)
+        {
+            SelectedWorkout = _intervallWorkoutManager.GetWorkoutById(new Guid((string)obj));
+            WorkoutSelected?.Invoke(this, null);
+        }
 
         private void OnIntervallFinished(object sender, EventArgs e)
         {
@@ -319,7 +325,8 @@ namespace TrainingManager.ViewModel
             {
                 WorkoutId = NewIntervallWorkout.WorkoutId,
                 WorkoutName = NewWorkoutName,
-                Exercises = NewIntervallWorkout.Exercises
+                Exercises = NewIntervallWorkout.Exercises,
+                WorkoutType = WorkoutType.IntervallWorkout,
             };
 
             _intervallWorkoutManager.SetWorkoutNameById(NewIntervallWorkout.WorkoutId, NewWorkoutName);

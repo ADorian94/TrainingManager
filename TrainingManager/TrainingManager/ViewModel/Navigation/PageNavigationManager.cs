@@ -5,6 +5,7 @@ using TrainingManager.View;
 using TrainingManager.View.MasterDetailNavigationPage;
 using TrainingManager.View.Timer.IntervallTimer;
 using TrainingManager.View.WeightWorkout;
+using TrainingManager.View.WeightWorkout.WeightHistory;
 using TrainingManager.View.WeightWorkout.WeightTrainingLog;
 using TrainingManager.View.WeightWorkout.WeightWorkoutNotes;
 using Xamarin.Forms;
@@ -30,6 +31,8 @@ namespace TrainingManager.ViewModel.Navigation
         private NoteEditor _noteEditor;
         private NavigationPage _navigationPage;
         private WeightWorkoutMenu _weightWorkoutMenu;
+        private HistoryView _weightHistoryView;
+        private WorkoutHistoryDetails _workoutHistoryDetails;
 
         //VIEWMODELLS
         private MasterDetailNavigationPageMasterViewModel _masterDetailNavigationPageMasterVM;
@@ -37,6 +40,7 @@ namespace TrainingManager.ViewModel.Navigation
         private ExerciseTimerVM _exerciseTimerVM;
         private IntervallTimerManagerVM _intervallTimerVM;
         private WeightWorkoutManagerVM _weightWorkoutManagerVM;
+        private WeightWorkoutHistoryManagerVM _weightWorkoutHistoryManagerVM;
 
         public PageNavigationManager()
         {
@@ -46,6 +50,7 @@ namespace TrainingManager.ViewModel.Navigation
             _exerciseTimerVM = new ExerciseTimerVM();
             _intervallTimerVM = new IntervallTimerManagerVM();
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM();
+            _weightWorkoutHistoryManagerVM = new WeightWorkoutHistoryManagerVM();
 
             //INITIALIZE PAGES
             _mainPage = new MainPage();
@@ -68,6 +73,8 @@ namespace TrainingManager.ViewModel.Navigation
             _addExerciseCaruselPage.Children.Add(_addWeightExercise);
             _noteEditor = new NoteEditor();
             _weightWorkoutMenu = new WeightWorkoutMenu();
+            _weightHistoryView = new HistoryView();
+            _workoutHistoryDetails = new WorkoutHistoryDetails();
 
             _navigationPage = new NavigationPage(_todayWeightWorkout);
             _masterDetailNavigationPage = new MasterDetailNavigationPage();
@@ -84,6 +91,8 @@ namespace TrainingManager.ViewModel.Navigation
             _addWeightExercise.BindingContext = _weightWorkoutManagerVM;
             _noteEditor.BindingContext = _weightWorkoutManagerVM;
             _weightWorkoutMenu.BindingContext = _weightWorkoutManagerVM;
+            _weightHistoryView.BindingContext = _weightWorkoutHistoryManagerVM;
+            _workoutHistoryDetails.BindingContext = _weightWorkoutHistoryManagerVM;
 
             //EVENT SUBSCRIBE
             _masterDetailNavigationPage.DetailPageSelected += OnDetailPageSelected;
@@ -92,18 +101,25 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerVM.OpenNewIntervallWorkoutPage += OnOpenNewIntervallWorkoutPage;
             _intervallTimerVM.CloseAddNewIntervallPage += OnCloseNavigationPage;
             _intervallTimerVM.CloseNewIntervallWorkoutPage += OnCloseNavigationPage;
-            _intervallTimerVM.WorkoutSelected += OnWorkoutSelected;
             _intervallTimerVM.ExceptionOccured += OnExceptionOccured;
             _intervallTimerVM.MessageApplication += OnMessageApplication;
             _intervallTimerVM.WorkoutMenuSelected += OnWorkoutMenuSelected;
+            _intervallTimerVM.WorkoutSelected += OnWorkoutSelected;
             _intervallTimerVM.IntervallMenuSelected += OnIntervallMenuelected;
             _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
             _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
             _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
             _weightWorkoutManagerVM.OpenTrainingLog += OnOpenTrainingLog;
+            _weightWorkoutManagerVM.OpenHistoryView += OnOpenHistoryView;
             _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
             _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
             _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
+            _weightWorkoutHistoryManagerVM.OpenWorkoutDetails += OnOpenWorkoutDetails;
+        }
+
+        private void _intervallTimerVM_WorkoutSelected(object sender, MessageEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         private async void OnWeightExerciseMenuSelected(object sender, MessageEventArgs e)
@@ -126,6 +142,11 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Edit")
                 _intervallTimerVM.EditIntervall(e.Message);
+        }
+
+        private void OnWorkoutSelected(object sender, EventArgs e)
+        {
+            _intervallTimerTabbedPage.CurrentPage = _activeIntervallTimerPage;
         }
 
         private async void OnWorkoutMenuSelected(object sender, MessageEventArgs e)
@@ -188,10 +209,7 @@ namespace TrainingManager.ViewModel.Navigation
             _masterDetailNavigationPage.Detail = _navigationPage;
         }
 
-        private void OnWorkoutSelected(object sender, EventArgs e)
-        {
-            _intervallTimerTabbedPage.CurrentPage = _activeIntervallTimerPage;
-        }
+
 
         private void OnOpenNewIntervallWorkoutPage(object sender, EventArgs e)
         {
@@ -236,6 +254,18 @@ namespace TrainingManager.ViewModel.Navigation
         private void OnOpenTrainingLog(object sender, EventArgs e)
         {
             _navigationPage.PushAsync(_todayWeightWorkout);
+            _masterDetailNavigationPage.Detail = _navigationPage;
+        }
+
+        private void OnOpenHistoryView(object sender, EventArgs e)
+        {
+            _navigationPage.PushAsync(_weightHistoryView);
+            _masterDetailNavigationPage.Detail = _navigationPage;
+        }
+
+        private void OnOpenWorkoutDetails(object sender, EventArgs e)
+        {
+            _navigationPage.PushAsync(_workoutHistoryDetails);
             _masterDetailNavigationPage.Detail = _navigationPage;
         }
     }

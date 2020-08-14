@@ -21,6 +21,9 @@
     <Compile Update="ViewModel\Navigation\MasterDetailPageItem\MasterDetailNavigationPageMenuItem.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Controls\OpenableCard.xaml.cs">
+      <DependentUpon>OpenableCard.xaml</DependentUpon>
+    </Compile>
     <Compile Update="View\WeightWorkout\WeightTrainingLog\AddExerciseCaruselPage.xaml.cs">
       <DependentUpon>AddExerciseCaruselPage.xaml</DependentUpon>
     </Compile>
@@ -37,6 +40,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\Controls\CardWithTextEntry.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\Controls\OpenableCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\Controls\LowSimpleCard.xaml">
@@ -76,6 +82,9 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\Timer\IntervallTimer\IntervallWorkoutsPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\WeightWorkout\WeightHistory\WorkoutHistoryDetails.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\AddWeightExercise.xaml">
@@ -118,6 +127,5 @@
 
   <ItemGroup>
     <Folder Include="View\WeightWorkout\WeightWorkout\" />
-    <Folder Include="View\WeightWorkout\WeightHistory\" />
   </ItemGroup>
 </Project>

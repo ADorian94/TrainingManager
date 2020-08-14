@@ -12,11 +12,15 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout>
-        <ListView x:Name="WorkoutList" ItemsSource="{Binding AllIntervallWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectedItem="{Binding SelectedWorkout}" Margin="0,5,0,0" >
+        <ListView x:Name="WorkoutList" ItemsSource="{Binding AllIntervallWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" Margin="0,5,0,0" >
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <ViewCell>
-                        <controls:LowSimpleCard CardMainText="{Binding WorkoutName}" ButtonCommand="{Binding BindingContext.WorkoutMenuSelectedCommand, Source={x:Reference WorkoutList}}" ButtonCommandParameter="{Binding WorkoutIdString}"/>
+                        <controls:LowSimpleCard CardMainText="{Binding WorkoutName}"
+                                                ButtonCommand="{Binding BindingContext.WorkoutMenuSelectedCommand, Source={x:Reference WorkoutList}}"
+                                                ButtonCommandParameter="{Binding WorkoutIdString}"
+                                                CardFrameTapped="{Binding BindingContext.WorkoutSelectedCommand, Source={x:Reference WorkoutList}}"
+                                                CardFrameTappedParameter="{Binding WorkoutIdString}"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
