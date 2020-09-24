@@ -134,12 +134,18 @@ namespace TrainingManager.View.Controls
         {
             OpenedCard.IsVisible = false;
             ClosedCard.IsVisible = true;
+
+            CardStack.Children.Clear();
+            CardStack.Children.Add(ClosedCard);
         }
 
         private void TapGestureRecognizer_Tapped_1(object sender, System.EventArgs e)
         {
             ClosedCard.IsVisible = false;
             OpenedCard.IsVisible = true;
+
+            CardStack.Children.Clear();
+            CardStack.Children.Add(OpenedCard);
         }
     }
 }

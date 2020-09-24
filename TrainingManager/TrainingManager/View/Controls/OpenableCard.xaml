@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
 
-    <StackLayout BackgroundColor="Transparent">
+    <StackLayout x:Name="CardStack" BackgroundColor="Transparent">
         <Frame x:Name="ClosedCard" IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>

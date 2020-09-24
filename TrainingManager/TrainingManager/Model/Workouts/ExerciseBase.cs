@@ -2,7 +2,7 @@
 
 namespace TrainingManager.Model.Workouts
 {
-    public class ExerciseBase
+    public abstract class ExerciseBase
     {
         /// <summary>
         /// Unique id of the exercise.

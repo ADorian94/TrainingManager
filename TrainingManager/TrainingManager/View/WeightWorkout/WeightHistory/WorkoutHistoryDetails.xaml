@@ -17,21 +17,19 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ScrollView VerticalOptions="FillAndExpand">
-        <StackLayout>
-            <Label Text="{Binding WorkoutDetails.WorkoutName}" Style="{StaticResource Title}"/>
-            <controls:SimpleCard CardMainText="Total weight" CardSecondaryText="{Binding WorkoutDetails.TotalWeight}"/>
-            <ListView x:Name="ExerciseList" ItemsSource="{Binding WeightWorkoutList}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
-                <ListView.ItemTemplate >
-                    <DataTemplate>
-                        <ViewCell>
-                            <controls:OpenableCard CloseCardMainLabel="{Binding ExerciseName}" CloseCardMainValue="{Binding WeightOfExercise}" OpenCardMainLabel="{Binding ExerciseName}"
+    <StackLayout>
+        <Label Text="{Binding WorkoutDetails.WorkoutName}" Style="{StaticResource Title}"/>
+        <controls:SimpleCard CardMainText="Total weight" CardSecondaryText="{Binding WorkoutDetails.TotalWeight}"/>
+        <ListView x:Name="ExerciseList" ItemsSource="{Binding WeightWorkoutList}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
+            <ListView.ItemTemplate >
+                <DataTemplate>
+                    <ViewCell>
+                        <controls:OpenableCard CloseCardMainLabel="{Binding ExerciseName}" CloseCardMainValue="{Binding WeightOfExercise}" OpenCardMainLabel="{Binding ExerciseName}"
                                                            OpenCardFirstLabel="Weight" OpenCardFirstValue="{Binding WeightOfExercise}"
                                                            OpenCardSecondLabel="Reps" OpenCardSecondValue="{Binding Reps}" ButtonVisibility="True"/>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-        </StackLayout>
-    </ScrollView>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
 </ContentPage>
