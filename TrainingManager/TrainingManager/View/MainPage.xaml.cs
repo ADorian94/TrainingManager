@@ -7,8 +7,6 @@ namespace TrainingManager.View
         public MainPage()
         {
             InitializeComponent();
-            int i = 0;
-            --i;
         }
     }
 }
