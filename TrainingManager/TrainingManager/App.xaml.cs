@@ -31,5 +31,7 @@ namespace TrainingManager
         {
             // Handle when your app resumes
         }
+
+        //this is a test change
     }
 }
