@@ -33,5 +33,6 @@ namespace TrainingManager
         }
 
         //this is a test change
+        //second test change
     }
 }
