@@ -184,8 +184,8 @@ namespace TrainingManager.ViewModel
             _intervallTimerManager.IntervallFinished += new EventHandler(OnIntervallFinished);
             TimerStarted = false;
             TimerStopped = true;
-            _intervallWorkoutManager = new IntervallWorkoutManager();
-            AllIntervallWorkouts = new ObservableCollection<IntervallWorkout>(_intervallWorkoutManager.GetWorkouts());
+            //_intervallWorkoutManager = new IntervallWorkoutManager();
+            //AllIntervallWorkouts = new ObservableCollection<IntervallWorkout>(_intervallWorkoutManager.GetWorkouts());
             NewWorkoutIntervalls = new ObservableCollection<IntervallExercise>();
             InitializeCommands();
         }
@@ -206,18 +206,18 @@ namespace TrainingManager.ViewModel
 
         public void DeleteWorkout(string stringGuid)
         {
-            _intervallWorkoutManager.DeleteWorkoutById(stringGuid);
+            //_intervallWorkoutManager.DeleteWorkoutById(stringGuid);
 
-            if (SelectedWorkout?.WorkoutIdString == stringGuid)
-                SelectedWorkout = new IntervallWorkout();
+            //if (SelectedWorkout?.WorkoutIdString == stringGuid)
+            //    SelectedWorkout = new IntervallWorkout();
 
-            UpdateIntervallWorkouts();
+            //UpdateIntervallWorkouts();
         }
 
         public void DeleteIntervall(string stringGuid)
         {
-            _intervallWorkoutManager.DeleteExerciseFromWorkoutById(NewIntervallWorkout.WorkoutId, new Guid(stringGuid));
-            UpdateIntervallsInWorkout();
+            //_intervallWorkoutManager.DeleteExerciseFromWorkoutById(NewIntervallWorkout.WorkoutId, new Guid(stringGuid));
+            //UpdateIntervallsInWorkout();
         }
 
         public void EditWorkout(string stringGuid)
@@ -230,16 +230,16 @@ namespace TrainingManager.ViewModel
 
         public void EditIntervall(string stringGuid)
         {
-            NewIntervall = _intervallWorkoutManager.GetExerciseInWorkoutById(NewIntervallWorkout.WorkoutId, new Guid(stringGuid));
-            NewIntervallName = NewIntervall.ExerciseName;
-            NewIntervallTime = NewIntervall.IntervallTime;
-            OpenNewIntervallPage?.Invoke(this, EventArgs.Empty);
+            //NewIntervall = _intervallWorkoutManager.GetExerciseInWorkoutById(NewIntervallWorkout.WorkoutId, new Guid(stringGuid));
+            //NewIntervallName = NewIntervall.ExerciseName;
+            //NewIntervallTime = NewIntervall.IntervallTime;
+            //OpenNewIntervallPage?.Invoke(this, EventArgs.Empty);
         }
 
         private void UpdateIntervallsInWorkout()
         {
-            NewIntervallWorkout = _intervallWorkoutManager.GetWorkoutById(NewIntervallWorkout.WorkoutId);
-            NewWorkoutIntervalls = new ObservableCollection<IntervallExercise>(NewIntervallWorkout.Exercises);
+            //NewIntervallWorkout = _intervallWorkoutManager.GetWorkoutById(NewIntervallWorkout.WorkoutId);
+            //NewWorkoutIntervalls = new ObservableCollection<IntervallExercise>(NewIntervallWorkout.Exercises);
         }
 
         private void UpdateIntervallWorkouts() =>
@@ -303,46 +303,46 @@ namespace TrainingManager.ViewModel
 
         private void AddNewIntervall(object obj)
         {
-            if (NewWorkoutIntervalls.Any(x => x.ExerciseId.Equals(NewIntervall.ExerciseId)))
-                _intervallWorkoutManager.DeleteExerciseFromWorkoutById(NewIntervallWorkout.WorkoutId, NewIntervall.ExerciseId);
+            //    if (NewWorkoutIntervalls.Any(x => x.ExerciseId.Equals(NewIntervall.ExerciseId)))
+            //        _intervallWorkoutManager.DeleteExerciseFromWorkoutById(NewIntervallWorkout.WorkoutId, NewIntervall.ExerciseId);
 
-            NewIntervall = new IntervallExercise()
-            {
-                ExerciseId = Guid.NewGuid(),
-                ExerciseName = NewIntervallName,
-                IntervallTime = NewIntervallTime
-            };
+            //    NewIntervall = new IntervallExercise()
+            //    {
+            //        ExerciseId = Guid.NewGuid(),
+            //        ExerciseName = NewIntervallName,
+            //        IntervallTime = NewIntervallTime
+            //    };
 
-            _intervallWorkoutManager.AddExerciseToWorkoutById(NewIntervallWorkout.WorkoutId, NewIntervall);
-            NewWorkoutIntervalls.Add(NewIntervall);
-            UpdateIntervallsInWorkout();
-            CloseAddNewIntervallPage?.Invoke(this, EventArgs.Empty);
+            //    _intervallWorkoutManager.AddExerciseToWorkoutById(NewIntervallWorkout.WorkoutId, NewIntervall);
+            //    NewWorkoutIntervalls.Add(NewIntervall);
+            //    UpdateIntervallsInWorkout();
+            //    CloseAddNewIntervallPage?.Invoke(this, EventArgs.Empty);
         }
 
         private void AddNewIntervallWorkout(object obj)
         {
-            NewIntervallWorkout = new IntervallWorkout()
-            {
-                WorkoutId = NewIntervallWorkout.WorkoutId,
-                WorkoutName = NewWorkoutName,
-                Exercises = NewIntervallWorkout.Exercises,
-                WorkoutType = WorkoutType.IntervallWorkout,
-            };
+            //NewIntervallWorkout = new IntervallWorkout()
+            //{
+            //    WorkoutId = NewIntervallWorkout.WorkoutId,
+            //    WorkoutName = NewWorkoutName,
+            //    Exercises = NewIntervallWorkout.Exercises,
+            //    WorkoutType = WorkoutType.IntervallWorkout,
+            //};
 
-            _intervallWorkoutManager.SetWorkoutNameById(NewIntervallWorkout.WorkoutId, NewWorkoutName);
-            _intervallWorkoutManager.SaveWorkoutById(NewIntervallWorkout.WorkoutId, WorkoutType.IntervallWorkout);
+            //_intervallWorkoutManager.SetWorkoutNameById(NewIntervallWorkout.WorkoutId, NewWorkoutName);
+            //_intervallWorkoutManager.SaveWorkoutById(NewIntervallWorkout.WorkoutId, WorkoutType.IntervallWorkout);
 
-            if (!AllIntervallWorkouts.Any(x => x.WorkoutIdString == NewIntervallWorkout.WorkoutIdString))
-                AllIntervallWorkouts.Add(_intervallWorkoutManager.GetWorkoutById(NewIntervallWorkout.WorkoutId));
+            //if (!AllIntervallWorkouts.Any(x => x.WorkoutIdString == NewIntervallWorkout.WorkoutIdString))
+            //    AllIntervallWorkouts.Add(_intervallWorkoutManager.GetWorkoutById(NewIntervallWorkout.WorkoutId));
 
-            CloseNewIntervallWorkoutPage?.Invoke(this, EventArgs.Empty);
+            //CloseNewIntervallWorkoutPage?.Invoke(this, EventArgs.Empty);
         }
 
         private void OpenNewIntervallWorkout(object obj)
         {
             NewIntervallWorkout = new IntervallWorkout()
             {
-                WorkoutId = Guid.NewGuid(),
+                //WorkoutId = Guid.NewGuid(),
                 WorkoutName = string.Empty,
                 Exercises = new List<IntervallExercise>()
             };
@@ -357,7 +357,7 @@ namespace TrainingManager.ViewModel
         {
             NewIntervall = new IntervallExercise()
             {
-                ExerciseId = Guid.NewGuid(),
+                //ExerciseId = Guid.NewGuid(),
                 ExerciseName = string.Empty,
                 IntervallTime = 0,
             };

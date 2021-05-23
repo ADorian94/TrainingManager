@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles" 
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.HomePage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <local:Style/>
+    </ContentPage.Resources>
+    <!--<Grid BackgroundColor="{StaticResource AppBackgroundColor}">
+    <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="120"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid Grid.Row="0" Margin="0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <StackLayout Grid.Column="0" >
+            <Label Text="2021.02.19 - Friday" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+            <Label Text="Hello     Dorian" LineBreakMode="CharacterWrap" Style="{StaticResource Title0}"/>
+        </StackLayout>
+        <StackLayout Grid.Column="1">
+            <Button HorizontalOptions="End" BackgroundColor="Blue" CornerRadius="40" WidthRequest="80" HeightRequest="80" Margin="20"/>
+        </StackLayout>
+    </Grid>
+    <Label Grid.Row="1" Text="Your personal records" Style="{StaticResource Title1}"/>
+    <ScrollView Grid.Row="2" Orientation="Horizontal" Margin="15, 0">
+        <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+            <controls:TallSimpleCard CardMainText="Biceps" CardSecondaryText="12"/>
+            <controls:TallSimpleCard CardMainText="Triceps" CardSecondaryText="12" />
+            <controls:TallSimpleCard CardMainText="Squat" CardSecondaryText="12" />
+            <controls:TallSimpleCard CardMainText="BenchPress" CardSecondaryText="12" />
+        </StackLayout>
+    </ScrollView>
+    <Label Grid.Row="3" Text="Pervious workouts" Style="{StaticResource Title1}"/>
+    <ScrollView Grid.Row="4">
+        <StackLayout Orientation="Vertical">
+            <controls:SimpleCard CardMainText="Biceps"/>
+            <controls:SimpleCard CardMainText="Triceps"/>
+            <controls:SimpleCard CardMainText="Squat"/>
+            <controls:SimpleCard CardMainText="BenchPress"/>
+        </StackLayout>
+    </ScrollView>
+    </Grid> -->
+
+    <!--<Grid BackgroundColor="{StaticResource AppBackgroundColor}" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout Grid.Column="0" >
+                <Label Text="2021.02.19 - Friday" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+                <Label Text="Hello     Dorian" LineBreakMode="CharacterWrap" Style="{StaticResource Title0}"/>
+            </StackLayout>
+            <StackLayout Grid.Column="1">
+                <Button HorizontalOptions="End" BackgroundColor="Blue" CornerRadius="40" WidthRequest="80" HeightRequest="80" Margin="20"/>
+            </StackLayout>
+        </Grid>
+        <ScrollView Grid.Row="1" Margin="0, -15">
+            <StackLayout >
+                <Label Text="Your personal records" Style="{StaticResource Title1}"/>
+                <ScrollView Orientation="Horizontal" Margin="15, 0">
+                    <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                        <controls:TallSimpleCard CardMainText="Biceps" CardSecondaryText="12"/>
+                        <controls:TallSimpleCard CardMainText="Triceps" CardSecondaryText="12" />
+                        <controls:TallSimpleCard CardMainText="Squat" CardSecondaryText="12" />
+                        <controls:TallSimpleCard CardMainText="Bench Press" CardSecondaryText="12" />
+                    </StackLayout>
+                </ScrollView>
+                <Label Text="Pervious workouts" Style="{StaticResource Title1}"/>
+
+                -->
+    <!--<StackLayout Orientation="Vertical">-->
+    <!--
+                <controls:SimpleCard CardMainText="Biceps"/>
+                <controls:SimpleCard CardMainText="Triceps"/>
+                <controls:SimpleCard CardMainText="Squat"/>
+                <controls:SimpleCard CardMainText="Bench Press"/>
+                -->
+    <!--</StackLayout>-->
+    <!--
+            </StackLayout>
+        </ScrollView>
+    </Grid>-->
+    <ScrollView BackgroundColor="{StaticResource AppBackgroundColor}" >
+        <StackLayout >
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <StackLayout Grid.Column="0" >
+                    <Label Text="2021.02.19 - Friday" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+                    <Label LineBreakMode="CharacterWrap" Style="{StaticResource Title0}">
+                        Hello    Dorian
+                    </Label>
+                </StackLayout>
+                <StackLayout Grid.Column="1">
+                    <Button HorizontalOptions="End" BackgroundColor="Blue" CornerRadius="40" WidthRequest="80" HeightRequest="80" Margin="20"/>
+                </StackLayout>
+            </Grid>
+            <Label Text="Your personal records" Style="{StaticResource Title1}"/>
+            <ScrollView Orientation="Horizontal" Margin="15, 0">
+                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
+                    <controls:TallSimpleCard CardMainText="Biceps" CardSecondaryText="12"/>
+                    <controls:TallSimpleCard CardMainText="Triceps" CardSecondaryText="12" />
+                    <controls:TallSimpleCard CardMainText="Squat" CardSecondaryText="12" />
+                    <controls:TallSimpleCard CardMainText="Bench Press" CardSecondaryText="12" />
+                </StackLayout>
+            </ScrollView>
+            <Label Text="Recent workouts" Style="{StaticResource Title1}"/>
+            <!--<StackLayout Orientation="Vertical">-->
+            <controls:SimpleCard CardMainText="Biceps"/>
+            <controls:SimpleCard CardMainText="Triceps"/>
+            <controls:SimpleCard CardMainText="Squat"/>
+            <controls:SimpleCard CardMainText="Bench Press"/>
+            <!--</StackLayout>-->
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

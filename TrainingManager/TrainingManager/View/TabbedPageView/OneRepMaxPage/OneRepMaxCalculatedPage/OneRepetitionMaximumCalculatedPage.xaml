@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.OneRepetitionMaximumCalculatedPage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <local:Style/>
+    </ContentPage.Resources>
+    <StackLayout>
+        <Label Text="Results" Style="{StaticResource Title0}"/>
+        <ListView ItemsSource="{Binding RecomendedMaximums}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
+            <ListView.ItemTemplate >
+                <DataTemplate>
+                    <ViewCell>
+                        <controls:SimpleCard CardMainText="{Binding MethodName}" CardSecondaryText="{Binding MaximumValue}"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

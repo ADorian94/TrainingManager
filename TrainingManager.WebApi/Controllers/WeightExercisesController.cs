@@ -23,9 +23,9 @@ namespace TrainingManager.WebApi.Controllers
 
         // GET: api/WeightExercises
         [HttpGet]
-        public IEnumerable<WeightExercise> GetWeightExercise()
+        public IEnumerable<WeightExercise> GetWeightExercises()
         {
-            return _context.WeightExercise;
+            return _context.WeightExercises;
         }
 
         // GET: api/WeightExercises/5
@@ -37,7 +37,7 @@ namespace TrainingManager.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var weightExercise = await _context.WeightExercise.FindAsync(id);
+            var weightExercise = await _context.WeightExercises.FindAsync(id);
 
             if (weightExercise == null)
             {
@@ -91,7 +91,7 @@ namespace TrainingManager.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            _context.WeightExercise.Add(weightExercise);
+            _context.WeightExercises.Add(weightExercise);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetWeightExercise", new { id = weightExercise.Id }, weightExercise);
@@ -106,13 +106,13 @@ namespace TrainingManager.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-            var weightExercise = await _context.WeightExercise.FindAsync(id);
+            var weightExercise = await _context.WeightExercises.FindAsync(id);
             if (weightExercise == null)
             {
                 return NotFound();
             }
 
-            _context.WeightExercise.Remove(weightExercise);
+            _context.WeightExercises.Remove(weightExercise);
             await _context.SaveChangesAsync();
 
             return Ok(weightExercise);
@@ -120,7 +120,7 @@ namespace TrainingManager.WebApi.Controllers
 
         private bool WeightExerciseExists(int id)
         {
-            return _context.WeightExercise.Any(e => e.Id == id);
+            return _context.WeightExercises.Any(e => e.Id == id);
         }
     }
 }

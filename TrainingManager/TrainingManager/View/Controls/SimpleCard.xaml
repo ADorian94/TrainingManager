@@ -15,14 +15,14 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="40"/>
                 </Grid.ColumnDefinitions>
-                <Label Grid.Column="0"  Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="StartAndExpand" FontSize="30" TextColor="White"/>
+                <Label Grid.Column="0" LineBreakMode="TailTruncation" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="StartAndExpand" FontSize="30" TextColor="White"/>
                 <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="sharp_more_vert_white_24.png" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
             </Grid>
             <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}" HorizontalOptions="Center" FontSize="35" TextColor="White"/>

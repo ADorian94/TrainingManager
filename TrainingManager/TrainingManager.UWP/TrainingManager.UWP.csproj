@@ -130,6 +130,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-100.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="closeIcon.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="sharp_more_vert_white_24.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -146,8 +147,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client">
+      <Version>5.2.7</Version>
+    </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.11" />
+    <PackageReference Include="Xamarin.Forms-IconTabbedPage">
+      <Version>1.0.4</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TrainingManager\TrainingManager.csproj">

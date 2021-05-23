@@ -10,22 +10,29 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.7" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
+    <PackageReference Include="Xamarin.Forms-IconTabbedPage" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\TrainingManager.Data\TrainingManager.Data.csproj" />
     <ProjectReference Include="..\..\Utility\Utility.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="ViewModel\Navigation\MasterDetailPageItem\MasterDetailNavigationPageMenuItem.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="View\Controls\OpenableCard.xaml.cs">
       <DependentUpon>OpenableCard.xaml</DependentUpon>
     </Compile>
-    <Compile Update="View\WeightWorkout\WeightTrainingLog\AddExerciseCaruselPage.xaml.cs">
-      <DependentUpon>AddExerciseCaruselPage.xaml</DependentUpon>
+    <Compile Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewWeightWorkoutPage.xaml.cs">
+      <DependentUpon>AddNewWeightWorkoutPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\TabbedPageView\NavigationTabbedPage.xaml.cs">
+      <DependentUpon>NavigationTabbedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Update="View\TabbedPageView\OneRepMaxPage\OneRepMaxCalculatedPage\OneRepetitionMaximumCalculatedPage.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -57,16 +64,46 @@
     <EmbeddedResource Update="View\Controls\SimpleRoundCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\MasterDetailNavigationPage\MasterDetailNavigationPage.xaml">
+    <EmbeddedResource Update="View\Controls\TallSimpleCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\MasterDetailNavigationPage\MasterDetailNavigationPageMaster.xaml">
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\AddNewDrillCaruselPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\DrillPages\AddSavedWeightExercises.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\DrillPages\AddWeightDrillPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\DrillPages\NotePage\NotePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\PopUpViewView.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewRoundPage\AddNewRoundPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewWeightWorkoutPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\ExercisesPage\ExercisesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\HomePage\HomePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\NavigationTabbedPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\OneRepMaxPage\OneRepetitionMaximumCalculatorPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\SettingsPage\SettingsPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\Timer\ExerciseTimer\ExerciseTimer.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\OneRepetitionMaximumCalculatedPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\Styles\Style.xaml">
@@ -85,24 +122,6 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\WeightWorkout\WeightHistory\WorkoutHistoryDetails.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\AddWeightExercise.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\NoteEditor.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\AddExerciseCaruselPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\SavedWEightExercises.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightTrainingLog\TodayWeightWorkout.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\WeightWorkout\WeightWorkoutMenu.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
@@ -126,6 +145,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="View\WeightWorkout\WeightWorkout\" />
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\..\..\..\..\..\..\..\Microsoft\Xamarin\NuGet\newtonsoft.json\11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>

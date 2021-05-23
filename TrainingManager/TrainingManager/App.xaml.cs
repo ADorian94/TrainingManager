@@ -1,4 +1,7 @@
-﻿using TrainingManager.ViewModel.Navigation;
+﻿using System;
+using System.Threading.Tasks;
+using TrainingManager.Model.Services;
+using TrainingManager.ViewModel.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -8,12 +11,13 @@ namespace TrainingManager
     public partial class App : Application
     {
         private PageNavigationManager _pageNavigationManager;
+        private ApiServices _apiService;
 
         public App()
         {
             InitializeComponent();
-            _pageNavigationManager = new PageNavigationManager();
-
+            _apiService = new ApiServices("http://localhost:51426");
+            _pageNavigationManager = new PageNavigationManager(_apiService);
             MainPage = _pageNavigationManager.GetMainPage();
         }
 
