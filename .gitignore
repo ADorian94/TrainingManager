@@ -259,3 +259,9 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+*.db
+TrainingManager.WebApi/Migrations/20210523123259_first.Designer.cs
+TrainingManager.WebApi/Migrations/20210523123259_first.cs
+TrainingManager.WebApi/Migrations/TrainingManagerContextModelSnapshot.cs
+TrainingManager.WebApi/TrainingManager.db
+TrainingManager.WebApi/TrainingManager.db

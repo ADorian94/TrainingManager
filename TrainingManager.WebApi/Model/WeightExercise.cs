@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrainingManager.WebApi.Model
@@ -8,8 +9,11 @@ namespace TrainingManager.WebApi.Model
         public int Id { get; set; }
         public Guid ExerciseGuid { get; set; }
         public string ExerciseName { get; set; }
-        [ForeignKey("WeightDrill")]
-        public int DrillId { get; set; }
-        public virtual WeightDrill WeightDrill { get; set; }
+        public double TotalExerciseWeight { get; set; }
+        public string Note { get; set; }
+        [ForeignKey("Workout")]
+        public int WorkoutId { get; set; }
+        public virtual WeightWorkout Workout { get; set; }
+        public virtual ICollection<WeightRound> WeightRounds { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace TrainingManager.Data.DTO
 {
@@ -7,6 +8,8 @@ namespace TrainingManager.Data.DTO
         public int Id { get; set; }
         public Guid ExerciseGuid { get; set; }
         public string ExerciseName { get; set; }
-        public int DrillId { get; set; }
+        public double TotalExerciseWeight { get; set; }
+        public string Note { get; set; }
+        public virtual ICollection<WeightRoundDTO> WeightRounds { get; set; }
     }
 }

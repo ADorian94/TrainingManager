@@ -12,56 +12,56 @@ namespace TrainingManager.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class WeightDrillsController : ControllerBase
+    public class WorkoutImagesController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
 
-        public WeightDrillsController(TrainingManagerContext context)
+        public WorkoutImagesController(TrainingManagerContext context)
         {
             _context = context;
         }
 
-        // GET: api/WeightDrills
+        // GET: api/WorkoutImages
         [HttpGet]
-        public IEnumerable<WeightDrill> GetWeightDrills()
+        public IEnumerable<WorkoutImage> GetWorkoutImages()
         {
-            return _context.WeightDrills;
+            return _context.WorkoutImages;
         }
 
-        // GET: api/WeightDrills/5
+        // GET: api/WorkoutImages/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetWeightDrill([FromRoute] int id)
+        public async Task<IActionResult> GetWorkoutImage([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var weightDrill = await _context.WeightDrills.FindAsync(id);
+            var workoutImage = await _context.WorkoutImages.FindAsync(id);
 
-            if (weightDrill == null)
+            if (workoutImage == null)
             {
                 return NotFound();
             }
 
-            return Ok(weightDrill);
+            return Ok(workoutImage);
         }
 
-        // PUT: api/WeightDrills/5
+        // PUT: api/WorkoutImages/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWeightDrill([FromRoute] int id, [FromBody] WeightDrill weightDrill)
+        public async Task<IActionResult> PutWorkoutImage([FromRoute] int id, [FromBody] WorkoutImage workoutImage)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != weightDrill.Id)
+            if (id != workoutImage.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(weightDrill).State = EntityState.Modified;
+            _context.Entry(workoutImage).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +69,7 @@ namespace TrainingManager.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!WeightDrillExists(id))
+                if (!WorkoutImageExists(id))
                 {
                     return NotFound();
                 }
@@ -82,45 +82,45 @@ namespace TrainingManager.WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/WeightDrills
+        // POST: api/WorkoutImages
         [HttpPost]
-        public async Task<IActionResult> PostWeightDrill([FromBody] WeightDrill weightDrill)
+        public async Task<IActionResult> PostWorkoutImage([FromBody] WorkoutImage workoutImage)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.WeightDrills.Add(weightDrill);
+            _context.WorkoutImages.Add(workoutImage);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetWeightDrill", new { id = weightDrill.Id }, weightDrill);
+            return CreatedAtAction("GetWorkoutImage", new { id = workoutImage.Id }, workoutImage);
         }
 
-        // DELETE: api/WeightDrills/5
+        // DELETE: api/WorkoutImages/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteWeightDrill([FromRoute] int id)
+        public async Task<IActionResult> DeleteWorkoutImage([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var weightDrill = await _context.WeightDrills.FindAsync(id);
-            if (weightDrill == null)
+            var workoutImage = await _context.WorkoutImages.FindAsync(id);
+            if (workoutImage == null)
             {
                 return NotFound();
             }
 
-            _context.WeightDrills.Remove(weightDrill);
+            _context.WorkoutImages.Remove(workoutImage);
             await _context.SaveChangesAsync();
 
-            return Ok(weightDrill);
+            return Ok(workoutImage);
         }
 
-        private bool WeightDrillExists(int id)
+        private bool WorkoutImageExists(int id)
         {
-            return _context.WeightDrills.Any(e => e.Id == id);
+            return _context.WorkoutImages.Any(e => e.Id == id);
         }
     }
 }

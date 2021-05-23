@@ -13,7 +13,6 @@ namespace TrainingManager.WebApi.Model
         public WorkoutType WorkoutType { get; set; }
         public DateTime WorkoutDate { get; set; }
         public double TotalWeight { get; set; }
-        public virtual ICollection<Round> Rounds { get; set; }
-        public virtual ICollection<WeightDrill> WeightDrills { get; set; }
+        public virtual ICollection<WeightExercise> WeightExercises { get; set; }
     }
 }

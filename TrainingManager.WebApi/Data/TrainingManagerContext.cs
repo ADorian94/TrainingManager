@@ -10,8 +10,8 @@ namespace TrainingManager.WebApi.Data
         }
 
         public DbSet<WeightWorkout> WeightWorkouts { get; set; }
-        public DbSet<WeightDrill> WeightDrills { get; set; }
-        public DbSet<Round> WeightRounds { get; set; }
         public DbSet<WeightExercise> WeightExercises { get; set; }
+        public DbSet<WeightRound> WeightRounds { get; set; }
+        public DbSet<WorkoutImage> WorkoutImages { get; set; }
     }
 }

@@ -16,74 +16,48 @@ namespace TrainingManager.WebApi.Migrations
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.1.14-servicing-32113");
 
-            modelBuilder.Entity("TrainingManager.WebApi.Model.Round", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("Note");
-
-                    b.Property<int>("Reps");
-
-                    b.Property<Guid>("RoundGuid");
-
-                    b.Property<string>("RoundName");
-
-                    b.Property<int>("WorkoutId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("WeightRounds");
-                });
-
-            modelBuilder.Entity("TrainingManager.WebApi.Model.WeightDrill", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<DateTime>("DrillDate");
-
-                    b.Property<Guid>("DrillGuid");
-
-                    b.Property<string>("DrillName");
-
-                    b.Property<string>("Note");
-
-                    b.Property<int>("Reps");
-
-                    b.Property<int>("RoundId");
-
-                    b.Property<double>("WeightOfDrill");
-
-                    b.Property<int>("WorkoutId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoundId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("WeightDrills");
-                });
-
             modelBuilder.Entity("TrainingManager.WebApi.Model.WeightExercise", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("DrillId");
-
                     b.Property<Guid>("ExerciseGuid");
 
                     b.Property<string>("ExerciseName");
 
+                    b.Property<string>("Note");
+
+                    b.Property<double>("TotalExerciseWeight");
+
+                    b.Property<int>("WorkoutId");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("DrillId");
+                    b.HasIndex("WorkoutId");
 
                     b.ToTable("WeightExercises");
+                });
+
+            modelBuilder.Entity("TrainingManager.WebApi.Model.WeightRound", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("ExerciseId");
+
+                    b.Property<int>("Reps");
+
+                    b.Property<Guid>("RoundGuid");
+
+                    b.Property<int>("RoundNumber");
+
+                    b.Property<double>("WeightOfDrill");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ExerciseId");
+
+                    b.ToTable("WeightRounds");
                 });
 
             modelBuilder.Entity("TrainingManager.WebApi.Model.WeightWorkout", b =>
@@ -108,32 +82,45 @@ namespace TrainingManager.WebApi.Migrations
                     b.ToTable("WeightWorkouts");
                 });
 
-            modelBuilder.Entity("TrainingManager.WebApi.Model.Round", b =>
+            modelBuilder.Entity("TrainingManager.WebApi.Model.WorkoutImage", b =>
                 {
-                    b.HasOne("TrainingManager.WebApi.Model.WeightWorkout", "Workout")
-                        .WithMany("Rounds")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity("TrainingManager.WebApi.Model.WeightDrill", b =>
-                {
-                    b.HasOne("TrainingManager.WebApi.Model.Round", "Round")
-                        .WithMany("WeightDrills")
-                        .HasForeignKey("RoundId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<byte[]>("ImageLarge");
 
-                    b.HasOne("TrainingManager.WebApi.Model.WeightWorkout", "Workout")
-                        .WithMany("WeightDrills")
-                        .HasForeignKey("WorkoutId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Property<byte[]>("ImageSmall");
+
+                    b.Property<int>("WorkoutId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("WorkoutId");
+
+                    b.ToTable("WorkoutImages");
                 });
 
             modelBuilder.Entity("TrainingManager.WebApi.Model.WeightExercise", b =>
                 {
-                    b.HasOne("TrainingManager.WebApi.Model.WeightDrill", "WeightDrill")
+                    b.HasOne("TrainingManager.WebApi.Model.WeightWorkout", "Workout")
+                        .WithMany("WeightExercises")
+                        .HasForeignKey("WorkoutId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TrainingManager.WebApi.Model.WeightRound", b =>
+                {
+                    b.HasOne("TrainingManager.WebApi.Model.WeightExercise", "Exercise")
+                        .WithMany("WeightRounds")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("TrainingManager.WebApi.Model.WorkoutImage", b =>
+                {
+                    b.HasOne("TrainingManager.WebApi.Model.WeightWorkout", "Workout")
                         .WithMany()
-                        .HasForeignKey("DrillId")
+                        .HasForeignKey("WorkoutId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618

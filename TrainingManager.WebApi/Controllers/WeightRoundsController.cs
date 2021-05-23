@@ -12,56 +12,56 @@ namespace TrainingManager.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RoundsController : ControllerBase
+    public class WeightRoundsController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
 
-        public RoundsController(TrainingManagerContext context)
+        public WeightRoundsController(TrainingManagerContext context)
         {
             _context = context;
         }
 
-        // GET: api/Rounds
+        // GET: api/WeightRounds
         [HttpGet]
-        public IEnumerable<Round> GetWeightRounds()
+        public IEnumerable<WeightRound> GetWeightRounds()
         {
             return _context.WeightRounds;
         }
 
-        // GET: api/Rounds/5
+        // GET: api/WeightRounds/5
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetRound([FromRoute] int id)
+        public async Task<IActionResult> GetWeightRound([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var round = await _context.WeightRounds.FindAsync(id);
+            var weightRound = await _context.WeightRounds.FindAsync(id);
 
-            if (round == null)
+            if (weightRound == null)
             {
                 return NotFound();
             }
 
-            return Ok(round);
+            return Ok(weightRound);
         }
 
-        // PUT: api/Rounds/5
+        // PUT: api/WeightRounds/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutRound([FromRoute] int id, [FromBody] Round round)
+        public async Task<IActionResult> PutWeightRound([FromRoute] int id, [FromBody] WeightRound weightRound)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != round.Id)
+            if (id != weightRound.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(round).State = EntityState.Modified;
+            _context.Entry(weightRound).State = EntityState.Modified;
 
             try
             {
@@ -69,7 +69,7 @@ namespace TrainingManager.WebApi.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!RoundExists(id))
+                if (!WeightRoundExists(id))
                 {
                     return NotFound();
                 }
@@ -82,43 +82,43 @@ namespace TrainingManager.WebApi.Controllers
             return NoContent();
         }
 
-        // POST: api/Rounds
+        // POST: api/WeightRounds
         [HttpPost]
-        public async Task<IActionResult> PostRound([FromBody] Round round)
+        public async Task<IActionResult> PostWeightRound([FromBody] WeightRound weightRound)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            _context.WeightRounds.Add(round);
+            _context.WeightRounds.Add(weightRound);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetRound", new { id = round.Id }, round);
+            return CreatedAtAction("GetWeightRound", new { id = weightRound.Id }, weightRound);
         }
 
-        // DELETE: api/Rounds/5
+        // DELETE: api/WeightRounds/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteRound([FromRoute] int id)
+        public async Task<IActionResult> DeleteWeightRound([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var round = await _context.WeightRounds.FindAsync(id);
-            if (round == null)
+            var weightRound = await _context.WeightRounds.FindAsync(id);
+            if (weightRound == null)
             {
                 return NotFound();
             }
 
-            _context.WeightRounds.Remove(round);
+            _context.WeightRounds.Remove(weightRound);
             await _context.SaveChangesAsync();
 
-            return Ok(round);
+            return Ok(weightRound);
         }
 
-        private bool RoundExists(int id)
+        private bool WeightRoundExists(int id)
         {
             return _context.WeightRounds.Any(e => e.Id == id);
         }

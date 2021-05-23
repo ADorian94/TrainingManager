@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using TrainingManager.Data.DTO;
+using Microsoft.EntityFrameworkCore;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
@@ -23,278 +23,104 @@ namespace TrainingManager.WebApi.Controllers
 
         // GET: api/WeightWorkouts
         [HttpGet]
-        public IActionResult GetWeightWorkouts()
+        public IEnumerable<WeightWorkout> GetWeightWorkouts()
         {
-            try
-            {
-                return Ok(_context.WeightWorkouts.Select(weightWorkout => new WeightWorkoutDTO
-                {
-                    Id = weightWorkout.Id,
-                    WorkoutName = weightWorkout.WorkoutName,
-                    WorkoutGuid = weightWorkout.WorkoutGuid,
-                    Note = weightWorkout.Note,
-                    TotalWeight = weightWorkout.TotalWeight,
-                    WorkoutType = weightWorkout.WorkoutType,
-                    WorkoutDate = weightWorkout.WorkoutDate,
-                    Rounds = _context.WeightRounds.Where(x => x.WorkoutId == weightWorkout.Id).Select(round => new RoundDTO
-                    {
-                        Id = round.Id,
-                        RoundGuid = round.RoundGuid,
-                        RoundName = round.RoundName,
-                        WorkoutId = round.WorkoutId,
-                        Reps = round.Reps,
-                        Note = round.Note,
-                        WeightDrills = _context.WeightDrills.Where(x => x.RoundId == round.Id).Select(drill => new WeightDrillDTO
-                        {
-                            Id = drill.Id,
-                            DrillName = drill.DrillName,
-                            DrillGuid = drill.DrillGuid,
-                            RoundId = drill.RoundId,
-                            DrillDate = drill.DrillDate,
-                            Note = drill.Note,
-                            Reps = drill.Reps,
-                            WorkoutId = drill.WorkoutId,
-                            WeightOfDrill = drill.WeightOfDrill
-                        }).ToList()
-                    }).ToList(),
-                    WeightDrills = _context.WeightDrills.Where(x => x.WorkoutId == weightWorkout.Id).Select(drill => new WeightDrillDTO
-                    {
-                        Id = drill.Id,
-                        DrillName = drill.DrillName,
-                        DrillGuid = drill.DrillGuid,
-                        RoundId = drill.RoundId,
-                        DrillDate = drill.DrillDate,
-                        Note = drill.Note,
-                        Reps = drill.Reps,
-                        WorkoutId = drill.WorkoutId,
-                        WeightOfDrill = drill.WeightOfDrill
-                    }).ToList()
-                }));
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                // Internal Server Error
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+            return _context.WeightWorkouts;
         }
 
         // GET: api/WeightWorkouts/5
         [HttpGet("{id}")]
-        public IActionResult GetWeightWorkout([FromRoute] int id)
+        public async Task<IActionResult> GetWeightWorkout([FromRoute] int id)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
+                return BadRequest(ModelState);
+            }
 
-                return Ok(_context.WeightWorkouts.Where(x => x.Id == id).Select(weightWorkout => new WeightWorkoutDTO
-                {
-                    Id = weightWorkout.Id,
-                    WorkoutName = weightWorkout.WorkoutName,
-                    WorkoutGuid = weightWorkout.WorkoutGuid,
-                    Note = weightWorkout.Note,
-                    TotalWeight = weightWorkout.TotalWeight,
-                    WorkoutType = weightWorkout.WorkoutType,
-                    WorkoutDate = weightWorkout.WorkoutDate,
-                    Rounds = _context.WeightRounds.Where(x => x.WorkoutId == weightWorkout.Id).Select(round => new RoundDTO
-                    {
-                        Id = round.Id,
-                        RoundGuid = round.RoundGuid,
-                        RoundName = round.RoundName,
-                        WorkoutId = round.WorkoutId,
-                        Reps = round.Reps,
-                        Note = round.Note,
-                        WeightDrills = _context.WeightDrills.Where(x => x.RoundId == round.Id).Select(drill => new WeightDrillDTO
-                        {
-                            Id = drill.Id,
-                            DrillName = drill.DrillName,
-                            DrillGuid = drill.DrillGuid,
-                            RoundId = drill.RoundId,
-                            DrillDate = drill.DrillDate,
-                            Note = drill.Note,
-                            Reps = drill.Reps,
-                            WorkoutId = drill.WorkoutId,
-                            WeightOfDrill = drill.WeightOfDrill
-                        }).ToList()
-                    }).ToList(),
-                    WeightDrills = _context.WeightDrills.Where(x => x.WorkoutId == weightWorkout.Id).Select(drill => new WeightDrillDTO
-                    {
-                        Id = drill.Id,
-                        DrillName = drill.DrillName,
-                        DrillGuid = drill.DrillGuid,
-                        RoundId = drill.RoundId,
-                        DrillDate = drill.DrillDate,
-                        Note = drill.Note,
-                        Reps = drill.Reps,
-                        WorkoutId = drill.WorkoutId,
-                        WeightOfDrill = drill.WeightOfDrill
-                    }).ToList()
-                }).Single());
-            }
-            catch (Exception ex)
+            var weightWorkout = await _context.WeightWorkouts.FindAsync(id);
+
+            if (weightWorkout == null)
             {
-                Console.WriteLine(ex.Message);
-                // Internal Server Error
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return NotFound();
             }
+
+            return Ok(weightWorkout);
         }
 
         // PUT: api/WeightWorkouts/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutWeightWorkout([FromRoute] int id, [FromBody] WeightWorkoutDTO weightWorkoutDTO)
+        public async Task<IActionResult> PutWeightWorkout([FromRoute] int id, [FromBody] WeightWorkout weightWorkout)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            if (id != weightWorkout.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(weightWorkout).State = EntityState.Modified;
+
             try
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-                if (id != weightWorkoutDTO.Id)
-                    return BadRequest();
-
-                WeightWorkout weightWorkout = _context.WeightWorkouts.FirstOrDefault(x => x.Id == weightWorkoutDTO.Id);
-
-                if (weightWorkout == null)
-                    return NotFound();
-
-                weightWorkout.WorkoutGuid = weightWorkoutDTO.WorkoutGuid;
-                weightWorkout.WorkoutName = weightWorkoutDTO.WorkoutName;
-                weightWorkout.Note = weightWorkoutDTO.Note;
-                weightWorkout.TotalWeight = weightWorkoutDTO.TotalWeight;
-                weightWorkout.WorkoutType = weightWorkoutDTO.WorkoutType;
-                weightWorkout.WorkoutDate = weightWorkoutDTO.WorkoutDate;
-
-                //todo: rounds és drills tárolása
-
                 await _context.SaveChangesAsync();
-                return Ok();
             }
-            catch
+            catch (DbUpdateConcurrencyException)
             {
-                // Internal Server Error
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                if (!WeightWorkoutExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
             }
+
+            return NoContent();
         }
 
         // POST: api/WeightWorkouts
         [HttpPost]
-        public async Task<IActionResult> PostWeightWorkout([FromBody] WeightWorkoutDTO weightWorkoutDTO)
+        public async Task<IActionResult> PostWeightWorkout([FromBody] WeightWorkout weightWorkout)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-                var newWeightWorkout = new WeightWorkout()
-                {
-                    WorkoutGuid = weightWorkoutDTO.WorkoutGuid,
-                    WorkoutName = weightWorkoutDTO.WorkoutName,
-                    Note = weightWorkoutDTO.Note,
-                    TotalWeight = weightWorkoutDTO.TotalWeight,
-                    WorkoutType = weightWorkoutDTO.WorkoutType,
-                    WorkoutDate = weightWorkoutDTO.WorkoutDate,
-                };
-
-                var addedWorkout = _context.WeightWorkouts.Add(newWeightWorkout);
-                weightWorkoutDTO.Id = addedWorkout.Entity.Id;
-                AddWeightDrill(weightWorkoutDTO.WeightDrills);
-                AddRounds(weightWorkoutDTO.Rounds);
-                await _context.SaveChangesAsync();
-
-                return CreatedAtAction("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
+                return BadRequest(ModelState);
             }
-            catch
-            {
-                // Internal Server Error
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+
+            _context.WeightWorkouts.Add(weightWorkout);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetWeightWorkout", new { id = weightWorkout.Id }, weightWorkout);
         }
 
         // DELETE: api/WeightWorkouts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWeightWorkout([FromRoute] int id)
         {
-            try
+            if (!ModelState.IsValid)
             {
-                if (!ModelState.IsValid)
-                    return BadRequest(ModelState);
-
-                var weightWorkout = await _context.WeightWorkouts.FindAsync(id);
-
-                if (weightWorkout == null)
-                    return NotFound();
-
-                _context.WeightWorkouts.Remove(weightWorkout);
-                await _context.SaveChangesAsync();
-
-                return Ok(weightWorkout);
+                return BadRequest(ModelState);
             }
-            catch
+
+            var weightWorkout = await _context.WeightWorkouts.FindAsync(id);
+            if (weightWorkout == null)
             {
-                // Internal Server Error
-                return StatusCode(StatusCodes.Status500InternalServerError);
+                return NotFound();
             }
+
+            _context.WeightWorkouts.Remove(weightWorkout);
+            await _context.SaveChangesAsync();
+
+            return Ok(weightWorkout);
         }
 
         private bool WeightWorkoutExists(int id)
         {
             return _context.WeightWorkouts.Any(e => e.Id == id);
-        }
-
-        private bool AddRounds(ICollection<RoundDTO> roundDTOs)
-        {
-            try
-            {
-                foreach (var roundDTO in roundDTOs)
-                {
-                    var newRound = new Round()
-                    {
-                        RoundName = roundDTO.RoundName,
-                        RoundGuid = roundDTO.RoundGuid,
-                        Note = roundDTO.Note,
-                        Reps = roundDTO.Reps,
-                        WorkoutId = roundDTO.WorkoutId,
-                    };
-
-                    AddWeightDrill(roundDTO.WeightDrills);
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
-        }
-
-        private bool AddWeightDrill(ICollection<WeightDrillDTO> weightDrillDTOs)
-        {
-            try
-            {
-                foreach (var weightDrillDTO in weightDrillDTOs)
-                {
-                    var newWeightDrill = new WeightDrill()
-                    {
-                        DrillName = weightDrillDTO.DrillName,
-                        DrillDate = weightDrillDTO.DrillDate,
-                        DrillGuid = weightDrillDTO.DrillGuid,
-                        Note = weightDrillDTO.Note,
-                        Reps = weightDrillDTO.Reps,
-                        RoundId = weightDrillDTO.RoundId,
-                        WeightOfDrill = weightDrillDTO.WeightOfDrill,
-                        WorkoutId = weightDrillDTO.WorkoutId
-                    };
-
-                    var addedDrill = _context.WeightDrills.Add(newWeightDrill);
-                    weightDrillDTO.Id = addedDrill.Entity.Id;
-                }
-
-                return true;
-            }
-            catch
-            {
-                return false;
-            }
         }
     }
 }
