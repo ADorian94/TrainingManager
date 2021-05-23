@@ -18,7 +18,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout>
-        <Label Text="{Binding WorkoutDetails.WorkoutName}" Style="{StaticResource Title}"/>
+        <Label Text="{Binding WorkoutDetails.WorkoutName}" Style="{StaticResource Title1}"/>
         <controls:SimpleCard CardMainText="Total weight" CardSecondaryText="{Binding WorkoutDetails.TotalWeight}"/>
         <ListView x:Name="ExerciseList" ItemsSource="{Binding WeightWorkoutList}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None">
             <ListView.ItemTemplate >

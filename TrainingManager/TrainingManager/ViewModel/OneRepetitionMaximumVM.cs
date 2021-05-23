@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using TrainingManager.Model;
+using TrainingManager.Model.Services;
 
 namespace TrainingManager.ViewModel
 {
@@ -62,7 +63,6 @@ namespace TrainingManager.ViewModel
                 OnPropertyChanged();
             }
         }
-
 
         private void CalculateMaximum(object obj)
         {

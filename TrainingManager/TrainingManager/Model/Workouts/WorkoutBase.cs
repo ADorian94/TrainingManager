@@ -8,8 +8,8 @@ namespace TrainingManager.Model.Workouts
         /// <summary>
         /// Unique id of the workout.
         /// </summary>
-        public Guid WorkoutId { get; set; }
-        public string WorkoutIdString { get => WorkoutId.ToString(); }
+        public int Id { get; set; }
+        public Guid WorkoutGuid { get; set; }
         /// <summary>
         /// Name of the workout
         /// </summary>

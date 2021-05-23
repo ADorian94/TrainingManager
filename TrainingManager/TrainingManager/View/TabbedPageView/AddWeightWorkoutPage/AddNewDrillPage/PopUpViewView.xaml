@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.TabbedPageView.AddWeightWorkoutPage.AddNewDrillPage.PopUpViewView"
+             AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All"
+             x:Name="this" Margin="0" BackgroundColor="#C0333333"
+             IsVisible="{x:Binding Source={x:Reference this}, Path=IsPopUpVisible}">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <Frame VerticalOptions="Center" Padding="0" HorizontalOptions="Center" WidthRequest="300" HeightRequest="150" IsClippedToBounds="True" HasShadow="True" CornerRadius="10">
+        <StackLayout BackgroundColor="{StaticResource CardBackgroundColor}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Margin="10, 5" Text="{x:Binding Source={x:Reference this}, Path=PopUpText}" Style="{StaticResource Title1}" HorizontalOptions="StartAndExpand"/>
+                <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="closeIcon.png" HeightRequest="20" Clicked="ImageButton_Clicked" />
+            </Grid>
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource BlueButton}" Text="{x:Binding Source={x:Reference this}, Path=RoundButtonText}" Command="{x:Binding Source={x:Reference this}, Path=RoundButtonCommand}" Margin="15, 15, 5, 0"/>
+                <Button Grid.Column="1" Style="{StaticResource BlueButton}" Text="{x:Binding Source={x:Reference this}, Path=ExerciseButtonText}" Command="{x:Binding Source={x:Reference this}, Path=ExerciseButtonCommand}" Margin="5, 15, 15, 0"/>
+            </Grid>
+        </StackLayout>
+    </Frame>
+</ContentView>

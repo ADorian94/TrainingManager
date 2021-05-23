@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using TrainingManager.Data.DTO;
 using TrainingManager.Model.Workouts.WeightWorkout;
 using Xamarin.Forms;
 
@@ -41,7 +42,7 @@ namespace TrainingManager.ViewModel
             if (value == null)
                 return false;
 
-            var collection = (ObservableCollection<WeightExercise>)value;
+            var collection = (ObservableCollection<WeightDrillVM>)value;
 
             if (collection.Count == 0)
                 return false;

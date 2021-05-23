@@ -17,8 +17,8 @@ namespace TrainingManager.ViewModel
 
         public WeightWorkoutHistoryManagerVM()
         {
-            _weightWorkoutManager = new WeightWorkoutManager();
-            WeightWorkoutsHistory = new ObservableCollection<WeightWorkout>(_weightWorkoutManager.GetWorkouts().Where(x => x.WorkoutDate.Date != DateTime.Now.Date));
+            //_weightWorkoutManager = new WeightWorkoutManager();
+            //WeightWorkoutsHistory = new ObservableCollection<WeightWorkout>(_weightWorkoutManager.GetWorkouts().Where(x => x.WorkoutDate.Date != DateTime.Now.Date));
             InitializeCommands();
         }
 

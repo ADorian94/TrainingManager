@@ -32,6 +32,8 @@
         WeightWorkout,
     }
 
+    public enum PageType { WightWorkout };
+
     public static class UsedFolders
     {
         public const string INTERVALL = "Intervall";

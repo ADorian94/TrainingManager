@@ -13,18 +13,39 @@
         <Setter Property="BackgroundColor" Value="{StaticResource AppBackgroundColor}"/>
     </Style>
 
-    <Style x:Key="Title" TargetType="{x:Type Label}">
+    <Style x:Key="Title0" TargetType="{x:Type Label}">
         <Setter Property="TextColor" Value="White"/>
-        <Setter Property="FontSize" Value="40"/>
+        <Setter Property="FontSize" Value="35"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="Margin" Value="15,15,15,0"/>
+        <Setter Property="Margin" Value="15,10,15,0"/>
+    </Style>
+
+    <Style x:Key="Title1" TargetType="{x:Type Label}">
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="FontSize" Value="25"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="Margin" Value="15,0,15,0"/>
+    </Style>
+
+    <Style x:Key="Title2" TargetType="{x:Type Label}">
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="FontSize" Value="15"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="Margin" Value="15,5,15,0"/>
+    </Style>
+
+    <Style x:Key="TitleSmall" TargetType="{x:Type Label}">
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="FontSize" Value="10"/>
+        <Setter Property="FontAttributes" Value="None"/>
+        <Setter Property="Margin" Value="15,10,15,0"/>
     </Style>
 
     <Style x:Key="BlueButton" TargetType="{x:Type Button}">
         <Setter Property="TextColor" Value="Black"/>
-        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="FontSize" Value="25"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="Margin" Value="15, 15, 15, 20"/>
+        <Setter Property="Margin" Value="15, 15, 15, 5"/>
         <Setter Property="CornerRadius" Value="10"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="HeightRequest" Value="60"/>
@@ -35,9 +56,9 @@
 
     <Style x:Key="RedButton" TargetType="{x:Type Button}">
         <Setter Property="TextColor" Value="Black"/>
-        <Setter Property="FontSize" Value="30"/>
+        <Setter Property="FontSize" Value="25"/>
         <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="Margin" Value="15, 15, 15, 20"/>
+        <Setter Property="Margin" Value="15, 15, 15, 5"/>
         <Setter Property="CornerRadius" Value="10"/>
         <Setter Property="HorizontalOptions" Value="FillAndExpand"/>
         <Setter Property="HeightRequest" Value="60"/>

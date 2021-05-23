@@ -4,41 +4,41 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using TrainingManager.Model.Interfaces;
-using TrainingManager.Model.Persistence;
+//using TrainingManager.Model.Persistence;
 using TrainingManager.Model.Workouts;
 
 namespace TrainingManager.Model
 {
-    public class WorkoutManagerBase<WorkoutTemplate, ExerciseTemplate> : IWorkoutManager<WorkoutTemplate, ExerciseTemplate>
+    public class WorkoutManagerBase<WorkoutTemplate, ExerciseTemplate> /*: IWorkoutManager<WorkoutTemplate, ExerciseTemplate>*/
         where WorkoutTemplate : WorkoutBase<ExerciseTemplate>
         where ExerciseTemplate : ExerciseBase
     {
-        public List<WorkoutTemplate> _workouts;
-        public IXmlHandler<WorkoutTemplate> _xmlHandler;
+        //public List<WorkoutTemplate> _workouts;
+        //public IXmlHandler<WorkoutTemplate> _xmlHandler;
 
         public WorkoutManagerBase()
         {
-            _workouts = new List<WorkoutTemplate>();
-            _xmlHandler = new XmlHandler<WorkoutTemplate, ExerciseTemplate>();
+            //_workouts = new List<WorkoutTemplate>();
+            //_xmlHandler = new XmlHandler<WorkoutTemplate, ExerciseTemplate>();
         }
 
         /// <summary>
         /// Add new exercise the the workout list.
         /// </summary>
         /// <param name="newWorkout">New workout.</param>
-        public void AddNewWorkout(WorkoutTemplate newWorkout) => _workouts.Add(newWorkout);
+        //public void AddNewWorkout(WorkoutTemplate newWorkout) => _workouts.Add(newWorkout);
         /// <summary>
         /// Get all added workouts.
         /// </summary>
         /// <returns>Workout list.</returns>
-        public List<WorkoutTemplate> GetWorkouts() => _workouts;
+        //public List<WorkoutTemplate> GetWorkouts() => _workouts;
         /// <summary>
         /// Add new exercise to a specified workout.
         /// </summary>
         /// <param name="workoutId">Unique if of the workout.</param>
         /// <param name="exercise">New exercise</param>
-        public void AddExerciseToWorkoutById(Guid workoutId, ExerciseTemplate exercise) =>
-            _workouts.Single(w => w.WorkoutId == workoutId).Exercises.Add(exercise);
+        //public void AddExerciseToWorkoutById(Guid workoutId, ExerciseTemplate exercise) =>
+        //    _workouts.Single(w => w.WorkoutId == workoutId).Exercises.Add(exercise);
 
         /// <summary>
         /// Remove specified exercise from the specified workout
@@ -47,22 +47,22 @@ namespace TrainingManager.Model
         /// <param name="exerciseId"></param>
         public void DeleteExerciseFromWorkoutById(Guid workoutId, Guid exerciseId)
         {
-            foreach (var workout in _workouts)
-            {
-                ExerciseTemplate tempExercise = null;
+            //foreach (var workout in _workouts)
+            //{
+            //    ExerciseTemplate tempExercise = null;
 
-                if (workout.WorkoutId.Equals(workoutId))
-                {
-                    foreach (var exercise in workout.Exercises)
-                    {
-                        if (exercise.ExerciseId.Equals(exerciseId))
-                            tempExercise = exercise;
-                    }
-                }
+            //    if (workout.WorkoutId.Equals(workoutId))
+            //    {
+            //        foreach (var exercise in workout.Exercises)
+            //        {
+            //            if (exercise.ExerciseId.Equals(exerciseId))
+            //                tempExercise = exercise;
+            //        }
+            //    }
 
-                if (tempExercise != null)
-                    workout.Exercises.Remove(tempExercise);
-            }
+            //    if (tempExercise != null)
+            //        workout.Exercises.Remove(tempExercise);
+            //}
         }
 
         //_workouts.First(w => w.WorkoutId == workoutId).Exercises.Remove(_workouts.First(w => w.WorkoutId.Equals(workoutId)).Exercises.First(e => e.ExerciseId.Equals(exerciseId)));
@@ -85,21 +85,21 @@ namespace TrainingManager.Model
             //    Exercises = temporaryWorkout.Exercises
             //});
 
-            _workouts.Single(x => x.WorkoutId == workoutId).WorkoutName = workoutName;
+            //_workouts.Single(x => x.WorkoutId == workoutId).WorkoutName = workoutName;
         }
         /// <summary>
         /// Get the specified workout.
         /// </summary>
         /// <param name="workoutId">Unique if of the searched workout.</param>
         /// <returns>Selected workout.</returns>
-        public WorkoutTemplate GetWorkoutById(Guid workoutId) => _workouts.Single(x => x.WorkoutId == workoutId);
+        //public WorkoutTemplate GetWorkoutById(Guid workoutId) => _workouts.Single(x => x.WorkoutId == workoutId);
 
         /// <summary>
         /// Get the exercises of the specified workout.
         /// </summary>
         /// <param name="workoutId">Unique id of the workout.</param>
         /// <returns>Exercises of the selected workout.</returns>
-        public List<ExerciseTemplate> GetWorkoutExercisesById(Guid workoutId) => _workouts.Single(x => x.WorkoutId == workoutId).Exercises;
+        //public List<ExerciseTemplate> GetWorkoutExercisesById(Guid workoutId) => _workouts.Single(x => x.WorkoutId == workoutId).Exercises;
 
         /// <summary>
         /// Save data to xml.
@@ -107,7 +107,7 @@ namespace TrainingManager.Model
         /// <param name="workoutId">Workout id</param>
         public void SaveWorkoutById(Guid workoutId, WorkoutType workoutType)
         {
-            _xmlHandler.SaveToXml(_workouts.Single(x => x.WorkoutId == workoutId), workoutType);
+            //_xmlHandler.SaveToXml(_workouts.Single(x => x.WorkoutId == workoutId), workoutType);
         }
 
         /// <summary>
@@ -116,7 +116,7 @@ namespace TrainingManager.Model
         /// <param name="stringGuid">Workout id</param>
         public void DeleteWorkoutById(string stringGuid)
         {
-            _workouts.Remove(_workouts.Single(x => x.WorkoutIdString == stringGuid));
+            //_workouts.Remove(_workouts.Single(x => x.WorkoutIdString == stringGuid));
             string filePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), $"{stringGuid}.xml");
             int tryCount = 5;
 
@@ -136,9 +136,9 @@ namespace TrainingManager.Model
             }
         }
 
-        public ExerciseTemplate GetExerciseInWorkoutById(Guid workoutId, Guid exerciseId) =>
-            (_workouts.Single(x => x.WorkoutId.Equals(workoutId))).Exercises.Single(x => x.ExerciseId.Equals(exerciseId));
+        public ExerciseTemplate GetExerciseInWorkoutById(Guid workoutId, Guid exerciseId) => null;
+        //(_workouts.Single(x => x.WorkoutId.Equals(workoutId))).Exercises.Single(x => x.ExerciseId.Equals(exerciseId));
 
-        public bool IsWorkoutExist(Guid workoutId) => _workouts.Any(x => x.WorkoutId.Equals(workoutId));
+        //public bool IsWorkoutExist(Guid workoutId) => _workouts.Any(x => x.WorkoutId.Equals(workoutId));
     }
 }
