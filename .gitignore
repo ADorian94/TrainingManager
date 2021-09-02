@@ -269,3 +269,4 @@ TrainingManager.WebApi/Migrations/20210523123259_first.cs
 TrainingManager.WebApi/Migrations/TrainingManagerContextModelSnapshot.cs
 TrainingManager.WebApi/TrainingManager.db
 TrainingManager.WebApi/TrainingManager.db
+*.db
