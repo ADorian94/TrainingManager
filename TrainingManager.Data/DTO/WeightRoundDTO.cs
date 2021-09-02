@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TrainingManager.Data.DTO
 {
@@ -9,7 +7,8 @@ namespace TrainingManager.Data.DTO
         public int Id { get; set; }
         public Guid RoundGuid { get; set; }
         public int RoundNumber { get; set; }
-        public double WeightOfDrill { get; set; }
+        public double WeightOfExercise { get; set; }
         public int Reps { get; set; }
+        public int ExerciseId { get; set; }
     }
 }

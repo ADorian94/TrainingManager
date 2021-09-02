@@ -35,19 +35,14 @@ namespace TrainingManager.ViewModel
     }
 
 
-    public class CollectionToBoolConverter : IValueConverter
+    public class DoubleToBoolConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
                 return false;
 
-            var collection = (ObservableCollection<WeightDrillVM>)value;
-
-            if (collection.Count == 0)
-                return false;
-
-            return true;
+            return ((double)value) != 0.0;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();

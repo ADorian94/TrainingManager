@@ -25,6 +25,9 @@
     <Compile Update="View\Controls\OpenableCard.xaml.cs">
       <DependentUpon>OpenableCard.xaml</DependentUpon>
     </Compile>
+    <Compile Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\ExercisePages\AddWeightExercisePage.xaml.cs">
+      <DependentUpon>AddWeightExercisePage.xaml</DependentUpon>
+    </Compile>
     <Compile Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewWeightWorkoutPage.xaml.cs">
       <DependentUpon>AddNewWeightWorkoutPage.xaml</DependentUpon>
     </Compile>
@@ -67,22 +70,16 @@
     <EmbeddedResource Update="View\Controls\TallSimpleCard.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\AddNewDrillCaruselPage.xaml">
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\AddNewDrillCaruselPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\DrillPages\AddSavedWeightExercises.xaml">
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\ExercisePages\AddSavedWeightExercises.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\DrillPages\AddWeightDrillPage.xaml">
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\ExercisePages\AddWeightExercisePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\DrillPages\NotePage\NotePage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewDrillPage\PopUpViewView.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewRoundPage\AddNewRoundPage.xaml">
+    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\ExercisePages\NotePage\NotePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewWeightWorkoutPage.xaml">

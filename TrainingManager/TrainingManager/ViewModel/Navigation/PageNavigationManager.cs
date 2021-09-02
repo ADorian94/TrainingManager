@@ -31,8 +31,7 @@ namespace TrainingManager.ViewModel.Navigation
         private AddNewWeightWorkoutPage _addNewWeightWorkoutPage;
         private AddNewDrillCaruselPage _addNewDrillCaruselPage;
         private AddSavedWeightExercises _addSavedWeightExercises;
-        private AddWeightDrillPage _addWeightDrillPage;
-        private AddNewRoundPage _addNewRoundPage;
+        private AddWeightExercisePage _addWeightDrillPage;
         private OneRepetitionMaximumCalculatorPage _oneRepetitionMaximumCalculatorPage;
         private OneRepetitionMaximumCalculatedPage _oneRepetitionMaximumCalculatedPage;
         private SettingsPage _settingsPage;
@@ -72,13 +71,12 @@ namespace TrainingManager.ViewModel.Navigation
             _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage();
             _settingsPage = new SettingsPage();
             _exercisesPage = new ExercisesPage();
-            _addWeightDrillPage = new AddWeightDrillPage();
+            _addWeightDrillPage = new AddWeightExercisePage();
             _addSavedWeightExercises = new AddSavedWeightExercises();
             _addNewDrillCaruselPage = new AddNewDrillCaruselPage();
             _addNewDrillCaruselPage.Children.Add(_addWeightDrillPage);
             _addNewDrillCaruselPage.Children.Add(_addSavedWeightExercises);
             _notePage = new NotePage();
-            _addNewRoundPage = new AddNewRoundPage();
 
             //NAVIGATION PAGES
             _homeNavigationPage = new NavigationPage(_homePage);
@@ -110,7 +108,6 @@ namespace TrainingManager.ViewModel.Navigation
             _addNewWeightWorkoutPage.BindingContext = _weightWorkoutManagerVM;
             _addWeightDrillPage.BindingContext = _weightWorkoutManagerVM;
             _notePage.BindingContext = _weightWorkoutManagerVM;
-            _addNewRoundPage.BindingContext = _weightWorkoutManagerVM;
 
             //EVENT SUBSCRIBE
             _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
@@ -125,7 +122,6 @@ namespace TrainingManager.ViewModel.Navigation
             _intervallTimerVM.IntervallMenuSelected += OnIntervallMenuelected;
             _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
             _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
-            _weightWorkoutManagerVM.OpenAddWeightRound += OnOpenAddWeightRound;
             _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
             _weightWorkoutManagerVM.OpenTrainingLog += OnOpenTrainingLog;
             _weightWorkoutManagerVM.OpenHistoryView += OnOpenHistoryView;
@@ -212,7 +208,6 @@ namespace TrainingManager.ViewModel.Navigation
         //    //_masterDetailNavigationPage.Detail = _navigationPage;
         //}
 
-        private void OnOpenAddWeightRound(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addNewRoundPage);
         private void OnOpenAddWeightExercise(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addNewDrillCaruselPage);
 
         private void OnOpenEditWeightExercise(object sender, EventArgs e)

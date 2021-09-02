@@ -1,8 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 
@@ -43,8 +41,23 @@ namespace TrainingManager.Model.Services
         {
             try
             {
-                HttpResponseMessage response = await _client.PostAsJsonAsync("api/WeightWorkouts", weigthWorkoutDto);
-                weigthWorkoutDto.Id = (await response.Content.ReadAsAsync<WeigthExerciseDTO>()).Id;
+                HttpResponseMessage response = await _client.PostAsJsonAsync("api/WeightWorkouts/", weigthWorkoutDto);
+                var id = (await response.Content.ReadAsAsync<WeightWorkoutDTO>()).Id;
+                weigthWorkoutDto.Id = id;
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> EditWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.PutAsJsonAsync("api/WeightWorkouts", weigthWorkoutDto);
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -55,7 +68,7 @@ namespace TrainingManager.Model.Services
         }
 
         //EXERCISES
-        public async Task<IEnumerable<WeigthExerciseDTO>> GetWeightExercisesAsync()
+        public async Task<IEnumerable<WeightExerciseDTO>> GetWeightExercisesAsync()
         {
             try
             {
@@ -63,7 +76,7 @@ namespace TrainingManager.Model.Services
 
                 if (response.IsSuccessStatusCode)
                 {
-                    IEnumerable<WeigthExerciseDTO> exercises = await response.Content.ReadAsAsync<IEnumerable<WeigthExerciseDTO>>();
+                    IEnumerable<WeightExerciseDTO> exercises = await response.Content.ReadAsAsync<IEnumerable<WeightExerciseDTO>>();
                     return exercises;
                 }
                 else
@@ -78,12 +91,12 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        public async Task<bool> AddWeightExerciseAsync(WeigthExerciseDTO weigthExerciseDto)
+        public async Task<bool> AddWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto)
         {
             try
             {
                 HttpResponseMessage response = await _client.PostAsJsonAsync("api/WeightExercises", weigthExerciseDto);
-                weigthExerciseDto.Id = (await response.Content.ReadAsAsync<WeigthExerciseDTO>()).Id;
+                weigthExerciseDto.Id = (await response.Content.ReadAsAsync<WeightExerciseDTO>()).Id;
                 return response.IsSuccessStatusCode;
             }
             catch (Exception ex)
@@ -93,7 +106,7 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        public async Task<bool> UpdateWeightExerciseAsync(WeigthExerciseDTO weigthExerciseDto)
+        public async Task<bool> UpdateWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto)
         {
             try
             {

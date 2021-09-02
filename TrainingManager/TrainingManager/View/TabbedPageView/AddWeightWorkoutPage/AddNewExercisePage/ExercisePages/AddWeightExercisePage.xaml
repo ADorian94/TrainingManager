@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.AddWeightExercisePage"
+             NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout>
+        <Label Text="{Binding NewWeightWorkout.WorkoutName}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+        <Label Text="New Exercise" Style="{StaticResource Title0}"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="100"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <controls:CardWithTextEntry Grid.Row="0" CardMainText="Exercise name" CardEntry="{Binding NewWeightExercise.ExerciseName, Mode=TwoWay}"/>
+            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="1" >
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Margin="10, 0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <controls:CardWithEntry Grid.Column="0" CardMainText="Weight" CardEntry="{Binding WeightOfExercise, Mode=TwoWay}"/>
+                                <controls:CardWithEntry Grid.Column="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}"/>
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <controls:SimpleCard Grid.Row="2" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}"/>
+            <Grid Grid.Row="3" Margin="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Text="Add" Command="{Binding AddWeightExerciseToWorkoutCommand}" Style="{StaticResource RedButton}" Grid.Column="0"/>
+                <Button Text="Round" Command="{Binding AddWeightRoundToExerciseCommand}" Style="{StaticResource BlueButton}" Grid.Column="1"/>
+            </Grid>
+        </Grid>
+    </StackLayout>
+</ContentPage>

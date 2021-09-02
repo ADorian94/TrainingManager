@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
 namespace TrainingManager.WebApi.Model
 {
@@ -13,7 +9,5 @@ namespace TrainingManager.WebApi.Model
         public int WorkoutId { get; set; }
         public byte[] ImageSmall { get; set; }
         public byte[] ImageLarge { get; set; }
-
-        public WeightWorkout Workout { get; set; }
     }
 }

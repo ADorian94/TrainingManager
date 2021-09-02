@@ -12,7 +12,7 @@ namespace TrainingManager.Data.DTO
         public WorkoutType WorkoutType { get; set; }
         public DateTime WorkoutDate { get; set; }
         public double TotalWeight { get; set; }
-        public ICollection<WeigthExerciseDTO> WeightExercises { get; set; }
+        public ICollection<WeightExerciseDTO> WeightExercisesDto { get; set; }
         public ICollection<ImageDTO> WorkoutImages { get; set; }
     }
 }
