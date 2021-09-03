@@ -2,29 +2,19 @@
 using TrainingManager.Model;
 using TrainingManager.Model.Services;
 using TrainingManager.View;
-using TrainingManager.View.Controls;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel.Navigation
 {
     public class PageNavigationManager
     {
-        //PAGES
-        //private ExerciseTimer _exerciseTimer;
-        //private AddIntervallPage _addIntervallPage;
-        //private IntervallWorkoutsPage _intervallWorkoutsPage;
-        //private AddIntervallWorkoutPage _intervallWorkoutPage;
-        //private ActiveIntervallTimerPage _activeIntervallTimerPage;
-        //private IntervallTimerPage _intervallTimerTabbedPage;
-        //private HistoryView _weightHistoryView;
-
         //NAVIGATION PAGES
         private NavigationPage _homeNavigationPage;
         private NavigationPage _oneRepNavigationPage;
         private NavigationPage _addNewWeightWorkoutNavigationPage;
         private NavigationPage _settignsNavigationPage;
         private NavigationPage _exercicsesNavigationPage;
-        private NavigationPage _addNewDrillNavigationPage;
+
         //TABBED PAGE
         private NavigationTabbedPage _navigationTabbedPage;
         private HomePage _homePage;
@@ -40,32 +30,17 @@ namespace TrainingManager.ViewModel.Navigation
 
         //VIEWMODELLS
         private OneRepetitionMaximumVM _oneRepetitionMaximumVM;
-        //private ExerciseTimerVM _exerciseTimerVM;
-        private IntervallTimerManagerVM _intervallTimerVM;
         private WeightWorkoutManagerVM _weightWorkoutManagerVM;
-        private WeightWorkoutHistoryManagerVM _weightWorkoutHistoryManagerVM;
 
         public PageNavigationManager(ApiServices apiServices)
         {
             //INITIALIZE VMS
             _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
-            //_exerciseTimerVM = new ExerciseTimerVM();
-            _intervallTimerVM = new IntervallTimerManagerVM();
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM(apiServices);
-            _weightWorkoutHistoryManagerVM = new WeightWorkoutHistoryManagerVM();
 
             //INITIALIZE PAGES
             _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage();
             _oneRepetitionMaximumCalculatedPage = new OneRepetitionMaximumCalculatedPage();
-            //_exerciseTimer = new ExerciseTimer();
-            //_activeIntervallTimerPage = new ActiveIntervallTimerPage();
-            //_activeIntervallTimerPage.Title = "Intervall";
-            //_intervallWorkoutsPage = new IntervallWorkoutsPage();
-            //_intervallWorkoutsPage.Title = "Workouts";
-            //_intervallTimerTabbedPage = new IntervallTimerPage();
-            //_intervallTimerTabbedPage.Title = "Intervall timer";
-            //_intervallTimerTabbedPage.Children.Add(_activeIntervallTimerPage);
-            //_intervallTimerTabbedPage.Children.Add(_intervallWorkoutsPage);
 
             _homePage = new HomePage();
             _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage();
@@ -90,8 +65,6 @@ namespace TrainingManager.ViewModel.Navigation
             _settignsNavigationPage = new NavigationPage(_settingsPage);
             _settignsNavigationPage.Title = "Settings";
 
-            _addNewDrillNavigationPage = new NavigationPage(_addNewDrillCaruselPage);
-
             _navigationTabbedPage = new NavigationTabbedPage();
             _navigationTabbedPage.Children.Add(_homeNavigationPage);
             _navigationTabbedPage.Children.Add(_exercicsesNavigationPage);
@@ -102,24 +75,12 @@ namespace TrainingManager.ViewModel.Navigation
             //BINDINGCONTEXT
             _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
             _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
-            //_exerciseTimer.BindingContext = _exerciseTimerVM;
-            //_activeIntervallTimerPage.BindingContext = _intervallTimerVM;
-            //_intervallWorkoutsPage.BindingContext = _intervallTimerVM;
             _addNewWeightWorkoutPage.BindingContext = _weightWorkoutManagerVM;
             _addWeightDrillPage.BindingContext = _weightWorkoutManagerVM;
             _notePage.BindingContext = _weightWorkoutManagerVM;
 
             //EVENT SUBSCRIBE
             _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
-            //_intervallTimerVM.OpenNewIntervallPage += OnNewIntervallPage;
-            //_intervallTimerVM.OpenNewIntervallWorkoutPage += OnOpenNewIntervallWorkoutPage;
-            _intervallTimerVM.CloseAddNewIntervallPage += OnCloseNavigationPage;
-            _intervallTimerVM.CloseNewIntervallWorkoutPage += OnCloseNavigationPage;
-            _intervallTimerVM.ExceptionOccured += OnExceptionOccured;
-            _intervallTimerVM.MessageApplication += OnMessageApplication;
-            _intervallTimerVM.WorkoutMenuSelected += OnWorkoutMenuSelected;
-            //_intervallTimerVM.WorkoutSelected += OnWorkoutSelected;
-            _intervallTimerVM.IntervallMenuSelected += OnIntervallMenuelected;
             _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
             _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
             _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
@@ -129,44 +90,17 @@ namespace TrainingManager.ViewModel.Navigation
             _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
             _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
             _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
-            _weightWorkoutHistoryManagerVM.OpenWorkoutDetails += OnOpenWorkoutDetails;
         }
-
-
 
         private async void OnWeightExerciseMenuSelected(object sender, MessageEventArgs e)
         {
-            string action = await _navigationTabbedPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
+            string action = await _navigationTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteExercise(e.Message);
 
             if (action == "Edit")
                 _weightWorkoutManagerVM.EditExercise(e.Message);
-        }
-
-        private async void OnIntervallMenuelected(object sender, MessageEventArgs e)
-        {
-            string action = await _navigationTabbedPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
-
-            if (action == "Delete")
-                _intervallTimerVM.DeleteIntervall(e.Message);
-
-            if (action == "Edit")
-                _intervallTimerVM.EditIntervall(e.Message);
-        }
-
-        //private void OnWorkoutSelected(object sender, EventArgs e) => _intervallTimerTabbedPage.CurrentPage = _activeIntervallTimerPage;
-
-        private async void OnWorkoutMenuSelected(object sender, MessageEventArgs e)
-        {
-            string action = await _navigationTabbedPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
-
-            if (action == "Delete")
-                _intervallTimerVM.DeleteWorkout(e.Message);
-
-            if (action == "Edit")
-                _intervallTimerVM.EditWorkout(e.Message);
         }
 
         private async void OnMessageApplication(object sender, MessageEventArgs e) => await _navigationTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
@@ -176,19 +110,11 @@ namespace TrainingManager.ViewModel.Navigation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnExceptionOccured(object sender, Model.ExceptionArgs e) => _navigationTabbedPage.DisplayAlert("Error during start workout.", e.Message, "Ok");
+        private void OnExceptionOccured(object sender, ExceptionArgs e) => _navigationTabbedPage.DisplayAlert("Error during start workout.", e.Message, "Ok");
 
         public Page GetMainPage() => _navigationTabbedPage;
 
         private void OnCalculationStarted(object sender, EventArgs e) => _oneRepNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
-
-        //private void OnOpenNewIntervallWorkoutPage(object sender, EventArgs e)
-        //{
-        //    _intervallWorkoutPage = new AddIntervallWorkoutPage();
-        //    _intervallWorkoutPage.BindingContext = _intervallTimerVM;
-        //    //_navigationPage.PushAsync(_intervallWorkoutPage);
-        //    //_masterDetailNavigationPage.Detail = _navigationPage;
-        //}
 
         private void OnCloseNavigationPage(object sender, EventArgs e)
         {
@@ -199,14 +125,6 @@ namespace TrainingManager.ViewModel.Navigation
                     break;
             }
         }
-
-        //private void OnNewIntervallPage(object sender, EventArgs e)
-        //{
-        //    _addIntervallPage = new AddIntervallPage();
-        //    _addIntervallPage.BindingContext = _intervallTimerVM;
-        //    //_navigationPage.PushAsync(_addIntervallPage);
-        //    //_masterDetailNavigationPage.Detail = _navigationPage;
-        //}
 
         private void OnOpenAddWeightExercise(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addNewDrillCaruselPage);
 

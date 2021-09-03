@@ -5,7 +5,7 @@ using System.Linq;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.Services;
-using TrainingManager.Model.Workouts.WeightWorkout;
+//using TrainingManager.Model.Workouts.WeightWorkout;
 
 namespace TrainingManager.ViewModel
 {
@@ -51,11 +51,11 @@ namespace TrainingManager.ViewModel
         private double _totalExerciseRounds;
         public double TotalExerciseRounds { get => _totalExerciseRounds; set { _totalExerciseRounds = value; OnPropertyChanged(); } }
 
-        private WeightWorkout _todayWeightWorkout;
-        public WeightWorkout TodayWeightWorkout { get => _todayWeightWorkout; set { _todayWeightWorkout = value; OnPropertyChanged(); } }
+        //private WeightWorkout _todayWeightWorkout;
+        //public WeightWorkout TodayWeightWorkout { get => _todayWeightWorkout; set { _todayWeightWorkout = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<WeightExercise> _weightWorkoutList;
-        public ObservableCollection<WeightExercise> WeightWorkoutList { get => _weightWorkoutList; set { _weightWorkoutList = value; OnPropertyChanged(); } }
+        //private ObservableCollection<WeightExercise> _weightWorkoutList;
+        //public ObservableCollection<WeightExercise> WeightWorkoutList { get => _weightWorkoutList; set { _weightWorkoutList = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand SaveTodayWorkoutCommand { get; private set; }
@@ -72,7 +72,7 @@ namespace TrainingManager.ViewModel
 
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
-        public event EventHandler OpenAddWeightRound;
+        //public event EventHandler OpenAddWeightRound;
         public event EventHandler OpenEditWeightExercise;
         public event EventHandler<ClosePageEventArgs> CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
@@ -84,7 +84,7 @@ namespace TrainingManager.ViewModel
         public WeightWorkoutManagerVM(ApiServices apiServices)
         {
             InitializeCommands();
-            WeightWorkoutList = new ObservableCollection<WeightExercise>();
+            //WeightWorkoutList = new ObservableCollection<WeightExercise>();
             NewWeightWorkout = new WeightWorkoutVM();
             NewWeightWorkout.WeightExercises = new ObservableCollection<WeightExerciseVM>();
             _apiServices = apiServices;
@@ -110,7 +110,7 @@ namespace TrainingManager.ViewModel
                 IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await _apiServices.GetWeightWorkoutsAsync();
 
                 if (weightWorkoutDTOs != null && weightWorkoutDTOs.ToList().Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
-                    SetupTodayWeightWorkoutDetailsAsync(weightWorkoutDTOs);
+                    SetupTodayWeightWorkoutDetails(weightWorkoutDTOs);
                 else
                 {
                     NewWeightWorkout = new WeightWorkoutVM()
@@ -140,9 +140,6 @@ namespace TrainingManager.ViewModel
 
             if (weightWorkoutDTOs != null && weightWorkoutDTOs.ToList().Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
             {
-                //if (weightWorkoutDTOs.ToList().Any(x => x.WorkoutGuid == NewWeightWorkout.WorkoutGuid))
-                //    throw new Exception($"No any workout found with the following id: {NewWeightWorkout.WorkoutGuid}");
-
                 await _apiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
                 {
                     Id = NewWeightWorkout.Id,
@@ -223,15 +220,10 @@ namespace TrainingManager.ViewModel
             CloseAddWeightExercise?.Invoke(this, new ClosePageEventArgs(PageType.WightWorkout));
         }
 
-        private void UpdateTodayWeightWorkoutLocal()
-        {
-            TodayWeightWorkout.Exercises = WeightWorkoutList.ToList();
-        }
-
         /// <summary>
         /// A szerverről lekérdezzük a mai naphoz tartozó edzést. 
         /// </summary>
-        private async void SetupTodayWeightWorkoutDetailsAsync(IEnumerable<WeightWorkoutDTO> workoutsFromServer)
+        private void SetupTodayWeightWorkoutDetails(IEnumerable<WeightWorkoutDTO> workoutsFromServer)
         {
             WeightWorkoutDTO weightWorkoutDTO = workoutsFromServer.FirstOrDefault(x => x.WorkoutDate.Date == DateTime.Now.Date);
 
@@ -276,7 +268,7 @@ namespace TrainingManager.ViewModel
         }
 
         /// <summary>
-        /// NOT WORKING
+        /// Töröljük az adott GUID-al rendelkező edzést
         /// </summary>
         /// <param name="stringGuid"></param>
         internal void DeleteExercise(string stringGuid)
@@ -299,11 +291,9 @@ namespace TrainingManager.ViewModel
         /// <param name="stringGuid"></param>
         internal void EditExercise(string stringGuid)
         {
-            WeightExercise Exercise = WeightWorkoutList.FirstOrDefault(x => Equals(x.ExerciseGuid.ToString(), stringGuid));
             OpenEditWeightExercise?.Invoke(this, null);
         }
 
-        private void UpdateWeightWorkout() => WeightWorkoutList = new ObservableCollection<WeightExercise>(TodayWeightWorkout.Exercises);
 
         private void OpenAddWeightExerciseFunction(object obj)
         {
@@ -337,7 +327,7 @@ namespace TrainingManager.ViewModel
         private void OpenNoteEditorFuncton(object obj) => OpenNoteEditor?.Invoke(this, null);
         private void OpenTrainingLogOpenFunction(object obj) => OpenTrainingLog?.Invoke(this, null);
         private void OpenHistoryViewOpenFunction(object obj) => OpenHistoryView?.Invoke(this, null);
-        private void WeightExerciseMenuSelectedFunction(object obj) => WeightExerciseMenuSelected?.Invoke(this, new MessageEventArgs(obj.ToString()));
+        private void WeightExerciseMenuSelectedFunction(object obj) => WeightExerciseMenuSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == obj.ToString()).ExerciseName, obj.ToString()));
         private double CountTotalWeightOfWorkout()
         {
             double sumWorkoutWeight = 0.0;

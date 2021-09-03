@@ -5,14 +5,21 @@ namespace TrainingManager.Model
     public class MessageEventArgs : EventArgs
     {
         /// <summary>
-        /// Üzenet lekérdezése, vagy beállítása.
+        /// Cím lekérdezése, vagy beállítása.
         /// </summary>
-        public String Message { get; private set; }
+        public string Title { get; private set; }
 
         /// <summary>
-        /// Üzenet eseményargumentum példányosítása.
+        /// Üzenet lekérdezése, vagy beállítása.
         /// </summary>
-        /// <param name="message">Üzenet.</param>
-        public MessageEventArgs(String message) => Message = message;
+        public string Message { get; private set; }
+
+        public MessageEventArgs(string title) => Message = title;
+
+        public MessageEventArgs(string title, string message)
+        {
+            Title = title;
+            Message = message;
+        }
     }
 }

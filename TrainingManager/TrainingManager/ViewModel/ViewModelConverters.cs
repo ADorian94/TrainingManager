@@ -1,23 +1,14 @@
 ﻿using System;
-using System.Collections.ObjectModel;
 using System.Globalization;
-using TrainingManager.Data.DTO;
-using TrainingManager.Model.Workouts.WeightWorkout;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel
 {
     public class BoolToVisibilityConverter : IValueConverter
     {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (int)value != 0;
-        }
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => (int)value != 0;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return (bool)value ? 1 : 0;
-        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => (bool)value ? 1 : 0;
     }
 
     public class DateToStringConverter : IValueConverter

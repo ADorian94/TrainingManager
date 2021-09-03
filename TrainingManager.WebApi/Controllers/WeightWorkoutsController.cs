@@ -187,7 +187,6 @@ namespace TrainingManager.WebApi.Controllers
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
 
                 return CreatedAtAction("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
-                //return CreatedAtRoute("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
             }
             catch (Exception ex)
             {
