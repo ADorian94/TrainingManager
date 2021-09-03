@@ -114,7 +114,7 @@ namespace TrainingManager.ViewModel
                         WorkoutDate = DateTime.Now,
                         WorkoutGuid = Guid.NewGuid(),
                         WorkoutName = string.Empty,
-                        WorkoutType = Data.DTO.WorkoutType.WeightWorkout,
+                        WorkoutType = WorkoutType.WeightWorkout,
                         WeightExercises = new ObservableCollection<WeightExerciseVM>(),
                     };
                 }
@@ -141,7 +141,7 @@ namespace TrainingManager.ViewModel
                     WorkoutName = NewWeightWorkout.WorkoutName,
                     WorkoutGuid = NewWeightWorkout.WorkoutGuid,
                     Note = NewWeightWorkout.Note,
-                    WorkoutType = Data.DTO.WorkoutType.WeightWorkout,
+                    WorkoutType = WorkoutType.WeightWorkout,
                     WorkoutImages = null,
                     WeightExercisesDto = new List<WeightExerciseDTO>(NewWeightWorkout.WeightExercises.Select(x => new WeightExerciseDTO()
                     {
@@ -321,6 +321,7 @@ namespace TrainingManager.ViewModel
         private void OpenTrainingLogOpenFunction(object obj) => OpenTrainingLog?.Invoke(this, null);
         private void OpenHistoryViewOpenFunction(object obj) => OpenHistoryView?.Invoke(this, null);
         private void WeightExerciseMenuSelectedFunction(object obj) => WeightExerciseMenuSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == obj.ToString()).ExerciseName, obj.ToString()));
+        //jó hát, ez kurva isten, hogy nem maradhat a vm-ben -> át kell pakolni a model rétegbe
         private double CountTotalWeightOfWorkout()
         {
             double sumWorkoutWeight = 0.0;
