@@ -266,3 +266,5 @@ TrainingManager.WebApi/Migrations/TrainingManagerContextModelSnapshot.cs
 TrainingManager.WebApi/TrainingManager.db
 TrainingManager.WebApi/TrainingManager.db
 *.db
+TrainingManager.WebApi/Migrations/20210903094402_firstmigration.cs
+TrainingManager.WebApi/Migrations/20210903094402_firstmigration.Designer.cs
