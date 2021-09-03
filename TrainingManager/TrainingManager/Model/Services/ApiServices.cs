@@ -8,7 +8,7 @@ namespace TrainingManager.Model.Services
 {
     public class ApiServices
     {
-        private HttpClient _client;
+        private readonly HttpClient _client;
 
         public ApiServices(string baseAddress)
         {
