@@ -54,16 +54,26 @@ namespace TrainingManager.ViewModel.Navigation
             _notePage = new NotePage();
 
             //NAVIGATION PAGES
-            _homeNavigationPage = new NavigationPage(_homePage);
-            _homeNavigationPage.Title = "Home";
-            _exercicsesNavigationPage = new NavigationPage(_exercisesPage);
-            _exercicsesNavigationPage.Title = "Exercises";
-            _addNewWeightWorkoutNavigationPage = new NavigationPage(_addNewWeightWorkoutPage);
-            _addNewWeightWorkoutNavigationPage.Title = "Workout";
-            _oneRepNavigationPage = new NavigationPage(_oneRepetitionMaximumCalculatorPage);
-            _oneRepNavigationPage.Title = "1RM";
-            _settignsNavigationPage = new NavigationPage(_settingsPage);
-            _settignsNavigationPage.Title = "Settings";
+            _homeNavigationPage = new NavigationPage(_homePage)
+            {
+                Title = "Home"
+            };
+            _exercicsesNavigationPage = new NavigationPage(_exercisesPage)
+            {
+                Title = "Exercises"
+            };
+            _addNewWeightWorkoutNavigationPage = new NavigationPage(_addNewWeightWorkoutPage)
+            {
+                Title = "Workout"
+            };
+            _oneRepNavigationPage = new NavigationPage(_oneRepetitionMaximumCalculatorPage)
+            {
+                Title = "1RM"
+            };
+            _settignsNavigationPage = new NavigationPage(_settingsPage)
+            {
+                Title = "Settings"
+            };
 
             _navigationTabbedPage = new NavigationTabbedPage();
             _navigationTabbedPage.Children.Add(_homeNavigationPage);

@@ -5,7 +5,6 @@ using System.Linq;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.Services;
-//using TrainingManager.Model.Workouts.WeightWorkout;
 
 namespace TrainingManager.ViewModel
 {
@@ -51,12 +50,6 @@ namespace TrainingManager.ViewModel
         private double _totalExerciseRounds;
         public double TotalExerciseRounds { get => _totalExerciseRounds; set { _totalExerciseRounds = value; OnPropertyChanged(); } }
 
-        //private WeightWorkout _todayWeightWorkout;
-        //public WeightWorkout TodayWeightWorkout { get => _todayWeightWorkout; set { _todayWeightWorkout = value; OnPropertyChanged(); } }
-
-        //private ObservableCollection<WeightExercise> _weightWorkoutList;
-        //public ObservableCollection<WeightExercise> WeightWorkoutList { get => _weightWorkoutList; set { _weightWorkoutList = value; OnPropertyChanged(); } }
-
         //COMMANDS
         public DelegateCommand SaveTodayWorkoutCommand { get; private set; }
         public DelegateCommand OpenAddWeightExerciseCommand { get; private set; }
@@ -72,7 +65,6 @@ namespace TrainingManager.ViewModel
 
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
-        //public event EventHandler OpenAddWeightRound;
         public event EventHandler OpenEditWeightExercise;
         public event EventHandler<ClosePageEventArgs> CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
@@ -84,9 +76,10 @@ namespace TrainingManager.ViewModel
         public WeightWorkoutManagerVM(ApiServices apiServices)
         {
             InitializeCommands();
-            //WeightWorkoutList = new ObservableCollection<WeightExercise>();
-            NewWeightWorkout = new WeightWorkoutVM();
-            NewWeightWorkout.WeightExercises = new ObservableCollection<WeightExerciseVM>();
+            NewWeightWorkout = new WeightWorkoutVM
+            {
+                WeightExercises = new ObservableCollection<WeightExerciseVM>()
+            };
             _apiServices = apiServices;
             SetupTodayWeightWorkoutAsync();
         }

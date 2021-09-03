@@ -16,27 +16,22 @@
         Mayhew,
         OConner,
         Wathen,
-        Avarage1RM
+        Avarage1RM,
     }
 
-    public enum IntervallTimerStates
-    {
-        IntervallTimerStopped,
-        IntervallTimerStarted,
-        IntervallTimerPaused
-    }
+    //public enum IntervallTimerStates
+    //{
+    //    IntervallTimerStopped,
+    //    IntervallTimerStarted,
+    //    IntervallTimerPaused
+    //}
 
-    public enum WorkoutType
-    {
-        IntervallWorkout,
-        WeightWorkout,
-    }
+    //public enum WorkoutType
+    //{
+    //    IntervallWorkout,
+    //    WeightWorkout,
+    //}
 
     public enum PageType { WightWorkout };
 
-    public static class UsedFolders
-    {
-        public const string INTERVALL = "Intervall";
-        public const string WEIGHT = "Weight";
-    }
 }

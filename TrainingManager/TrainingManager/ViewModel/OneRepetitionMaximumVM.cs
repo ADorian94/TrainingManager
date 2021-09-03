@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using TrainingManager.Model;
-using TrainingManager.Model.Services;
 
 namespace TrainingManager.ViewModel
 {
@@ -9,7 +8,6 @@ namespace TrainingManager.ViewModel
     {
         private OneRepetitionMaximumModel _model;
         public event EventHandler CalculationStartEvent;
-        public event EventHandler OpenMasterEvent;
 
         public DelegateCommand CalculateMaximumCommand { get; private set; }
         public DelegateCommand SetupCommand { get; private set; }
@@ -24,11 +22,6 @@ namespace TrainingManager.ViewModel
         protected override void InitializeCommands()
         {
             CalculateMaximumCommand = new DelegateCommand(CalculateMaximum);
-        }
-
-        private void OpenMaster(object obj)
-        {
-            OpenMasterEvent?.Invoke(this, EventArgs.Empty);
         }
 
         private double _weight = 0;
