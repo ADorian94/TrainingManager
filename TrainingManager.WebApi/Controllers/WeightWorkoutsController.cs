@@ -41,7 +41,7 @@ namespace TrainingManager.WebApi.Controllers
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         Id = x.Id,
-                        ExerciseName = x.ExerciseName,
+                        ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
@@ -85,7 +85,7 @@ namespace TrainingManager.WebApi.Controllers
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         Id = x.Id,
-                        ExerciseName = x.ExerciseName,
+                        ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
@@ -233,10 +233,12 @@ namespace TrainingManager.WebApi.Controllers
             {
                 foreach (var weightExerciseDto in weightExercisesDto)
                 {
+                    int actId = AddActivityByNameIfNeeded(weightExerciseDto.ExerciseName);
+
                     var weightExercise = new WeightExercise()
                     {
                         ExerciseGuid = weightExerciseDto.ExerciseGuid,
-                        ExerciseName = weightExerciseDto.ExerciseName,
+                        ActivityId = actId,
                         Note = weightExerciseDto.Note,
                         TotalExerciseWeight = weightExerciseDto.TotalExerciseWeight,
                         WorkoutId = _context.WeightWorkouts.Single(x => x.WorkoutGuid == workoutGuid).Id,
@@ -252,6 +254,26 @@ namespace TrainingManager.WebApi.Controllers
             catch
             {
                 return false;
+            }
+        }
+
+        private int AddActivityByNameIfNeeded(string exerciseName)
+        {
+            if (_context.WeightActivities.Any(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()))
+            {
+                return _context.WeightActivities.Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()).Id;
+            }
+            else
+            {
+                var newActivity = new WeightActivity()
+                {
+                    ActivityGuid = Guid.NewGuid(),
+                    ActivityName = exerciseName
+                };
+
+                var addedActivity = _context.WeightActivities.Add(newActivity);
+                _context.SaveChanges();
+                return addedActivity.Entity.Id;
             }
         }
 
