@@ -29,7 +29,7 @@ namespace TrainingManager.View.Controls
         }
 
         public static readonly BindableProperty IsButtonVisibleProperty =
-            BindableProperty.Create("IsButtonVisibles", typeof(bool), typeof(LowSimpleCard), true);
+            BindableProperty.Create("IsButtonVisibles", typeof(bool), typeof(LowSimpleCard), false);
 
         public DelegateCommand ButtonCommand
         {

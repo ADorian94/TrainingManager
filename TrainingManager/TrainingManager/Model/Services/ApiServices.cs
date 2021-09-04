@@ -67,6 +67,25 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        //ACTIVITIES
+        public async Task<IEnumerable<string>> GetWeightActivitiesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightActivities");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<string>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
         //EXERCISES
         public async Task<IEnumerable<WeightExerciseDTO>> GetWeightExercisesAsync()
         {

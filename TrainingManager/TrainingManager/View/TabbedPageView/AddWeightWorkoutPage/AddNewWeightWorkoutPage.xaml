@@ -36,7 +36,7 @@
                                 <ViewCell>
                                     <controls:OpenableCard CloseCardMainLabel="{Binding ExerciseName}" OpenCardMainLabel="{Binding ExerciseName}"
                                                            OpenCardFirstLabel="Total weight" OpenCardFirstValue="{Binding TotalExerciseWeight}"
-                                                           OpenCardSecondLabel="Number of rounds" OpenCardSecondValue="{Binding TotalExerciseRounds}"
+                                                           OpenCardSecondLabel="Rounds" OpenCardSecondValue="{Binding TotalExerciseRounds}"
                                                            ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference WeightWorkoutPage}}"
                                                            ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="True"/>
                                 </ViewCell>

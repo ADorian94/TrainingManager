@@ -50,6 +50,9 @@ namespace TrainingManager.ViewModel
         private double _totalExerciseRounds;
         public double TotalExerciseRounds { get => _totalExerciseRounds; set { _totalExerciseRounds = value; OnPropertyChanged(); } }
 
+        private ObservableCollection<string> _savedActivities;
+        public ObservableCollection<string> SavedActivities { get => _savedActivities; set { _savedActivities = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand SaveTodayWorkoutCommand { get; private set; }
         public DelegateCommand OpenAddWeightExerciseCommand { get; private set; }
@@ -62,6 +65,7 @@ namespace TrainingManager.ViewModel
         public DelegateCommand OpenTrainingLogOpenCommand { get; private set; }
         public DelegateCommand OpenHistoryViewOpenCommand { get; private set; }
         public DelegateCommand WeightExerciseMenuSelectedCommand { get; private set; }
+        public DelegateCommand SavedActivitiySelected { get; private set; }
 
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
@@ -72,6 +76,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler OpenTrainingLog;
         public event EventHandler OpenHistoryView;
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
+        public event EventHandler<string> SavedWeightActivitySelected;
 
         public WeightWorkoutManagerVM(ApiServices apiServices)
         {
@@ -82,7 +87,22 @@ namespace TrainingManager.ViewModel
             };
             _apiServices = apiServices;
             SetupTodayWeightWorkoutAsync();
+            SetupActivitiesAsync();
+
         }
+
+        private async void SetupActivitiesAsync()
+        {
+            SavedActivities = new ObservableCollection<string>();
+            var activities = await _apiServices.GetWeightActivitiesAsync();
+
+            foreach (var item in activities)
+            {
+                SavedActivities.Add(item);
+            }
+
+        }
+
         protected override void InitializeCommands()
         {
             SaveTodayWorkoutCommand = new DelegateCommand(SaveTodayWorkoutFunctionAsync);
@@ -93,6 +113,7 @@ namespace TrainingManager.ViewModel
             OpenTrainingLogOpenCommand = new DelegateCommand(OpenTrainingLogOpenFunction);
             OpenHistoryViewOpenCommand = new DelegateCommand(OpenHistoryViewOpenFunction);
             WeightExerciseMenuSelectedCommand = new DelegateCommand(WeightExerciseMenuSelectedFunction);
+            SavedActivitiySelected = new DelegateCommand(SavedActivitiySelectedFunction);
             SaveNoteCommand = new DelegateCommand(SaveNoteFunction);
         }
 
@@ -279,11 +300,15 @@ namespace TrainingManager.ViewModel
         }
 
         /// <summary>
-        /// NOT WORKING
+        /// Kiválasztunk egy gyakorlatot az edzésből, amit szerkeszteni fogunk.
         /// </summary>
         /// <param name="stringGuid"></param>
         internal void EditExercise(string stringGuid)
         {
+            WeightExerciseVM exerciseForEdit = _newWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid);
+            NewWeightExercise = exerciseForEdit;
+            _newWeightWorkout.WeightExercises.Remove(exerciseForEdit);
+            SaveTodayWorkoutFunctionAsync(null);
             OpenEditWeightExercise?.Invoke(this, null);
         }
 
@@ -321,6 +346,13 @@ namespace TrainingManager.ViewModel
         private void OpenTrainingLogOpenFunction(object obj) => OpenTrainingLog?.Invoke(this, null);
         private void OpenHistoryViewOpenFunction(object obj) => OpenHistoryView?.Invoke(this, null);
         private void WeightExerciseMenuSelectedFunction(object obj) => WeightExerciseMenuSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == obj.ToString()).ExerciseName, obj.ToString()));
+        private void SavedActivitiySelectedFunction(object obj)
+        {
+            NewWeightExercise.ExerciseName = (string)obj;
+            ExerciseName = (string)obj;
+            SavedWeightActivitySelected?.Invoke(this, (string)obj);
+        }
+
         //jó hát, ez kurva isten, hogy nem maradhat a vm-ben -> át kell pakolni a model rétegbe
         private double CountTotalWeightOfWorkout()
         {

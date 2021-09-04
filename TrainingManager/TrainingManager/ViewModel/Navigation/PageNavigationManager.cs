@@ -87,6 +87,7 @@ namespace TrainingManager.ViewModel.Navigation
             _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
             _addNewWeightWorkoutPage.BindingContext = _weightWorkoutManagerVM;
             _addWeightDrillPage.BindingContext = _weightWorkoutManagerVM;
+            _addSavedWeightExercises.BindingContext = _weightWorkoutManagerVM;
             _notePage.BindingContext = _weightWorkoutManagerVM;
 
             //EVENT SUBSCRIBE
@@ -97,6 +98,7 @@ namespace TrainingManager.ViewModel.Navigation
             _weightWorkoutManagerVM.OpenTrainingLog += OnOpenTrainingLog;
             _weightWorkoutManagerVM.OpenHistoryView += OnOpenHistoryView;
             _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
+            _weightWorkoutManagerVM.SavedWeightActivitySelected += OnSavedWeightActivitySelected;
             _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
             _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
             _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
@@ -111,6 +113,11 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Edit")
                 _weightWorkoutManagerVM.EditExercise(e.Message);
+        }
+
+        private void OnSavedWeightActivitySelected(object sender, string e)
+        {
+            _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children[0];
         }
 
         private async void OnMessageApplication(object sender, MessageEventArgs e) => await _navigationTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
@@ -138,11 +145,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void OnOpenAddWeightExercise(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addNewDrillCaruselPage);
 
-        private void OnOpenEditWeightExercise(object sender, EventArgs e)
-        {
-            //_navigationPage.PushAsync(_addWeightExercise);
-            //_masterDetailNavigationPage.Detail = _navigationPage;
-        }
+        private void OnOpenEditWeightExercise(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addWeightDrillPage);
 
         private void OnOpenNoteEditor(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_notePage);
 

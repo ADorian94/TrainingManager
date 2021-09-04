@@ -1,13 +1,30 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
              x:Class="TrainingManager.View.AddSavedWeightExercises"
              NavigationPage.HasNavigationBar="False">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="This page is not ready for use"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" FontSize="Header" TextColor="White" FontAttributes="Bold"/>
+            <Label Text="{Binding NewWeightWorkout.WorkoutName}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+            <Label Text="Saved Exercises" Style="{StaticResource Title0}"/>
+            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=SavedActivities}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:LowSimpleCard CardMainText="{Binding}" IsButtonVisible="False" CardFrameTapped="{Binding SavedActivitiySelected}" CardFrameTappedParameter="{Binding}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
