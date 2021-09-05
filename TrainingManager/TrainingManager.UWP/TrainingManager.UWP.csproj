@@ -151,7 +151,7 @@
       <Version>5.2.7</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.Forms" Version="4.8.0.1687" />
-    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.11" />
+    <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform" Version="6.2.12" />
     <PackageReference Include="Xamarin.Forms-IconTabbedPage">
       <Version>1.0.4</Version>
     </PackageReference>

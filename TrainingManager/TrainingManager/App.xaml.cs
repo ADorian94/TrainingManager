@@ -16,6 +16,7 @@ namespace TrainingManager
         {
             InitializeComponent();
             _apiService = new ApiServices("http://localhost:51426");
+            //_apiService = new ApiServices("http://192.168.56.1:51426"); //phone debug
             _pageNavigationManager = new PageNavigationManager(_apiService);
             MainPage = _pageNavigationManager.GetMainPage();
         }

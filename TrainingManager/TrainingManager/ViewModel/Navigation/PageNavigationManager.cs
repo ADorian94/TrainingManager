@@ -8,15 +8,9 @@ namespace TrainingManager.ViewModel.Navigation
 {
     public class PageNavigationManager
     {
-        //NAVIGATION PAGES
-        private NavigationPage _homeNavigationPage;
-        private NavigationPage _oneRepNavigationPage;
-        private NavigationPage _addNewWeightWorkoutNavigationPage;
-        private NavigationPage _settignsNavigationPage;
-        private NavigationPage _exercicsesNavigationPage;
-
         //TABBED PAGE
-        private NavigationTabbedPage _navigationTabbedPage;
+        private NavigationPage _mainNavigationPage;
+        private NavigationTabbedPage _mainTabbedPage;
         private HomePage _homePage;
         private AddNewWeightWorkoutPage _addNewWeightWorkoutPage;
         private AddNewDrillCaruselPage _addNewDrillCaruselPage;
@@ -39,13 +33,12 @@ namespace TrainingManager.ViewModel.Navigation
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM(apiServices);
 
             //INITIALIZE PAGES
-            _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage();
+            _homePage = new HomePage() { Title = "Home" };
+            _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage() { Title = "Workout" };
+            _settingsPage = new SettingsPage() { Title = "Settings" };
+            _exercisesPage = new ExercisesPage() { Title = "Exercises" };
+            _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage() { Title = "1RM" };
             _oneRepetitionMaximumCalculatedPage = new OneRepetitionMaximumCalculatedPage();
-
-            _homePage = new HomePage();
-            _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage();
-            _settingsPage = new SettingsPage();
-            _exercisesPage = new ExercisesPage();
             _addWeightDrillPage = new AddWeightExercisePage();
             _addSavedWeightExercises = new AddSavedWeightExercises();
             _addNewDrillCaruselPage = new AddNewDrillCaruselPage();
@@ -53,34 +46,14 @@ namespace TrainingManager.ViewModel.Navigation
             _addNewDrillCaruselPage.Children.Add(_addSavedWeightExercises);
             _notePage = new NotePage();
 
-            //NAVIGATION PAGES
-            _homeNavigationPage = new NavigationPage(_homePage)
-            {
-                Title = "Home"
-            };
-            _exercicsesNavigationPage = new NavigationPage(_exercisesPage)
-            {
-                Title = "Exercises"
-            };
-            _addNewWeightWorkoutNavigationPage = new NavigationPage(_addNewWeightWorkoutPage)
-            {
-                Title = "Workout"
-            };
-            _oneRepNavigationPage = new NavigationPage(_oneRepetitionMaximumCalculatorPage)
-            {
-                Title = "1RM"
-            };
-            _settignsNavigationPage = new NavigationPage(_settingsPage)
-            {
-                Title = "Settings"
-            };
+            _mainTabbedPage = new NavigationTabbedPage();
+            _mainTabbedPage.Children.Add(_homePage);
+            _mainTabbedPage.Children.Add(_exercisesPage);
+            _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
+            _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
+            _mainTabbedPage.Children.Add(_settingsPage);
 
-            _navigationTabbedPage = new NavigationTabbedPage();
-            _navigationTabbedPage.Children.Add(_homeNavigationPage);
-            _navigationTabbedPage.Children.Add(_exercicsesNavigationPage);
-            _navigationTabbedPage.Children.Add(_addNewWeightWorkoutNavigationPage);
-            _navigationTabbedPage.Children.Add(_oneRepNavigationPage);
-            _navigationTabbedPage.Children.Add(_settignsNavigationPage);
+            _mainNavigationPage = new NavigationPage(_mainTabbedPage);
 
             //BINDINGCONTEXT
             _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
@@ -95,8 +68,6 @@ namespace TrainingManager.ViewModel.Navigation
             _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
             _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
             _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
-            _weightWorkoutManagerVM.OpenTrainingLog += OnOpenTrainingLog;
-            _weightWorkoutManagerVM.OpenHistoryView += OnOpenHistoryView;
             _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
             _weightWorkoutManagerVM.SavedWeightActivitySelected += OnSavedWeightActivitySelected;
             _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
@@ -106,7 +77,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnWeightExerciseMenuSelected(object sender, MessageEventArgs e)
         {
-            string action = await _navigationTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteExercise(e.Message);
@@ -120,51 +91,33 @@ namespace TrainingManager.ViewModel.Navigation
             _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children[0];
         }
 
-        private async void OnMessageApplication(object sender, MessageEventArgs e) => await _navigationTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
+        private async void OnMessageApplication(object sender, MessageEventArgs e) => await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
 
         /// <summary>
         /// Alapvető hibakezelés.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnExceptionOccured(object sender, ExceptionArgs e) => _navigationTabbedPage.DisplayAlert("Error during start workout.", e.Message, "Ok");
+        private void OnExceptionOccured(object sender, ExceptionArgs e) => _mainTabbedPage.DisplayAlert("Error during start workout.", e.Message, "Ok");
 
-        public Page GetMainPage() => _navigationTabbedPage;
+        public Page GetMainPage() => _mainNavigationPage;
 
-        private void OnCalculationStarted(object sender, EventArgs e) => _oneRepNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
+        private void OnCalculationStarted(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
 
         private void OnCloseNavigationPage(object sender, EventArgs e)
         {
             switch (((ClosePageEventArgs)e).Page)
             {
                 case PageType.WightWorkout:
-                    _addNewWeightWorkoutNavigationPage.PopAsync();
+                    _mainNavigationPage.PopAsync();
                     break;
             }
         }
 
-        private void OnOpenAddWeightExercise(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addNewDrillCaruselPage);
+        private void OnOpenAddWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
 
-        private void OnOpenEditWeightExercise(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_addWeightDrillPage);
+        private void OnOpenEditWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPage);
 
-        private void OnOpenNoteEditor(object sender, EventArgs e) => _addNewWeightWorkoutNavigationPage.PushAsync(_notePage);
-
-        private void OnOpenTrainingLog(object sender, EventArgs e)
-        {
-            //_navigationPage.PushAsync(_todayWeightWorkout);
-            //_masterDetailNavigationPage.Detail = _navigationPage;
-        }
-
-        private void OnOpenHistoryView(object sender, EventArgs e)
-        {
-            //_navigationPage.PushAsync(_weightHistoryView);
-            //_masterDetailNavigationPage.Detail = _navigationPage;
-        }
-
-        private void OnOpenWorkoutDetails(object sender, EventArgs e)
-        {
-            //_navigationPage.PushAsync(_workoutHistoryDetails);
-            //_masterDetailNavigationPage.Detail = _navigationPage;
-        }
+        private void OnOpenNoteEditor(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePage);
     }
 }
