@@ -29,7 +29,15 @@
                     <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
                     <Label Text="New Workout" Style="{StaticResource Title0}"/>
                     <controls:CardWithTextEntry CardMainText="Workout name" CardEntry="{Binding NewWeightWorkout.WorkoutName, Mode=TwoWay}"/>
-                    <controls:SimpleCard CardMainText="Total weight" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}" IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                    <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}" IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                    <!--<Grid Margin="10,0" HeightRequest="150">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <controls:SimpleCard Grid.Column="0" CardMainText="Total weight" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}" IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}" Margin="5,0"/>
+                        <controls:SimpleCard Grid.Column="1" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}" Margin="5,0"/>
+                    </Grid>-->
                     <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                         <ListView.ItemTemplate >
                             <DataTemplate>

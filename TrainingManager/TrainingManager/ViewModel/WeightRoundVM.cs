@@ -6,15 +6,18 @@ namespace TrainingManager.ViewModel
     {
         protected override void InitializeCommands() { }
 
+        //EVENTS
+        public event EventHandler<double> RoundWeightChanged;
+
         //PROPERTIES
         private Guid _roundGuid;
         public Guid RoundGuid { get => _roundGuid; set { _roundGuid = value; OnPropertyChanged(); } }
 
         private double _weightOfExercise;
-        public double WeightOfExercise { get => _weightOfExercise; set { _weightOfExercise = value; OnPropertyChanged(); } }
+        public double WeightOfExercise { get => _weightOfExercise; set { _weightOfExercise = value; OnPropertyChanged(); RoundWeightChanged?.Invoke(this, WeightOfExercise * Reps); } }
 
         private int _reps;
-        public int Reps { get => _reps; set { _reps = value; OnPropertyChanged(); } }
+        public int Reps { get => _reps; set { _reps = value; OnPropertyChanged(); RoundWeightChanged?.Invoke(this, WeightOfExercise * Reps); } }
 
         private int _roundNumber;
         public int RoundNumber { get => _roundNumber; set { _roundNumber = value; OnPropertyChanged(); } }

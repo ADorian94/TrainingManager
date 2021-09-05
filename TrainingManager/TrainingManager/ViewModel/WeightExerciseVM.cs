@@ -40,9 +40,9 @@ namespace TrainingManager.ViewModel
         public double TotalExerciseRounds { get => _totalExerciseRounds; set { _totalExerciseRounds = value; OnPropertyChanged(); } }
 
         private ObservableCollection<WeightRoundVM> _weightRounds;
-        public ObservableCollection<WeightRoundVM> WeightRounds { get => _weightRounds; set { _weightRounds = value; OnPropertyChanged(); CountTotalWeightOfExercise(); } }
+        public ObservableCollection<WeightRoundVM> WeightRounds { get => _weightRounds; set { _weightRounds = value; OnPropertyChanged(); } }
 
-        private void CountTotalWeightOfExercise()
+        public void CountTotalWeightOfExercise()
         {
             if (WeightRounds != null)
             {

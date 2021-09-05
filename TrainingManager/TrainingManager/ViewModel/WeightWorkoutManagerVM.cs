@@ -92,19 +92,8 @@ namespace TrainingManager.ViewModel
             SetupActivitiesAsync();
         }
 
-        internal void DeleteRoundByStringGuid(string e) => NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
-
-        private async void SetupActivitiesAsync()
-        {
-            SavedActivities = new ObservableCollection<string>();
-            var activities = await _apiServices.GetWeightActivitiesAsync();
-
-            foreach (var item in activities)
-            {
-                SavedActivities.Add(item);
-            }
-
-        }
+        public void DeleteRoundByStringGuid(string e) => NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
+        private async void SetupActivitiesAsync() => SavedActivities = new ObservableCollection<string>(await _apiServices.GetWeightActivitiesAsync());
 
         protected override void InitializeCommands()
         {
@@ -327,25 +316,36 @@ namespace TrainingManager.ViewModel
             NewWeightExercise.Note = string.Empty;
             NewWeightExercise.ExerciseGuid = Guid.NewGuid();
             NewWeightExercise.WeightRounds = new ObservableCollection<WeightRoundVM>();
-            NewWeightExercise.WeightRounds.Add(new WeightRoundVM()
+            var round = new WeightRoundVM()
             {
                 Reps = 0,
                 RoundNumber = 0,
                 WeightOfExercise = 0.0,
-                RoundGuid = Guid.NewGuid(),
-            });
+                RoundGuid = Guid.NewGuid()
+            };
+            round.RoundWeightChanged += RecalculateRoundWeight;
+            NewWeightExercise.WeightRounds.Add(round);
             OpenAddWeightExercise?.Invoke(this, null);
         }
 
         private void AddWeightRoundToExerciseFunction(object obj)
         {
-            NewWeightExercise.WeightRounds.Add(new WeightRoundVM()
+            var round = new WeightRoundVM()
             {
                 Reps = 0,
                 RoundNumber = 0,
                 WeightOfExercise = 0.0,
-                RoundGuid = Guid.NewGuid(),
-            });
+                RoundGuid = Guid.NewGuid()
+            };
+
+            round.RoundWeightChanged += RecalculateRoundWeight;
+            NewWeightExercise.WeightRounds.Add(round);
+        }
+
+        private void RecalculateRoundWeight(object sender, double e)
+        {
+            NewWeightExercise.CountTotalWeightOfExercise();
+            TotalExerciseWeight = NewWeightExercise.TotalExerciseWeight;
         }
 
         private void OpenNoteEditorFuncton(object obj) => OpenNoteEditor?.Invoke(this, null);

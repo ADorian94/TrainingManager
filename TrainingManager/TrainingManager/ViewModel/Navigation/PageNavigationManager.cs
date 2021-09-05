@@ -78,7 +78,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelected(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Exercise selected", "Cancel", "Delete");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Do you want to remove the round?", "Cancel", "Delete");
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteRoundByStringGuid(e);

@@ -19,12 +19,20 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="100"/>
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <controls:CardWithTextEntry Grid.Row="0" CardMainText="Exercise name" CardEntry="{Binding NewWeightExercise.ExerciseName, Mode=TwoWay}"/>
-            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="1">
+            <Grid Grid.Row="1" Margin="10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <controls:SimpleCard Grid.Column="0" CardMainText="Weight" CardSecondaryText="{Binding TotalExerciseWeight}" Margin="5,0"/>
+                <controls:SimpleCard Grid.Column="1" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}" Margin="5,0"/>
+            </Grid>
+            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="2">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
@@ -36,7 +44,6 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-            <controls:SimpleCard Grid.Row="2" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}"/>
             <Grid Grid.Row="3" Margin="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
