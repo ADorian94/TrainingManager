@@ -73,6 +73,15 @@ namespace TrainingManager.ViewModel.Navigation
             _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
             _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
             _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
+            _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
+        }
+
+        private async void OnExerciseRoundSelected(object sender, string e)
+        {
+            string action = await _addWeightDrillPage.DisplayActionSheet("Exercise selected", "Cancel", "Delete");
+
+            if (action == "Delete")
+                _weightWorkoutManagerVM.DeleteRoundByStringGuid(e);
         }
 
         private async void OnWeightExerciseMenuSelected(object sender, MessageEventArgs e)

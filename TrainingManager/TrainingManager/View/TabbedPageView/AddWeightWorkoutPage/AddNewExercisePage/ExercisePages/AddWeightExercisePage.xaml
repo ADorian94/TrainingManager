@@ -4,7 +4,8 @@
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.AddWeightExercisePage"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="False"
+             x:Name="WeightExercisePage">
     <ContentPage.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -23,18 +24,14 @@
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <controls:CardWithTextEntry Grid.Row="0" CardMainText="Exercise name" CardEntry="{Binding NewWeightExercise.ExerciseName, Mode=TwoWay}"/>
-            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="1" >
+            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="1">
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <Grid Margin="10, 0">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <controls:CardWithEntry Grid.Column="0" CardMainText="Weight" CardEntry="{Binding WeightOfExercise, Mode=TwoWay}"/>
-                                <controls:CardWithEntry Grid.Column="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}"/>
-                            </Grid>
+                            <controls:DoubleCardWithEntry FirstCardMainText="Weight" FirstCardEntry="{Binding WeightOfExercise, Mode=TwoWay}"
+                                                          SecondCardMainText="Reps" SecondCardEntry="{Binding Reps, Mode=TwoWay}"
+                                                          CardFrameTapped="{Binding BindingContext.ExerciseRoundSelectedCommand, Source={x:Reference WeightExercisePage}}"
+                                                          TapCommandParameter="{Binding RoundGuid}" Margin="0"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
