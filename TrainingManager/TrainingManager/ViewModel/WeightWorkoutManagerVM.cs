@@ -66,6 +66,7 @@ namespace TrainingManager.ViewModel
         public DelegateCommand OpenHistoryViewOpenCommand { get; private set; }
         public DelegateCommand WeightExerciseMenuSelectedCommand { get; private set; }
         public DelegateCommand SavedActivitiySelected { get; private set; }
+        public DelegateCommand ExerciseRoundSelectedCommand { get; private set; }
 
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
@@ -77,6 +78,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler OpenHistoryView;
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
         public event EventHandler<string> SavedWeightActivitySelected;
+        public event EventHandler<string> ExerciseRoundSelected;
 
         public WeightWorkoutManagerVM(ApiServices apiServices)
         {
@@ -88,8 +90,9 @@ namespace TrainingManager.ViewModel
             _apiServices = apiServices;
             SetupTodayWeightWorkoutAsync();
             SetupActivitiesAsync();
-
         }
+
+        internal void DeleteRoundByStringGuid(string e) => NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
 
         private async void SetupActivitiesAsync()
         {
@@ -115,7 +118,10 @@ namespace TrainingManager.ViewModel
             WeightExerciseMenuSelectedCommand = new DelegateCommand(WeightExerciseMenuSelectedFunction);
             SavedActivitiySelected = new DelegateCommand(SavedActivitiySelectedFunction);
             SaveNoteCommand = new DelegateCommand(SaveNoteFunction);
+            ExerciseRoundSelectedCommand = new DelegateCommand(ExerciseRoundSelectedFunction);
         }
+
+        private void ExerciseRoundSelectedFunction(object obj) => ExerciseRoundSelected?.Invoke(this, (string)obj);
 
         private async void SetupTodayWeightWorkoutAsync()
         {
