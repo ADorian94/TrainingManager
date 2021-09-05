@@ -15,8 +15,8 @@
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <controls:CardWithEntry Grid.Row="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}"/>
-            <controls:CardWithEntry Grid.Row="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}"/>
+            <controls:CardWithEntry Grid.Row="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}" Margin="10,0"/>
+            <controls:CardWithEntry Grid.Row="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}" Margin="10,0"/>
         </Grid>
         <Button Text="Calculate" Command="{Binding CalculateMaximumCommand}" Style="{StaticResource BlueButton}"/>
     </StackLayout>
