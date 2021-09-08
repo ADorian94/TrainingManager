@@ -155,6 +155,9 @@
     <PackageReference Include="Xamarin.Forms-IconTabbedPage">
       <Version>1.0.4</Version>
     </PackageReference>
+    <PackageReference Include="XamForms.Controls.Calendar">
+      <Version>1.1.1</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TrainingManager\TrainingManager.csproj">
