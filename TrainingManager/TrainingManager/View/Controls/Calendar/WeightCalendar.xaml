@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:XamForms.Controls;assembly=XamForms.Controls.Calendar"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.Calendar.WeightCalendar"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <StackLayout>
+            <controls:Calendar TitleLabelTextColor="White"
+                               TitleLeftArrowTextColor="{StaticResource MainRedColor}"
+                               TitleRightArrowTextColor="{StaticResource MainBlueColor}"
+                               Padding="10,0,10,0"
+                               StartDay="Monday"
+                               SelectedBorderWidth="4"
+                               DisabledBorderColor="Black"
+                               BackgroundColor="Transparent"
+                               WeekdaysBackgroundColor="Transparent"
+                               WeekdaysTextColor="White"
+                               DatesBackgroundColor="{StaticResource CardBackgroundColor}"
+                               DatesTextColor="White"
+                               DatesBackgroundColorOutsideMonth="Transparent"
+                               DatesTextColorOutsideMonth="{StaticResource CardBackgroundColor}"
+                               BorderColor="Transparent"
+                               SpecialDates="{x:Binding Source={x:Reference this}, Path=Dates}"
+                               HorizontalOptions="CenterAndExpand"
+                               VerticalOptions="CenterAndExpand"
+                               SelectedBorderColor="{StaticResource MainRedColor}"
+                               SelectedTextColor="{StaticResource MainRedColor}"
+                               DateClicked="Calendar_DateClicked"/>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>
