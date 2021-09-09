@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;

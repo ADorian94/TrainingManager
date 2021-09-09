@@ -131,9 +131,10 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", ex.Message));
             }
         }
+
         protected void RecalculateRoundWeight(object sender, double e)
         {
             NewWeightExercise.CountTotalWeightOfExercise();
@@ -163,8 +164,8 @@ namespace TrainingManager.ViewModel
         {
             WeightExerciseVM exerciseForEdit = NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid);
             NewWeightExercise = exerciseForEdit;
-            NewWeightWorkout.WeightExercises.Remove(exerciseForEdit);
-            SaveTodayWorkoutFunctionAsync(null);
+            //NewWeightWorkout.WeightExercises.Remove(exerciseForEdit);
+            //SaveTodayWorkoutFunctionAsync(null);
             OpenEditWeightExercise?.Invoke(this, null);
         }
 
@@ -176,6 +177,9 @@ namespace TrainingManager.ViewModel
         {
             try
             {
+                if (NewWeightWorkout.WeightExercises.Any(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid))
+                    NewWeightWorkout.WeightExercises.Remove(NewWeightExercise);
+
                 NewWeightWorkout.WeightExercises.Add(NewWeightExercise);
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
                 NewWeightExercise.TotalExerciseRounds = NewWeightWorkout.WeightExercises.FirstOrDefault(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid).WeightRounds.Count;

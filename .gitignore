@@ -260,13 +260,6 @@ paket-files/
 __pycache__/
 *.pyc
 *.db
-TrainingManager.WebApi/Migrations/20210523123259_first.Designer.cs
-TrainingManager.WebApi/Migrations/20210523123259_first.cs
-TrainingManager.WebApi/Migrations/TrainingManagerContextModelSnapshot.cs
 TrainingManager.WebApi/TrainingManager.db
 TrainingManager.WebApi/TrainingManager.db
 *.db
-TrainingManager.WebApi/Migrations/20210903094402_firstmigration.cs
-TrainingManager.WebApi/Migrations/20210903094402_firstmigration.Designer.cs
-TrainingManager.WebApi/Migrations/20210903165111_fst.Designer.cs
-TrainingManager.WebApi/Migrations/20210903165111_fst.cs
