@@ -5,10 +5,6 @@ namespace TrainingManager.ViewModel
 {
     public class WeightExerciseVM : ViewModelBase
     {
-        //FIELDS
-        private int _workoutId;
-        private int _roundId;
-
         public WeightExerciseVM()
         {
             ExerciseName = string.Empty;

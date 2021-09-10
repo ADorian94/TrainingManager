@@ -164,8 +164,6 @@ namespace TrainingManager.ViewModel
         {
             WeightExerciseVM exerciseForEdit = NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid);
             NewWeightExercise = exerciseForEdit;
-            //NewWeightWorkout.WeightExercises.Remove(exerciseForEdit);
-            //SaveTodayWorkoutFunctionAsync(null);
             OpenEditWeightExercise?.Invoke(this, null);
         }
 
