@@ -104,7 +104,7 @@ namespace TrainingManager.ViewModel
             await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
             {
                 Id = NewWeightWorkout.Id,
-                WorkoutDate = DateTime.Now,
+                WorkoutDate = NewWeightWorkout.WorkoutDate,
                 TotalWeight = NewWeightWorkout.TotalWeight,
                 WorkoutName = NewWeightWorkout.WorkoutName,
                 WorkoutGuid = NewWeightWorkout.WorkoutGuid,

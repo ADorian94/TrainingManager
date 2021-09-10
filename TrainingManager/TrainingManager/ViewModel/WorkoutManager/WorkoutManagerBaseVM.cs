@@ -176,7 +176,9 @@ namespace TrainingManager.ViewModel
             try
             {
                 if (NewWeightWorkout.WeightExercises.Any(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid))
+                {
                     NewWeightWorkout.WeightExercises.Remove(NewWeightExercise);
+                }
 
                 NewWeightWorkout.WeightExercises.Add(NewWeightExercise);
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
