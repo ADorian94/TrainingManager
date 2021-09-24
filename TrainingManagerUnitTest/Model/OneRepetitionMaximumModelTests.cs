@@ -7,6 +7,7 @@ namespace TrainingManager.Model.Tests
     [TestClass()]
     public class OneRepetitionMaximumModelTests
     {
+        //komment
         //FIELDS
         private OneRepetitionMaximumModel _repetitionMaximumModel;
         private const double ZERO_WEIGHT = 0.0;
