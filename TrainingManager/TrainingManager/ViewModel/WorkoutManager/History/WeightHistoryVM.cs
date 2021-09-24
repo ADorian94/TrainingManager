@@ -19,6 +19,8 @@ namespace TrainingManager.ViewModel
             SetupHistoryAsync();
             InitializeCommands();
             WorkoutDateSelected = new DelegateCommand(WorkoutDateSelectedFunction);
+            HistoryWorkoutItemSelectedCommand = new DelegateCommand(HistoryWorkoutItemSelectedFunction);
+            SearchCommand = new DelegateCommand(SearchFunction);
         }
 
         private async void SetupHistoryAsync()
@@ -27,6 +29,7 @@ namespace TrainingManager.ViewModel
             {
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 WorkoutDates = new ObservableCollection<SpecialDate>();
+                HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>();
 
                 foreach (var workout in workouts)
                 {
@@ -36,6 +39,8 @@ namespace TrainingManager.ViewModel
                         Selectable = true,
                         FontAttributes = FontAttributes.Bold,
                     });
+
+                    HistoryWorkoutItems.Add(new HistoryItemVM(workout));
                 }
             }
             catch (Exception)
@@ -48,11 +53,17 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<SpecialDate> _workoutDates;
         public ObservableCollection<SpecialDate> WorkoutDates { get => _workoutDates; set { _workoutDates = value; OnPropertyChanged(); } }
 
+        private ObservableCollection<HistoryItemVM> _historyWorkoutItems;
+        public ObservableCollection<HistoryItemVM> HistoryWorkoutItems { get => _historyWorkoutItems; set { _historyWorkoutItems = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand WorkoutDateSelected { get; private set; }
+        public DelegateCommand HistoryWorkoutItemSelectedCommand { get; private set; }
+        public DelegateCommand SearchCommand { get; private set; }
 
         //EVENTS
         public event EventHandler<DateTime> WeightWorkoutDateSelected;
+        public event EventHandler<MessageEventArgs> HistoryWorkoutItemSelected;
 
         //COMMAND FUNCTIONS
         private async void WorkoutDateSelectedFunction(object obj)
@@ -94,6 +105,50 @@ namespace TrainingManager.ViewModel
 
                 WeightWorkoutDateSelected?.Invoke(this, ((DateTimeEventArgs)obj).DateTime);
             }
+        }
+
+        private async void HistoryWorkoutItemSelectedFunction(object obj)
+        {
+            var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
+
+            if (workouts.Any(x => x.WorkoutGuid.ToString() == ((string)obj)))
+            {
+                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutGuid.ToString() == ((string)obj));
+
+                NewWeightWorkout = new WeightWorkoutVM()
+                {
+                    Id = workout.Id,
+                    WorkoutName = workout.WorkoutName,
+                    WorkoutDate = workout.WorkoutDate,
+                    //TotalExerciseRounds = workout.WeightExercisesDto.FirstOrDefault(x => x.WorkoutId == workout.Id).WeightRoundsDto.Count,
+                    TotalWeight = workout.TotalWeight,
+                    WorkoutGuid = workout.WorkoutGuid,
+                    WorkoutType = workout.WorkoutType,
+                    Note = workout.Note,
+                    WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
+                    {
+                        ExerciseGuid = x.ExerciseGuid,
+                        ExerciseName = x.ExerciseName,
+                        Note = x.Note,
+                        TotalExerciseWeight = x.TotalExerciseWeight,
+                        TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                        WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
+                        {
+                            RoundGuid = y.RoundGuid,
+                            RoundNumber = y.RoundNumber,
+                            Reps = y.Reps,
+                            WeightOfExercise = y.WeightOfExercise
+                        })),
+                    }))
+                };
+
+                HistoryWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName));
+            }
+        }
+
+        public void SearchFunction(object obj)
+        {
+
         }
 
         //PROTETED

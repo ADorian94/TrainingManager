@@ -113,23 +113,6 @@ namespace TrainingManager.View.Controls
         public static readonly BindableProperty ButtonVisibilityProperty =
             BindableProperty.Create("ButtonVisibility", typeof(bool), typeof(OpenableCard), defaultValue: false);
 
-        //public DelegateCommand CardFrameTapped
-        //{
-        //    get { return (DelegateCommand)GetValue(CardFrameTappedProperty); }
-        //    set { SetValue(CardFrameTappedProperty, value); }
-        //}
-
-        //public static readonly BindableProperty CardFrameTappedProperty =
-        //    BindableProperty.Create("CardFrameTapped", typeof(DelegateCommand), typeof(OpenableCard), defaultValue: default(DelegateCommand), propertyChanged: OnFrameTapCommandPropertyChanged);
-
-        //private static void OnFrameTapCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        //{
-        //    if (bindable is OpenableCard headerTemplate && newValue is DelegateCommand command)
-        //    {
-        //        headerTemplate.CardFrameTapped = command;
-        //    }
-        //}
-
         private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
         {
             OpenedCard.IsVisible = false;

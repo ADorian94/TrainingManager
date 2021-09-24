@@ -95,6 +95,7 @@ namespace TrainingManager.ViewModel.Navigation
             _addWeightDrillPageHistory.BindingContext = _weightHistoryVM;
             _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
             _addNewWeightWorkoutPageHistory.BindingContext = _weightHistoryVM;
+            _searchHistoryPage.BindingContext = _weightHistoryVM;
 
             //EVENT SUBSCRIBE
             _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
@@ -122,11 +123,24 @@ namespace TrainingManager.ViewModel.Navigation
             _weightHistoryVM.ExerciseRoundSelected += OnExerciseRoundSelectedHistory;
             _weightHistoryVM.ExceptionAllert += OnExceptionOccured;
             _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
+            _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
         }
-
         public Page GetMainPage() => _mainNavigationPage;
 
         //EVENT HANDLERS
+
+        private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
+        {
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
+
+            //if (action == "Delete")
+            //_weightWorkoutManagerVM.DeleteExercise(e.Message);
+
+            if (action == "Edit")
+                await _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
+
+        }
+
         private void OnWeightWorkoutDateSelected(object sender, DateTime e)
         {
             _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);

@@ -1,12 +1,38 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.TabbedPageView.History.HistoryPages.SearchPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="This page is not ready for use"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" FontSize="Header" TextColor="White" FontAttributes="Bold"/>
+            <Label Text="History" Style="{StaticResource Title0}"/>
+            <controls:CardWithSearchBar CardMainText="Search" CardPlaceholder="Workout detail..." CardSearchCommand="{Binding SearchCommand}"/>
+            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=HistoryWorkoutItems}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:OpenableCard CloseCardMainLabel="{Binding WorkoutName}" OpenCardMainLabel="{Binding WorkoutName}"
+                                                   OpenCardFirstLabel="Date" OpenCardFirstValue="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
+                                                   OpenCardSecondLabel="Weight" OpenCardSecondValue="{Binding TotalWeight}"
+                                                   ButtonVisibility="True"
+                                                   ButtonCommand="{Binding HistoryWorkoutItemSelectedCommand}"
+                                                   ButtonCommandParameter="{Binding WorkoutGuid}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.CardWithSearchBar"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10" Padding="10">
+            <StackLayout BackgroundColor="Transparent">
+                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
+                <SearchBar Grid.Row="1" Placeholder="{x:Binding Source={x:Reference this}, Path=CardPlaceholder}"
+                           Text="{x:Binding Source={x:Reference this}, Path=CardSearchText}"
+                           SearchCommand="{x:Binding Source={x:Reference this}, Path=CardSearchCommand}"
+                           TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"
+                           HorizontalTextAlignment="Center" />
+            </StackLayout>
+        </Frame>
+    </ContentView.Content>
+</ContentView>
