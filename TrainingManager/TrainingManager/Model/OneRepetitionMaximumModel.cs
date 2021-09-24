@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Utility;
 
 namespace TrainingManager.Model
@@ -18,20 +19,14 @@ namespace TrainingManager.Model
             }
         }
 
-        public IEnumerable<MaximumMethod> CalculateOneRepMaximums(double weight, int reps)
-        {
-            var maximumList = new List<MaximumMethod>();
-
-            foreach (var method in _possbleMethods)
-                maximumList.Add(new MaximumMethod
-                {
-                    MethodName = MethodToString(method),
-                    MaximumValue = CalculateByMethod(weight, reps, method),
-                    TypeOfMethod = method
-                });
-
-            return maximumList;
-        }
+        //ezt akarom tesztelni
+        public IEnumerable<MaximumMethod> CalculateOneRepMaximums(double weight, int reps) =>
+            _possbleMethods.Select(method => new MaximumMethod
+            {
+                MethodName = MethodToString(method),
+                MaximumValue = CalculateByMethod(weight, reps, method),
+                TypeOfMethod = method
+            });
 
         private string MethodToString(MethodType methodType)
         {
