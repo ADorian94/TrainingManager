@@ -60,7 +60,7 @@ namespace TrainingManager.ViewModel
         private void CalculateMaximum(object obj)
         {
             RecomendedMaximums.Clear();
-            RecomendedMaximums = _model.CalculateOneRepMaximums(_weight, _reps);
+            RecomendedMaximums = new ObservableCollection<MaximumMethod>(_model.CalculateOneRepMaximums(_weight, _reps));
             CalculationStartEvent?.Invoke(this, EventArgs.Empty);
         }
     }
