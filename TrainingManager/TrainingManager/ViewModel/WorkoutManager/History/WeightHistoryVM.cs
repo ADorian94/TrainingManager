@@ -56,6 +56,9 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<HistoryItemVM> _historyWorkoutItems;
         public ObservableCollection<HistoryItemVM> HistoryWorkoutItems { get => _historyWorkoutItems; set { _historyWorkoutItems = value; OnPropertyChanged(); } }
 
+        private string _searchText;
+        public string SearchText { get => _searchText; set { _searchText = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand WorkoutDateSelected { get; private set; }
         public DelegateCommand HistoryWorkoutItemSelectedCommand { get; private set; }
@@ -142,13 +145,23 @@ namespace TrainingManager.ViewModel
                     }))
                 };
 
-                HistoryWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName));
+                HistoryWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
             }
         }
 
-        public void SearchFunction(object obj)
+        public async void SearchFunction(object obj)
         {
+            string[] searchStrings = SearchText.Trim().Split(' ');
+            IEnumerable<WeightWorkoutDTO> workouts = await ApiServices.GetWeightWorkoutsAsync();
+            IEnumerable<HistoryItemVM> foundElements = new ObservableCollection<HistoryItemVM>();
+            foundElements = searchStrings.SelectMany(str => workouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))).Select(x => new HistoryItemVM(x)));
+            HistoryWorkoutItems.Clear();
 
+            foreach (var item in foundElements)
+            {
+                if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
+                    HistoryWorkoutItems.Add(item);
+            }
         }
 
         //PROTETED
@@ -188,5 +201,19 @@ namespace TrainingManager.ViewModel
 
         //PUBLIC
         public override void RefreshWorkouts(object sender, EventArgs e) => SetupHistoryAsync();
+
+        public async void DeleteWeightWorkoutByStringGuid(string wokroutGuid)
+        {
+            try
+            {
+                var workouts = await ApiServices.GetWeightWorkoutsAsync();
+                await ApiServices.DeleteWeightWorkoutAsync(workouts.Single(x => x.WorkoutGuid.ToString() == wokroutGuid).Id);
+                SetupHistoryAsync();
+            }
+            catch (Exception)
+            {
+                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+            }
+        }
     }
 }

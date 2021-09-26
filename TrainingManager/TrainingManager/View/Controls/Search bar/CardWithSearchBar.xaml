@@ -12,8 +12,10 @@
             <StackLayout BackgroundColor="Transparent">
                 <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
                 <SearchBar Grid.Row="1" Placeholder="{x:Binding Source={x:Reference this}, Path=CardPlaceholder}"
-                           Text="{x:Binding Source={x:Reference this}, Path=CardSearchText}"
+                           Text="{x:Binding Source={x:Reference this}, Path=CardSearchText, Mode=TwoWay}"
                            SearchCommand="{x:Binding Source={x:Reference this}, Path=CardSearchCommand}"
+                           TextChanged="SearchBar_TextChanged"
+                           VerticalTextAlignment="Center"
                            TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"
                            HorizontalTextAlignment="Center" />
             </StackLayout>

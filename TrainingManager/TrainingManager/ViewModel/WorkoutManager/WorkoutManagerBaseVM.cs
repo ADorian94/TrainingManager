@@ -156,6 +156,7 @@ namespace TrainingManager.ViewModel
         //PUBLIC 
         public void DeleteRoundByStringGuid(string e) => NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
 
+
         /// <summary>
         /// Kiválasztunk egy gyakorlatot az edzésből, amit szerkeszteni fogunk.
         /// </summary>

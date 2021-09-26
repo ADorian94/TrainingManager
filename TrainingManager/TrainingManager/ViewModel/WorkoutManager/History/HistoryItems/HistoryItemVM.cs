@@ -29,5 +29,21 @@ namespace TrainingManager.ViewModel
             WorkoutDate = weightWorkout.WorkoutDate;
             WorkoutGuid = weightWorkout.WorkoutGuid;
         }
+
+        public override bool Equals(object obj)
+        {
+            var otherItem = (HistoryItemVM)obj;
+            return WorkoutDate == otherItem.WorkoutDate && WorkoutGuid == otherItem.WorkoutGuid;
+        }
+
+        public static bool operator ==(HistoryItemVM a, HistoryItemVM b)
+        {
+            return a.WorkoutDate == b.WorkoutDate && a.WorkoutGuid == b.WorkoutGuid;
+        }
+
+        public static bool operator !=(HistoryItemVM a, HistoryItemVM b)
+        {
+            return !(a.WorkoutDate == b.WorkoutDate || a.WorkoutGuid == b.WorkoutGuid);
+        }
     }
 }

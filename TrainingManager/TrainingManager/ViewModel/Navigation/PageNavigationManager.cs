@@ -131,10 +131,10 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
         {
-            string action = await _mainTabbedPage.DisplayActionSheet(e.Message, "Cancel", "Delete", "Edit");
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
 
-            //if (action == "Delete")
-            //_weightWorkoutManagerVM.DeleteExercise(e.Message);
+            if (action == "Delete")
+                _weightHistoryVM.DeleteWeightWorkoutByStringGuid(e.Message);
 
             if (action == "Edit")
                 await _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);

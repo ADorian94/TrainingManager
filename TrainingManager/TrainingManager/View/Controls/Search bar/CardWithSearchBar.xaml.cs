@@ -37,7 +37,7 @@ namespace TrainingManager.View.Controls
         }
 
         public static readonly BindableProperty CardSearchTextProperty =
-            BindableProperty.Create("CardSearchText", typeof(string), typeof(CardWithSearchBar), string.Empty);
+            BindableProperty.Create("CardSearchText", typeof(string), typeof(CardWithSearchBar), string.Empty, BindingMode.TwoWay);
 
         public DelegateCommand CardSearchCommand
         {
@@ -52,6 +52,11 @@ namespace TrainingManager.View.Controls
         {
             if (bindable is CardWithSearchBar headerTemplate && newValue is DelegateCommand command)
                 headerTemplate.CardSearchCommand = command;
+        }
+
+        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            CardSearchCommand?.Execute(CardSearchText);
         }
     }
 }

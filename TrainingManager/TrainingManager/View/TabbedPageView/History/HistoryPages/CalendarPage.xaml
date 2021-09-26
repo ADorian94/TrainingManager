@@ -2,9 +2,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:calendar="clr-namespace:TrainingManager.View.Controls.Calendar"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
              x:Class="TrainingManager.View.TabbedPageView.History.HistoryPages.CalendarPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
+            <Label Text="Calendar" Style="{StaticResource Title0}"/>
             <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}"/>
         </StackLayout>
     </ContentPage.Content>

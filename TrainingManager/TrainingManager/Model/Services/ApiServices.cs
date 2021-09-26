@@ -67,6 +67,20 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<bool> DeleteWeightWorkoutAsync(int workoutId)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.DeleteAsync($"api/WeightWorkouts/{workoutId}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         //ACTIVITIES
         public async Task<IEnumerable<string>> GetWeightActivitiesAsync()
         {

@@ -209,6 +209,7 @@ namespace TrainingManager.WebApi.Controllers
                 if (weightWorkout == null)
                     return NotFound();
 
+                await RemoveExercises(weightWorkout.Id);
                 _context.WeightWorkouts.Remove(weightWorkout);
                 await _context.SaveChangesAsync();
 
@@ -219,6 +220,32 @@ namespace TrainingManager.WebApi.Controllers
                 // Internal Server Error
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
+
+        private async Task RemoveExercises(int id)
+        {
+            var exercises = _context.WeightExercises.Where(ex => ex.WorkoutId == id);
+
+            foreach (var exercise in exercises)
+            {
+                await RemoveRounds(exercise.Id);
+                _context.WeightExercises.Remove(exercise);
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task RemoveRounds(int id)
+        {
+            var rounds = _context.WeightRounds.Where(ex => ex.ExerciseId == id);
+
+            foreach (var round in rounds)
+            {
+                await RemoveRounds(round.Id);
+                _context.WeightRounds.Remove(round);
+            }
+
+            await _context.SaveChangesAsync();
         }
 
         private bool WeightWorkoutExists(int id)
