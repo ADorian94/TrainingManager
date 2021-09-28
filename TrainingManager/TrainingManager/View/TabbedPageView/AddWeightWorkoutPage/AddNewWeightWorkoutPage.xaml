@@ -28,9 +28,13 @@
                 <StackLayout Grid.Row="0">
                     <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
                     <Label Text="{x:Binding Source={x:Reference WeightWorkoutPage}, Path=ViewMainTitle}" Style="{StaticResource Title0}"/>
-                    <controls:CardWithTextEntry CardMainText="Workout name" CardEntry="{Binding NewWeightWorkout.WorkoutName, Mode=TwoWay}"/>
-                    <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}" IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
-                    <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                    <controls:CardWithTextEntry x:Name="NameCard" CardMainText="Workout name" CardEntry="{Binding NewWeightWorkout.WorkoutName, Mode=TwoWay}"/>
+                    <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None"
+                              HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                        <ListView.Header>
+                            <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
+                                                 IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                        </ListView.Header>
                         <ListView.ItemTemplate >
                             <DataTemplate>
                                 <ViewCell>
