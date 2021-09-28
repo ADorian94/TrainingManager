@@ -42,6 +42,8 @@ namespace TrainingManager.Model.Tests
                 if (item.TypeOfMethod == MethodType.Brzycki)
                     Assert.AreEqual(Math.Round(weightOfExercise * (36.0 / (37.0 - repsOfExercise)), 2), item.MaximumValue);
 
+                
+
                 //...
             }
         }
