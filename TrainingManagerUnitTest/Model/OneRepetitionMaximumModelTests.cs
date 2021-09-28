@@ -43,7 +43,7 @@ namespace TrainingManager.Model.Tests
                     Assert.AreEqual(Math.Round(weightOfExercise * (36.0 / (37.0 - repsOfExercise)), 2), item.MaximumValue);
 
                 if (item.TypeOfMethod == MethodType.McGlothin)
-                    Assert.AreEqual(Math.Round((weightOfExercise * 100.0 ) / (101.3 - 2.67123 * repsOfExercise), 2), item.MaximumValue);
+                    Assert.AreEqual(Math.Round((weightOfExercise * 100.0) / (101.3 - 2.67123 * repsOfExercise), 2), item.MaximumValue);
 
                 if (item.TypeOfMethod == MethodType.Lombardi)
                     Assert.AreEqual(Math.Round(weightOfExercise * (Math.Pow(repsOfExercise, 0.10)), 2), item.MaximumValue);
@@ -51,12 +51,11 @@ namespace TrainingManager.Model.Tests
                 if (item.TypeOfMethod == MethodType.Mayhew)
                     Assert.AreEqual(Math.Round((100.0 * weightOfExercise) / (52.2 + 41.9 * Math.Pow(Math.E, -0.055 * repsOfExercise)), 2), item.MaximumValue);
 
-                 if (item.TypeOfMethod == MethodType.OConner)
+                if (item.TypeOfMethod == MethodType.OConner)
                     Assert.AreEqual(Math.Round(weightOfExercise * (1 + (repsOfExercise / 40.0)), 2), item.MaximumValue);
 
                 if (item.TypeOfMethod == MethodType.Wathen)
                     Assert.AreEqual(Math.Round((100.0 * weightOfExercise) / (48.8 + 53.8 * Math.Pow(Math.E, -0.075 * repsOfExercise)), 2), item.MaximumValue);
-                //...
             }
         }
 
@@ -66,9 +65,8 @@ namespace TrainingManager.Model.Tests
         [DataRow(MethodType.McGlothin, "McGlothin method")]
         [DataRow(MethodType.Lombardi, "Lombardi method")]
         [DataRow(MethodType.Mayhew, "Mayhew method")]
-        [DataRow(MethodType.OConner, "OConner method")]
+        [DataRow(MethodType.OConner, "O'Conner method")]
         [DataRow(MethodType.Wathen, "Wathen method")]
-        //...
         public void MethodTypeNameTest(MethodType type, string name)
         {
             List<MaximumMethod> result = new List<MaximumMethod>(_repetitionMaximumModel.CalculateOneRepMaximums(ZERO_WEIGHT, ZERO_REPS));
