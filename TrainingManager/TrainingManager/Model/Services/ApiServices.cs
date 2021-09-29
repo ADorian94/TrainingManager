@@ -6,7 +6,7 @@ using TrainingManager.Data.DTO;
 
 namespace TrainingManager.Model.Services
 {
-    public class ApiServices
+    public class ApiServices : IApiServices
     {
         private readonly HttpClient _client;
 

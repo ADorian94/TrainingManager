@@ -1,43 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
+using System.Linq;
 using Utility;
 
 namespace TrainingManager.Model
 {
-    class OneRepetitionMaximumModel
+    public class OneRepetitionMaximumModel
     {
-        private List<MethodType> _possbleMethods;
+        private readonly List<MethodType> _possbleMethods;
 
         public OneRepetitionMaximumModel()
         {
-            _possbleMethods = new List<MethodType>()
+            _possbleMethods = new List<MethodType>();
+
+            foreach (MethodType method in Enum.GetValues(typeof(MethodType)))
             {
-                MethodType.Avarage1RM,
-                MethodType.Brzycki,
-                MethodType.Epley,
-                MethodType.Lombardi,
-                MethodType.Mayhew,
-                MethodType.McGlothin,
-                MethodType.OConner,
-                MethodType.Wathen,
-            };
+                _possbleMethods.Add(method);
+            }
         }
 
-        public ObservableCollection<MaximumMethod> CalculateOneRepMaximums(double weight, int reps)
-        {
-            var maximumList = new ObservableCollection<MaximumMethod>();
-
-            foreach (var method in _possbleMethods)
-                maximumList.Add(new MaximumMethod
-                {
-                    MethodName = MethodToString(method),
-                    MaximumValue = CalculateByMethod(weight, reps, method),
-                    TypeOfMethod = MethodType.Epley
-                });
-
-            return maximumList;
-        }
+        //ezt akarom tesztelni
+        public IEnumerable<MaximumMethod> CalculateOneRepMaximums(double weight, int reps) =>
+            _possbleMethods.Select(method => new MaximumMethod
+            {
+                MethodName = MethodToString(method),
+                MaximumValue = CalculateByMethod(weight, reps, method),
+                TypeOfMethod = method
+            });
 
         private string MethodToString(MethodType methodType)
         {
