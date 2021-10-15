@@ -149,7 +149,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Model\Interfaces\" />
     <Folder Include="Model\Workouts\" />
   </ItemGroup>
 </Project>

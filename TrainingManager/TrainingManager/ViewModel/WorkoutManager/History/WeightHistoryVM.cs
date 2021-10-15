@@ -12,7 +12,7 @@ namespace TrainingManager.ViewModel
 {
     public class WeightHistoryVM : WorkoutManagerBaseVM
     {
-        public WeightHistoryVM(ApiServices apiServices)
+        public WeightHistoryVM(IApiServices apiServices)
         {
             ApiServices = apiServices;
             SetupActivitiesAsync();

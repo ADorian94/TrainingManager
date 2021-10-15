@@ -1,4 +1,5 @@
-﻿using TrainingManager.Model.Services;
+﻿using TrainingManager.Model;
+using TrainingManager.Model.Services;
 using TrainingManager.ViewModel.Navigation;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -10,7 +11,7 @@ namespace TrainingManager
     {
         //FIELDS
         private PageNavigationManager _pageNavigationManager;
-        private ApiServices _apiService;
+        private IApiServices _apiService;
 
         public App()
         {

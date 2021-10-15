@@ -40,7 +40,7 @@ namespace TrainingManager.ViewModel.Navigation
         private readonly WeightWorkoutManagerVM _weightWorkoutManagerVM;
         private readonly WeightHistoryVM _weightHistoryVM;
 
-        public PageNavigationManager(ApiServices apiServices)
+        public PageNavigationManager(IApiServices apiServices)
         {
             //INITIALIZE VMS
             _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
