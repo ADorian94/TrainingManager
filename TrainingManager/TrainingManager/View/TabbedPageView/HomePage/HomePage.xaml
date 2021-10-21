@@ -3,10 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TrainingManager.View.Styles" 
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.HomePage"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
-        <local:Style/>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView BackgroundColor="{StaticResource AppBackgroundColor}" >
         <StackLayout >
@@ -34,13 +42,23 @@
                     <controls:TallSimpleCard CardMainText="Bench Press" CardSecondaryText="12" />
                 </StackLayout>
             </ScrollView>
-            <Label Text="Recent workouts" Style="{StaticResource Title1}"/>
-            <!--<StackLayout Orientation="Vertical">-->
-            <controls:SimpleCard CardMainText="Biceps"/>
-            <controls:SimpleCard CardMainText="Triceps"/>
-            <controls:SimpleCard CardMainText="Squat"/>
-            <controls:SimpleCard CardMainText="Bench Press"/>
-            <!--</StackLayout>-->
+            <StackLayout>
+                <Label Text="Recent workouts" Style="{StaticResource Title0}"/>
+                <ListView x:Name="RecentList" ItemsSource="{Binding Path=RecentWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                    <ListView.ItemTemplate >
+                        <DataTemplate>
+                            <ViewCell>
+                                <controls:OpenableCard CloseCardMainLabel="{Binding WorkoutName}" OpenCardMainLabel="{Binding WorkoutName}"
+                                                   OpenCardFirstLabel="Date" OpenCardFirstValue="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
+                                                   OpenCardSecondLabel="Weight" OpenCardSecondValue="{Binding TotalWeight}"
+                                                   ButtonVisibility="True"
+                                                   ButtonCommand="{Binding WeightWorkoutMenuSelectedCommand}"
+                                                   ButtonCommandParameter="{Binding WorkoutGuid}"/>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

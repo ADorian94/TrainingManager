@@ -19,19 +19,5 @@
         Avarage1RM,
     }
 
-    //public enum IntervallTimerStates
-    //{
-    //    IntervallTimerStopped,
-    //    IntervallTimerStarted,
-    //    IntervallTimerPaused
-    //}
-
-    //public enum WorkoutType
-    //{
-    //    IntervallWorkout,
-    //    WeightWorkout,
-    //}
-
     public enum PageType { WightWorkout };
-
 }

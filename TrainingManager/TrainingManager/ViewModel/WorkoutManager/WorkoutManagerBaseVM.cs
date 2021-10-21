@@ -58,8 +58,8 @@ namespace TrainingManager.ViewModel
         public DelegateCommand AddWeightRoundToExerciseCommand { get; private set; }
         public DelegateCommand OpenNoteEditorCommand { get; private set; }
         public DelegateCommand SaveNoteCommand { get; private set; }
-        public DelegateCommand OpenTrainingLogOpenCommand { get; private set; }
-        public DelegateCommand OpenHistoryViewOpenCommand { get; private set; }
+        //public DelegateCommand OpenTrainingLogOpenCommand { get; private set; }
+        //public DelegateCommand OpenHistoryViewOpenCommand { get; private set; }
         public DelegateCommand WeightExerciseMenuSelectedCommand { get; private set; }
         public DelegateCommand SavedActivitiySelected { get; private set; }
         public DelegateCommand ExerciseRoundSelectedCommand { get; private set; }

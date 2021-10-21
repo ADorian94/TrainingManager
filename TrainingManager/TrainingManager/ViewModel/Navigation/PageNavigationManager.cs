@@ -16,6 +16,8 @@ namespace TrainingManager.ViewModel.Navigation
         private readonly NavigationPage _mainNavigationPage;
         private readonly NavigationTabbedPage _mainTabbedPage;
         private readonly HomePage _homePage;
+        private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPageHome;
+        private readonly RecentWorkoutDetails _recentWorkoutDetailsPage;
         private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPage;
         private readonly AddNewDrillCaruselPage _addNewDrillCaruselPage;
         private readonly AddSavedWeightExercises _addSavedWeightExercises;
@@ -39,6 +41,7 @@ namespace TrainingManager.ViewModel.Navigation
         private readonly OneRepetitionMaximumVM _oneRepetitionMaximumVM;
         private readonly WeightWorkoutManagerVM _weightWorkoutManagerVM;
         private readonly WeightHistoryVM _weightHistoryVM;
+        private readonly HomeVM _homeVM;
 
         public PageNavigationManager(IApiServices apiServices)
         {
@@ -46,9 +49,12 @@ namespace TrainingManager.ViewModel.Navigation
             _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM(apiServices);
             _weightHistoryVM = new WeightHistoryVM(apiServices);
+            _homeVM = new HomeVM(apiServices);
 
             //INITIALIZE PAGES
             _homePage = new HomePage() { Title = "Home" };
+            _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
+            _recentWorkoutDetailsPage = new RecentWorkoutDetails();
             _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout") { Title = "Workout" };
             _settingsPage = new SettingsPage() { Title = "Settings" };
             _exercisesPage = new ExercisesPage() { Title = "Exercises" };
@@ -96,6 +102,9 @@ namespace TrainingManager.ViewModel.Navigation
             _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
             _addNewWeightWorkoutPageHistory.BindingContext = _weightHistoryVM;
             _searchHistoryPage.BindingContext = _weightHistoryVM;
+            _homePage.BindingContext = _homeVM;
+            _addNewWeightWorkoutPageHome.BindingContext = _homeVM;
+            _recentWorkoutDetailsPage.BindingContext = _homeVM;
 
             //EVENT SUBSCRIBE
             _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
@@ -124,11 +133,21 @@ namespace TrainingManager.ViewModel.Navigation
             _weightHistoryVM.ExceptionAllert += OnExceptionOccured;
             _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
             _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
+
+            _homeVM.RecentWorkoutItemSelected += OnRecentWorkoutItemSelected;
         }
+
+        private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
+        {
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Details");
+
+            if (action == "Details")
+                await _mainNavigationPage.PushAsync(_recentWorkoutDetailsPage);
+        }
+
         public Page GetMainPage() => _mainNavigationPage;
 
         //EVENT HANDLERS
-
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
@@ -138,7 +157,6 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Edit")
                 await _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
-
         }
 
         private void OnWeightWorkoutDateSelected(object sender, DateTime e)
