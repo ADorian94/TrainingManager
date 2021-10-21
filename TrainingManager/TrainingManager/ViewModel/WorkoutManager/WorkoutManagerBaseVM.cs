@@ -9,7 +9,7 @@ namespace TrainingManager.ViewModel
     public abstract class WorkoutManagerBaseVM : ViewModelBase
     {
         //FIELDS
-        protected ApiServices ApiServices;
+        protected IApiServices ApiServices;
 
         //PROPERTIES
         private WeightWorkoutVM _newWeightWorkout;

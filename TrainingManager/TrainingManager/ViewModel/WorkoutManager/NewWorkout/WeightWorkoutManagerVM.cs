@@ -10,7 +10,7 @@ namespace TrainingManager.ViewModel
 {
     public class WeightWorkoutManagerVM : WorkoutManagerBaseVM
     {
-        public WeightWorkoutManagerVM(ApiServices apiServices)
+        public WeightWorkoutManagerVM(IApiServices apiServices)
         {
             InitializeCommands();
             NewWeightWorkout = new WeightWorkoutVM
