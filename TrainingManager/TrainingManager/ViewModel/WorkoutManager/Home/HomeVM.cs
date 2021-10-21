@@ -4,13 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
-using TrainingManager.Model.Services;
 
 namespace TrainingManager.ViewModel
 {
     public class HomeVM : WorkoutManagerBaseVM
     {
-        public HomeVM(ApiServices apiServices)
+        public HomeVM(IApiServices apiServices)
         {
             InitializeCommands();
             ApiServices = apiServices;
