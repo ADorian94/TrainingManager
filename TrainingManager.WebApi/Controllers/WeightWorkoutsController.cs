@@ -10,6 +10,7 @@ using TrainingManager.WebApi.Model;
 
 namespace TrainingManager.WebApi.Controllers
 {
+#warning Refaktorálni
     [Route("api/[controller]")]
     [ApiController]
     public class WeightWorkoutsController : ControllerBase
