@@ -3,6 +3,7 @@ using System.Linq;
 using TrainingManager.Model;
 using TrainingManager.Model.Services;
 using TrainingManager.View;
+using TrainingManager.View.LoginAndRegistration;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
 using Xamarin.Forms;
@@ -14,6 +15,9 @@ namespace TrainingManager.ViewModel.Navigation
     {
         //TABBED PAGE
         private readonly NavigationPage _mainNavigationPage;
+        private readonly LoginAndRegistrationCaruselPage _loginAndRegisterCaruselPage;
+        private readonly LoginPage _loginPage;
+        private readonly RegistrationPage _registrationPage;
         private readonly NavigationTabbedPage _mainTabbedPage;
         private readonly HomePage _homePage;
         private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPageHome;
@@ -52,6 +56,11 @@ namespace TrainingManager.ViewModel.Navigation
             _homeVM = new HomeVM(apiServices);
 
             //INITIALIZE PAGES
+            _loginAndRegisterCaruselPage = new LoginAndRegistrationCaruselPage();
+            _loginPage = new LoginPage();
+            _registrationPage = new RegistrationPage();
+            _loginAndRegisterCaruselPage.Children.Add(_loginPage);
+            _loginAndRegisterCaruselPage.Children.Add(_registrationPage);
             _homePage = new HomePage() { Title = "Home" };
             _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
             _recentWorkoutDetailsPage = new RecentWorkoutDetails();
@@ -146,6 +155,7 @@ namespace TrainingManager.ViewModel.Navigation
         }
 
         public Page GetMainPage() => _mainNavigationPage;
+        public Page GetLoginPage() => _loginAndRegisterCaruselPage;
 
         //EVENT HANDLERS
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)

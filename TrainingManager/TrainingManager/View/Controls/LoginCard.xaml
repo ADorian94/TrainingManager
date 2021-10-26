@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.LoginCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" Margin="15, 15, 15, 5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="User name" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
+                <Entry Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=UserName}" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
+                <Label Grid.Row="2" Text="Password" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
+                <Entry Grid.Row="3" Text="{x:Binding Source={x:Reference this}, Path=Password}" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

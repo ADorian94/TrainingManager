@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<CarouselPage xmlns="http://xamarin.com/schemas/2014/forms"
+              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+              xmlns:images="clr-namespace:TrainingManager.View.Media" xmlns:local="clr-namespace:TrainingManager.View.Styles"
+              x:Class="TrainingManager.View.LoginAndRegistration.LoginAndRegistrationCaruselPage"
+              NavigationPage.HasNavigationBar="False"
+              BackgroundImageSource="{StaticResource BackGroundPic}">
+    <CarouselPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <images:Images/>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </CarouselPage.Resources>
+</CarouselPage>

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<BoxView xmlns="http://xamarin.com/schemas/2014/forms" 
+         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+         xmlns:local="clr-namespace:TrainingManager.View.Styles"
+         x:Class="TrainingManager.View.Controls.Overlays.MainOverlay">
+    <BoxView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </BoxView.Resources>
+    <BoxView.Background>
+        <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+            <GradientStop Color="Transparent" Offset="0"/>
+            <GradientStop Color="{StaticResource AppBackgroundColor}" Offset="0.7"/>
+            <GradientStop Color="{StaticResource AppBackgroundColor}" Offset="1"/>
+        </LinearGradientBrush>
+    </BoxView.Background>
+</BoxView>

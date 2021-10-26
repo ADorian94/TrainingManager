@@ -20,6 +20,7 @@ namespace TrainingManager
             //_apiService = new ApiServices("http://192.168.56.1:51426"); //phone debug
             _pageNavigationManager = new PageNavigationManager(_apiService);
             MainPage = _pageNavigationManager.GetMainPage();
+            //MainPage = _pageNavigationManager.GetLoginPage();
         }
 
         protected override void OnStart()
