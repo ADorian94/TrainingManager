@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
 using TrainingManager.View.LoginAndRegistration;
 using TrainingManager.ViewModel.WorkoutManager.Account;
 using Xamarin.Forms;
@@ -30,13 +31,13 @@ namespace TrainingManager.ViewModel.Navigation
         private readonly RegistrationManagerVM _registrationManagerVM;
         private readonly LoginManagerVM _loginManagerVM;
 
-        public AuthenticationNavigationManager(IApiServices apiServices)
+        public AuthenticationNavigationManager(IApiServices apiServices, IAuthService authService)
         {
             _apiServices = apiServices;
 
             //VIEWMODELS
             _registrationManagerVM = new RegistrationManagerVM(_apiServices);
-            _loginManagerVM = new LoginManagerVM(_apiServices);
+            _loginManagerVM = new LoginManagerVM(_apiServices, authService);
 
             //INITIALIZE PAGES
             _loadingView = new LoadingView();
@@ -60,7 +61,21 @@ namespace TrainingManager.ViewModel.Navigation
             _loginManagerVM.LoginFailed += OnAuthenticationMessage;
             _loginManagerVM.MessageApplication += OnAuthenticationMessage;
 
-            MainPage = new NavigationPage(_loginAndRegisterCaruselPage);
+            MainPage = new NavigationPage(_loadingView);
+            TryLoginAndSetMainPage();
+        }
+
+        private async void TryLoginAndSetMainPage()
+        {
+            bool loginResult = await _loginManagerVM.TryLoginWithSavedCredentialsAsync();
+
+            if (loginResult)
+                AuthenticationSuceed?.Invoke(this, EventArgs.Empty);
+            else
+            {
+                MainPage = new NavigationPage(_loginAndRegisterCaruselPage);
+                MainPageChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         internal void Logout()

@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
 using TrainingManager.View;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
@@ -15,6 +16,7 @@ namespace TrainingManager.ViewModel.Navigation
     {
         //FIELDS
         private IApiServices _apiServices;
+        private IAuthService _authService;
 
         //PROPERTIES
         public Page MainPage { get; private set; }
@@ -56,9 +58,10 @@ namespace TrainingManager.ViewModel.Navigation
         private HomeVM _homeVM;
         private SettingsVM _settingsVM;
 
-        public PageNavigationManager(IApiServices apiServices)
+        public PageNavigationManager(IApiServices apiServices, IAuthService authService)
         {
             _apiServices = apiServices;
+            _authService = authService;
 
             //INITIALIZE VM
             _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
@@ -131,7 +134,7 @@ namespace TrainingManager.ViewModel.Navigation
         {
             return Task.Run(() =>
             {
-                _settingsVM = new SettingsVM(_apiServices);
+                _settingsVM = new SettingsVM(_apiServices, _authService);
 
                 _settingsPage.BindingContext = _settingsVM;
 

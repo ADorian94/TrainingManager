@@ -1,5 +1,6 @@
 ﻿using System;
 using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
 using TrainingManager.Model.Services;
 using TrainingManager.ViewModel.Navigation;
 using Xamarin.Forms;
@@ -14,14 +15,16 @@ namespace TrainingManager
         private AuthenticationNavigationManager _authenticationNavigationManager;
         private PageNavigationManager _pageNavigationManager;
         private IApiServices _apiService;
+        private IAuthService _authService;
 
         public App()
         {
             InitializeComponent();
             _apiService = new ApiServices("http://localhost:51426");
+            _authService = new AuthService();
             //_apiService = new ApiServices("http://192.168.56.1:51426"); //phone debug
-            _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService);
-            _pageNavigationManager = new PageNavigationManager(_apiService);
+            _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
+            _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
             _pageNavigationManager.MainPageChanged += OnMainPageChanged;
             _pageNavigationManager.Logout += OnLogout;
             _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
