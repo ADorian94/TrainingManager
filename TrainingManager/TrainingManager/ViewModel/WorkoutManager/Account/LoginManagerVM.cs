@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Security;
+using System.Threading.Tasks;
 using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
 
 namespace TrainingManager.ViewModel.WorkoutManager.Account
 {
@@ -8,6 +10,7 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
     {
         //FIELDS
         private readonly IApiServices _apiServices;
+        private readonly IAuthService _authService;
 
         //PROPERTIES
         private string _userName;
@@ -21,9 +24,24 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
         public event EventHandler AuthenticationStarted;
         public event EventHandler<MessageEventArgs> LoginFailed;
 
-        public LoginManagerVM(IApiServices apiServices)
+        public LoginManagerVM(IApiServices apiServices, IAuthService authService)
         {
             _apiServices = apiServices;
+            _authService = authService;
+        }
+
+        public async Task<bool> TryLoginWithSavedCredentialsAsync()
+        {
+            (string userName, string userPassword) = await _authService.GetUserCredentialsAsync();
+            bool result = !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(userPassword);
+
+            if (result)
+            {
+                bool loginResult = await _apiServices.LoginAsync(userName, userPassword);
+                return loginResult;
+            }
+
+            return false;
         }
 
         //COMMANDS
@@ -41,11 +59,12 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
             {
                 AuthenticationStarted?.Invoke(this, EventArgs.Empty);
 
-                bool registrationResult = await _apiServices.LoginAsync(UserName, Password);
+                bool loginResult = await _apiServices.LoginAsync(UserName, Password);
 
-                if (registrationResult)
+                if (loginResult)
                 {
                     LoginSuccess?.Invoke(this, EventArgs.Empty);
+                    _authService.SetUserCredentials(UserName, Password);
                     UserName = string.Empty;
                 }
                 else

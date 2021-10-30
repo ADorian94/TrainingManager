@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
 
 namespace TrainingManager.ViewModel.WorkoutManager.Settigns
 {
@@ -9,6 +10,7 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
     {
         //FILEDS
         private readonly IApiServices _apiServices;
+        private readonly IAuthService _authServices;
 
         //EVENTS
         public event EventHandler LogoutSuccess;
@@ -17,9 +19,10 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         //COMMANDS
         public DelegateCommand SignOutCommand { get; private set; }
 
-        public SettingsVM(IApiServices apiServices)
+        public SettingsVM(IApiServices apiServices, IAuthService authServices)
         {
             _apiServices = apiServices;
+            _authServices = authServices;
         }
 
         protected override void InitializeCommands()
@@ -33,7 +36,10 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
             bool result = await _apiServices.LogoutAsync();
 
             if (result)
+            {
                 LogoutSuccess?.Invoke(this, EventArgs.Empty);
+                _authServices.RemoveUserCredentials();
+            }
             else
                 LogoutFailed?.Invoke(this, new MessageEventArgs("Error during the log out process."));
         }
