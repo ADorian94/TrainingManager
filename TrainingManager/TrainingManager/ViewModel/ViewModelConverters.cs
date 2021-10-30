@@ -25,6 +25,20 @@ namespace TrainingManager.ViewModel
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
 
+    public class DateToShortStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return string.Empty;
+
+            var dateTime = (DateTime)value;
+
+            return dateTime.Date.ToString("ddd");
+        }
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
 
     public class DoubleToBoolConverter : IValueConverter
     {

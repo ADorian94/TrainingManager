@@ -8,6 +8,7 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
+            <converter:DateToShortStringConverter x:Key="DateToShortStringConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -25,12 +26,14 @@
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
-                            <controls:OpenableCard CloseCardMainLabel="{Binding WorkoutName}" OpenCardMainLabel="{Binding WorkoutName}"
-                                                   OpenCardFirstLabel="Date" OpenCardFirstValue="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
-                                                   OpenCardSecondLabel="Weight" OpenCardSecondValue="{Binding TotalWeight}"
-                                                   ButtonVisibility="True"
-                                                   ButtonCommand="{Binding HistoryWorkoutItemSelectedCommand}"
-                                                   ButtonCommandParameter="{Binding WorkoutGuid}"/>
+                            <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
+                                                      ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
+                                                      CloseCardMainLabel="{Binding WorkoutName}"
+                                                      OpenCardFirstLabel="Weight" 
+                                                      OpenCardFirstValue="{Binding TotalWeight}"
+                                                      ButtonCommand="{Binding HistoryWorkoutItemSelectedCommand}"
+                                                      ButtonCommandParameter="{Binding WorkoutGuid}"
+                                                      ButtonVisibility="True"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
