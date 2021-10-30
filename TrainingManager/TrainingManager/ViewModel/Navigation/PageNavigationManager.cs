@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using TrainingManager.Model;
-using TrainingManager.Model.Services;
 using TrainingManager.View;
-using TrainingManager.View.LoginAndRegistration;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
+using TrainingManager.ViewModel.WorkoutManager.Settigns;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel.Navigation
@@ -13,15 +13,23 @@ namespace TrainingManager.ViewModel.Navigation
 #warning Refact required: PageNavigationManager
     public class PageNavigationManager
     {
+        //FIELDS
+        private IApiServices _apiServices;
+
+        //PROPERTIES
+        public Page MainPage { get; private set; }
+
+        //EVENT
+        public event EventHandler MainPageChanged;
+        public event EventHandler Logout;
+
         //TABBED PAGE
         private readonly NavigationPage _mainNavigationPage;
-        private readonly LoginAndRegistrationCaruselPage _loginAndRegisterCaruselPage;
-        private readonly LoginPage _loginPage;
-        private readonly RegistrationPage _registrationPage;
         private readonly NavigationTabbedPage _mainTabbedPage;
         private readonly HomePage _homePage;
         private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPageHome;
         private readonly RecentWorkoutDetails _recentWorkoutDetailsPage;
+
         private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPage;
         private readonly AddNewDrillCaruselPage _addNewDrillCaruselPage;
         private readonly AddSavedWeightExercises _addSavedWeightExercises;
@@ -42,25 +50,18 @@ namespace TrainingManager.ViewModel.Navigation
         private readonly AddWeightExercisePage _addWeightDrillPageHistory;
 
         //VIEWMODELLS
-        private readonly OneRepetitionMaximumVM _oneRepetitionMaximumVM;
-        private readonly WeightWorkoutManagerVM _weightWorkoutManagerVM;
-        private readonly WeightHistoryVM _weightHistoryVM;
-        private readonly HomeVM _homeVM;
+        private OneRepetitionMaximumVM _oneRepetitionMaximumVM;
+        private WeightWorkoutManagerVM _weightWorkoutManagerVM;
+        private WeightHistoryVM _weightHistoryVM;
+        private HomeVM _homeVM;
+        private SettingsVM _settingsVM;
 
         public PageNavigationManager(IApiServices apiServices)
         {
-            //INITIALIZE VMS
-            _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
-            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(apiServices);
-            _weightHistoryVM = new WeightHistoryVM(apiServices);
-            _homeVM = new HomeVM(apiServices);
+            _apiServices = apiServices;
 
-            //INITIALIZE PAGES
-            _loginAndRegisterCaruselPage = new LoginAndRegistrationCaruselPage();
-            _loginPage = new LoginPage();
-            _registrationPage = new RegistrationPage();
-            _loginAndRegisterCaruselPage.Children.Add(_loginPage);
-            _loginAndRegisterCaruselPage.Children.Add(_registrationPage);
+            //INITIALIZE VM
+            _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
             _homePage = new HomePage() { Title = "Home" };
             _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
             _recentWorkoutDetailsPage = new RecentWorkoutDetails();
@@ -95,55 +96,117 @@ namespace TrainingManager.ViewModel.Navigation
             _mainTabbedPage.Children.Add(_exercisesPage);
             _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
             _mainTabbedPage.Children.Add(_settingsPage);
-
             _mainNavigationPage = new NavigationPage(_mainTabbedPage);
 
-            //BINDINGCONTEXT
             _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
             _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
-            _addNewWeightWorkoutPage.BindingContext = _weightWorkoutManagerVM;
-            _addWeightDrillPage.BindingContext = _weightWorkoutManagerVM;
-            _addSavedWeightExercises.BindingContext = _weightWorkoutManagerVM;
-            _notePage.BindingContext = _weightWorkoutManagerVM;
-            _calendarHistoryPage.BindingContext = _weightHistoryVM;
-            _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
-            _addWeightDrillPageHistory.BindingContext = _weightHistoryVM;
-            _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
-            _addNewWeightWorkoutPageHistory.BindingContext = _weightHistoryVM;
-            _searchHistoryPage.BindingContext = _weightHistoryVM;
-            _homePage.BindingContext = _homeVM;
-            _addNewWeightWorkoutPageHome.BindingContext = _homeVM;
-            _recentWorkoutDetailsPage.BindingContext = _homeVM;
 
-            //EVENT SUBSCRIBE
             _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
-            _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
-            _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
-            _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
-            _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
-            _weightWorkoutManagerVM.SavedWeightActivitySelected += OnSavedWeightActivitySelected;
-            _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
-            _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
-            _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
-            _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
-            _weightWorkoutManagerVM.ExceptionAllert += OnExceptionOccured;
-            _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
+        }
 
-            _weightHistoryVM.WeightWorkoutDateSelected += OnWeightWorkoutDateSelected;
-            _weightHistoryVM.OpenAddWeightExercise += OnOpenAddWeightExerciseHistory;
-            _weightHistoryVM.CloseAddWeightExercise += OnCloseNavigationPage;
-            _weightHistoryVM.OpenNoteEditor += OnOpenNoteEditorHistory;
-            _weightHistoryVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelectedHistory;
-            _weightHistoryVM.SavedWeightActivitySelected += OnSavedWeightActivitySelectedHistory;
-            _weightHistoryVM.OpenEditWeightExercise += OnOpenEditWeightExerciseHistory;
-            _weightHistoryVM.MessageApplication += OnMessageApplication;
-            _weightHistoryVM.CloseNoteEditor += OnCloseNavigationPage;
-            _weightHistoryVM.ExerciseRoundSelected += OnExerciseRoundSelectedHistory;
-            _weightHistoryVM.ExceptionAllert += OnExceptionOccured;
-            _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
-            _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
+        //konkurensé lehetne alakítanis
+        public Task InitializeAfterAuthenticationAsync()
+        {
+            return Task.Run(async () =>
+            {
+                //CREATE VMs INIT TEHEM CONCURENTLY
+                var vmInitializations = new Task[]
+                {
+                    CreateWeightWorkoutManagerVM(),
+                    CreateWeightHistoryVM(),
+                    CreateHomeVM(),
+                    CreateSettingsVM()
+                };
 
-            _homeVM.RecentWorkoutItemSelected += OnRecentWorkoutItemSelected;
+                await Task.WhenAll(vmInitializations);
+
+                //EVENT SUBSCRIBE
+                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
+                MainPage = _mainNavigationPage;
+                MainPageChanged?.Invoke(this, EventArgs.Empty);
+            });
+        }
+
+        private Task CreateSettingsVM()
+        {
+            return Task.Run(() =>
+            {
+                _settingsVM = new SettingsVM(_apiServices);
+
+                _settingsPage.BindingContext = _settingsVM;
+
+                _settingsVM.LogoutSuccess += OnLogoutSuccess;
+                _settingsVM.LogoutFailed += OnMessageApplication;
+            });
+        }
+
+        private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
+
+        private Task CreateHomeVM()
+        {
+            return Task.Run(() =>
+            {
+                _homeVM = new HomeVM(_apiServices);
+
+                _homePage.BindingContext = _homeVM;
+                _addNewWeightWorkoutPageHome.BindingContext = _homeVM;
+                _recentWorkoutDetailsPage.BindingContext = _homeVM;
+
+                _homeVM.RecentWorkoutItemSelected += OnRecentWorkoutItemSelected;
+            });
+        }
+
+        private Task CreateWeightHistoryVM()
+        {
+            return Task.Run(() =>
+            {
+                _weightHistoryVM = new WeightHistoryVM(_apiServices);
+
+                _calendarHistoryPage.BindingContext = _weightHistoryVM;
+                _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
+                _addWeightDrillPageHistory.BindingContext = _weightHistoryVM;
+                _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
+                _addNewWeightWorkoutPageHistory.BindingContext = _weightHistoryVM;
+                _searchHistoryPage.BindingContext = _weightHistoryVM;
+
+                _weightHistoryVM.WeightWorkoutDateSelected += OnWeightWorkoutDateSelected;
+                _weightHistoryVM.OpenAddWeightExercise += OnOpenAddWeightExerciseHistory;
+                _weightHistoryVM.CloseAddWeightExercise += OnCloseNavigationPage;
+                _weightHistoryVM.OpenNoteEditor += OnOpenNoteEditorHistory;
+                _weightHistoryVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelectedHistory;
+                _weightHistoryVM.SavedWeightActivitySelected += OnSavedWeightActivitySelectedHistory;
+                _weightHistoryVM.OpenEditWeightExercise += OnOpenEditWeightExerciseHistory;
+                _weightHistoryVM.MessageApplication += OnMessageApplication;
+                _weightHistoryVM.CloseNoteEditor += OnCloseNavigationPage;
+                _weightHistoryVM.ExerciseRoundSelected += OnExerciseRoundSelectedHistory;
+                _weightHistoryVM.ExceptionAllert += OnExceptionOccured;
+                _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
+            });
+        }
+
+        private Task CreateWeightWorkoutManagerVM()
+        {
+            return Task.Run(() =>
+            {
+                _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiServices);
+
+                _addNewWeightWorkoutPage.BindingContext = _weightWorkoutManagerVM;
+                _addWeightDrillPage.BindingContext = _weightWorkoutManagerVM;
+                _addSavedWeightExercises.BindingContext = _weightWorkoutManagerVM;
+                _notePage.BindingContext = _weightWorkoutManagerVM;
+
+                _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
+                _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
+                _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
+                _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
+                _weightWorkoutManagerVM.SavedWeightActivitySelected += OnSavedWeightActivitySelected;
+                _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
+                _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
+                _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
+                _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
+                _weightWorkoutManagerVM.ExceptionAllert += OnExceptionOccured;
+            });
         }
 
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
@@ -153,9 +216,6 @@ namespace TrainingManager.ViewModel.Navigation
             if (action == "Details")
                 await _mainNavigationPage.PushAsync(_recentWorkoutDetailsPage);
         }
-
-        public Page GetMainPage() => _mainNavigationPage;
-        public Page GetLoginPage() => _loginAndRegisterCaruselPage;
 
         //EVENT HANDLERS
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
@@ -214,7 +274,9 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();
         private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
-        private async void OnMessageApplication(object sender, MessageEventArgs e) => await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
+        private async void OnMessageApplication(object sender, MessageEventArgs e) =>
+            await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
+
         /// <summary>
         /// Alapvető hibakezelés.
         /// </summary>

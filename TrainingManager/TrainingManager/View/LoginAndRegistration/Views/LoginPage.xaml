@@ -25,8 +25,9 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Text="Login" Style="{StaticResource Title0}"/>
-                <controls:LoginCard Grid.Row="1"/>
-                <Button Grid.Row="2" Text="Login" Style="{StaticResource BlueButton}"/>
+                <controls:LoginCard Grid.Row="1" UserName="{Binding UserName, Mode=TwoWay}"
+                                    Password="{Binding Password, Mode=TwoWay}"/>
+                <Button Grid.Row="2" Text="Login" Style="{StaticResource BlueButton}" Command="{Binding LoginCommand}"/>
                 <Label Grid.Row="3" Text="Swipe left to Sign up" FontSize="13" TextColor="White" HorizontalOptions="CenterAndExpand" Margin="0,0,0,10"/>
             </Grid>
         </Grid>

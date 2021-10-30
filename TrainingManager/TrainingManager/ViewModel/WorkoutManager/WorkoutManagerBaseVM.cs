@@ -149,7 +149,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - Activities", "Can't connect to the server."));
             }
         }
 

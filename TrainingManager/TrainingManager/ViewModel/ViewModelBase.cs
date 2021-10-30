@@ -10,6 +10,11 @@ namespace TrainingManager.ViewModel
     /// </summary>
     public abstract class ViewModelBase : INotifyPropertyChanged
     {
+        public ViewModelBase()
+        {
+            InitializeCommands();
+        }
+
         /// <summary>
         /// Tulajdonság változásának eseménye.
         /// </summary>

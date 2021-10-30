@@ -11,7 +11,6 @@ namespace TrainingManager.ViewModel
     {
         public HomeVM(IApiServices apiServices)
         {
-            InitializeCommands();
             ApiServices = apiServices;
             RecentWorkouts = new ObservableCollection<HistoryItemVM>();
             SetupHomeAsync();
@@ -37,7 +36,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - WeightWorkouts", "Can't connect to the server."));
             }
         }
 
