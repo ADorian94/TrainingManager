@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrainingManager.Data.DTO;
@@ -13,6 +14,7 @@ namespace TrainingManager.WebApi.Controllers
 #warning Refaktorálni
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WeightWorkoutsController : ControllerBase
     {
         private readonly TrainingManagerContext _context;

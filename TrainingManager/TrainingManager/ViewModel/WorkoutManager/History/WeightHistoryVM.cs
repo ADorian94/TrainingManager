@@ -17,7 +17,6 @@ namespace TrainingManager.ViewModel
             ApiServices = apiServices;
             SetupActivitiesAsync();
             SetupHistoryAsync();
-            InitializeCommands();
             WorkoutDateSelected = new DelegateCommand(WorkoutDateSelectedFunction);
             HistoryWorkoutItemSelectedCommand = new DelegateCommand(HistoryWorkoutItemSelectedFunction);
             SearchCommand = new DelegateCommand(SearchFunction);
@@ -45,7 +44,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - WeightWorkouts", "Can't connect to the server."));
             }
         }
 

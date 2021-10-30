@@ -6,6 +6,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using TrainingManager.WebApi.Data;
+using TrainingManager.WebApi.Model;
+using Microsoft.AspNetCore.Identity;
+
+using Microsoft.Extensions.Hosting;
 
 namespace TrainingManager.WebApi
 {
@@ -23,13 +27,31 @@ namespace TrainingManager.WebApi
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            //services.AddDbContext<TrainingManagerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("TrainingManagerContext")));
+            //adatábzis beállítása
             services.AddDbContext<TrainingManagerContext>(options => options.UseSqlite("Data Source=TrainingManager.db"));
 
+            //autentikáció beállítása
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<TrainingManagerContext>()
+                .AddDefaultTokenProviders();
+
+            services.Configure<IdentityOptions>(options =>
+            {
+                // Jelszó komplexitására vonatkozó konfiguráció
+                options.Password.RequireDigit = true;
+                options.Password.RequiredLength = 8;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = true;
+                options.Password.RequireLowercase = false;
+                options.Password.RequiredUniqueChars = 3;
+
+                // Felhasználókezelésre vonatkozó konfiguráció
+                options.User.RequireUniqueEmail = true;
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -40,7 +62,9 @@ namespace TrainingManager.WebApi
                 app.UseHsts();
             }
 
+            app.UseStaticFiles();
             app.UseHttpsRedirection();
+            app.UseAuthentication();
             app.UseMvc();
         }
     }

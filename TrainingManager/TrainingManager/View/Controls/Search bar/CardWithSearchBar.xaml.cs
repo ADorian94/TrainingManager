@@ -56,7 +56,8 @@ namespace TrainingManager.View.Controls
 
         private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
         {
-            CardSearchCommand?.Execute(CardSearchText);
+            if (CardSearchText != null)
+                CardSearchCommand?.Execute(CardSearchText);
         }
     }
 }

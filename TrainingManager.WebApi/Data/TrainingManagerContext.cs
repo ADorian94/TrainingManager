@@ -1,12 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using TrainingManager.WebApi.Model;
 
 namespace TrainingManager.WebApi.Data
 {
-    public class TrainingManagerContext : DbContext
+    public class TrainingManagerContext : IdentityDbContext<ApplicationUser>
     {
         public TrainingManagerContext(DbContextOptions<TrainingManagerContext> options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+            builder.Entity<ApplicationUser>().ToTable("Users");
         }
 
         public DbSet<WeightWorkout> WeightWorkouts { get; set; }

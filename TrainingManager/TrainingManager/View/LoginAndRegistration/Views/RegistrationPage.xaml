@@ -22,8 +22,13 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Label Grid.Row="0" Text="Registration" Style="{StaticResource Title0}"/>
-                <controls:RegistrationCard Grid.Row="1"/>
-                <Button Grid.Row="2" Text="Register now" Style="{StaticResource BlueButton}"/>
+                <controls:RegistrationCard Grid.Row="1" 
+                                           Name="{Binding Name, Mode=TwoWay}"
+                                           UserName="{Binding UserName, Mode=TwoWay}"
+                                           Email="{Binding UserEmail, Mode=TwoWay}"
+                                           Password="{Binding Password, Mode=TwoWay}"
+                                           ConfirmPassword="{Binding ConfirmPassword, Mode=TwoWay}"/>
+                <Button Grid.Row="2" Text="Register now" Style="{StaticResource BlueButton}" Command="{Binding RegisterCommand}"/>
                 <Label Grid.Row="3" Text="Swipe right to Sign in" FontSize="13" TextColor="White" HorizontalOptions="CenterAndExpand" Margin="0,0,0,10"/>
             </Grid>
         </Grid>

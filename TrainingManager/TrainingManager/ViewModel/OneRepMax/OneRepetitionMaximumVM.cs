@@ -16,7 +16,6 @@ namespace TrainingManager.ViewModel
         {
             _model = new OneRepetitionMaximumModel();
             RecomendedMaximums = new ObservableCollection<MaximumMethod>();
-            InitializeCommands();
         }
 
         protected override void InitializeCommands()

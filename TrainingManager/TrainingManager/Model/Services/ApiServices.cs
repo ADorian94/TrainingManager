@@ -1,6 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 
@@ -151,6 +154,52 @@ namespace TrainingManager.Model.Services
                 //todo: saját exception dobása
                 throw new Exception(ex.Message);
             }
+        }
+
+        //Account
+        public async Task<bool> LoginAsync(string userName, string password)
+        {
+            var accountDetails = new UserLoginDTO
+            {
+                UserName = userName,
+                Password = password
+            };
+
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(accountDetails));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            HttpResponseMessage response = await _client.PostAsync("api/Account/Login", content);
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+                return false;
+
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> RegisterAync(string name, string userName, string userEmail, string password, string confirmPassword)
+        {
+            var accountDetails = new UserRegistrationDTO
+            {
+                Name = name,
+                UserName = userName,
+                Email = userEmail,
+                Password = password,
+                ConfirmPassword = confirmPassword
+            };
+
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(accountDetails));
+            content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = await _client.PostAsync("api/Account/Register", content);
+            return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> LogoutAsync()
+        {
+            HttpResponseMessage response = await _client.PostAsJsonAsync("api/Account/Signout", "");
+
+            if (response.IsSuccessStatusCode)
+                return true;
+
+            throw new Exception($"Service returned response: {response.StatusCode}");
         }
     }
 }

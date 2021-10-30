@@ -10,3 +10,4 @@ namespace TrainingManager.WebApi.Model
         public string ActivityName { get; set; }
     }
 }
+ 

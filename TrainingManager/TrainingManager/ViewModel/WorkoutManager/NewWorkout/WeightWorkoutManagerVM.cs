@@ -12,7 +12,6 @@ namespace TrainingManager.ViewModel
     {
         public WeightWorkoutManagerVM(IApiServices apiServices)
         {
-            InitializeCommands();
             NewWeightWorkout = new WeightWorkoutVM
             {
                 WeightExercises = new ObservableCollection<WeightExerciseVM>()
@@ -50,7 +49,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - GetWeightWorkouts", "Can't connect to the server."));
             }
         }
 
@@ -70,7 +69,7 @@ namespace TrainingManager.ViewModel
                 WorkoutDate = weightWorkoutDTO.WorkoutDate,
                 WorkoutGuid = weightWorkoutDTO.WorkoutGuid,
                 WorkoutName = weightWorkoutDTO.WorkoutName,
-                WorkoutType = Data.DTO.WorkoutType.WeightWorkout,
+                WorkoutType = WorkoutType.WeightWorkout,
                 WeightExercises = new ObservableCollection<WeightExerciseVM>(),
             };
 
