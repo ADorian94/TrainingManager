@@ -26,30 +26,30 @@ namespace TrainingManager.ViewModel.Navigation
         public event EventHandler Logout;
 
         //TABBED PAGE
-        private readonly NavigationPage _mainNavigationPage;
-        private readonly NavigationTabbedPage _mainTabbedPage;
-        private readonly HomePage _homePage;
-        private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPageHome;
-        private readonly RecentWorkoutDetails _recentWorkoutDetailsPage;
+        private NavigationPage _mainNavigationPage;
+        private NavigationTabbedPage _mainTabbedPage;
+        private HomePage _homePage;
+        private AddNewWeightWorkoutPage _addNewWeightWorkoutPageHome;
+        private RecentWorkoutDetails _recentWorkoutDetailsPage;
 
-        private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPage;
-        private readonly AddNewDrillCaruselPage _addNewDrillCaruselPage;
-        private readonly AddSavedWeightExercises _addSavedWeightExercises;
-        private readonly AddWeightExercisePage _addWeightDrillPage;
-        private readonly OneRepetitionMaximumCalculatorPage _oneRepetitionMaximumCalculatorPage;
-        private readonly OneRepetitionMaximumCalculatedPage _oneRepetitionMaximumCalculatedPage;
-        private readonly SettingsPage _settingsPage;
-        private readonly ExercisesPage _exercisesPage;
-        private readonly NotePage _notePage;
-        private readonly NotePage _notePageHistory;
+        private AddNewWeightWorkoutPage _addNewWeightWorkoutPage;
+        private AddNewDrillCaruselPage _addNewDrillCaruselPage;
+        private AddSavedWeightExercises _addSavedWeightExercises;
+        private AddWeightExercisePage _addWeightDrillPage;
+        private OneRepetitionMaximumCalculatorPage _oneRepetitionMaximumCalculatorPage;
+        private OneRepetitionMaximumCalculatedPage _oneRepetitionMaximumCalculatedPage;
+        private SettingsPage _settingsPage;
+        private ExercisesPage _exercisesPage;
+        private NotePage _notePage;
+        private NotePage _notePageHistory;
 
-        private readonly HistoryCaruselPage _historyCaruselPage;
-        private readonly CalendarPage _calendarHistoryPage;
-        private readonly SearchPage _searchHistoryPage;
-        private readonly AddNewWeightWorkoutPage _addNewWeightWorkoutPageHistory;
-        private readonly AddNewDrillCaruselPage _addNewDrillCaruselPageHistory;
-        private readonly AddSavedWeightExercises _addSavedWeightExercisesHistory;
-        private readonly AddWeightExercisePage _addWeightDrillPageHistory;
+        private HistoryCaruselPage _historyCaruselPage;
+        private CalendarPage _calendarHistoryPage;
+        private SearchPage _searchHistoryPage;
+        private AddNewWeightWorkoutPage _addNewWeightWorkoutPageHistory;
+        private AddNewDrillCaruselPage _addNewDrillCaruselPageHistory;
+        private AddSavedWeightExercises _addSavedWeightExercisesHistory;
+        private AddWeightExercisePage _addWeightDrillPageHistory;
 
         //VIEWMODELLS
         private OneRepetitionMaximumVM _oneRepetitionMaximumVM;
@@ -62,7 +62,36 @@ namespace TrainingManager.ViewModel.Navigation
         {
             _apiServices = apiServices;
             _authService = authService;
+            InitializePages();
+        }
 
+        //konkurensé lehetne alakítanis
+        public Task InitializeAfterAuthenticationAsync()
+        {
+            return Task.Run(async () =>
+            {
+                InitializePages();
+
+                //CREATE VMs INIT TEHEM CONCURENTLY
+                var vmInitializations = new Task[]
+                {
+                    CreateWeightWorkoutManagerVM(),
+                    CreateWeightHistoryVM(),
+                    CreateHomeVM(),
+                    CreateSettingsVM()
+                };
+
+                await Task.WhenAll(vmInitializations);
+
+                //EVENT SUBSCRIBE
+                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
+                MainPage = _mainNavigationPage;
+                MainPageChanged?.Invoke(this, EventArgs.Empty);
+            });
+        }
+
+        private void InitializePages()
+        {
             //INITIALIZE VM
             _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
             _homePage = new HomePage() { Title = "Home" };
@@ -105,29 +134,6 @@ namespace TrainingManager.ViewModel.Navigation
             _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
 
             _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
-        }
-
-        //konkurensé lehetne alakítanis
-        public Task InitializeAfterAuthenticationAsync()
-        {
-            return Task.Run(async () =>
-            {
-                //CREATE VMs INIT TEHEM CONCURENTLY
-                var vmInitializations = new Task[]
-                {
-                    CreateWeightWorkoutManagerVM(),
-                    CreateWeightHistoryVM(),
-                    CreateHomeVM(),
-                    CreateSettingsVM()
-                };
-
-                await Task.WhenAll(vmInitializations);
-
-                //EVENT SUBSCRIBE
-                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
-                MainPage = _mainNavigationPage;
-                MainPageChanged?.Invoke(this, EventArgs.Empty);
-            });
         }
 
         private Task CreateSettingsVM()

@@ -37,7 +37,8 @@ namespace TrainingManager
             _authenticationNavigationManager.Logout();
         }
 
-        private async void OnAuthenticationSuceed(object sender, EventArgs e) => await _pageNavigationManager.InitializeAfterAuthenticationAsync();
+        private void OnAuthenticationSuceed(object sender, EventArgs e) =>
+            Dispatcher.BeginInvokeOnMainThread(async () => await _pageNavigationManager.InitializeAfterAuthenticationAsync());
         private void OnMainPageChanged(object sender, EventArgs e) => Dispatcher.BeginInvokeOnMainThread(() => MainPage = _pageNavigationManager.MainPage);
         private void OnAuthenticationMainPageChanged(object sender, EventArgs e) => MainPage = _authenticationNavigationManager.MainPage;
 
