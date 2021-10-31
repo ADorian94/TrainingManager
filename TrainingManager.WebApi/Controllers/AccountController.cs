@@ -35,9 +35,7 @@ namespace TrainingManager.WebApi.Controllers
                 var result = await _signInManager.PasswordSignInAsync(userLoginDTO.UserName, userLoginDTO.Password, isPersistent: false, lockoutOnFailure: false);
 
                 if (result.Succeeded)
-                {
                     return Ok();
-                }
 
                 ModelState.AddModelError("", "Acess denied!");
                 return Unauthorized();

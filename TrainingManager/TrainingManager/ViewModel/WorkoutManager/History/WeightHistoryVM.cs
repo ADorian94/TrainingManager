@@ -91,7 +91,7 @@ namespace TrainingManager.ViewModel
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         ExerciseName = x.ExerciseName,
-                        Note = x.Note,
+                        ExerciseNote = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
@@ -131,7 +131,7 @@ namespace TrainingManager.ViewModel
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         ExerciseName = x.ExerciseName,
-                        Note = x.Note,
+                        ExerciseNote = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
@@ -182,7 +182,7 @@ namespace TrainingManager.ViewModel
                 {
                     ExerciseGuid = x.ExerciseGuid,
                     ExerciseName = x.ExerciseName,
-                    Note = x.Note,
+                    Note = x.ExerciseNote,
                     TotalExerciseWeight = x.TotalExerciseWeight,
                     WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                     {

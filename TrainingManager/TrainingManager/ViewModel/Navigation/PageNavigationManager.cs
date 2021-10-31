@@ -171,6 +171,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _addSavedWeightExercisesHistory.BindingContext = _weightHistoryVM;
                 _addNewWeightWorkoutPageHistory.BindingContext = _weightHistoryVM;
                 _searchHistoryPage.BindingContext = _weightHistoryVM;
+                _notePageHistory.BindingContext = _weightHistoryVM;
 
                 _weightHistoryVM.WeightWorkoutDateSelected += OnWeightWorkoutDateSelected;
                 _weightHistoryVM.OpenAddWeightExercise += OnOpenAddWeightExerciseHistory;

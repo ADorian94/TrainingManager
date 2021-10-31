@@ -71,7 +71,7 @@ namespace TrainingManager.ViewModel
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         ExerciseName = x.ExerciseName,
-                        Note = x.Note,
+                        ExerciseNote = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()

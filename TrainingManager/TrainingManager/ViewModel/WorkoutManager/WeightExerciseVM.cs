@@ -8,13 +8,13 @@ namespace TrainingManager.ViewModel
         public WeightExerciseVM()
         {
             ExerciseName = string.Empty;
-            Note = string.Empty;
+            ExerciseNote = string.Empty;
         }
 
         public WeightExerciseVM(WeightExerciseVM weightExercise)
         {
             ExerciseName = weightExercise.ExerciseName;
-            Note = weightExercise.Note;
+            ExerciseNote = weightExercise.ExerciseNote;
         }
 
         protected override void InitializeCommands() { }
@@ -26,8 +26,8 @@ namespace TrainingManager.ViewModel
         private Guid _exerciseGuid;
         public Guid ExerciseGuid { get => _exerciseGuid; set { _exerciseGuid = value; OnPropertyChanged(); } }
 
-        private string _note;
-        public string Note { get => _note; set { _note = value; OnPropertyChanged(); } }
+        private string _exerciseNote;
+        public string ExerciseNote { get => _exerciseNote; set { _exerciseNote = value; OnPropertyChanged(); } }
 
         private double _totalExerciseWeight;
         public double TotalExerciseWeight { get => _totalExerciseWeight; set { _totalExerciseWeight = value; OnPropertyChanged(); } }

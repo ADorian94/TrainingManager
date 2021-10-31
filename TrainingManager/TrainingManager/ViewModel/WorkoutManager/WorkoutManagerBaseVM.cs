@@ -58,8 +58,6 @@ namespace TrainingManager.ViewModel
         public DelegateCommand AddWeightRoundToExerciseCommand { get; private set; }
         public DelegateCommand OpenNoteEditorCommand { get; private set; }
         public DelegateCommand SaveNoteCommand { get; private set; }
-        //public DelegateCommand OpenTrainingLogOpenCommand { get; private set; }
-        //public DelegateCommand OpenHistoryViewOpenCommand { get; private set; }
         public DelegateCommand WeightExerciseMenuSelectedCommand { get; private set; }
         public DelegateCommand SavedActivitiySelected { get; private set; }
         public DelegateCommand ExerciseRoundSelectedCommand { get; private set; }
@@ -199,7 +197,7 @@ namespace TrainingManager.ViewModel
             NewWeightExercise = new WeightExerciseVM();
             NewWeightExercise.ExerciseName = string.Empty;
             NewWeightExercise.TotalExerciseWeight = 0.0;
-            NewWeightExercise.Note = string.Empty;
+            NewWeightExercise.ExerciseNote = string.Empty;
             NewWeightExercise.ExerciseGuid = Guid.NewGuid();
             NewWeightExercise.WeightRounds = new ObservableCollection<WeightRoundVM>();
             var round = new WeightRoundVM()

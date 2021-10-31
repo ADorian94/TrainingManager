@@ -90,7 +90,7 @@ namespace TrainingManager.ViewModel
 
                 NewWeightWorkout.WeightExercises.Add(new WeightExerciseVM()
                 {
-                    Note = exercise.Note,
+                    ExerciseNote = exercise.Note,
                     ExerciseGuid = exercise.ExerciseGuid,
                     ExerciseName = exercise.ExerciseName,
                     TotalExerciseRounds = exercise.WeightRoundsDto.Count,
@@ -121,7 +121,7 @@ namespace TrainingManager.ViewModel
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         ExerciseName = x.ExerciseName,
-                        Note = x.Note,
+                        Note = x.ExerciseNote,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                         {
@@ -135,7 +135,6 @@ namespace TrainingManager.ViewModel
             }
             else
             {
-                //EZ A RÉSZE ÚGY NÉZ KI, HOGY MŰKÖDIK
                 //ha még nincs a mai naphoz workout, akkor létrehozzuk és feltöltjük
                 var newWorkout = new WeightWorkoutDTO
                 {
@@ -150,7 +149,7 @@ namespace TrainingManager.ViewModel
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         ExerciseName = x.ExerciseName,
-                        Note = x.Note,
+                        Note = x.ExerciseNote,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                         {

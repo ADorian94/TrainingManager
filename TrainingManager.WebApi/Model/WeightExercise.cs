@@ -9,7 +9,6 @@ namespace TrainingManager.WebApi.Model
         public int Id { get; set; }
         public Guid ExerciseGuid { get; set; }
         public int ActivityId { get; set; }
-        //public string ExerciseName { get; set; }
         public double TotalExerciseWeight { get; set; }
         public string Note { get; set; }
         [ForeignKey("Workout")]
