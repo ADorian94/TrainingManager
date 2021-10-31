@@ -23,9 +23,10 @@ namespace TrainingManager.WebApi.Controllers
 
         // GET: api/WeightActivities
         [HttpGet]
-        public IActionResult GetWeightActivities()
+        public async Task<IActionResult> GetWeightActivities()
         {
-            return Ok(_context.WeightActivities.Select(x => x.ActivityName));
+            ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            return Ok(_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => x.ActivityName));
         }
 
         // GET: api/WeightActivities/5

@@ -13,6 +13,7 @@ namespace TrainingManager.WebApi.Model
         public string Note { get; set; }
         [ForeignKey("Workout")]
         public int WorkoutId { get; set; }
+        public string OwnerUserName { get; set; }
         public virtual ICollection<WeightRound> WeightRounds { get; set; }
     }
 }

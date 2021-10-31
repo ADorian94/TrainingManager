@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Model;
-using TrainingManager.Model.Services;
 
 namespace TrainingManager.ViewModel
 {

@@ -8,6 +8,6 @@ namespace TrainingManager.WebApi.Model
         public int Id { get; set; }
         public Guid ActivityGuid { get; set; }
         public string ActivityName { get; set; }
+        public string OwnerUserName { get; set; }
     }
 }
- 

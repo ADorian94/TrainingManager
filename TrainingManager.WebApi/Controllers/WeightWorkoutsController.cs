@@ -30,7 +30,8 @@ namespace TrainingManager.WebApi.Controllers
         {
             try
             {
-                return Ok(_context.WeightWorkouts.Select(weightWorkout => new WeightWorkoutDTO
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
                 {
                     Id = weightWorkout.Id,
                     WorkoutName = weightWorkout.WorkoutName,
@@ -74,7 +75,9 @@ namespace TrainingManager.WebApi.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                return Ok(_context.WeightWorkouts.Where(x => x.Id == id).Select(weightWorkout => new WeightWorkoutDTO
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                return Ok(_context.WeightWorkouts.Where(x => x.Id == id && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
                 {
                     Id = weightWorkout.Id,
                     WorkoutName = weightWorkout.WorkoutName,
@@ -115,7 +118,8 @@ namespace TrainingManager.WebApi.Controllers
         {
             try
             {
-                WeightWorkout weightWorkout = _context.WeightWorkouts.FirstOrDefault(x => x.Id == weightWorkoutDTO.Id);
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                WeightWorkout weightWorkout = _context.WeightWorkouts.FirstOrDefault(x => x.Id == weightWorkoutDTO.Id && x.OwnerUserName == user.UserName);
 
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
@@ -170,6 +174,8 @@ namespace TrainingManager.WebApi.Controllers
         {
             try
             {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
@@ -181,6 +187,7 @@ namespace TrainingManager.WebApi.Controllers
                     TotalWeight = weightWorkoutDTO.TotalWeight,
                     WorkoutType = weightWorkoutDTO.WorkoutType,
                     WorkoutDate = weightWorkoutDTO.WorkoutDate,
+                    OwnerUserName = user.UserName
                 };
 
                 var addedWorkout = _context.WeightWorkouts.Add(newWeightWorkout);
@@ -204,10 +211,12 @@ namespace TrainingManager.WebApi.Controllers
         {
             try
             {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                var weightWorkout = await _context.WeightWorkouts.FindAsync(id);
+                var weightWorkout = _context.WeightWorkouts.Single(x => x.OwnerUserName == user.UserName && x.Id == id);
 
                 if (weightWorkout == null)
                     return NotFound();
@@ -227,7 +236,8 @@ namespace TrainingManager.WebApi.Controllers
 
         private async Task RemoveExercises(int id)
         {
-            var exercises = _context.WeightExercises.Where(ex => ex.WorkoutId == id);
+            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var exercises = _context.WeightExercises.Where(ex => ex.OwnerUserName == user.UserName && ex.WorkoutId == id);
 
             foreach (var exercise in exercises)
             {
@@ -260,6 +270,8 @@ namespace TrainingManager.WebApi.Controllers
         {
             try
             {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
                 foreach (var weightExerciseDto in weightExercisesDto)
                 {
                     int actId = AddActivityByNameIfNeeded(weightExerciseDto.ExerciseName);
@@ -271,6 +283,7 @@ namespace TrainingManager.WebApi.Controllers
                         Note = weightExerciseDto.Note,
                         TotalExerciseWeight = weightExerciseDto.TotalExerciseWeight,
                         WorkoutId = _context.WeightWorkouts.Single(x => x.WorkoutGuid == workoutGuid).Id,
+                        OwnerUserName = user.UserName
                     };
 
                     var addedweightExercise = _context.WeightExercises.Add(weightExercise);
@@ -288,16 +301,19 @@ namespace TrainingManager.WebApi.Controllers
 
         private int AddActivityByNameIfNeeded(string exerciseName)
         {
-            if (_context.WeightActivities.Any(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()))
+            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            if (_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Any(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()))
             {
-                return _context.WeightActivities.Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()).Id;
+                return _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()).Id;
             }
             else
             {
                 var newActivity = new WeightActivity()
                 {
                     ActivityGuid = Guid.NewGuid(),
-                    ActivityName = exerciseName
+                    ActivityName = exerciseName,
+                    OwnerUserName = user.UserName,
                 };
 
                 var addedActivity = _context.WeightActivities.Add(newActivity);
