@@ -52,10 +52,17 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
 
                 if (registrationResult)
                 {
-                    RegistrationSuccess?.Invoke(this, EventArgs.Empty);
+                    bool loginResult = await _apiServices.LoginAsync(UserName, Password);
+
+                    if (loginResult)
+                        RegistrationSuccess?.Invoke(this, EventArgs.Empty);
+                    else
+                        OnMessageApplication("Can't login after registration. Try from the login page.");
+
                     UserName = string.Empty;
                     UserEmail = string.Empty;
                     Name = string.Empty;
+
                 }
                 else
                     RegistrationFailed?.Invoke(this, new MessageEventArgs("Registration failed."));
