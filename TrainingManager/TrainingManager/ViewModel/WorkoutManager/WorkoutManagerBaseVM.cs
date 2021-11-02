@@ -152,6 +152,21 @@ namespace TrainingManager.ViewModel
 
         //PUBLIC 
         public void DeleteRoundByStringGuid(string e) => NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
+        public void DuplicateRoundByStringGuid(string e)
+        {
+            WeightRoundVM originalRound = NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e);
+
+            var round = new WeightRoundVM()
+            {
+                Reps = originalRound.Reps,
+                RoundNumber = 0,
+                WeightOfExercise = originalRound.WeightOfExercise,
+                RoundGuid = Guid.NewGuid()
+            };
+
+            round.RoundWeightChanged += RecalculateRoundWeight;
+            NewWeightExercise.WeightRounds.Add(round);
+        }
 
 
         /// <summary>

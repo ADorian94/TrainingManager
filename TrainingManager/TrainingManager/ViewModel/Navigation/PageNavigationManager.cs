@@ -248,7 +248,10 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelected(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Do you want to remove the round?", "Cancel", "Delete");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", "Delete", "Duplicate");
+
+            if (action == "Duplicate")
+                _weightWorkoutManagerVM.DuplicateRoundByStringGuid(e);
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteRoundByStringGuid(e);
@@ -256,7 +259,10 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelectedHistory(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Do you want to remove the round?", "Cancel", "Delete");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", "Delete", "Duplicate");
+
+            if (action == "Duplicate")
+                _weightHistoryVM.DuplicateRoundByStringGuid(e);
 
             if (action == "Delete")
                 _weightHistoryVM.DeleteRoundByStringGuid(e);
