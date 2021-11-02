@@ -103,6 +103,54 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        //IMAGES
+        public async Task<bool> UploadProfilePicture(byte[] image)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.PostAsJsonAsync("api/Account/Profile", image);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unable to upload profile picture. {ex.Message}");
+            }
+        }
+
+        public async Task<byte[]> DownloadProfilePicture()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/Account/OriginalProfile");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<byte[]>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unable to upload profile picture. {ex.Message}");
+            }
+        }
+
+        public async Task<string> GetNameOfTheUser()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/Account/NameOfTheUser");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsStringAsync();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                throw new Exception($"Unable to get user name. {ex.Message}");
+            }
+        }
+
         //EXERCISES
         public async Task<IEnumerable<WeightExerciseDTO>> GetWeightExercisesAsync()
         {

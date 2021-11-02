@@ -7,5 +7,7 @@ namespace TrainingManager.WebApi.Model
     {
         [Required]
         public string Name { get; set; }
+        public byte[] ProfilePicture { get; set; }
+        public byte[] SmallProfilePicture { get; set; }
     }
 }

@@ -85,6 +85,7 @@ namespace TrainingManager.ViewModel.Navigation
 
                 //EVENT SUBSCRIBE
                 _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
+                _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
             });

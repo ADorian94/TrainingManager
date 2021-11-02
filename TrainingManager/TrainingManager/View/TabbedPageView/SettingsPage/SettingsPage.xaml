@@ -13,6 +13,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout VerticalOptions="EndAndExpand">
+            <Button Style="{StaticResource RedButton}" Text="Upload image" Command="{Binding UploadImageCommand}" VerticalOptions="EndAndExpand"/>
             <Button Style="{StaticResource BlueButton}" Text="Sign out" Command="{Binding SignOutCommand}" VerticalOptions="EndAndExpand"/>
         </StackLayout>
     </ContentPage.Content>

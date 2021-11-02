@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
+using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel
 {
@@ -21,6 +24,15 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<HistoryItemVM> _recentWorkouts;
         public ObservableCollection<HistoryItemVM> RecentWorkouts { get => _recentWorkouts; set { _recentWorkouts = value; OnPropertyChanged(); } }
 
+        private ImageSource _profilePicture;
+        public ImageSource ProfilePicture { get => _profilePicture; set { _profilePicture = value; OnPropertyChanged(); } }
+
+        private string _wellcomeMessage;
+        public string WellcomeMessage { get => _wellcomeMessage; set { _wellcomeMessage = value; OnPropertyChanged(); } }
+
+        private DateTime _date;
+        public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }
 
@@ -31,13 +43,23 @@ namespace TrainingManager.ViewModel
         {
             try
             {
+                Date = DateTime.Now;
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 RecentWorkouts = new ObservableCollection<HistoryItemVM>(workouts.OrderBy(x => x.WorkoutDate).Take(5).Select(w => new HistoryItemVM(w)));
+                WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
+                await InitializeProfilePicture();
             }
             catch (Exception)
             {
                 InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - WeightWorkouts", "Can't connect to the server."));
             }
+        }
+
+        private async Task InitializeProfilePicture()
+        {
+            byte[] originalImage = await ApiServices.DownloadProfilePicture();
+            MemoryStream memoryStream = new MemoryStream(originalImage);
+            ProfilePicture = ImageSource.FromStream(() => memoryStream);
         }
 
         public override void RefreshWorkouts(object sender, EventArgs e)
@@ -87,5 +109,7 @@ namespace TrainingManager.ViewModel
                 RecentWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
             }
         }
+
+        public async void OnProfileChanged(object sender, EventArgs e) => await InitializeProfilePicture();
     }
 }

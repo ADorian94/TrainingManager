@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TrainingManager.Data.DTO;
+using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
 namespace TrainingManager.WebApi.Controllers
@@ -16,11 +21,13 @@ namespace TrainingManager.WebApi.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly TrainingManagerContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        public AccountController(TrainingManagerContext context, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpPost("Login")]
@@ -53,20 +60,94 @@ namespace TrainingManager.WebApi.Controllers
 
             try
             {
-                var newUser = new ApplicationUser()
+                using (var memoryStream = new MemoryStream())
                 {
-                    Name = userRegistrationDTO.Name,
-                    UserName = userRegistrationDTO.UserName,
-                    Email = userRegistrationDTO.Email,
-                    SecurityStamp = Guid.NewGuid().ToString()
-                };
+                    var profilePicture = System.IO.File.OpenRead("Images\\accountCircle.png");
+                    await profilePicture.CopyToAsync(memoryStream);
+                    byte[] profilePictureArray = memoryStream.ToArray();
 
-                var result = await _userManager.CreateAsync(newUser, userRegistrationDTO.Password);
+                    var newUser = new ApplicationUser()
+                    {
+                        Name = userRegistrationDTO.Name,
+                        UserName = userRegistrationDTO.UserName,
+                        Email = userRegistrationDTO.Email,
+                        SecurityStamp = Guid.NewGuid().ToString(),
+                        ProfilePicture = profilePictureArray,
+                    };
 
-                return result.Succeeded ? Ok() : throw new Exception();
+                    var result = await _userManager.CreateAsync(newUser, userRegistrationDTO.Password);
+
+                    return result.Succeeded ? Ok() : throw new Exception();
+                }
             }
             catch
             {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpPost("Profile")]
+        public async Task<IActionResult> PostProfilePicture([FromBody] byte[] image)
+        {
+            try
+            {
+                ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+
+                if (image == null || user == null)
+                    return NotFound();
+
+                //byte[] smallImageBytes;
+
+                //using (var imageStream = new MemoryStream())
+                //{
+                //    MemoryStream memoryStream = new MemoryStream(image, true);
+                //    var img = Image.FromStream(memoryStream);
+                //    var originalImage = new Bitmap(img);
+                //    var smallImage = new Bitmap(originalImage, 100, 100);
+                //    smallImage.Save(imageStream, System.Drawing.Imaging.ImageFormat.Jpeg);
+                //    smallImageBytes = imageStream.ToArray();
+                //}
+
+                user.ProfilePicture = image;
+                //user.SmallProfilePicture = smallImageBytes;
+
+                _context.SaveChanges();
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                // Internal Server Error
+                Console.WriteLine(ex.Message);
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("OriginalProfile")]
+        public async Task<IActionResult> GetProfilePicture()
+        {
+            try
+            {
+                ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                return Ok(user.ProfilePicture);
+            }
+            catch
+            {
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("NameOfTheUser")]
+        public async Task<IActionResult> GetNameOfTheUser()
+        {
+            try
+            {
+                ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+                return Ok(user.Name);
+            }
+            catch
+            {
+                // Internal Server Error
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
