@@ -148,21 +148,6 @@ namespace TrainingManager.ViewModel
             }
         }
 
-        public async void SearchFunction(object obj)
-        {
-            string[] searchStrings = SearchText.Trim().Split(' ');
-            IEnumerable<WeightWorkoutDTO> workouts = await ApiServices.GetWeightWorkoutsAsync();
-            IEnumerable<HistoryItemVM> foundElements = new ObservableCollection<HistoryItemVM>();
-            foundElements = searchStrings.SelectMany(str => workouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))).Select(x => new HistoryItemVM(x)));
-            HistoryWorkoutItems.Clear();
-
-            foreach (var item in foundElements)
-            {
-                if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
-                    HistoryWorkoutItems.Add(item);
-            }
-        }
-
         //PROTETED
         protected override async void SaveTodayWorkoutFunctionAsync(object obj)
         {
@@ -212,6 +197,21 @@ namespace TrainingManager.ViewModel
             catch (Exception)
             {
                 InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+            }
+        }
+
+        public async void SearchFunction(object obj)
+        {
+            string[] searchStrings = SearchText.Trim().Split(' ');
+            IEnumerable<WeightWorkoutDTO> workouts = await ApiServices.GetWeightWorkoutsAsync();
+            IEnumerable<HistoryItemVM> foundElements = new ObservableCollection<HistoryItemVM>();
+            foundElements = searchStrings.SelectMany(str => workouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))).Select(x => new HistoryItemVM(x)));
+            HistoryWorkoutItems.Clear();
+
+            foreach (var item in foundElements)
+            {
+                if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
+                    HistoryWorkoutItems.Add(item);
             }
         }
     }

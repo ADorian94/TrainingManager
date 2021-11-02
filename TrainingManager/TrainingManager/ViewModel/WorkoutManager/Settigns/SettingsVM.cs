@@ -7,6 +7,7 @@ using Microsoft.Win32;
 using TrainingManager.Model.Services;
 using System.IO;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace TrainingManager.ViewModel.WorkoutManager.Settigns
 {
@@ -21,6 +22,7 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         public event EventHandler LogoutSuccess;
         public event EventHandler<MessageEventArgs> LogoutFailed;
         public event EventHandler ProfileChanged;
+        public event EventHandler<(Action, string, string)> ProfileChangeStarted;
 
         //COMMANDS
         public DelegateCommand SignOutCommand { get; private set; }
@@ -40,7 +42,12 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         }
 
         //COMMAND FUNCTION
-        private async void UploadImageFunction(object obj)
+        private void UploadImageFunction(object obj)
+        {
+            ProfileChangeStarted?.Invoke(this, (SelectAndUploadFunction, "Upload profile picture", "For the best result use a square image."));
+        }
+
+        private async void SelectAndUploadFunction()
         {
             byte[] image = await _mediaService.SelectPhotoAsync();
             await _apiServices.UploadProfilePicture(image);

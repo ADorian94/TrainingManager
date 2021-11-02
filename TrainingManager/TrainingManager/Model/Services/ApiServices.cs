@@ -204,7 +204,7 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        //Account
+        //ACCOUNT
         public async Task<bool> LoginAsync(string userName, string password)
         {
             var accountDetails = new UserLoginDTO

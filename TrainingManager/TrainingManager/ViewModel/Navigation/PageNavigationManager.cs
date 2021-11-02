@@ -147,6 +147,7 @@ namespace TrainingManager.ViewModel.Navigation
 
                 _settingsVM.LogoutSuccess += OnLogoutSuccess;
                 _settingsVM.LogoutFailed += OnMessageApplication;
+                _settingsVM.ProfileChangeStarted += OnProfileChangeStarted;
             });
         }
 
@@ -220,6 +221,7 @@ namespace TrainingManager.ViewModel.Navigation
             });
         }
 
+        //EVENT HANDLERS
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Details");
@@ -228,7 +230,6 @@ namespace TrainingManager.ViewModel.Navigation
                 await _mainNavigationPage.PushAsync(_recentWorkoutDetailsPage);
         }
 
-        //EVENT HANDLERS
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
@@ -288,13 +289,18 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnMessageApplication(object sender, MessageEventArgs e) =>
             await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
 
+        private async void OnProfileChangeStarted(object sender, (Action Callback, string Title, string Message) e)
+        {
+            await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
+            e.Callback?.Invoke();
+        }
+
         /// <summary>
         /// Alapvető hibakezelés.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void OnExceptionOccured(object sender, MessageEventArgs e) => _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
-
 
         private void OnCalculationStarted(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
 

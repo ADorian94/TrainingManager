@@ -53,11 +53,5 @@ namespace TrainingManager.View.Controls
             if (bindable is CardWithSearchBar headerTemplate && newValue is DelegateCommand command)
                 headerTemplate.CardSearchCommand = command;
         }
-
-        private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (CardSearchText != null)
-                CardSearchCommand?.Execute(CardSearchText);
-        }
     }
 }
