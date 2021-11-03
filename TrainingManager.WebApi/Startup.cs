@@ -10,6 +10,7 @@ using TrainingManager.WebApi.Model;
 using Microsoft.AspNetCore.Identity;
 
 using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 
 namespace TrainingManager.WebApi
 {
@@ -61,6 +62,11 @@ namespace TrainingManager.WebApi
             {
                 app.UseHsts();
             }
+
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+            });
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();
