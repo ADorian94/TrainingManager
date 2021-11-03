@@ -151,7 +151,12 @@ namespace TrainingManager.ViewModel
         }
 
         //PUBLIC 
-        public void DeleteRoundByStringGuid(string e) => NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
+        public void DeleteRoundByStringGuid(string e)
+        {
+            NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
+            RecalculateRoundWeight(this, 0.0);
+        }
+
         public void DuplicateRoundByStringGuid(string e)
         {
             WeightRoundVM originalRound = NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e);
@@ -168,7 +173,6 @@ namespace TrainingManager.ViewModel
             NewWeightExercise.WeightRounds.Add(round);
         }
 
-
         /// <summary>
         /// Kiválasztunk egy gyakorlatot az edzésből, amit szerkeszteni fogunk.
         /// </summary>
@@ -177,6 +181,8 @@ namespace TrainingManager.ViewModel
         {
             WeightExerciseVM exerciseForEdit = NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid);
             NewWeightExercise = exerciseForEdit;
+            NewWeightExercise.CountTotalWeightOfExercise();
+            TotalExerciseWeight = NewWeightExercise.TotalExerciseWeight;
             OpenEditWeightExercise?.Invoke(this, null);
         }
 
@@ -223,9 +229,9 @@ namespace TrainingManager.ViewModel
             };
             round.RoundWeightChanged += RecalculateRoundWeight;
             NewWeightExercise.WeightRounds.Add(round);
+            TotalExerciseWeight = 0.0;
             OpenAddWeightExercise?.Invoke(this, null);
         }
-
 
         private void AddWeightRoundToExerciseFunction(object obj)
         {

@@ -4,7 +4,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
-using TrainingManager.Model.Services;
 using Xamarin.Forms;
 using XamForms.Controls;
 

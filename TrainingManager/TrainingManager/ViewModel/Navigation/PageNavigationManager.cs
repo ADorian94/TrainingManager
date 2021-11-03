@@ -323,7 +323,12 @@ namespace TrainingManager.ViewModel.Navigation
         private void OnOpenAddWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
         private void OnOpenAddWeightExerciseHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPageHistory);
         private void OnOpenEditWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPage);
-        private void OnOpenEditWeightExerciseHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
+        private void OnOpenEditWeightExerciseHistory(object sender, EventArgs e)
+        {
+
+            _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
+        }
+
         private void OnOpenNoteEditor(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePage);
         private void OnOpenNoteEditorHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePageHistory);
     }
