@@ -44,8 +44,7 @@ namespace TrainingManager.ViewModel
             try
             {
                 Date = DateTime.Now;
-                var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
-                RecentWorkouts = new ObservableCollection<HistoryItemVM>(workouts.OrderBy(x => x.WorkoutDate).Take(5).Select(w => new HistoryItemVM(w)));
+                await UpdateRecentWorkoutsAsync();
                 WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
                 await InitializeProfilePicture();
             }
@@ -62,15 +61,19 @@ namespace TrainingManager.ViewModel
             ProfilePicture = ImageSource.FromStream(() => memoryStream);
         }
 
-        public override void RefreshWorkouts(object sender, EventArgs e)
-        {
-        }
+        public override async void RefreshWorkouts(object sender, EventArgs e) => await UpdateRecentWorkoutsAsync();
 
         protected override void SaveTodayWorkoutFunctionAsync(object obj)
         {
         }
 
         //PRIVATES
+        private async Task UpdateRecentWorkoutsAsync()
+        {
+            var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
+            RecentWorkouts = new ObservableCollection<HistoryItemVM>(workouts.OrderBy(x => x.WorkoutDate).Take(5).Select(w => new HistoryItemVM(w)));
+        }
+
         private async void WeightWorkoutMenuSelectedFunction(object obj)
         {
             var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());

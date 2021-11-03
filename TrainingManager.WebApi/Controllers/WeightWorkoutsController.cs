@@ -172,7 +172,10 @@ namespace TrainingManager.WebApi.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-                await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
+
+                if (weightWorkoutDTO.WorkoutImages != null)
+                    await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
+
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
                 return Ok();
             }
@@ -208,7 +211,10 @@ namespace TrainingManager.WebApi.Controllers
                 var addedWorkout = _context.WeightWorkouts.Add(newWeightWorkout);
                 await _context.SaveChangesAsync();
                 weightWorkoutDTO.Id = addedWorkout.Entity.Id;
-                await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
+
+                if (weightWorkoutDTO.WorkoutImages != null)
+                    await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
+
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
 
                 return CreatedAtAction("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
@@ -239,7 +245,9 @@ namespace TrainingManager.WebApi.Controllers
                 if (weightWorkout == null)
                     return NotFound();
 
-                await RemoveImages(weightWorkout.Id);
+                if (_context.WorkoutImages.Any(x => x.OwnerUserName == user.UserName && x.WorkoutId == id))
+                    await RemoveImages(weightWorkout.Id);
+
                 await RemoveExercises(weightWorkout.Id);
                 _context.WeightWorkouts.Remove(weightWorkout);
                 await _context.SaveChangesAsync();

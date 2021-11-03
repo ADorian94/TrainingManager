@@ -65,6 +65,7 @@ namespace TrainingManager.ViewModel
         //EVENTS
         public event EventHandler<DateTime> WeightWorkoutDateSelected;
         public event EventHandler<MessageEventArgs> HistoryWorkoutItemSelected;
+        public event EventHandler WorkoutDeleted;
 
         //COMMAND FUNCTIONS
         private async void WorkoutDateSelectedFunction(object obj)
@@ -191,6 +192,7 @@ namespace TrainingManager.ViewModel
             {
                 var workouts = await ApiServices.GetWeightWorkoutsAsync();
                 await ApiServices.DeleteWeightWorkoutAsync(workouts.Single(x => x.WorkoutGuid.ToString() == wokroutGuid).Id);
+                WorkoutDeleted?.Invoke(this, EventArgs.Empty);
                 SetupHistoryAsync();
             }
             catch (Exception)
