@@ -20,11 +20,8 @@ namespace TrainingManager
         public App()
         {
             InitializeComponent();
-            //_apiService = new ApiServices("http://localhost:51426");
             _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
-            //_apiService = new ApiServices("https://trainingmanagerwebapi.azurewebsites.net/");
             _authService = new AuthService();
-            //_apiService = new ApiServices("http://192.168.56.1:51426"); //phone debug
             _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
             _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
             _pageNavigationManager.MainPageChanged += OnMainPageChanged;
@@ -58,8 +55,5 @@ namespace TrainingManager
         {
             // Handle when your app resumes
         }
-
-        //this is a test change
-        //second test change
     }
 }
