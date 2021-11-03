@@ -9,5 +9,6 @@ namespace TrainingManager.WebApi.Model
         public int WorkoutId { get; set; }
         public byte[] ImageSmall { get; set; }
         public byte[] ImageLarge { get; set; }
+        public string OwnerUserName { get; set; }
     }
 }

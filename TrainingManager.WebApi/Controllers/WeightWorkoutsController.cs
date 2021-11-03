@@ -40,6 +40,13 @@ namespace TrainingManager.WebApi.Controllers
                     TotalWeight = weightWorkout.TotalWeight,
                     WorkoutType = weightWorkout.WorkoutType,
                     WorkoutDate = weightWorkout.WorkoutDate,
+                    WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    {
+                        Id = i.Id,
+                        WorkoutId = weightWorkout.Id,
+                        ImageLarge = i.ImageLarge,
+                        ImageSmall = i.ImageSmall,
+                    }).ToList(),
                     WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
                     {
                         ExerciseGuid = x.ExerciseGuid,
@@ -86,6 +93,13 @@ namespace TrainingManager.WebApi.Controllers
                     TotalWeight = weightWorkout.TotalWeight,
                     WorkoutType = weightWorkout.WorkoutType,
                     WorkoutDate = weightWorkout.WorkoutDate,
+                    WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    {
+                        Id = i.Id,
+                        WorkoutId = weightWorkout.Id,
+                        ImageLarge = i.ImageLarge,
+                        ImageSmall = i.ImageSmall,
+                    }).ToList(),
                     WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
                     {
                         ExerciseGuid = x.ExerciseGuid,
@@ -158,6 +172,7 @@ namespace TrainingManager.WebApi.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+                await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
                 return Ok();
             }
@@ -187,12 +202,13 @@ namespace TrainingManager.WebApi.Controllers
                     TotalWeight = weightWorkoutDTO.TotalWeight,
                     WorkoutType = weightWorkoutDTO.WorkoutType,
                     WorkoutDate = weightWorkoutDTO.WorkoutDate,
-                    OwnerUserName = user.UserName
+                    OwnerUserName = user.UserName,
                 };
 
                 var addedWorkout = _context.WeightWorkouts.Add(newWeightWorkout);
                 await _context.SaveChangesAsync();
                 weightWorkoutDTO.Id = addedWorkout.Entity.Id;
+                await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
 
                 return CreatedAtAction("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
@@ -204,6 +220,8 @@ namespace TrainingManager.WebApi.Controllers
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
+
+
 
         // DELETE: api/WeightWorkouts/5
         [HttpDelete("{id}")]
@@ -221,6 +239,7 @@ namespace TrainingManager.WebApi.Controllers
                 if (weightWorkout == null)
                     return NotFound();
 
+                await RemoveImages(weightWorkout.Id);
                 await RemoveExercises(weightWorkout.Id);
                 _context.WeightWorkouts.Remove(weightWorkout);
                 await _context.SaveChangesAsync();
@@ -347,6 +366,38 @@ namespace TrainingManager.WebApi.Controllers
             {
                 return false;
             }
+        }
+
+        private async Task AddImagesForWorkoutAsync(ICollection<ImageDTO> workoutImages, Guid workoutGuid)
+        {
+            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+            foreach (var imageDTO in workoutImages)
+            {
+                var image = new WorkoutImage()
+                {
+                    ImageLarge = imageDTO.ImageLarge,
+                    ImageSmall = imageDTO.ImageSmall,
+                    WorkoutId = _context.WeightWorkouts.Single(x => x.WorkoutGuid == workoutGuid).Id,
+                    OwnerUserName = user.UserName
+                };
+
+                var addedWorkout = _context.WorkoutImages.Add(image);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        private async Task RemoveImages(int id)
+        {
+            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var images = _context.WorkoutImages.Where(ex => ex.OwnerUserName == user.UserName && ex.WorkoutId == id);
+
+            foreach (var image in images)
+            {
+                _context.WorkoutImages.Remove(image);
+            }
+
+            await _context.SaveChangesAsync();
         }
     }
 }
