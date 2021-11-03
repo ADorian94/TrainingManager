@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -96,21 +94,7 @@ namespace TrainingManager.WebApi.Controllers
                 if (image == null || user == null)
                     return NotFound();
 
-                //byte[] smallImageBytes;
-
-                //using (var imageStream = new MemoryStream())
-                //{
-                //    MemoryStream memoryStream = new MemoryStream(image, true);
-                //    var img = Image.FromStream(memoryStream);
-                //    var originalImage = new Bitmap(img);
-                //    var smallImage = new Bitmap(originalImage, 100, 100);
-                //    smallImage.Save(imageStream, System.Drawing.Imaging.ImageFormat.Jpeg);
-                //    smallImageBytes = imageStream.ToArray();
-                //}
-
                 user.ProfilePicture = image;
-                //user.SmallProfilePicture = smallImageBytes;
-
                 _context.SaveChanges();
                 return Ok();
             }
