@@ -259,7 +259,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelectedHistory(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", "Delete", "Duplicate");
+            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", "Delete", "Duplicate");
 
             if (action == "Duplicate")
                 _weightHistoryVM.DuplicateRoundByStringGuid(e);
