@@ -14,7 +14,7 @@
             <ListView.ItemTemplate >
                 <DataTemplate>
                     <ViewCell>
-                        <controls:SimpleCard CardMainText="{Binding MethodName}" CardSecondaryText="{Binding MaximumValue}"/>
+                        <controls:SimpleCard CardMainText="{Binding MethodName}" CardSecondaryText="{Binding MaximumValue}" Margin="15, 5"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>

@@ -17,6 +17,7 @@ namespace TrainingManager.ViewModel.Navigation
         //FIELDS
         private IApiServices _apiServices;
         private IAuthService _authService;
+        private static object _lockObj = new object();
 
         //PROPERTIES
         public Page MainPage { get; private set; }
@@ -89,6 +90,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
                 _weightHistoryVM.WorkoutDeleted += _homeVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
+                _homeVM.ProfileSelected += OnProfileSelected;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
             });
@@ -96,48 +98,51 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void InitializePages()
         {
-            //INITIALIZE VM
-            _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
-            _homePage = new HomePage() { Title = "Home" };
-            _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
-            _recentWorkoutDetailsPage = new RecentWorkoutDetails();
-            _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout") { Title = "Workout" };
-            _settingsPage = new SettingsPage() { Title = "Settings" };
-            _exercisesPage = new ExercisesPage() { Title = "Exercises" };
-            _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage() { Title = "1RM" };
-            _oneRepetitionMaximumCalculatedPage = new OneRepetitionMaximumCalculatedPage();
-            _addWeightDrillPage = new AddWeightExercisePage();
-            _addSavedWeightExercises = new AddSavedWeightExercises();
-            _addNewDrillCaruselPage = new AddNewDrillCaruselPage();
-            _addNewDrillCaruselPage.Children.Add(_addWeightDrillPage);
-            _addNewDrillCaruselPage.Children.Add(_addSavedWeightExercises);
-            _notePage = new NotePage();
-            _calendarHistoryPage = new CalendarPage();
-            _searchHistoryPage = new SearchPage();
-            _historyCaruselPage = new HistoryCaruselPage() { Title = "History" };
-            _historyCaruselPage.Children.Add(_calendarHistoryPage);
-            _historyCaruselPage.Children.Add(_searchHistoryPage);
-            _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout") { Title = "Workout" };
-            _addNewDrillCaruselPageHistory = new AddNewDrillCaruselPage();
-            _addSavedWeightExercisesHistory = new AddSavedWeightExercises();
-            _addWeightDrillPageHistory = new AddWeightExercisePage();
-            _addNewDrillCaruselPageHistory.Children.Add(_addWeightDrillPageHistory);
-            _addNewDrillCaruselPageHistory.Children.Add(_addSavedWeightExercisesHistory);
-            _notePageHistory = new NotePage();
+            lock (_lockObj)
+            {
+                //INITIALIZE VM
+                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
+                _homePage = new HomePage() { Title = "Home" };
+                _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
+                _recentWorkoutDetailsPage = new RecentWorkoutDetails();
+                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout") { Title = "Workout" };
+                _settingsPage = new SettingsPage() { Title = "Settings" };
+                _exercisesPage = new ExercisesPage() { Title = "Exercises" };
+                _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage() { Title = "1RM" };
+                _oneRepetitionMaximumCalculatedPage = new OneRepetitionMaximumCalculatedPage();
+                _addWeightDrillPage = new AddWeightExercisePage();
+                _addSavedWeightExercises = new AddSavedWeightExercises();
+                _addNewDrillCaruselPage = new AddNewDrillCaruselPage();
+                _addNewDrillCaruselPage.Children.Add(_addWeightDrillPage);
+                _addNewDrillCaruselPage.Children.Add(_addSavedWeightExercises);
+                _notePage = new NotePage();
+                _calendarHistoryPage = new CalendarPage();
+                _searchHistoryPage = new SearchPage();
+                _historyCaruselPage = new HistoryCaruselPage() { Title = "History" };
+                _historyCaruselPage.Children.Add(_calendarHistoryPage);
+                _historyCaruselPage.Children.Add(_searchHistoryPage);
+                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout") { Title = "Workout" };
+                _addNewDrillCaruselPageHistory = new AddNewDrillCaruselPage();
+                _addSavedWeightExercisesHistory = new AddSavedWeightExercises();
+                _addWeightDrillPageHistory = new AddWeightExercisePage();
+                _addNewDrillCaruselPageHistory.Children.Add(_addWeightDrillPageHistory);
+                _addNewDrillCaruselPageHistory.Children.Add(_addSavedWeightExercisesHistory);
+                _notePageHistory = new NotePage();
 
-            _mainTabbedPage = new NavigationTabbedPage();
-            _mainTabbedPage.Children.Add(_homePage);
-            _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
-            _mainTabbedPage.Children.Add(_historyCaruselPage);
-            _mainTabbedPage.Children.Add(_exercisesPage);
-            _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
-            _mainTabbedPage.Children.Add(_settingsPage);
-            _mainNavigationPage = new NavigationPage(_mainTabbedPage);
+                _mainTabbedPage = new NavigationTabbedPage();
+                _mainTabbedPage.Children.Add(_homePage);
+                _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
+                _mainTabbedPage.Children.Add(_historyCaruselPage);
+                _mainTabbedPage.Children.Add(_exercisesPage);
+                _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
+                //_mainTabbedPage.Children.Add(_settingsPage);
+                _mainNavigationPage = new NavigationPage(_mainTabbedPage);
 
-            _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
-            _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
+                _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
+                _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
 
-            _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
+                _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
+            }
         }
 
         private Task CreateSettingsVM()
@@ -153,8 +158,6 @@ namespace TrainingManager.ViewModel.Navigation
                 _settingsVM.ProfileChangeStarted += OnProfileChangeStarted;
             });
         }
-
-        private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
 
         private Task CreateHomeVM()
         {
@@ -225,6 +228,7 @@ namespace TrainingManager.ViewModel.Navigation
         }
 
         //EVENT HANDLERS
+        private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Details");
@@ -334,5 +338,6 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void OnOpenNoteEditor(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePage);
         private void OnOpenNoteEditorHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePageHistory);
+        private void OnProfileSelected(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_settingsPage);
     }
 }

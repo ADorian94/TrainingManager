@@ -18,6 +18,7 @@ namespace TrainingManager.ViewModel
             RecentWorkouts = new ObservableCollection<HistoryItemVM>();
             SetupHomeAsync();
             WeightWorkoutMenuSelectedCommand = new DelegateCommand(WeightWorkoutMenuSelectedFunction);
+            ProfileSelectedCommand = new DelegateCommand(ProfileSelectedFunction);
         }
 
         //PROPERTIES
@@ -35,9 +36,11 @@ namespace TrainingManager.ViewModel
 
         //COMMANDS
         public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }
+        public DelegateCommand ProfileSelectedCommand { get; private set; }
 
         //EVENTS
         public event EventHandler<MessageEventArgs> RecentWorkoutItemSelected;
+        public event EventHandler ProfileSelected;
 
         private async void SetupHomeAsync()
         {
@@ -114,5 +117,6 @@ namespace TrainingManager.ViewModel
         }
 
         public async void OnProfileChanged(object sender, EventArgs e) => await InitializeProfilePicture();
+        private void ProfileSelectedFunction(object obj) => ProfileSelected?.Invoke(this, EventArgs.Empty);
     }
 }

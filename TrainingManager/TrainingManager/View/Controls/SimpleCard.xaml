@@ -8,7 +8,7 @@
         <local:Style/>
     </ContentView.Resources>
 
-    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10">
+    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}"  CornerRadius="10">
         <Frame.GestureRecognizers>
             <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}"/>
         </Frame.GestureRecognizers>

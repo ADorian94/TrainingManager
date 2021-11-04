@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using Xamarin.Forms;
@@ -25,6 +26,7 @@ namespace TrainingManager.ViewModel
         {
             try
             {
+                Thread.Sleep(1000);
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 WorkoutDates = new ObservableCollection<SpecialDate>();
                 HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>();
