@@ -196,7 +196,9 @@
     <AndroidResource Include="Resources\drawable\closeIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\DeadLiftBackground.png" />
+    <AndroidResource Include="Resources\drawable\DeadLiftBackground.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\Background1.png" />
