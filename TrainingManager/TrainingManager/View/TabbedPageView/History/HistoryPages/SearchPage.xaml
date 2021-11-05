@@ -4,7 +4,8 @@
              xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
-             x:Class="TrainingManager.View.TabbedPageView.History.HistoryPages.SearchPage">
+             x:Class="TrainingManager.View.TabbedPageView.History.HistoryPages.SearchPage"
+             x:Name="Search">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
@@ -31,7 +32,7 @@
                                                       CloseCardMainLabel="{Binding WorkoutName}"
                                                       OpenCardFirstLabel="Weight" 
                                                       OpenCardFirstValue="{Binding TotalWeight}"
-                                                      ButtonCommand="{Binding HistoryWorkoutItemSelectedCommand}"
+                                                      ButtonCommand="{Binding BindingContext.HistoryWorkoutItemSelectedCommand, Source={x:Reference Search}}"
                                                       ButtonCommandParameter="{Binding WorkoutGuid}"
                                                       ButtonVisibility="True"/>
                         </ViewCell>
