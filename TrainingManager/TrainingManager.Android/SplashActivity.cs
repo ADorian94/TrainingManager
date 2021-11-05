@@ -8,16 +8,6 @@ using System.Threading.Tasks;
 
 namespace TrainingManager.Droid
 {
-    //[Activity(Label = "SplashActivity")]
-    //public class SplashActivity : Activity
-    //{
-    //    protected override void OnCreate(Bundle savedInstanceState)
-    //    {
-    //        base.OnCreate(savedInstanceState);
-
-    //        // Create your application here
-    //    }
-    //}
     [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = true, NoHistory = true)]
     public class SplashActivity : AppCompatActivity
     {

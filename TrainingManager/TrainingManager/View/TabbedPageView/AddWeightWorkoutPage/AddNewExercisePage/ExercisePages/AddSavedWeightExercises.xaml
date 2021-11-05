@@ -5,7 +5,8 @@
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.AddSavedWeightExercises"
-             NavigationPage.HasNavigationBar="False">
+             NavigationPage.HasNavigationBar="False"
+             x:Name="Saved">
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
@@ -24,7 +25,8 @@
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
-                            <controls:LowSimpleCard CardMainText="{Binding}" IsButtonVisible="False" CardFrameTapped="{Binding SavedActivitiySelected}" CardFrameTappedParameter="{Binding}"/>
+                            <controls:LowSimpleCard CardMainText="{Binding}" IsButtonVisible="False" CardFrameTappedParameter="{Binding}"
+                                                    CardFrameTapped="{Binding BindingContext.SavedActivitiySelected, Source={x:Reference Saved}}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
