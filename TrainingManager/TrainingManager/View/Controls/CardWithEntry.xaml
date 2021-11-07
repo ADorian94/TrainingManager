@@ -7,19 +7,10 @@
     <ContentView.Resources>
         <local:Style/>
     </ContentView.Resources>
-    <StackLayout BackgroundColor="Transparent">
-        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="5" CornerRadius="10">
-            <Grid BackgroundColor="Transparent" VerticalOptions="CenterAndExpand">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="auto"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}"
-                       HorizontalOptions="Start" FontSize="20" TextColor="White" BackgroundColor="Transparent"/>
-                <Entry Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=CardEntry}"
-                       Keyboard="Numeric" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White"
-                       FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent"/>
-            </Grid>
-        </Frame>
-    </StackLayout>
+    <Frame Margin="5" Style="{StaticResource CardFrame}">
+        <StackLayout BackgroundColor="Transparent">
+            <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+            <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntry}" Keyboard="Numeric" Style="{StaticResource CardContent}"/>
+        </StackLayout>
+    </Frame>
 </ContentView>
