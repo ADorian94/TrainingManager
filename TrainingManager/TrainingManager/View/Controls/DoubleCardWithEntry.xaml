@@ -6,21 +6,24 @@
     <ContentView.Resources>
         <local:Style/>
     </ContentView.Resources>
-    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="Transparent" Padding="10, 0" Margin="0">
-        <Frame.GestureRecognizers>
-            <TapGestureRecognizer Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}" CommandParameter="{x:Binding Source={x:Reference this}, Path=TapCommandParameter}" NumberOfTapsRequired="2"/>
-        </Frame.GestureRecognizers>
-        <StackLayout BackgroundColor="Transparent">
+    <StackLayout >
+        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="Transparent" Padding="10, 0" Margin="0">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}" CommandParameter="{x:Binding Source={x:Reference this}, Path=TapCommandParameter}" NumberOfTapsRequired="2"/>
+            </Frame.GestureRecognizers>
             <Grid BackgroundColor="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <controls:CardWithEntry Grid.Column="0" CardMainText="{x:Binding Source={x:Reference this}, Path=FirstCardMainText}"
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <controls:CardWithEntry Grid.Row="0" Grid.Column="0" CardMainText="{x:Binding Source={x:Reference this}, Path=FirstCardMainText}"
                                         CardEntry="{x:Binding Source={x:Reference this}, Path=FirstCardEntry, Mode=TwoWay}"/>
-                <controls:CardWithEntry Grid.Column="1" CardMainText="{x:Binding Source={x:Reference this}, Path=SecondCardMainText}"
+                <controls:CardWithEntry Grid.Row="0" Grid.Column="1" CardMainText="{x:Binding Source={x:Reference this}, Path=SecondCardMainText}"
                                         CardEntry="{x:Binding Source={x:Reference this}, Path=SecondCardEntry, Mode=TwoWay}"/>
             </Grid>
-        </StackLayout>
-    </Frame>
+        </Frame>
+    </StackLayout>
 </ContentView>

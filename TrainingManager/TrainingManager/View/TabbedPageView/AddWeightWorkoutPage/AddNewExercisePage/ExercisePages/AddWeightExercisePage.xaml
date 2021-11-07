@@ -36,14 +36,14 @@
                 <controls:SimpleCard Grid.Column="0" CardMainText="Weight" CardSecondaryText="{Binding TotalExerciseWeight}" Margin="5,0"/>
                 <controls:SimpleCard Grid.Column="1" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}" Margin="5,0"/>
             </Grid>
-            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="2">
+            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="2" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <controls:DoubleCardWithEntry FirstCardMainText="Weight" FirstCardEntry="{Binding WeightOfExercise, Mode=TwoWay}"
                                                           SecondCardMainText="Reps" SecondCardEntry="{Binding Reps, Mode=TwoWay}"
                                                           CardFrameTapped="{Binding BindingContext.ExerciseRoundSelectedCommand, Source={x:Reference WeightExercisePage}}"
-                                                          TapCommandParameter="{Binding RoundGuid}" Margin="0"/>
+                                                          TapCommandParameter="{Binding RoundGuid}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
