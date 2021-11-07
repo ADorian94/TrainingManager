@@ -13,13 +13,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <ActivityIndicator 
-                VerticalOptions="CenterAndExpand"
-                HorizontalOptions="CenterAndExpand"
-                Color="White"
-                IsRunning="True"
-                WidthRequest="150"
-                HeightRequest="150"/>
+            <ActivityIndicator Style="{StaticResource Loading}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

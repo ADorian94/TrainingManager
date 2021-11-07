@@ -4,7 +4,9 @@
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              xmlns:overlays="clr-namespace:TrainingManager.View.Controls.Overlays"
-             x:Class="TrainingManager.View.LoginAndRegistration.RegistrationPage">
+             x:Class="TrainingManager.View.LoginAndRegistration.RegistrationPage"
+             NavigationPage.HasNavigationBar="False"
+             BackgroundColor="Transparent">
     <ContentPage.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
