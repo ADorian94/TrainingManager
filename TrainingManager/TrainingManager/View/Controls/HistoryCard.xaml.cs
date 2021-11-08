@@ -15,7 +15,7 @@ namespace TrainingManager.View.Controls
         public HistoryCard()
         {
             InitializeComponent();
-            OpenedCard.IsVisible = true;
+            History.IsVisible = true;
         }
 
         public string CloseCardMainLabel

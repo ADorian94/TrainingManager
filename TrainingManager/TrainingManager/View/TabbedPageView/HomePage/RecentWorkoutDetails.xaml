@@ -21,12 +21,12 @@
     <StackLayout>
         <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
         <Label Text="Details" Style="{StaticResource Title0}"/>
-        <controls:CardWithTextEntry x:Name="NameCard" CardMainText="Workout name" CardEntry="{Binding NewWeightWorkout.WorkoutName, Mode=TwoWay}"/>
+        <controls:SimpleCard x:Name="NameCard" CardMainText="Workout name" Margin="15, 5, 15, 0" CardSecondaryText="{Binding NewWeightWorkout.WorkoutName}"/>
         <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None"
-                              HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                  HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
             <ListView.Header>
                 <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
-                                                 IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                                     IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
             </ListView.Header>
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -35,7 +35,7 @@
                                                            OpenCardFirstLabel="Total weight" OpenCardFirstValue="{Binding TotalExerciseWeight}"
                                                            OpenCardSecondLabel="Rounds" OpenCardSecondValue="{Binding TotalExerciseRounds}"
                                                            ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference RecentWorkoutDetailsPage}}"
-                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="True"/>
+                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="False"/>
                     </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
