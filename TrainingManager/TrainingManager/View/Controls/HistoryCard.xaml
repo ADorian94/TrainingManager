@@ -41,7 +41,7 @@
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="40"/>
                             </Grid.ColumnDefinitions>
-                            <Label Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CloseCardMainLabel}" Style="{StaticResource CardTitle}"/>
+                            <Label Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CloseCardMainLabel}" Style="{StaticResource CardTitle}" VerticalOptions="Center"/>
                             <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="{StaticResource TripleDotIcon}" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
                         </Grid>
                         <Grid Grid.Row="1">
