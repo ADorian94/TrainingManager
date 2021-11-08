@@ -90,6 +90,22 @@
         <Setter Property="Visual" Value="Material"/>
     </Style>
 
+    <Style x:Key="OpenCardLabelContent" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalOptions" Value="StartAndExpand"/>
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Visual" Value="Material"/>
+    </Style>
+
+    <Style x:Key="OpenCardValueContent" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalOptions" Value="Center"/>
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Visual" Value="Material"/>
+    </Style>
+
     <Style x:Key="CardFrame" TargetType="{x:Type Frame}">
         <Setter Property="IsClippedToBounds" Value="True"/>
         <Setter Property="HasShadow" Value="True"/>
