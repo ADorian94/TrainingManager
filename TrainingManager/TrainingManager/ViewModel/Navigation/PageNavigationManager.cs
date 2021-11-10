@@ -63,7 +63,7 @@ namespace TrainingManager.ViewModel.Navigation
         {
             _apiServices = apiServices;
             _authService = authService;
-            InitializePages();
+            //InitializePages();
         }
 
         //konkurensé lehetne alakítanis
@@ -71,7 +71,14 @@ namespace TrainingManager.ViewModel.Navigation
         {
             return Task.Run(async () =>
             {
-                InitializePages();
+                try
+                {
+                    InitializePages();
+                }
+                catch(Exception ex)
+                {
+                    OnExceptionOccured(this, new MessageEventArgs(ex.Message));
+                }
 
                 //CREATE VMs INIT TEHEM CONCURENTLY
                 var vmInitializations = new Task[]
@@ -224,6 +231,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
                 _weightWorkoutManagerVM.ExceptionAllert += OnExceptionOccured;
+                //_weightWorkoutManagerVM.ChangeWorkoutDate += OnChangeWorkoutDate;
             });
         }
 

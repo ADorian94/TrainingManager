@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             x:Class="TrainingManager.View.Controls.CardWithDatepicker"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:Style/>
+    </ContentView.Resources>
+    <Frame Margin="15, 5" Style="{StaticResource CardFrame}">
+        <StackLayout BackgroundColor="Transparent">
+            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+            <!--<DatePicker Grid.Row="1" Date="{x:Binding Source={x:Reference this}, Path=CardDate}" Style="{StaticResource CardContent}"/>-->
+            <DatePicker Grid.Row="1" />
+        </StackLayout>
+    </Frame>
+</ContentView>

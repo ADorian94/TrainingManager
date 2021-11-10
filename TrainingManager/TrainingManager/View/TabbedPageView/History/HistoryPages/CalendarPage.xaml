@@ -14,8 +14,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Calendar" Style="{StaticResource Title0}"/>
-            <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}"
-                                     HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"/>
+            <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

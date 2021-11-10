@@ -12,6 +12,8 @@ namespace TrainingManager.ViewModel
 {
     public class HomeVM : WorkoutManagerBaseVM
     {
+        //FIELDS
+        private byte[] _originalImage;
         public HomeVM(IApiServices apiServices)
         {
             ApiServices = apiServices;
@@ -59,9 +61,8 @@ namespace TrainingManager.ViewModel
 
         private async Task InitializeProfilePicture()
         {
-            byte[] originalImage = await ApiServices.DownloadProfilePicture();
-            MemoryStream memoryStream = new MemoryStream(originalImage);
-            ProfilePicture = ImageSource.FromStream(() => memoryStream);
+            _originalImage = await ApiServices.DownloadProfilePicture();
+            ProfilePicture = ImageSource.FromStream(() => new MemoryStream(_originalImage));
         }
 
         public override async void RefreshWorkouts(object sender, EventArgs e) => await UpdateRecentWorkoutsAsync();

@@ -46,6 +46,10 @@
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
+                        <!--<ListView.Footer>
+                            <controls:CardWithDatepicker CardMainText="Date" Margin="15, 5" CardDate="{Binding NewWeightWorkout.WorkoutDate}"
+                                                 IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                        </ListView.Footer>-->
                     </ListView>
                 </StackLayout>
                 <Grid Grid.Row="1">
