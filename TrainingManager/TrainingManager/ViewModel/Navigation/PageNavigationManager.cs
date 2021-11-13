@@ -75,7 +75,7 @@ namespace TrainingManager.ViewModel.Navigation
                 {
                     InitializePages();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     OnExceptionOccured(this, new MessageEventArgs(ex.Message));
                 }
@@ -321,7 +321,7 @@ namespace TrainingManager.ViewModel.Navigation
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void OnExceptionOccured(object sender, MessageEventArgs e) => _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
+        private async void OnExceptionOccured(object sender, MessageEventArgs e) => await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
 
         private void OnCalculationStarted(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
 

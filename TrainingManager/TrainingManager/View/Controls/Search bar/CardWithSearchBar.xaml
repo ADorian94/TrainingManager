@@ -14,6 +14,7 @@
                 <SearchBar Grid.Row="1" Placeholder="{x:Binding Source={x:Reference this}, Path=CardPlaceholder}"
                            Text="{x:Binding Source={x:Reference this}, Path=CardSearchText, Mode=TwoWay}"
                            SearchCommand="{x:Binding Source={x:Reference this}, Path=CardSearchCommand}"
+                           TextChanged="OnTextChanged"
                            VerticalTextAlignment="Center"
                            TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"
                            HorizontalTextAlignment="Center" />

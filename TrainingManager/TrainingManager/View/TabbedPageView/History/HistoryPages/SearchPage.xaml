@@ -22,7 +22,7 @@
             <Label Text="History" Style="{StaticResource Title0}"/>
             <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=HistoryWorkoutItems}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                 <ListView.Header>
-                    <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" CardSearchText="{Binding SearchText}"/>
+                    <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" CardSearchText="{Binding SearchText, Mode=TwoWay}" CardTextEmptyCommand="{Binding CardTextEmptyCommand}"/>
                 </ListView.Header>
                 <ListView.ItemTemplate >
                     <DataTemplate>

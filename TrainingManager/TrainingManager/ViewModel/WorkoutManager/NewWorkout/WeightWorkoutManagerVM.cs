@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 
@@ -104,6 +106,7 @@ namespace TrainingManager.ViewModel
         {
             IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
 
+            //Meglévő edzés szerkesztése
             if (weightWorkoutDTOs != null && weightWorkoutDTOs.ToList().Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
             {
                 await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
@@ -132,6 +135,7 @@ namespace TrainingManager.ViewModel
                     })),
                 });
             }
+            //Új edzés létrehozása
             else
             {
                 //ha még nincs a mai naphoz workout, akkor létrehozzuk és feltöltjük

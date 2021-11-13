@@ -230,7 +230,7 @@ namespace TrainingManager.ViewModel
             round.RoundWeightChanged += RecalculateRoundWeight;
             NewWeightExercise.WeightRounds.Add(round);
             TotalExerciseWeight = 0.0;
-            OpenAddWeightExercise?.Invoke(this, null);
+            OpenAddWeightExercise?.Invoke(this, EventArgs.Empty);
         }
 
         private void AddWeightRoundToExerciseFunction(object obj)

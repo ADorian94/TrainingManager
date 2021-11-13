@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <style name="MyTheme.Base" parent="Theme.AppCompat.Light">
+  <style name="MyTheme.Base" parent="Theme.AppCompat.DayNight">
   </style>
 
   <style name="MyTheme" parent="MyTheme.Base">
   </style>
 
-  <style name="MyTheme.Splash" parent ="Theme.AppCompat.Light.NoActionBar">
+  <style name="MyTheme.Splash" parent ="Theme.AppCompat.DayNight.NoActionBar">
     <item name="android:windowBackground">@drawable/splash_screen</item>
     <item name="android:windowNoTitle">true</item>
     <!--<item name="android:windowFullscreen">true</item>-->
@@ -22,7 +22,7 @@
   <style name="MainTheme" parent="MainTheme.Base">
   </style>
   <!-- Base theme applied no matter what API -->
-  <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+  <style name="MainTheme.Base" parent="Theme.AppCompat.DayNight.DarkActionBar">
     <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
     <item name="windowNoTitle">true</item>
     <!--We will be using the toolbar so no need to show ActionBar-->
@@ -44,7 +44,7 @@
     <!--<item name="android:windowFullscreen">true</item>-->
   </style>
 
-  <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+  <style name="AppCompatDialogStyle" parent="Theme.AppCompat.DayNight.Dialog">
     <item name="colorAccent">#03A9F9</item>
   </style>
 </resources>

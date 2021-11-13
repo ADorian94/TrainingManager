@@ -46,12 +46,33 @@ namespace TrainingManager.View.Controls
         }
 
         public static readonly BindableProperty CardSearchCommandProperty =
-            BindableProperty.Create("CardSearchCommand", typeof(DelegateCommand), typeof(CardWithSearchBar), defaultValue: default(DelegateCommand), propertyChanged: OnFrameTapCommandPropertyChanged);
+            BindableProperty.Create("CardSearchCommand", typeof(DelegateCommand), typeof(CardWithSearchBar), defaultValue: default(DelegateCommand), propertyChanged: OnSearchCommandPropertyChanged);
 
-        private static void OnFrameTapCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        private static void OnSearchCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is CardWithSearchBar headerTemplate && newValue is DelegateCommand command)
                 headerTemplate.CardSearchCommand = command;
+        }
+
+        public DelegateCommand CardTextEmptyCommand
+        {
+            get { return (DelegateCommand)GetValue(CardTextEmptyCommandProperty); }
+            set { SetValue(CardTextEmptyCommandProperty, value); }
+        }
+
+        public static readonly BindableProperty CardTextEmptyCommandProperty =
+            BindableProperty.Create("CardTextEmptyCommand", typeof(DelegateCommand), typeof(CardWithSearchBar), defaultValue: default(DelegateCommand), propertyChanged: OnCardTextEmptyCommandPropertyChanged);
+
+        private static void OnCardTextEmptyCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            if (bindable is CardWithSearchBar headerTemplate && newValue is DelegateCommand command)
+                headerTemplate.CardTextEmptyCommand = command;
+        }
+
+        private void OnTextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (string.IsNullOrEmpty(CardSearchText))
+                CardTextEmptyCommand?.Execute(null);
         }
     }
 }

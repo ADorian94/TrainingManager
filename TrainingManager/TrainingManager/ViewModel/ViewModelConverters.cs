@@ -73,4 +73,39 @@ namespace TrainingManager.ViewModel
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException("The converter is not implemeted.");
     }
+
+    public class DoubleToDoubleConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return null;
+
+            return (double)value;
+
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return 0.0;
+
+            string stringValue = value as string;
+
+            if (string.IsNullOrEmpty(stringValue))
+                return 0.0;
+
+            double dbl;
+
+            if (double.TryParse(stringValue, out dbl))
+            {
+                if (dbl == 0)
+                    return 0.0;
+
+                return dbl;
+            }
+
+            return 0.0;
+        }
+    }
 }
