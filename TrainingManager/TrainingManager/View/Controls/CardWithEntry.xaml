@@ -10,7 +10,7 @@
     <Frame Margin="5" Style="{StaticResource CardFrame}">
         <StackLayout BackgroundColor="Transparent">
             <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
-            <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntry}" Keyboard="Numeric" Style="{StaticResource CardContent}"/>
+            <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntryString}" TextChanged="Entry_TextChanged" Style="{StaticResource CardContent}"/>
         </StackLayout>
     </Frame>
 </ContentView>
