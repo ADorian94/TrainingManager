@@ -21,24 +21,6 @@ namespace TrainingManager.View.Controls
         public static readonly BindableProperty CardMainTextProperty =
             BindableProperty.Create("CardMainText", typeof(string), typeof(CardWithSearchBar), string.Empty);
 
-        public string CardPlaceholder
-        {
-            get { return (string)GetValue(CardPlaceholderProperty); }
-            set { SetValue(CardPlaceholderProperty, value); }
-        }
-
-        public static readonly BindableProperty CardPlaceholderProperty =
-            BindableProperty.Create("CardPlaceholder", typeof(string), typeof(CardWithSearchBar), string.Empty);
-
-        public string CardSearchText
-        {
-            get { return (string)GetValue(CardSearchTextProperty); }
-            set { SetValue(CardSearchTextProperty, value); }
-        }
-
-        public static readonly BindableProperty CardSearchTextProperty =
-            BindableProperty.Create("CardSearchText", typeof(string), typeof(CardWithSearchBar), string.Empty, BindingMode.TwoWay);
-
         public DelegateCommand CardSearchCommand
         {
             get { return (DelegateCommand)GetValue(CardSearchCommandProperty); }
@@ -52,27 +34,6 @@ namespace TrainingManager.View.Controls
         {
             if (bindable is CardWithSearchBar headerTemplate && newValue is DelegateCommand command)
                 headerTemplate.CardSearchCommand = command;
-        }
-
-        public DelegateCommand CardTextEmptyCommand
-        {
-            get { return (DelegateCommand)GetValue(CardTextEmptyCommandProperty); }
-            set { SetValue(CardTextEmptyCommandProperty, value); }
-        }
-
-        public static readonly BindableProperty CardTextEmptyCommandProperty =
-            BindableProperty.Create("CardTextEmptyCommand", typeof(DelegateCommand), typeof(CardWithSearchBar), defaultValue: default(DelegateCommand), propertyChanged: OnCardTextEmptyCommandPropertyChanged);
-
-        private static void OnCardTextEmptyCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
-        {
-            if (bindable is CardWithSearchBar headerTemplate && newValue is DelegateCommand command)
-                headerTemplate.CardTextEmptyCommand = command;
-        }
-
-        private void OnTextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (string.IsNullOrEmpty(CardSearchText))
-                CardTextEmptyCommand?.Execute(null);
         }
     }
 }

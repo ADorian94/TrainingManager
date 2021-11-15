@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using Xamarin.Forms;
@@ -20,7 +19,6 @@ namespace TrainingManager.ViewModel
             WorkoutDateSelected = new DelegateCommand(WorkoutDateSelectedFunction);
             HistoryWorkoutItemSelectedCommand = new DelegateCommand(HistoryWorkoutItemSelectedFunction);
             SearchCommand = new DelegateCommand(SearchFunction);
-            CardTextEmptyCommand = new DelegateCommand(CardTextEmptyFunction);
         }
 
         private async void SetupHistoryAsync()
@@ -56,14 +54,10 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<HistoryItemVM> _historyWorkoutItems;
         public ObservableCollection<HistoryItemVM> HistoryWorkoutItems { get => _historyWorkoutItems; set { _historyWorkoutItems = value; OnPropertyChanged(); } }
 
-        private string _searchText;
-        public string SearchText { get => _searchText; set { _searchText = value; OnPropertyChanged(); } }
-
         //COMMANDS
         public DelegateCommand WorkoutDateSelected { get; private set; }
         public DelegateCommand HistoryWorkoutItemSelectedCommand { get; private set; }
         public DelegateCommand SearchCommand { get; private set; }
-        public DelegateCommand CardTextEmptyCommand { get; private set; }
 
         //EVENTS
         public event EventHandler<DateTime> WeightWorkoutDateSelected;
@@ -206,41 +200,24 @@ namespace TrainingManager.ViewModel
 
         public async void SearchFunction(object obj)
         {
+            var searchStr = obj.ToString();
             IEnumerable<HistoryItemVM> foundElements = new ObservableCollection<HistoryItemVM>();
+            IEnumerable<WeightWorkoutDTO> workouts = await ApiServices.GetWeightWorkoutsAsync();
 
-            if (!string.IsNullOrEmpty(SearchText))
+            if (!string.IsNullOrEmpty(searchStr))
             {
-                string[] searchStrings = SearchText.Trim().Split(' ');
-                IEnumerable<WeightWorkoutDTO> workouts = await ApiServices.GetWeightWorkoutsAsync();
+                string[] searchStrings = searchStr.Trim().Split(' ');
                 foundElements = searchStrings.SelectMany(str => workouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))).Select(x => new HistoryItemVM(x)));
             }
+            else
+                foundElements = workouts.Select(x => new HistoryItemVM(x));
 
             HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>();
 
-            if (foundElements.Any())
+            foreach (var item in foundElements)
             {
-                foreach (var item in foundElements)
-                {
-                    if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
-                        HistoryWorkoutItems.Add(item);
-                }
-            }
-            else
-            {
-                SearchText = string.Empty;
-            }
-        }
-
-        private async void CardTextEmptyFunction(object obj)
-        {
-            if (HistoryWorkoutItems != null)
-            {
-                HistoryWorkoutItems.Clear();
-                var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
-
-                foreach (var workout in workouts)
-
-                    HistoryWorkoutItems.Add(new HistoryItemVM(workout));
+                if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
+                    HistoryWorkoutItems.Add(item);
             }
         }
     }
