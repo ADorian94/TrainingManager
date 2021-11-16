@@ -34,11 +34,21 @@ namespace TrainingManager.ViewModel
 
             var dateTime = (DateTime)value;
 
-            return dateTime.Date.ToString("ddd");
+            switch (dateTime.DayOfWeek)
+            {
+                case DayOfWeek.Monday: return "Mon";
+                case DayOfWeek.Tuesday: return "Tue";
+                case DayOfWeek.Wednesday: return "Wed";
+                case DayOfWeek.Thursday: return "Thu";
+                case DayOfWeek.Friday: return "Fri";
+                case DayOfWeek.Saturday: return "Sat";
+                case DayOfWeek.Sunday: return "Sun";
+                default: return string.Empty;
+            }
         }
+
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
     }
-
 
     public class DoubleToBoolConverter : IValueConverter
     {
@@ -72,40 +82,5 @@ namespace TrainingManager.ViewModel
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException("The converter is not implemeted.");
-    }
-
-    public class DoubleToDoubleConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-                return null;
-
-            return (double)value;
-
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            if (value == null)
-                return 0.0;
-
-            string stringValue = value as string;
-
-            if (string.IsNullOrEmpty(stringValue))
-                return 0.0;
-
-            double dbl;
-
-            if (double.TryParse(stringValue, out dbl))
-            {
-                if (dbl == 0)
-                    return 0.0;
-
-                return dbl;
-            }
-
-            return 0.0;
-        }
     }
 }

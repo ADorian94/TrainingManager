@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
@@ -17,7 +18,7 @@ namespace TrainingManager.ViewModel.Navigation
         //FIELDS
         private IApiServices _apiServices;
         private IAuthService _authService;
-        private static object _lockObj = new object();
+        private int _initialAttempts = 0;
 
         //PROPERTIES
         public Page MainPage { get; private set; }
@@ -105,7 +106,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void InitializePages()
         {
-            lock (_lockObj)
+            try
             {
                 //INITIALIZE VM
                 _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
@@ -149,6 +150,15 @@ namespace TrainingManager.ViewModel.Navigation
                 _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
 
                 _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
+            }
+            catch
+            {
+                if (_initialAttempts > 3)
+                    throw;
+
+                Thread.Sleep(500);
+                ++_initialAttempts;
+                InitializePages();
             }
         }
 
