@@ -72,6 +72,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler<string> ExerciseRoundSelected;
         public event EventHandler<MessageEventArgs> ExceptionAllert;
         public event EventHandler WorkoutSaved;
+        public event EventHandler<Messages> ErrorInSaveProcess;
 
         protected override void InitializeCommands()
         {
@@ -93,6 +94,7 @@ namespace TrainingManager.ViewModel
         //PROTECTED FUNCTIONS
         protected void InvokeExceptionAllertEvent(object obj, MessageEventArgs args) => ExceptionAllert?.Invoke(obj, args);
         protected void InvokeWorkoutSavedEvent(object obj, EventArgs args) => WorkoutSaved?.Invoke(obj, args);
+        protected void InvokeErrorInSaveProcess(object obj, Messages message) => ErrorInSaveProcess?.Invoke(obj, message);
 
         protected double CountTotalWeightOfWorkout()
         {
@@ -194,10 +196,11 @@ namespace TrainingManager.ViewModel
         {
             try
             {
+                if (!IsExerciseReadyToAdd())
+                    return;
+
                 if (NewWeightWorkout.WeightExercises.Any(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid))
-                {
                     NewWeightWorkout.WeightExercises.Remove(NewWeightExercise);
-                }
 
                 NewWeightWorkout.WeightExercises.Add(NewWeightExercise);
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
@@ -210,6 +213,52 @@ namespace TrainingManager.ViewModel
             }
 
             CloseAddWeightExercise?.Invoke(this, new ClosePageEventArgs(PageType.WightWorkout));
+        }
+
+        private bool IsExerciseReadyToAdd()
+        {
+            if (string.IsNullOrEmpty(NewWeightExercise.ExerciseName))
+            {
+                ErrorInSaveProcess(this, Messages.EmptyExerciseName);
+                return false;
+            }
+
+            if (NewWeightExercise.TotalExerciseWeight <= 0)
+            {
+                ErrorInSaveProcess(this, Messages.EmptyExercise);
+                return false;
+            }
+
+            if (NewWeightExercise.WeightRounds.Any(x => x.WeightOfExercise <= 0))
+            {
+                ErrorInSaveProcess(this, Messages.InvalidWeight);
+                return false;
+            }
+
+            if (NewWeightExercise.WeightRounds.Any(x => x.Reps <= 0))
+            {
+                ErrorInSaveProcess(this, Messages.InvalidReps);
+                return false;
+            }
+
+            return true;
+        }
+
+        protected bool IsReadyReadyToSave()
+        {
+            if (string.IsNullOrEmpty(NewWeightWorkout.WorkoutName))
+            {
+                ErrorInSaveProcess(this, Messages.EmptyWorkoutName);
+                return false;
+            }
+
+            if (NewWeightWorkout.TotalWeight <= 0)
+            {
+                ErrorInSaveProcess(this, Messages.EmptyWorkout);
+                return false;
+            }
+
+            return true;
         }
 
         private void OpenAddWeightExerciseFunction(object obj)

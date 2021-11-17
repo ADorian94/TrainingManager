@@ -217,6 +217,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightHistoryVM.ExceptionAllert += OnExceptionOccured;
                 _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
                 _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
+                _weightHistoryVM.ErrorInSaveProcess += OnErrorInSaveProcess;
             });
         }
 
@@ -241,11 +242,13 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
                 _weightWorkoutManagerVM.ExceptionAllert += OnExceptionOccured;
-                //_weightWorkoutManagerVM.ChangeWorkoutDate += OnChangeWorkoutDate;
+                _weightWorkoutManagerVM.ErrorInSaveProcess += OnErrorInSaveProcess;
             });
         }
 
         //EVENT HANDLERS
+        private async void OnErrorInSaveProcess(object sender, Messages message) =>
+            await _mainTabbedPage.DisplayAlert("Warrning", MessageLibrary.Instance.GetMessage(message), "Ok");
         private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {

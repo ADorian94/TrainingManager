@@ -104,6 +104,9 @@ namespace TrainingManager.ViewModel
         //PROTECTED
         protected override async void SaveTodayWorkoutFunctionAsync(object obj)
         {
+            if (!IsReadyReadyToSave())
+                return;
+
             IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
 
             //Meglévő edzés szerkesztése
