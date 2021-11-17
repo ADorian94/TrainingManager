@@ -14,7 +14,7 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <Label Text="Settigns" Style="{StaticResource Title0}" VerticalOptions="StartAndExpand"/>
+            <Label Text="Settings" Style="{StaticResource Title0}" VerticalOptions="StartAndExpand"/>
             <Button Style="{StaticResource RedButton}" Text="Upload image" Command="{Binding UploadImageCommand}"/>
             <Button Style="{StaticResource BlueButton}" Text="Sign out" Command="{Binding SignOutCommand}"/>
         </StackLayout>
