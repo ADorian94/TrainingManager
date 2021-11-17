@@ -53,14 +53,22 @@ namespace TrainingManager.View.Controls
             var replacedString = CardEntryString.Replace(',', '.');
             var valueStringBuidler = new StringBuilder(replacedString);
 
-            for (int i = valueStringBuidler.Length - 1; i >= 0; --i)
+            try
             {
-                if (!char.IsDigit(valueStringBuidler[i]) && (valueStringBuidler.ToString().Count(x => x == '.') > 1 || valueStringBuidler[i] != '.'))
-                    valueStringBuidler.Remove(i, 1);
-            }
+                for (int i = valueStringBuidler.Length - 1; i >= 0; --i)
+                {
+                    if (!char.IsDigit(valueStringBuidler[i]) && (valueStringBuidler.ToString().Count(x => x == '.') > 1 || valueStringBuidler[i] != '.'))
+                        valueStringBuidler.Remove(i, 1);
+                }
 
-            CardEntryString = valueStringBuidler.ToString();
-            CardEntry = double.Parse(CardEntryString, CultureInfo.InvariantCulture);
+                CardEntryString = valueStringBuidler.ToString();
+                CardEntry = double.Parse(CardEntryString, CultureInfo.InvariantCulture);
+            }
+            catch
+            {
+                CardEntryString = "0";
+                CardEntry = 0;
+            }
         }
     }
 }
