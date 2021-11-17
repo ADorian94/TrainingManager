@@ -19,5 +19,15 @@
         Avarage1RM,
     }
 
-    public enum PageType { WightWorkout };
+    public enum PageType { WightWorkout }
+
+    public enum Messages
+    {
+        EmptyExerciseName,
+        EmptyWorkoutName,
+        InvalidWeight,
+        InvalidReps,
+        EmptyExercise,
+        EmptyWorkout,
+    }
 }
