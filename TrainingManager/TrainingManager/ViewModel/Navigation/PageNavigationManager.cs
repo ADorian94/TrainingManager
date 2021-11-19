@@ -67,7 +67,6 @@ namespace TrainingManager.ViewModel.Navigation
             //InitializePages();
         }
 
-        //konkurensé lehetne alakítanis
         public Task InitializeAfterAuthenticationAsync()
         {
             return Task.Run(async () =>
