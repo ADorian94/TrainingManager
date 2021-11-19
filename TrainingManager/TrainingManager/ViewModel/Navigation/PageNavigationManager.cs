@@ -141,9 +141,8 @@ namespace TrainingManager.ViewModel.Navigation
                 _mainTabbedPage.Children.Add(_homePage);
                 _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
                 _mainTabbedPage.Children.Add(_historyCaruselPage);
-                _mainTabbedPage.Children.Add(_exercisesPage);
+                //_mainTabbedPage.Children.Add(_exercisesPage);
                 _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
-                //_mainTabbedPage.Children.Add(_settingsPage);
                 _mainNavigationPage = new NavigationPage(_mainTabbedPage);
 
                 _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
