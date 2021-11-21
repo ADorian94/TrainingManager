@@ -12266,7 +12266,7 @@ namespace TrainingManager.Droid
 			public const int design_snackbar_background = 2131165293;
 			
 			// aapt resource value: 0x7F07006E
-			public const int gym_big = 2131165294;
+			public const int fitness = 2131165294;
 			
 			// aapt resource value: 0x7F07006F
 			public const int ic_arrow_down_24dp = 2131165295;
@@ -13004,25 +13004,25 @@ namespace TrainingManager.Droid
 			public const int preference_list_divider_material = 2131165539;
 			
 			// aapt resource value: 0x7F070164
-			public const int ProgramIcon = 2131165540;
+			public const int sharp_more_vert_24 = 2131165540;
 			
 			// aapt resource value: 0x7F070165
-			public const int sharp_more_vert_24 = 2131165541;
+			public const int sharp_more_vert_white_24 = 2131165541;
 			
 			// aapt resource value: 0x7F070166
-			public const int sharp_more_vert_white_24 = 2131165542;
+			public const int splash_screen = 2131165542;
 			
 			// aapt resource value: 0x7F070167
-			public const int splash_screen = 2131165543;
+			public const int test_custom_background = 2131165543;
 			
 			// aapt resource value: 0x7F070168
-			public const int test_custom_background = 2131165544;
+			public const int tooltip_frame_dark = 2131165544;
 			
 			// aapt resource value: 0x7F070169
-			public const int tooltip_frame_dark = 2131165545;
+			public const int tooltip_frame_light = 2131165545;
 			
 			// aapt resource value: 0x7F07016A
-			public const int tooltip_frame_light = 2131165546;
+			public const int TrainingManagerAppIcon = 2131165546;
 			
 			static Drawable()
 			{
@@ -14809,16 +14809,7 @@ namespace TrainingManager.Droid
 		{
 			
 			// aapt resource value: 0x7F0C0000
-			public const int icon = 2131492864;
-			
-			// aapt resource value: 0x7F0C0001
-			public const int icon_round = 2131492865;
-			
-			// aapt resource value: 0x7F0C0002
-			public const int launcher_foreground = 2131492866;
-			
-			// aapt resource value: 0x7F0C0003
-			public const int ProgramIcon = 2131492867;
+			public const int TrainingManagerAppIcon = 2131492864;
 			
 			static Mipmap()
 			{
