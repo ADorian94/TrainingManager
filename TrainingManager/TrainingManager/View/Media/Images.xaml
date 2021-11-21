@@ -3,5 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TrainingManager.View.Media.Images">
     <ImageSource x:Key="BackGroundPic">DeadLiftBackground.png</ImageSource>
+    <ImageSource x:Key="LoginBackgroundWide">DeadliftWide.png</ImageSource>
+    <ImageSource x:Key="LoginBackgroundPortrait">DeadliftPortrait.png</ImageSource>
+    <ImageSource x:Key="RegistrationBackgroundWide">PlateWide.png</ImageSource>
+    <ImageSource x:Key="RegistrationBackgroundPortrait">PlatePortrait.png</ImageSource>
     <ImageSource x:Key="TripleDotIcon">sharp_more_vert_white_24.png</ImageSource>
 </ResourceDictionary>

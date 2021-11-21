@@ -48,9 +48,9 @@ namespace TrainingManager.ViewModel
                     };
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - GetWeightWorkouts", "Can't connect to the server."));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
 

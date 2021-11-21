@@ -36,7 +36,7 @@
                 <controls:SimpleCard Grid.Column="0" CardMainText="Weight" CardSecondaryText="{Binding TotalExerciseWeight}" Margin="5,0"/>
                 <controls:SimpleCard Grid.Column="1" CardMainText="Comment" CardFrameTapped="{Binding OpenNoteEditorCommand}" Margin="5,0"/>
             </Grid>
-            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" Grid.Row="2" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
+            <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" SeparatorVisibility="None" Grid.Row="2" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>

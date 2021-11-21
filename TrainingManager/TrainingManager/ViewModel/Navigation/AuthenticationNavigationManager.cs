@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
 using TrainingManager.View.LoginAndRegistration;
@@ -24,7 +22,6 @@ namespace TrainingManager.ViewModel.Navigation
         //PAGES
         private readonly LoginAndRegistrationCaruselPage _loginAndRegisterCaruselPage;
         private readonly LoginPage _loginPage;
-        private readonly LoadingView _loadingView;
         private readonly RegistrationPage _registrationPage;
 
         //VIEWMODELLS
@@ -40,7 +37,6 @@ namespace TrainingManager.ViewModel.Navigation
             _loginManagerVM = new LoginManagerVM(_apiServices, authService);
 
             //INITIALIZE PAGES
-            _loadingView = new LoadingView();
             _loginAndRegisterCaruselPage = new LoginAndRegistrationCaruselPage();
             _loginPage = new LoginPage();
             _registrationPage = new RegistrationPage();
@@ -53,15 +49,13 @@ namespace TrainingManager.ViewModel.Navigation
 
             //EVENT SUBSCRIBE
             _registrationManagerVM.RegistrationSuccess += OnAuthenticationSucceed;
-            _registrationManagerVM.RegistrationFailed += OnAuthenticationMessage;
-            _registrationManagerVM.MessageApplication += OnAuthenticationMessage;
+            _registrationManagerVM.PopUpMessage += OnPopUpMessageMessage;
             _registrationManagerVM.AuthenticationStarted += OnAuthenticationStarted;
             _loginManagerVM.AuthenticationStarted += OnAuthenticationStarted;
             _loginManagerVM.LoginSuccess += OnAuthenticationSucceed;
-            _loginManagerVM.LoginFailed += OnAuthenticationMessage;
-            _loginManagerVM.MessageApplication += OnAuthenticationMessage;
+            _loginManagerVM.PopUpMessage += OnPopUpMessageMessage;
 
-            MainPage = new NavigationPage(_loadingView);
+            MainPage = new NavigationPage(new LoadingView());
             TryLoginAndSetMainPage();
         }
 
@@ -84,19 +78,20 @@ namespace TrainingManager.ViewModel.Navigation
             MainPageChanged?.Invoke(this, EventArgs.Empty);
         }
 
+        //EVENT HANDLERS
         private void OnAuthenticationStarted(object sender, EventArgs e)
         {
-            MainPage = _loadingView;
+            MainPage = new LoadingView();
             MainPageChanged?.Invoke(this, EventArgs.Empty);
-        }
-
-        private async void OnAuthenticationMessage(object sender, MessageEventArgs e)
-        {
-            MainPage = _loginAndRegisterCaruselPage;
-            MainPageChanged?.Invoke(this, EventArgs.Empty);
-            await _loginAndRegisterCaruselPage.DisplayAlert(e.Message, e.Message, "Ok");
         }
 
         private void OnAuthenticationSucceed(object sender, EventArgs e) => AuthenticationSuceed?.Invoke(this, EventArgs.Empty);
+
+        private async void OnPopUpMessageMessage(object sender, Messages e)
+        {
+            MainPage = _loginAndRegisterCaruselPage;
+            MainPageChanged?.Invoke(this, EventArgs.Empty);
+            await _loginAndRegisterCaruselPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(e), MessageLibrary.Instance.GetMessage(e), "Ok");
+        }
     }
 }

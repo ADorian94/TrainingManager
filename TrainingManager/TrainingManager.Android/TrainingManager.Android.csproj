@@ -196,12 +196,14 @@
     <AndroidResource Include="Resources\drawable\closeIcon.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\DeadLiftBackground.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <AndroidResource Include="Resources\drawable\DeadliftPortrait.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\Background1.png" />
+    <AndroidResource Include="Resources\drawable\PlatePortrait.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <ProjectExtensions>

@@ -21,13 +21,32 @@
 
     public enum PageType { WightWorkout }
 
+    public enum MessageType
+    {
+        Warrning,
+        Info,
+        Error,
+    }
+
     public enum Messages
     {
         EmptyExerciseName,
         EmptyWorkoutName,
         InvalidWeight,
         InvalidReps,
+        MayInvalidReps,
         EmptyExercise,
         EmptyWorkout,
+        EmptyUserName,
+        EmptyPassword,
+        LoginFailed,
+        RequiredFirstName,
+        RequiredUserName,
+        RequiredEmail,
+        RequiredPassword,
+        RequiredConfirmPassword,
+        PasswordsAreNotEquals,
+        RegistrationFailed,
+        LoginFailedAfterRegistration,
     }
 }
