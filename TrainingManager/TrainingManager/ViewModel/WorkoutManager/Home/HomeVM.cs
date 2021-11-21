@@ -49,9 +49,15 @@ namespace TrainingManager.ViewModel
             try
             {
                 Date = DateTime.Now;
-                await InitializeProfilePicture();
-                await UpdateRecentWorkoutsAsync();
                 WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
+
+                var initializeTasks = new Task[]
+                {
+                    InitializeProfilePicture(),
+                    UpdateRecentWorkoutsAsync(),
+                };
+
+                await Task.WhenAll(initializeTasks);
             }
             catch (Exception ex)
             {
