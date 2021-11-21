@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Security;
 using System.Threading.Tasks;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
@@ -22,7 +21,6 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
         //EVENTS
         public event EventHandler LoginSuccess;
         public event EventHandler AuthenticationStarted;
-        public event EventHandler<MessageEventArgs> LoginFailed;
 
         public LoginManagerVM(IApiServices apiServices, IAuthService authService)
         {
@@ -55,10 +53,9 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
         //COMMAND FUNCTIONS
         private async void LoginFunction(object obj)
         {
-            if (ArePreconditionsFine())
+            if (IsReadyReadyToLogin())
             {
                 AuthenticationStarted?.Invoke(this, EventArgs.Empty);
-
                 bool loginResult = await _apiServices.LoginAsync(UserName, Password);
 
                 if (loginResult)
@@ -68,24 +65,24 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
                     UserName = string.Empty;
                 }
                 else
-                    LoginFailed?.Invoke(this, new MessageEventArgs("Loogn failed."));
+                    SendPopUpMessage(Messages.LoginFailed);
 
                 Password = string.Empty;
             }
         }
 
         //PRIVATES
-        private bool ArePreconditionsFine()
+        private bool IsReadyReadyToLogin()
         {
             if (string.IsNullOrEmpty(UserName))
             {
-                OnMessageApplication("A felhasznélónév megadása kötelező!");
+                SendPopUpMessage(Messages.EmptyUserName);
                 return false;
             }
 
-            if (string.IsNullOrEmpty(Password.ToString()))
+            if (string.IsNullOrEmpty(Password))
             {
-                OnMessageApplication("A jelszó megadása kötelező!");
+                SendPopUpMessage(Messages.EmptyPassword);
                 return false;
             }
 

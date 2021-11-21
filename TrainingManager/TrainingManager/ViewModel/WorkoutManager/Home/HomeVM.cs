@@ -49,13 +49,19 @@ namespace TrainingManager.ViewModel
             try
             {
                 Date = DateTime.Now;
-                await UpdateRecentWorkoutsAsync();
                 WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
-                await InitializeProfilePicture();
+
+                var initializeTasks = new Task[]
+                {
+                    InitializeProfilePicture(),
+                    UpdateRecentWorkoutsAsync(),
+                };
+
+                await Task.WhenAll(initializeTasks);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - WeightWorkouts", "Can't connect to the server."));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
 
@@ -91,7 +97,6 @@ namespace TrainingManager.ViewModel
                     Id = workout.Id,
                     WorkoutName = workout.WorkoutName,
                     WorkoutDate = workout.WorkoutDate,
-                    //TotalExerciseRounds = workout.WeightExercisesDto.FirstOrDefault(x => x.WorkoutId == workout.Id).WeightRoundsDto.Count,
                     TotalWeight = workout.TotalWeight,
                     WorkoutGuid = workout.WorkoutGuid,
                     WorkoutType = workout.WorkoutType,

@@ -5,7 +5,7 @@ using Android.OS;
 
 namespace TrainingManager.Droid
 {
-    [Activity(Label = "TrainingManager", Icon = "@drawable/ProgramIcon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "TrainingManager", Icon = "@drawable/TrainingManagerAppIcon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle savedInstanceState)

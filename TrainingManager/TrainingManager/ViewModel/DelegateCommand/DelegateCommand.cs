@@ -50,17 +50,18 @@ namespace TrainingManager.ViewModel
         /// Tevékenység végrehajtása.
         /// </summary>
         /// <param name="parameter">A tevékenység paramétere.</param>
-        public void Execute(Object parameter)
+        public void Execute(object parameter)
         {
             if (!CanExecute(parameter))
                 throw new InvalidOperationException("Command execution is disabled.");
+
             try
             {
                 _execute(parameter);
             }
-            catch (Exception ex)
+            catch
             {
-                Console.WriteLine($"Fatal error. {ex.Message}");
+                throw;
             }
         }
 

@@ -9,8 +9,8 @@
     </ContentView.Resources>
     <Frame Margin="15, 5" Style="{StaticResource CardFrame}">
         <StackLayout BackgroundColor="Transparent">
-            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
-            <Entry Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=CardEntry}" Style="{StaticResource CardContent}"/>
+            <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+            <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntry}" Style="{StaticResource CardEntryContent}"/>
         </StackLayout>
     </Frame>
 </ContentView>

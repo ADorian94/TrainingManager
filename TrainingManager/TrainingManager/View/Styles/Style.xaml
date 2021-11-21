@@ -90,6 +90,15 @@
         <Setter Property="Visual" Value="Material"/>
     </Style>
 
+    <Style x:Key="CardEntryContent" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Visual" Value="Material"/>
+    </Style>
+
     <Style x:Key="OpenCardLabelContent" TargetType="{x:Type Label}">
         <Setter Property="HorizontalOptions" Value="StartAndExpand"/>
         <Setter Property="TextColor" Value="White"/>

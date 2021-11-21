@@ -40,7 +40,7 @@ namespace TrainingManager.UWP
         /// <param name="e">Details about the launch request and process.</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            ApplicationView.GetForCurrentView().TryResizeView(new Size(500, 800));
+            ApplicationView.GetForCurrentView().TryResizeView(new Size(900, 800));
 
             Frame rootFrame = Window.Current.Content as Frame;
 

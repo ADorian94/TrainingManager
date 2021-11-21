@@ -41,9 +41,9 @@ namespace TrainingManager.ViewModel
                     HistoryWorkoutItems.Add(new HistoryItemVM(workout));
                 }
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - WeightWorkouts", "Can't connect to the server."));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
 
@@ -192,9 +192,9 @@ namespace TrainingManager.ViewModel
                 WorkoutDeleted?.Invoke(this, EventArgs.Empty);
                 SetupHistoryAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", "Can't connect to the server."));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
 

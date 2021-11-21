@@ -58,9 +58,31 @@ namespace TrainingManager.ViewModel
 
         private void CalculateMaximum(object obj)
         {
-            RecomendedMaximums.Clear();
+            if (!IsReadyToCalculate())
+                return;
+
+            if (Reps > 10)
+                SendPopUpMessage(Messages.MayInvalidReps);
+
             RecomendedMaximums = new ObservableCollection<MaximumMethod>(_model.CalculateOneRepMaximums(_weight, _reps));
             CalculationStartEvent?.Invoke(this, EventArgs.Empty);
+        }
+
+        private bool IsReadyToCalculate()
+        {
+            if (Weight <= 0)
+            {
+                SendPopUpMessage(Messages.InvalidWeight);
+                return false;
+            }
+
+            if (Reps <= 0)
+            {
+                SendPopUpMessage(Messages.InvalidReps);
+                return false;
+            }
+
+            return true;
         }
     }
 }

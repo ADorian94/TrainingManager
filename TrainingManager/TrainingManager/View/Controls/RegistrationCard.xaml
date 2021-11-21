@@ -12,7 +12,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" CornerRadius="10" Margin="15, 15, 15, 5">
+        <Frame BackgroundColor="{StaticResource CardBackgroundColor}" Style="{StaticResource CardFrame}" Margin="15, 15, 15, 5">
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"/>
@@ -25,16 +25,16 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Text="Name" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
-                <Entry Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=Name}" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
-                <Label Grid.Row="2" Text="User Name"  HorizontalOptions="Start" FontSize="20" TextColor="White"/>
-                <Entry Grid.Row="3" Text="{x:Binding Source={x:Reference this}, Path=UserName}" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
-                <Label Grid.Row="4" Text="Email"  HorizontalOptions="Start" FontSize="20" TextColor="White"/>
-                <Entry Grid.Row="5" Text="{x:Binding Source={x:Reference this}, Path=Email}" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
-                <Label Grid.Row="6" Text="Password" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
-                <Entry Grid.Row="7" Text="{x:Binding Source={x:Reference this}, Path=Password}" IsPassword="True" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
-                <Label Grid.Row="8" Text="Confirm Password" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
-                <Entry Grid.Row="9" Text="{x:Binding Source={x:Reference this}, Path=ConfirmPassword}" IsPassword="True" WidthRequest="15" HorizontalTextAlignment="Center" TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
+                <Label Grid.Row="0" Text="First name" Style="{StaticResource CardTitle}"/>
+                <Entry Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=Name}" Style="{StaticResource CardEntryContent}"/>
+                <Label Grid.Row="2" Text="User name" Style="{StaticResource CardTitle}"/>
+                <Entry Grid.Row="3" Text="{x:Binding Source={x:Reference this}, Path=UserName}" Style="{StaticResource CardEntryContent}"/>
+                <Label Grid.Row="4" Text="Email" Style="{StaticResource CardTitle}"/>
+                <Entry Grid.Row="5" Text="{x:Binding Source={x:Reference this}, Path=Email}" Style="{StaticResource CardEntryContent}"/>
+                <Label Grid.Row="6" Text="Password" Style="{StaticResource CardTitle}"/>
+                <Entry Grid.Row="7" Text="{x:Binding Source={x:Reference this}, Path=Password}" IsPassword="True" Style="{StaticResource CardEntryContent}"/>
+                <Label Grid.Row="8" Text="Confirm Password" Style="{StaticResource CardTitle}"/>
+                <Entry Grid.Row="9" Text="{x:Binding Source={x:Reference this}, Path=ConfirmPassword}" IsPassword="True" Style="{StaticResource CardEntryContent}"/>
             </Grid>
         </Frame>
     </ContentView.Content>

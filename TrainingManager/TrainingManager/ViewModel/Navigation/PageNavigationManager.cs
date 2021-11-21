@@ -64,10 +64,8 @@ namespace TrainingManager.ViewModel.Navigation
         {
             _apiServices = apiServices;
             _authService = authService;
-            //InitializePages();
         }
 
-        //konkurensé lehetne alakítanis
         public Task InitializeAfterAuthenticationAsync()
         {
             return Task.Run(async () =>
@@ -78,7 +76,7 @@ namespace TrainingManager.ViewModel.Navigation
                 }
                 catch (Exception ex)
                 {
-                    OnExceptionOccured(this, new MessageEventArgs(ex.Message));
+                    OnExceptionOccured(this, new ExceptionArgs(ex.Message));
                 }
 
                 //CREATE VMs INIT TEHEM CONCURENTLY
@@ -141,15 +139,15 @@ namespace TrainingManager.ViewModel.Navigation
                 _mainTabbedPage.Children.Add(_homePage);
                 _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
                 _mainTabbedPage.Children.Add(_historyCaruselPage);
-                _mainTabbedPage.Children.Add(_exercisesPage);
+                //_mainTabbedPage.Children.Add(_exercisesPage);
                 _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
-                //_mainTabbedPage.Children.Add(_settingsPage);
                 _mainNavigationPage = new NavigationPage(_mainTabbedPage);
 
                 _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
                 _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
 
                 _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
+                _oneRepetitionMaximumVM.PopUpMessage += OnPopUpMessage;
             }
             catch
             {
@@ -214,10 +212,10 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightHistoryVM.MessageApplication += OnMessageApplication;
                 _weightHistoryVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightHistoryVM.ExerciseRoundSelected += OnExerciseRoundSelectedHistory;
-                _weightHistoryVM.ExceptionAllert += OnExceptionOccured;
+                _weightHistoryVM.ExceptionOccured += OnExceptionOccured;
                 _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
                 _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
-                _weightHistoryVM.ErrorInSaveProcess += OnErrorInSaveProcess;
+                _weightHistoryVM.PopUpMessage += OnPopUpMessage;
             });
         }
 
@@ -241,15 +239,14 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
                 _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
-                _weightWorkoutManagerVM.ExceptionAllert += OnExceptionOccured;
-                _weightWorkoutManagerVM.ErrorInSaveProcess += OnErrorInSaveProcess;
+                _weightWorkoutManagerVM.ExceptionOccured += OnExceptionOccured;
+                _weightWorkoutManagerVM.PopUpMessage += OnPopUpMessage;
             });
         }
 
         //EVENT HANDLERS
-        private async void OnErrorInSaveProcess(object sender, Messages message) =>
-            await _mainTabbedPage.DisplayAlert("Warrning", MessageLibrary.Instance.GetMessage(message), "Ok");
-        private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
+        private async void OnPopUpMessage(object send, Messages message) =>
+            await _mainNavigationPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(message), MessageLibrary.Instance.GetMessage(message), "Ok");
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Details");
@@ -260,7 +257,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
         {
-            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Delete", "Edit");
 
             if (action == "Delete")
                 _weightHistoryVM.DeleteWeightWorkoutByStringGuid(e.Message);
@@ -269,14 +266,9 @@ namespace TrainingManager.ViewModel.Navigation
                 await _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
         }
 
-        private void OnWeightWorkoutDateSelected(object sender, DateTime e)
-        {
-            _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
-        }
-
         private async void OnExerciseRoundSelected(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", "Delete", "Duplicate");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Delete");
 
             if (action == "Duplicate")
                 _weightWorkoutManagerVM.DuplicateRoundByStringGuid(e);
@@ -287,7 +279,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelectedHistory(object sender, string e)
         {
-            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", "Delete", "Duplicate");
+            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Delete");
 
             if (action == "Duplicate")
                 _weightHistoryVM.DuplicateRoundByStringGuid(e);
@@ -298,7 +290,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnWeightExerciseMenuSelected(object sender, MessageEventArgs e)
         {
-            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Edit", "Delete");
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteExercise(e.Message);
@@ -309,7 +301,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnWeightExerciseMenuSelectedHistory(object sender, MessageEventArgs e)
         {
-            string action = await _addNewWeightWorkoutPageHistory.DisplayActionSheet(e.Title, "Cancel", "Delete", "Edit");
+            string action = await _addNewWeightWorkoutPageHistory.DisplayActionSheet(e.Title, "Cancel", null, "Edit", "Delete");
 
             if (action == "Delete")
                 _weightHistoryVM.DeleteExercise(e.Message);
@@ -318,8 +310,6 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightHistoryVM.EditExercise(e.Message);
         }
 
-        private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();
-        private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
         private async void OnMessageApplication(object sender, MessageEventArgs e) =>
             await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
 
@@ -328,35 +318,17 @@ namespace TrainingManager.ViewModel.Navigation
             await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
             e.Callback?.Invoke();
         }
-
-        /// <summary>
-        /// Alapvető hibakezelés.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void OnExceptionOccured(object sender, MessageEventArgs e) => await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
-
+        private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
+        private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();
+        private async void OnExceptionOccured(object sender, ExceptionArgs e) => await _mainTabbedPage.DisplayAlert("Error", e.Message, "Ok");
         private void OnCalculationStarted(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
-
-        private void OnCloseNavigationPage(object sender, EventArgs e)
-        {
-            switch (((ClosePageEventArgs)e).Page)
-            {
-                case PageType.WightWorkout:
-                    _mainNavigationPage.PopAsync();
-                    break;
-            }
-        }
-
+        private void OnCloseNavigationPage(object sender, EventArgs e) => _mainNavigationPage.PopAsync();
+        private void OnWeightWorkoutDateSelected(object sender, DateTime e) => _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
+        private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
         private void OnOpenAddWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
         private void OnOpenAddWeightExerciseHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPageHistory);
         private void OnOpenEditWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPage);
-        private void OnOpenEditWeightExerciseHistory(object sender, EventArgs e)
-        {
-
-            _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
-        }
-
+        private void OnOpenEditWeightExerciseHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
         private void OnOpenNoteEditor(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePage);
         private void OnOpenNoteEditorHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePageHistory);
         private void OnProfileSelected(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_settingsPage);

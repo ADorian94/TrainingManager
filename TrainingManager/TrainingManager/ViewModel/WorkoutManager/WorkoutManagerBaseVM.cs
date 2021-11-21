@@ -70,9 +70,8 @@ namespace TrainingManager.ViewModel
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
         public event EventHandler<string> SavedWeightActivitySelected;
         public event EventHandler<string> ExerciseRoundSelected;
-        public event EventHandler<MessageEventArgs> ExceptionAllert;
+        //public event EventHandler<MessageEventArgs> ExceptionAllert;
         public event EventHandler WorkoutSaved;
-        public event EventHandler<Messages> ErrorInSaveProcess;
 
         protected override void InitializeCommands()
         {
@@ -92,9 +91,8 @@ namespace TrainingManager.ViewModel
         public abstract void RefreshWorkouts(object sender, EventArgs e);
 
         //PROTECTED FUNCTIONS
-        protected void InvokeExceptionAllertEvent(object obj, MessageEventArgs args) => ExceptionAllert?.Invoke(obj, args);
+        //protected void SendExceptionPopUp(object obj, MessageEventArgs args) => ExceptionAllert?.Invoke(obj, args);
         protected void InvokeWorkoutSavedEvent(object obj, EventArgs args) => WorkoutSaved?.Invoke(obj, args);
-        protected void InvokeErrorInSaveProcess(object obj, Messages message) => ErrorInSaveProcess?.Invoke(obj, message);
 
         protected double CountTotalWeightOfWorkout()
         {
@@ -130,7 +128,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", ex.Message));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
 
@@ -146,9 +144,9 @@ namespace TrainingManager.ViewModel
             {
                 SavedActivities = new ObservableCollection<string>(await ApiServices.GetWeightActivitiesAsync());
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error - Activities", "Can't connect to the server."));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
 
@@ -209,7 +207,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception ex)
             {
-                InvokeExceptionAllertEvent(this, new MessageEventArgs("Error", ex.Message));
+                OnExeptionOccured(new ExceptionArgs(ex));
             }
 
             CloseAddWeightExercise?.Invoke(this, new ClosePageEventArgs(PageType.WightWorkout));
@@ -219,25 +217,25 @@ namespace TrainingManager.ViewModel
         {
             if (string.IsNullOrEmpty(NewWeightExercise.ExerciseName))
             {
-                ErrorInSaveProcess(this, Messages.EmptyExerciseName);
+                SendPopUpMessage(Messages.EmptyExerciseName);
                 return false;
             }
 
             if (NewWeightExercise.TotalExerciseWeight <= 0)
             {
-                ErrorInSaveProcess(this, Messages.EmptyExercise);
+                SendPopUpMessage(Messages.EmptyExercise);
                 return false;
             }
 
             if (NewWeightExercise.WeightRounds.Any(x => x.WeightOfExercise <= 0))
             {
-                ErrorInSaveProcess(this, Messages.InvalidWeight);
+                SendPopUpMessage(Messages.InvalidWeight);
                 return false;
             }
 
             if (NewWeightExercise.WeightRounds.Any(x => x.Reps <= 0))
             {
-                ErrorInSaveProcess(this, Messages.InvalidReps);
+                SendPopUpMessage(Messages.InvalidReps);
                 return false;
             }
 
@@ -248,13 +246,13 @@ namespace TrainingManager.ViewModel
         {
             if (string.IsNullOrEmpty(NewWeightWorkout.WorkoutName))
             {
-                ErrorInSaveProcess(this, Messages.EmptyWorkoutName);
+                SendPopUpMessage(Messages.EmptyWorkoutName);
                 return false;
             }
 
             if (NewWeightWorkout.TotalWeight <= 0)
             {
-                ErrorInSaveProcess(this, Messages.EmptyWorkout);
+                SendPopUpMessage(Messages.EmptyWorkout);
                 return false;
             }
 

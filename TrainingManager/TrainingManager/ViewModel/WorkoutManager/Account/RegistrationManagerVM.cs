@@ -27,7 +27,6 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
         //EVENTS
         public event EventHandler AuthenticationStarted;
         public event EventHandler RegistrationSuccess;
-        public event EventHandler<MessageEventArgs> RegistrationFailed;
 
         //COMMANDS
         public DelegateCommand RegisterCommand { get; private set; }
@@ -57,15 +56,14 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
                     if (loginResult)
                         RegistrationSuccess?.Invoke(this, EventArgs.Empty);
                     else
-                        OnMessageApplication("Can't login after registration. Try from the login page.");
+                        SendPopUpMessage(Messages.LoginFailedAfterRegistration);
 
                     UserName = string.Empty;
                     UserEmail = string.Empty;
                     Name = string.Empty;
-
                 }
                 else
-                    RegistrationFailed?.Invoke(this, new MessageEventArgs("Registration failed."));
+                    SendPopUpMessage(Messages.RegistrationFailed);
 
                 Password = string.Empty;
                 ConfirmPassword = string.Empty;
@@ -77,37 +75,37 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
         {
             if (string.IsNullOrEmpty(Name))
             {
-                OnMessageApplication("A teljes név megadása kötelező!");
+                SendPopUpMessage(Messages.RequiredFirstName);
                 return false;
             }
 
             if (string.IsNullOrEmpty(UserName))
             {
-                OnMessageApplication("A felhasznélónév megadása kötelező!");
+                SendPopUpMessage(Messages.RequiredUserName);
                 return false;
             }
 
             if (string.IsNullOrEmpty(UserEmail))
             {
-                OnMessageApplication("Az email cím megadása kötelető!");
+                SendPopUpMessage(Messages.RequiredEmail);
                 return false;
             }
 
             if (string.IsNullOrEmpty(Password))
             {
-                OnMessageApplication("A jelszó megadása kötelező!");
+                SendPopUpMessage(Messages.RequiredPassword);
                 return false;
             }
 
             if (string.IsNullOrEmpty(ConfirmPassword))
             {
-                OnMessageApplication("A jelszó megerősítése kötelező!");
+                SendPopUpMessage(Messages.RequiredConfirmPassword);
                 return false;
             }
 
             if (Password != ConfirmPassword)
             {
-                OnMessageApplication("A jelszavak nem egyeznek!");
+                SendPopUpMessage(Messages.PasswordsAreNotEquals);
                 return false;
             }
 

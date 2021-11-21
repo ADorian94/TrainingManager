@@ -3,19 +3,21 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:images="clr-namespace:TrainingManager.View.Media"
              xmlns:overlays="clr-namespace:TrainingManager.View.Controls.Overlays"
              x:Class="TrainingManager.View.LoginAndRegistration.LoginPage"
-             NavigationPage.HasNavigationBar="False"
-             BackgroundColor="Transparent">
+             NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <images:Images/>
                 <local:Style/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
         <Grid>
+            <Image Source="{OnIdiom Default={StaticResource LoginBackgroundWide}, Phone={StaticResource LoginBackgroundPortrait}}" Aspect="AspectFill" />
             <overlays:MainOverlay/>
             <Grid VerticalOptions="End" >
                 <Grid.RowDefinitions>
