@@ -25,6 +25,9 @@ namespace TrainingManager.UWP
 
             LoadApplication(new TrainingManager.App());
             ApplicationView.GetForCurrentView().TitleBar.BackgroundColor = Colors.Black;
+            ApplicationView.PreferredLaunchViewSize = new Size(900, 800);
+            ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(900, 800));
         }
     }
 }
