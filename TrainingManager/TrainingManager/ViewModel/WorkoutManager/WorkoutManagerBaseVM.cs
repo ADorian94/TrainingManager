@@ -70,7 +70,6 @@ namespace TrainingManager.ViewModel
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
         public event EventHandler<string> SavedWeightActivitySelected;
         public event EventHandler<string> ExerciseRoundSelected;
-        //public event EventHandler<MessageEventArgs> ExceptionAllert;
         public event EventHandler WorkoutSaved;
 
         protected override void InitializeCommands()

@@ -249,7 +249,7 @@ namespace TrainingManager.ViewModel.Navigation
             await _mainNavigationPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(message), MessageLibrary.Instance.GetMessage(message), "Ok");
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
-            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", "Details");
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Details");
 
             if (action == "Details")
                 await _mainNavigationPage.PushAsync(_recentWorkoutDetailsPage);
