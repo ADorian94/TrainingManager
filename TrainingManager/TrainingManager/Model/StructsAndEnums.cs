@@ -19,8 +19,6 @@
         Avarage1RM,
     }
 
-    public enum PageType { WightWorkout }
-
     public enum MessageType
     {
         Warrning,

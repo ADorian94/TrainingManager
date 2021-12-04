@@ -318,19 +318,20 @@ namespace TrainingManager.ViewModel.Navigation
             await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
             e.Callback?.Invoke();
         }
+
         private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
         private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();
         private async void OnExceptionOccured(object sender, ExceptionArgs e) => await _mainTabbedPage.DisplayAlert("Error", e.Message, "Ok");
-        private void OnCalculationStarted(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
-        private void OnCloseNavigationPage(object sender, EventArgs e) => _mainNavigationPage.PopAsync();
-        private void OnWeightWorkoutDateSelected(object sender, DateTime e) => _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
+        private async void OnCalculationStarted(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
+        private async void OnCloseNavigationPage(object sender, EventArgs e) => await _mainNavigationPage.PopAsync();
+        private async void OnWeightWorkoutDateSelected(object sender, DateTime e) => await _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
         private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
-        private void OnOpenAddWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
-        private void OnOpenAddWeightExerciseHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addNewDrillCaruselPageHistory);
-        private void OnOpenEditWeightExercise(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPage);
-        private void OnOpenEditWeightExerciseHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
-        private void OnOpenNoteEditor(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePage);
-        private void OnOpenNoteEditorHistory(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_notePageHistory);
-        private void OnProfileSelected(object sender, EventArgs e) => _mainNavigationPage.PushAsync(_settingsPage);
+        private async void OnOpenAddWeightExercise(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
+        private async void OnOpenAddWeightExerciseHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addNewDrillCaruselPageHistory);
+        private async void OnOpenEditWeightExercise(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addWeightDrillPage);
+        private async void OnOpenEditWeightExerciseHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
+        private async void OnOpenNoteEditor(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_notePage);
+        private async void OnOpenNoteEditorHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_notePageHistory);
+        private async void OnProfileSelected(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_settingsPage);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
 using TrainingManager.Model.Interfaces;
 using Xamarin.Essentials;
@@ -10,17 +9,9 @@ namespace TrainingManager.Model.Services
     {
         public async Task<byte[]> SelectPhotoAsync()
         {
-            try
-            {
-                var photo = await MediaPicker.PickPhotoAsync();
-                var photoArray = await LoadPhotoAsync(photo);
-                return photoArray;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"CapturePhotoAsync THREW: {ex.Message}");
-                throw;
-            }
+            var photo = await MediaPicker.PickPhotoAsync();
+            var photoArray = await LoadPhotoAsync(photo);
+            return photoArray;
         }
 
         private async Task<byte[]> LoadPhotoAsync(FileResult photo)

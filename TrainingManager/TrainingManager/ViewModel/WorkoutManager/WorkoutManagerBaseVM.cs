@@ -64,9 +64,9 @@ namespace TrainingManager.ViewModel
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
         public event EventHandler OpenEditWeightExercise;
-        public event EventHandler<ClosePageEventArgs> CloseAddWeightExercise;
+        public event EventHandler CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
-        public event EventHandler<ClosePageEventArgs> CloseNoteEditor;
+        public event EventHandler CloseNoteEditor;
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
         public event EventHandler<string> SavedWeightActivitySelected;
         public event EventHandler<string> ExerciseRoundSelected;
@@ -90,14 +90,13 @@ namespace TrainingManager.ViewModel
         public abstract void RefreshWorkouts(object sender, EventArgs e);
 
         //PROTECTED FUNCTIONS
-        //protected void SendExceptionPopUp(object obj, MessageEventArgs args) => ExceptionAllert?.Invoke(obj, args);
         protected void InvokeWorkoutSavedEvent(object obj, EventArgs args) => WorkoutSaved?.Invoke(obj, args);
 
         protected double CountTotalWeightOfWorkout()
         {
             double sumWorkoutWeight = 0.0;
 
-            for (int i = 0; i < NewWeightWorkout.WeightExercises.Count; i++)
+            for (int i = 0; i < NewWeightWorkout.WeightExercises.Count; ++i)
             {
                 double sumExerciseWeight = 0.0;
 
@@ -182,12 +181,12 @@ namespace TrainingManager.ViewModel
             NewWeightExercise = exerciseForEdit;
             NewWeightExercise.CountTotalWeightOfExercise();
             TotalExerciseWeight = NewWeightExercise.TotalExerciseWeight;
-            OpenEditWeightExercise?.Invoke(this, null);
+            OpenEditWeightExercise?.Invoke(this, EventArgs.Empty);
         }
 
         //PRIVATES
         private void ExerciseRoundSelectedFunction(object obj) => ExerciseRoundSelected?.Invoke(this, (string)obj);
-        private void SaveNoteFunction(object obj) => CloseNoteEditor?.Invoke(this, new ClosePageEventArgs(PageType.WightWorkout));
+        private void SaveNoteFunction(object obj) => CloseNoteEditor?.Invoke(this, EventArgs.Empty);
 
         private void AddWeightExerciseToWorkoutFunction(object obj)
         {
@@ -209,7 +208,7 @@ namespace TrainingManager.ViewModel
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
 
-            CloseAddWeightExercise?.Invoke(this, new ClosePageEventArgs(PageType.WightWorkout));
+            CloseAddWeightExercise?.Invoke(this, EventArgs.Empty);
         }
 
         private bool IsExerciseReadyToAdd()

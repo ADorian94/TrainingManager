@@ -17,7 +17,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler<ExceptionArgs> ExceptionOccured;
         public event EventHandler<Messages> PopUpMessage;
 
-        protected virtual void OnPropertyChanged([CallerMemberName] String propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }

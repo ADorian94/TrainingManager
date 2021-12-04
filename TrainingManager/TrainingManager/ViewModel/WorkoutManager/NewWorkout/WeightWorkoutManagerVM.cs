@@ -31,7 +31,7 @@ namespace TrainingManager.ViewModel
             {
                 IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
 
-                if (weightWorkoutDTOs != null && weightWorkoutDTOs.ToList().Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
+                if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
                     SetupTodayWeightWorkoutDetails(weightWorkoutDTOs);
                 else
                 {
@@ -110,7 +110,7 @@ namespace TrainingManager.ViewModel
             IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
 
             //Meglévő edzés szerkesztése
-            if (weightWorkoutDTOs != null && weightWorkoutDTOs.ToList().Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
+            if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
             {
                 await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
                 {

@@ -1,73 +1,33 @@
 ﻿using System;
 using System.Windows.Input;
-using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel
 {
-    /// <summary>
-    /// Általános parancs típusa.
-    /// </summary>
     public class DelegateCommand : ICommand
     {
-        private readonly Action<Object> _execute; // a tevékenységet végrehajtó lambda-kifejezés
-        private readonly Func<Object, Boolean> _canExecute; // a tevékenység feltételét ellenőző lambda-kifejezés
+        private readonly Action<object> _execute;
+        private readonly Func<object, bool> _canExecute;
 
-        /// <summary>
-        /// Parancs létrehozása.
-        /// </summary>
-        /// <param name="execute">Végrehajtandó tevékenység.</param>
-        public DelegateCommand(Action<Object> execute) : this(null, execute) { }
+        public DelegateCommand(Action<object> execute) : this(null, execute) { }
+        //public DelegateCommand(Action<object, SelectedItemChangedEventArgs> workoutSelected) { }
 
-        public DelegateCommand(Action<object, SelectedItemChangedEventArgs> workoutSelected) { }
-
-        /// <summary>
-        /// Parancs létrehozása.
-        /// </summary>
-        /// <param name="canExecute">Végrehajthatóság feltétele.</param>
-        /// <param name="execute">Végrehajtandó tevékenység.</param>
-        public DelegateCommand(Func<Object, Boolean> canExecute, Action<Object> execute)
+        public DelegateCommand(Func<object, bool> canExecute, Action<object> execute)
         {
             _execute = execute ?? throw new ArgumentNullException("execute");
             _canExecute = canExecute;
         }
 
-        /// <summary>
-        /// Végrehajthatóság változásának eseménye.
-        /// </summary>
         public event EventHandler CanExecuteChanged;
-
-        /// <summary>
-        /// Végrehajthatóság ellenőrzése
-        /// </summary>
-        /// <param name="parameter">A tevékenység paramétere.</param>
-        /// <returns>Igaz, ha a tevékenység végrehajtható.</returns>
-        public Boolean CanExecute(Object parameter)
-        {
-            return _canExecute == null ? true : _canExecute(parameter);
-        }
-
-        /// <summary>
-        /// Tevékenység végrehajtása.
-        /// </summary>
-        /// <param name="parameter">A tevékenység paramétere.</param>
+        public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
         public void Execute(object parameter)
         {
-            if (!CanExecute(parameter))
-                throw new InvalidOperationException("Command execution is disabled.");
-
-            try
-            {
+            if (CanExecute(parameter))
                 _execute(parameter);
-            }
-            catch
-            {
-                throw;
-            }
+
+            //if (!CanExecute(parameter))
+            //throw new InvalidOperationException("Command execution is disabled.");
         }
 
-        /// <summary>
-        /// Végrehajthatóság változásának eseménykiváltása.
-        /// </summary>
         public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);
     }
 }
