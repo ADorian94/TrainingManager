@@ -4,7 +4,6 @@ using TrainingManager.Data.DTO;
 
 namespace TrainingManager.Model
 {
-
     public interface IApiServices
     {
         Task<bool> LoginAsync(string userName, string password);
