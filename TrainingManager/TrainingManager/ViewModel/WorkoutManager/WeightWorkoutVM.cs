@@ -7,6 +7,49 @@ namespace TrainingManager.ViewModel
     {
         protected override void InitializeCommands() { }
 
+        public WeightWorkoutVM()
+        {
+        }
+
+        public WeightWorkoutVM(WeightWorkoutVM baseWorkout)
+        {
+            Id = baseWorkout.Id;
+            Note = baseWorkout.Note;
+            TotalExerciseRounds = baseWorkout.WeightExercises.Count;
+            TotalWeight = baseWorkout.TotalWeight;
+            WorkoutDate = baseWorkout.WorkoutDate;
+            WorkoutGuid = baseWorkout.WorkoutGuid;
+            WorkoutName = baseWorkout.WorkoutName;
+            WorkoutType = baseWorkout.WorkoutType;
+            WeightExercises = new ObservableCollection<WeightExerciseVM>();
+
+            foreach (var exercise in baseWorkout.WeightExercises)
+            {
+                var rounds = new ObservableCollection<WeightRoundVM>();
+
+                foreach (var round in exercise.WeightRounds)
+                {
+                    rounds.Add(new WeightRoundVM()
+                    {
+                        Reps = round.Reps,
+                        RoundGuid = round.RoundGuid,
+                        RoundNumber = round.RoundNumber,
+                        WeightOfExercise = round.WeightOfExercise,
+                    });
+                }
+
+                WeightExercises.Add(new WeightExerciseVM()
+                {
+                    ExerciseNote = exercise.ExerciseNote,
+                    ExerciseGuid = exercise.ExerciseGuid,
+                    ExerciseName = exercise.ExerciseName,
+                    TotalExerciseRounds = exercise.WeightRounds.Count,
+                    TotalExerciseWeight = exercise.TotalExerciseWeight,
+                    WeightRounds = new ObservableCollection<WeightRoundVM>(rounds),
+                });
+            }
+        }
+
         //PROPERTIES
         private int _id;
         public int Id { get => _id; set { _id = value; OnPropertyChanged(); } }
@@ -34,5 +77,44 @@ namespace TrainingManager.ViewModel
 
         private ObservableCollection<WeightExerciseVM> _weightExercises;
         public ObservableCollection<WeightExerciseVM> WeightExercises { get => _weightExercises; set { _weightExercises = value; OnPropertyChanged(); } }
+
+        public static bool operator ==(WeightWorkoutVM w1, WeightWorkoutVM w2)
+        {
+            if ((object)w1 == null)
+                return (object)w2 == null;
+
+            return w1.Equals(w2);
+        }
+
+        public static bool operator !=(WeightWorkoutVM w1, WeightWorkoutVM w2) => !(w1 == w2);
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var w2 = (WeightWorkoutVM)obj;
+
+            return WorkoutName == w2.WorkoutName && Note == w2.Note && TotalWeight == w2.TotalWeight &&
+                WorkoutDate.Date == w2.WorkoutDate.Date && WorkoutType == w2.WorkoutType && AreExercisesEquals(w2);
+        }
+
+        public override int GetHashCode() =>
+            WorkoutName.GetHashCode() ^ Note.GetHashCode() ^ TotalWeight.GetHashCode() ^ TotalExerciseRounds.GetHashCode() ^
+            WorkoutDate.GetHashCode() ^ WorkoutType.GetHashCode() ^ WeightExercises.GetHashCode();
+
+        private bool AreExercisesEquals(WeightWorkoutVM w2)
+        {
+            bool result = WeightExercises.Count == w2.WeightExercises.Count;
+            int index = 0;
+
+            while (result && index < WeightExercises.Count)
+            {
+                result = WeightExercises[index] == w2.WeightExercises[index];
+                ++index;
+            }
+
+            return result;
+        }
     }
 }

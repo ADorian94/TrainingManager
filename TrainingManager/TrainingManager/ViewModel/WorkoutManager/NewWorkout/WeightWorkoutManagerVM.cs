@@ -47,6 +47,8 @@ namespace TrainingManager.ViewModel
                         WeightExercises = new ObservableCollection<WeightExerciseVM>(),
                     };
                 }
+
+                WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
             }
             catch (Exception ex)
             {
@@ -168,8 +170,11 @@ namespace TrainingManager.ViewModel
                 };
                 await ApiServices.AddWeightWorkoutAsync(newWorkout);
                 NewWeightWorkout.Id = newWorkout.Id;
-                InvokeWorkoutSavedEvent(this, null);
             }
+
+            WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
+            CheckChangesAndSetResult();
+            InvokeWorkoutSavedEvent(this, null);
         }
     }
 }

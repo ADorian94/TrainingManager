@@ -81,7 +81,7 @@ namespace TrainingManager.ViewModel
         private async Task UpdateRecentWorkoutsAsync()
         {
             var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
-            RecentWorkouts = new ObservableCollection<HistoryItemVM>(workouts.OrderBy(x => x.WorkoutDate).Take(5).Select(w => new HistoryItemVM(w)));
+            RecentWorkouts = new ObservableCollection<HistoryItemVM>(workouts.OrderByDescending(x => x.WorkoutDate.Date).Take(5).Select(w => new HistoryItemVM(w)));
         }
 
         private async void WeightWorkoutMenuSelectedFunction(object obj)

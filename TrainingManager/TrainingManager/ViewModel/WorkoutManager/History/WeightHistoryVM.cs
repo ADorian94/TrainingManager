@@ -27,7 +27,7 @@ namespace TrainingManager.ViewModel
             {
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 WorkoutDates = new ObservableCollection<SpecialDate>();
-                HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>();
+                var items = new List<HistoryItemVM>();
 
                 foreach (var workout in workouts)
                 {
@@ -38,8 +38,10 @@ namespace TrainingManager.ViewModel
                         FontAttributes = FontAttributes.Bold,
                     });
 
-                    HistoryWorkoutItems.Add(new HistoryItemVM(workout));
+                    items.Add(new HistoryItemVM(workout));
                 }
+
+                HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(items.OrderByDescending(x => x.WorkoutDate.Date));
             }
             catch (Exception ex)
             {
@@ -212,13 +214,15 @@ namespace TrainingManager.ViewModel
             else
                 foundElements = workouts.Select(x => new HistoryItemVM(x));
 
-            HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>();
+            var items = new List<HistoryItemVM>();
 
             foreach (var item in foundElements)
             {
                 if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
-                    HistoryWorkoutItems.Add(item);
+                    items.Add(item);
             }
+
+            HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(items.OrderByDescending(x => x.WorkoutDate.Date));
         }
     }
 }

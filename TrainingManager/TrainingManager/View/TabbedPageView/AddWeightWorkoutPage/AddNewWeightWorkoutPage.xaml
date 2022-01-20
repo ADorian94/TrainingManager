@@ -11,6 +11,7 @@
         <ResourceDictionary>
             <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
+            <converter:BoolNegateConverter x:Key="BoolNegateConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -53,7 +54,16 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Text="Save" Style="{StaticResource BlueButton}" Command="{Binding SaveTodayWorkoutCommand}" />
+                    <Button Grid.Column="0" Text="Save" Style="{StaticResource BlueButton}" IsVisible="{Binding HasAnyChanges, Converter={StaticResource BoolNegateConverter}}" Command="{Binding SaveTodayWorkoutCommand}" />
+                    <Button Grid.Column="0" Text="Save" Style="{StaticResource RedButton}" IsVisible="{Binding HasAnyChanges}" Command="{Binding SaveTodayWorkoutCommand}" />
+                    <!--<Button Grid.Column="0" Text="Save" Command="{Binding SaveTodayWorkoutCommand}" >
+                        <Button.Style>
+                            <MultiBinding Converter="{StaticResource WorkoutToStyleMultiConverter}">
+                                <Binding Path="WeightWorkoutBookmark"/>
+                                <Binding Path="NewWeightWorkout"/>
+                            </MultiBinding>
+                        </Button.Style>
+                    </Button>-->
                     <Button Grid.Column="1" Text="Exercise" Style="{StaticResource BlueButton}" Command="{Binding OpenAddWeightExerciseCommand}" />
                 </Grid>
             </Grid>
