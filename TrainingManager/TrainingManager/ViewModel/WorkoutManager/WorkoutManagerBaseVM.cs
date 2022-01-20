@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Model;
@@ -9,8 +10,12 @@ namespace TrainingManager.ViewModel
     {
         //FIELDS
         protected IApiServices ApiServices;
+        protected internal WeightWorkoutVM WeightWorkoutBookmark;
 
         //PROPERTIES
+        private bool _hasAnyChanges;
+        public bool HasAnyChanges { get => _hasAnyChanges; set { _hasAnyChanges = value; OnPropertyChanged(); } }
+
         private WeightWorkoutVM _newWeightWorkout;
         public WeightWorkoutVM NewWeightWorkout { get => _newWeightWorkout; set { _newWeightWorkout = value; OnPropertyChanged(); } }
 
@@ -112,8 +117,16 @@ namespace TrainingManager.ViewModel
             return sumWorkoutWeight;
         }
 
+        protected void CheckChangesAndSetResult()
+        {
+            if (WeightWorkoutBookmark != null && NewWeightWorkout != null)
+                HasAnyChanges = WeightWorkoutBookmark != NewWeightWorkout;
+            else
+                HasAnyChanges = false;
+        }
+
         /// <summary>
-        /// Töröljük az adott GUID-al rendelkező edzést
+        /// Töröljük az adott GUID-al rendelkező gyakorlatot
         /// </summary>
         /// <param name="stringGuid"></param>
         public void DeleteExercise(string stringGuid)
@@ -123,6 +136,7 @@ namespace TrainingManager.ViewModel
                 NewWeightWorkout.TotalExerciseRounds -= NewWeightWorkout.WeightExercises.FirstOrDefault(x => x.ExerciseGuid.ToString() == stringGuid).WeightRounds.Count;
                 NewWeightWorkout.WeightExercises.Remove(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid));
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
+                CheckChangesAndSetResult();
             }
             catch (Exception ex)
             {
@@ -140,7 +154,8 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                SavedActivities = new ObservableCollection<string>(await ApiServices.GetWeightActivitiesAsync());
+                IEnumerable<string> activities = await ApiServices.GetWeightActivitiesAsync();
+                SavedActivities = new ObservableCollection<string>(activities.OrderBy(x => x));
             }
             catch (Exception ex)
             {
@@ -181,6 +196,7 @@ namespace TrainingManager.ViewModel
             NewWeightExercise = exerciseForEdit;
             NewWeightExercise.CountTotalWeightOfExercise();
             TotalExerciseWeight = NewWeightExercise.TotalExerciseWeight;
+            CheckChangesAndSetResult();
             OpenEditWeightExercise?.Invoke(this, EventArgs.Empty);
         }
 
@@ -202,6 +218,7 @@ namespace TrainingManager.ViewModel
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
                 NewWeightExercise.TotalExerciseRounds = NewWeightWorkout.WeightExercises.FirstOrDefault(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid).WeightRounds.Count;
                 NewWeightWorkout.TotalExerciseRounds = NewWeightExercise.TotalExerciseRounds;
+                CheckChangesAndSetResult();
             }
             catch (Exception ex)
             {

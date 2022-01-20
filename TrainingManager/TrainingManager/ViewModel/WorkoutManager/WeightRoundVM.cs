@@ -21,5 +21,27 @@ namespace TrainingManager.ViewModel
 
         private int _roundNumber;
         public int RoundNumber { get => _roundNumber; set { _roundNumber = value; OnPropertyChanged(); } }
+
+        public static bool operator ==(WeightRoundVM r1, WeightRoundVM r2)
+        {
+            if ((object)r1 == null)
+                return (object)r2 == null;
+
+            return r1.Equals(r2);
+        }
+
+        public static bool operator !=(WeightRoundVM r1, WeightRoundVM r2) => !(r1 == r2);
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+                return false;
+
+            var w2 = (WeightRoundVM)obj;
+
+            return WeightOfExercise == w2.WeightOfExercise && Reps == w2.Reps && RoundNumber == w2.RoundNumber;
+        }
+
+        public override int GetHashCode() => WeightOfExercise.GetHashCode() ^ Reps.GetHashCode() ^ RoundNumber.GetHashCode();
     }
 }
