@@ -9,6 +9,5 @@
                 <local:Style/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-        <!--This is a comment-->
     </Application.Resources>
 </Application>
