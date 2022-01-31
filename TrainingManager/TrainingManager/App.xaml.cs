@@ -3,6 +3,7 @@ using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
 using TrainingManager.Model.Services;
 using TrainingManager.ViewModel.Navigation;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -20,6 +21,7 @@ namespace TrainingManager
         public App()
         {
             InitializeComponent();
+            CheckPermissions();
             _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
             _authService = new AuthService();
             _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
@@ -29,6 +31,14 @@ namespace TrainingManager
             _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
             _authenticationNavigationManager.AuthenticationSuceed += OnAuthenticationSuceed;
             MainPage = _authenticationNavigationManager.MainPage;
+        }
+
+        private async void CheckPermissions()
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+            if (status != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.Camera>();
         }
 
         private void OnLogout(object sender, EventArgs e) => _authenticationNavigationManager.Logout();
