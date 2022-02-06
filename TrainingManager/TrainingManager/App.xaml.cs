@@ -23,8 +23,11 @@ namespace TrainingManager
         {
             LogWriter.Instance.Nlog.Info("**********NEW RUN**********");
             InitializeComponent();
+            LogWriter.Instance.Nlog.Info("Component initialized");
             CheckPermissions();
+            LogWriter.Instance.Nlog.Info("Permissions checked");
             _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
+            LogWriter.Instance.Nlog.Info("Api service initialized");
             _authService = new AuthService();
             _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
             _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
