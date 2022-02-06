@@ -1,6 +1,7 @@
 ﻿using System;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
 using TrainingManager.View.LoginAndRegistration;
 using TrainingManager.ViewModel.WorkoutManager.Account;
 using Xamarin.Forms;
@@ -30,6 +31,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         public AuthenticationNavigationManager(IApiServices apiServices, IAuthService authService)
         {
+            LogWriter.Instance.Nlog.Info("Authentication Manager Initialization started.");
             _apiServices = apiServices;
 
             //VIEWMODELS
@@ -57,16 +59,22 @@ namespace TrainingManager.ViewModel.Navigation
 
             MainPage = new NavigationPage(new LoadingView());
             TryLoginAndSetMainPage();
+            LogWriter.Instance.Nlog.Info("Authentication Manager Initialization finished.");
         }
 
         private async void TryLoginAndSetMainPage()
         {
+            LogWriter.Instance.Nlog.Info("Authentication attempt.");
             bool loginResult = await _loginManagerVM.TryLoginWithSavedCredentialsAsync();
 
             if (loginResult)
+            {
+                LogWriter.Instance.Nlog.Info("Authentication succeed.");
                 AuthenticationSuceed?.Invoke(this, EventArgs.Empty);
+            }
             else
             {
+                LogWriter.Instance.Nlog.Info("Authentication failed.");
                 MainPage = new NavigationPage(_loginAndRegisterCaruselPage);
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
             }

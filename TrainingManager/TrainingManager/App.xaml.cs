@@ -1,6 +1,7 @@
 ﻿using System;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
 using TrainingManager.Model.Services;
 using TrainingManager.ViewModel.Navigation;
 using Xamarin.Essentials;
@@ -20,6 +21,7 @@ namespace TrainingManager
 
         public App()
         {
+            LogWriter.Instance.Nlog.Info("**********NEW RUN**********");
             InitializeComponent();
             CheckPermissions();
             _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
@@ -39,6 +41,16 @@ namespace TrainingManager
 
             if (status != PermissionStatus.Granted)
                 await Permissions.RequestAsync<Permissions.Camera>();
+
+            status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+
+            if (status != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+            status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+            if (status != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.StorageRead>();
         }
 
         private void OnLogout(object sender, EventArgs e) => _authenticationNavigationManager.Logout();
