@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace TrainingManager.Droid
 {
-    [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = true, NoHistory = true)]
+    [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = false, NoHistory = true)]
     public class SplashActivity : AppCompatActivity
     {
         static readonly string _tAG = "X:" + typeof(SplashActivity).Name;
