@@ -24,8 +24,6 @@ namespace TrainingManager
             try
             {
                 LogWriter.Instance.Nlog.Info("**********NEW RUN**********");
-                InitializeComponent();
-                LogWriter.Instance.Nlog.Info("Component initialized");
                 CheckPermissions();
                 LogWriter.Instance.Nlog.Info("Permissions checked");
                 _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
@@ -33,10 +31,13 @@ namespace TrainingManager
                 _authService = new AuthService();
                 _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
                 _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
+                InitializeComponent();
+                LogWriter.Instance.Nlog.Info("Component initialized");
                 _pageNavigationManager.MainPageChanged += OnMainPageChanged;
                 _pageNavigationManager.Logout += OnLogout;
                 _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
                 _authenticationNavigationManager.AuthenticationSuceed += OnAuthenticationSuceed;
+
             }
             catch (Exception ex)
             {
