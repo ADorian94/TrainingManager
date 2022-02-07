@@ -21,20 +21,30 @@ namespace TrainingManager
 
         public App()
         {
-            LogWriter.Instance.Nlog.Info("**********NEW RUN**********");
-            InitializeComponent();
-            LogWriter.Instance.Nlog.Info("Component initialized");
-            CheckPermissions();
-            LogWriter.Instance.Nlog.Info("Permissions checked");
-            _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
-            LogWriter.Instance.Nlog.Info("Api service initialized");
-            _authService = new AuthService();
-            _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
-            _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
-            _pageNavigationManager.MainPageChanged += OnMainPageChanged;
-            _pageNavigationManager.Logout += OnLogout;
-            _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
-            _authenticationNavigationManager.AuthenticationSuceed += OnAuthenticationSuceed;
+            try
+            {
+                LogWriter.Instance.Nlog.Info("**********NEW RUN**********");
+                InitializeComponent();
+                LogWriter.Instance.Nlog.Info("Component initialized");
+                CheckPermissions();
+                LogWriter.Instance.Nlog.Info("Permissions checked");
+                _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
+                LogWriter.Instance.Nlog.Info("Api service initialized");
+                _authService = new AuthService();
+                _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
+                _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
+                _pageNavigationManager.MainPageChanged += OnMainPageChanged;
+                _pageNavigationManager.Logout += OnLogout;
+                _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
+                _authenticationNavigationManager.AuthenticationSuceed += OnAuthenticationSuceed;
+
+            }
+            catch (Exception ex)
+            {
+                LogWriter.Instance.Nlog.Error(ex.Message);
+                throw;
+            }
+
             MainPage = _authenticationNavigationManager.MainPage;
         }
 
