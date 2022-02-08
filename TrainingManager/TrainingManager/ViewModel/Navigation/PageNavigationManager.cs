@@ -170,7 +170,7 @@ namespace TrainingManager.ViewModel.Navigation
 
                 _settingsVM.LogoutSuccess += OnLogoutSuccess;
                 _settingsVM.LogoutFailed += OnMessageApplication;
-                _settingsVM.ProfileChangeStarted += OnProfileChangeStarted;
+                _settingsVM.PopUpMessageWithCallBack += OnPopUpMessage;
             });
         }
 
@@ -247,6 +247,13 @@ namespace TrainingManager.ViewModel.Navigation
         //EVENT HANDLERS
         private async void OnPopUpMessage(object send, Messages message) =>
             await _mainNavigationPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(message), MessageLibrary.Instance.GetMessage(message), "Ok");
+
+        private async void OnPopUpMessage(object sender, (Messages message, Action Callback) e)
+        {
+            await _mainNavigationPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(e.message), MessageLibrary.Instance.GetMessage(e.message), "Ok");
+            e.Callback?.Invoke();
+        }
+
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Details");
@@ -313,11 +320,7 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnMessageApplication(object sender, MessageEventArgs e) =>
             await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
 
-        private async void OnProfileChangeStarted(object sender, (Action Callback, string Title, string Message) e)
-        {
-            await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
-            e.Callback?.Invoke();
-        }
+
 
         private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
         private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();

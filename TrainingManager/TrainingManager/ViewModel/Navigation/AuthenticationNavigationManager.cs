@@ -31,7 +31,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         public AuthenticationNavigationManager(IApiServices apiServices, IAuthService authService)
         {
-            LogWriter.Instance.Nlog.Info("Authentication Manager Initialization started.");
+            LogHandler.Instance.Nlog.Info("Authentication Manager Initialization started.");
             _apiServices = apiServices;
 
             //VIEWMODELS
@@ -59,22 +59,22 @@ namespace TrainingManager.ViewModel.Navigation
 
             MainPage = new NavigationPage(new LoadingView());
             TryLoginAndSetMainPage();
-            LogWriter.Instance.Nlog.Info("Authentication Manager Initialization finished.");
+            LogHandler.Instance.Nlog.Info("Authentication Manager Initialization finished.");
         }
 
         private async void TryLoginAndSetMainPage()
         {
-            LogWriter.Instance.Nlog.Info("Authentication attempt.");
+            LogHandler.Instance.Nlog.Info("Authentication attempt.");
             bool loginResult = await _loginManagerVM.TryLoginWithSavedCredentialsAsync();
 
             if (loginResult)
             {
-                LogWriter.Instance.Nlog.Info("Authentication succeed.");
+                LogHandler.Instance.Nlog.Info("Authentication succeed.");
                 AuthenticationSuceed?.Invoke(this, EventArgs.Empty);
             }
             else
             {
-                LogWriter.Instance.Nlog.Info("Authentication failed.");
+                LogHandler.Instance.Nlog.Info("Authentication failed.");
                 MainPage = new NavigationPage(_loginAndRegisterCaruselPage);
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
             }

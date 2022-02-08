@@ -46,5 +46,7 @@
         PasswordsAreNotEquals,
         RegistrationFailed,
         LoginFailedAfterRegistration,
+        UploadPictureMessage,
+        AssesDeniedProfilePictureMessage,
     }
 }

@@ -73,8 +73,7 @@ namespace TrainingManager.WebApi.Controllers
                         ProfilePicture = profilePictureArray,
                     };
 
-                    var result = await _userManager.CreateAsync(newUser, userRegistrationDTO.Password);
-
+                    IdentityResult result = await _userManager.CreateAsync(newUser, userRegistrationDTO.Password);
                     return result.Succeeded ? Ok() : throw new Exception();
                 }
             }
