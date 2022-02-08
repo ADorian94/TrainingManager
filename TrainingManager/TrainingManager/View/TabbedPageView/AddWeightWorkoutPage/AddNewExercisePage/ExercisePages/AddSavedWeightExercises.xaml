@@ -21,6 +21,7 @@
         <StackLayout>
             <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
             <Label Text="Saved Exercises" Style="{StaticResource Title0}"/>
+            <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" />
             <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=SavedActivities}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                 <ListView.ItemTemplate >
                     <DataTemplate>

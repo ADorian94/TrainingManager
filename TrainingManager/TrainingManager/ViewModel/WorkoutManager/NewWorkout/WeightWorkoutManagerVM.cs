@@ -10,6 +10,8 @@ namespace TrainingManager.ViewModel
 {
     public class WeightWorkoutManagerVM : WorkoutManagerBaseVM
     {
+        public DelegateCommand SearchCommand { get; private set; }
+
         public WeightWorkoutManagerVM(IApiServices apiServices)
         {
             NewWeightWorkout = new WeightWorkoutVM
@@ -19,6 +21,7 @@ namespace TrainingManager.ViewModel
             ApiServices = apiServices;
             SetupActivitiesAsync();
             SetupTodayWeightWorkoutAsync();
+            SearchCommand = new DelegateCommand(SearchFunction);
         }
 
         public override void RefreshWorkouts(object sender, EventArgs e) => SetupTodayWeightWorkoutAsync();
@@ -182,6 +185,31 @@ namespace TrainingManager.ViewModel
             WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
             CheckChangesAndSetResult();
             InvokeWorkoutSavedEvent(this, null);
+        }
+
+        public async void SearchFunction(object obj)
+        {
+            var searchStr = obj.ToString();
+            IEnumerable<string> foundElements = new ObservableCollection<string>();
+            IEnumerable<string> activities = await ApiServices.GetWeightActivitiesAsync();
+
+            if (!string.IsNullOrEmpty(searchStr))
+            {
+                string[] searchStrings = searchStr.Trim().Split(' ');
+                foundElements = searchStrings.SelectMany(str => activities.Where(x => x.ToUpper().Contains(str.ToUpper())).Select(x => x));
+            }
+            else
+                foundElements = activities.Select(x => x);
+
+            //var items = new List<string>();
+
+            //foreach (var item in foundElements)
+            //{
+            //    if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
+            //        items.Add(item);
+            //}
+
+            SavedActivities = new ObservableCollection<string>(foundElements.OrderBy(x => x));
         }
     }
 }
