@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Model;
+using TrainingManager.Model.LogWriter;
 
 namespace TrainingManager.ViewModel
 {
@@ -222,6 +223,7 @@ namespace TrainingManager.ViewModel
             }
             catch (Exception ex)
             {
+                LogHandler.Instance.Nlog.Error(ex.Message);
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
 

@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
+using TrainingManager.Model.LogWriter;
 
 namespace TrainingManager.ViewModel
 {
@@ -46,12 +45,15 @@ namespace TrainingManager.ViewModel
                         WorkoutType = WorkoutType.WeightWorkout,
                         WeightExercises = new ObservableCollection<WeightExerciseVM>(),
                     };
+
+                    LogHandler.Instance.Nlog.Info("Empty new workout created.");
                 }
 
                 WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
             }
             catch (Exception ex)
             {
+                LogHandler.Instance.Nlog.Error(ex.Message);
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
         }
@@ -101,6 +103,8 @@ namespace TrainingManager.ViewModel
                     WeightRounds = new ObservableCollection<WeightRoundVM>(rounds),
                 });
             }
+
+            LogHandler.Instance.Nlog.Info("New workout readed from server.");
         }
 
         //PROTECTED
@@ -139,6 +143,8 @@ namespace TrainingManager.ViewModel
                         })),
                     })),
                 });
+
+                LogHandler.Instance.Nlog.Info("Existing workout edited.");
             }
             //Új edzés létrehozása
             else
@@ -170,6 +176,7 @@ namespace TrainingManager.ViewModel
                 };
                 await ApiServices.AddWeightWorkoutAsync(newWorkout);
                 NewWeightWorkout.Id = newWorkout.Id;
+                LogHandler.Instance.Nlog.Info("New workout saved.");
             }
 
             WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);

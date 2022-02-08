@@ -20,6 +20,8 @@ namespace TrainingManager.Model.Services
             {
                 BaseAddress = new Uri(baseAddress)
             };
+
+            LogHandler.Instance.Nlog.Info("Api service initialized.");
         }
 
         //WORKOUTS

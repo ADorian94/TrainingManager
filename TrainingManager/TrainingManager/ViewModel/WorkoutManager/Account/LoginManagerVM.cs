@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
 
 namespace TrainingManager.ViewModel.WorkoutManager.Account
 {
@@ -30,8 +31,10 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
 
         public async Task<bool> TryLoginWithSavedCredentialsAsync()
         {
+            LogHandler.Instance.Nlog.Info("Auto login process started.");
             (string userName, string userPassword) = await _authService.GetUserCredentialsAsync();
             bool result = !string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(userPassword);
+            LogHandler.Instance.Nlog.Info($"Stored username is empty: {string.IsNullOrEmpty(userName)}, stored password is empty: {string.IsNullOrEmpty(userPassword)}");
 
             if (result)
             {
@@ -53,6 +56,8 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
         //COMMAND FUNCTIONS
         private async void LoginFunction(object obj)
         {
+            LogHandler.Instance.Nlog.Info("Login process started.");
+
             if (IsReadyReadyToLogin())
             {
                 AuthenticationStarted?.Invoke(this, EventArgs.Empty);
@@ -60,12 +65,16 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
 
                 if (loginResult)
                 {
+                    LogHandler.Instance.Nlog.Info("Login succeed.");
                     LoginSuccess?.Invoke(this, EventArgs.Empty);
                     _authService.SetUserCredentials(UserName, Password);
                     UserName = string.Empty;
                 }
                 else
+                {
+                    LogHandler.Instance.Nlog.Error("Login failed.");
                     SendPopUpMessage(Messages.LoginFailed);
+                }
 
                 Password = string.Empty;
             }
@@ -77,12 +86,14 @@ namespace TrainingManager.ViewModel.WorkoutManager.Account
             if (string.IsNullOrEmpty(UserName))
             {
                 SendPopUpMessage(Messages.EmptyUserName);
+                LogHandler.Instance.Nlog.Warn("Can't login. Username is null or empty.");
                 return false;
             }
 
             if (string.IsNullOrEmpty(Password))
             {
                 SendPopUpMessage(Messages.EmptyPassword);
+                LogHandler.Instance.Nlog.Warn("Can't login. Password is null or empty.");
                 return false;
             }
 

@@ -59,22 +59,21 @@ namespace TrainingManager.ViewModel.Navigation
 
             MainPage = new NavigationPage(new LoadingView());
             TryLoginAndSetMainPage();
-            LogHandler.Instance.Nlog.Info("Authentication Manager Initialization finished.");
+            LogHandler.Instance.Nlog.Info("Authentication Manager initialization succeed.");
         }
 
         private async void TryLoginAndSetMainPage()
         {
-            LogHandler.Instance.Nlog.Info("Authentication attempt.");
             bool loginResult = await _loginManagerVM.TryLoginWithSavedCredentialsAsync();
 
             if (loginResult)
             {
-                LogHandler.Instance.Nlog.Info("Authentication succeed.");
+                LogHandler.Instance.Nlog.Info("Auto authentication succeed.");
                 AuthenticationSuceed?.Invoke(this, EventArgs.Empty);
             }
             else
             {
-                LogHandler.Instance.Nlog.Info("Authentication failed.");
+                LogHandler.Instance.Nlog.Info("Auto authentication failed.");
                 MainPage = new NavigationPage(_loginAndRegisterCaruselPage);
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -82,6 +81,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         internal void Logout()
         {
+            LogHandler.Instance.Nlog.Info("User logged out.");
             MainPage = _loginAndRegisterCaruselPage;
             MainPageChanged?.Invoke(this, EventArgs.Empty);
         }
