@@ -9,13 +9,13 @@ using Xamarin.Forms;
 
 namespace TrainingManager.Model.LogWriter
 {
-    public sealed class LogWriter : ILogWriter
+    public sealed class LogHandler : ILogWriter
     {
-        private static Lazy<ILogWriter> Lazy => new Lazy<ILogWriter>(() => new LogWriter(), true);
+        private static Lazy<ILogWriter> Lazy => new Lazy<ILogWriter>(() => new LogHandler(), true);
         public static ILogWriter Instance => Lazy.Value;
         public Logger Nlog { get; set; }
 
-        public LogWriter()
+        public LogHandler()
         {
             //Platform specific 
             string pathOfLogDirectory = Path.Combine(DependencyService.Get<IDataAcess>().GetExternalStorage(), "logs");

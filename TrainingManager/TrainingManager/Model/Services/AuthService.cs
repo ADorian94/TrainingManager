@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
 using Xamarin.Essentials;
 
 namespace TrainingManager.Model.Services
@@ -20,10 +21,12 @@ namespace TrainingManager.Model.Services
             {
                 string userName = await SecureStorage.GetAsync(USER_NAME);
                 string userPassword = await SecureStorage.GetAsync(USER_PASSWORD);
+                LogHandler.Instance.Nlog.Info("Read stored user credentials.");
                 return (userName, userPassword);
             }
             catch (Exception ex)
             {
+                LogHandler.Instance.Nlog.Info($"Excemtion while reading user credentials: {ex.Message}");
                 throw ex;
             }
         }
@@ -34,9 +37,11 @@ namespace TrainingManager.Model.Services
             {
                 await SecureStorage.SetAsync(USER_NAME, userName);
                 await SecureStorage.SetAsync(USER_PASSWORD, password);
+                LogHandler.Instance.Nlog.Info("Write user credentials.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                LogHandler.Instance.Nlog.Info($"Excemtion while writeing user credentials: {ex.Message}");
                 FailedToStoreUserCredentials?.Invoke(this, EventArgs.Empty);
             }
         }
@@ -45,6 +50,7 @@ namespace TrainingManager.Model.Services
         {
             SecureStorage.Remove(USER_NAME);
             SecureStorage.Remove(USER_PASSWORD);
+            LogHandler.Instance.Nlog.Info("Remove user credentials.");
         }
     }
 }

@@ -39,6 +39,8 @@ namespace TrainingManager.Model
             _messageDictionary.Add(Messages.PasswordsAreNotEquals, "Passwords have to math for the registration.");
             _messageDictionary.Add(Messages.RegistrationFailed, "Registration failed.");
             _messageDictionary.Add(Messages.LoginFailedAfterRegistration, "Can't login after registration process. Try from the login page.");
+            _messageDictionary.Add(Messages.UploadPictureMessage, "For the best result use a square image.");
+            _messageDictionary.Add(Messages.AssesDeniedProfilePictureMessage, "Can't upload profile picture! Access denied!");
 
             _messageTypeDictionary = new Dictionary<Messages, MessageType>();
             _messageTypeDictionary.Add(Messages.EmptyExerciseName, MessageType.Warrning);
@@ -59,6 +61,8 @@ namespace TrainingManager.Model
             _messageTypeDictionary.Add(Messages.PasswordsAreNotEquals, MessageType.Info);
             _messageTypeDictionary.Add(Messages.RegistrationFailed, MessageType.Error);
             _messageTypeDictionary.Add(Messages.LoginFailedAfterRegistration, MessageType.Error);
+            _messageTypeDictionary.Add(Messages.UploadPictureMessage, MessageType.Info);
+            _messageTypeDictionary.Add(Messages.AssesDeniedProfilePictureMessage, MessageType.Error);
         }
 
         //PUBLIC

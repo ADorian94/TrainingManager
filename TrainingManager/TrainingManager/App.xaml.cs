@@ -23,13 +23,10 @@ namespace TrainingManager
         {
             try
             {
-                LogWriter.Instance.Nlog.Info("**********NEW RUN**********");
+                LogHandler.Instance.Nlog.Info("**********NEW RUN**********");
                 InitializeComponent();
-                LogWriter.Instance.Nlog.Info("Component initialized");
                 CheckPermissions();
-                LogWriter.Instance.Nlog.Info("Permissions checked");
                 _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
-                LogWriter.Instance.Nlog.Info("Api service initialized");
                 _authService = new AuthService();
                 _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
                 _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
@@ -37,11 +34,11 @@ namespace TrainingManager
                 _pageNavigationManager.Logout += OnLogout;
                 _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
                 _authenticationNavigationManager.AuthenticationSuceed += OnAuthenticationSuceed;
-
+                LogHandler.Instance.Nlog.Info("Application initialization succeed.");
             }
             catch (Exception ex)
             {
-                LogWriter.Instance.Nlog.Error(ex.Message);
+                LogHandler.Instance.Nlog.Error(ex.Message);
                 throw;
             }
 
@@ -64,6 +61,8 @@ namespace TrainingManager
 
             if (status != PermissionStatus.Granted)
                 await Permissions.RequestAsync<Permissions.StorageRead>();
+
+            LogHandler.Instance.Nlog.Info("Permissions checked");
         }
 
         private void OnLogout(object sender, EventArgs e) => _authenticationNavigationManager.Logout();

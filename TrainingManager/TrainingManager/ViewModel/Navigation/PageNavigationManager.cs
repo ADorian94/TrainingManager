@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
 using TrainingManager.View;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
@@ -64,15 +65,19 @@ namespace TrainingManager.ViewModel.Navigation
         {
             _apiServices = apiServices;
             _authService = authService;
+            LogHandler.Instance.Nlog.Info("PageNavigation manager initialization succeed.");
         }
 
         public Task InitializeAfterAuthenticationAsync()
         {
             return Task.Run(async () =>
             {
+                LogHandler.Instance.Nlog.Info("PageNavigation manager initialization after authentication started.");
+
                 try
                 {
                     InitializePages();
+                    LogHandler.Instance.Nlog.Info("Page initialization succeed.");
                 }
                 catch (Exception ex)
                 {
@@ -99,6 +104,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _homeVM.ProfileSelected += OnProfileSelected;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
+                LogHandler.Instance.Nlog.Info("PageNavigation manager initialization after authentication finished.");
             });
         }
 
@@ -149,8 +155,11 @@ namespace TrainingManager.ViewModel.Navigation
                 _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
                 _oneRepetitionMaximumVM.PopUpMessage += OnPopUpMessage;
             }
-            catch
+            catch (Exception ex)
             {
+                LogHandler.Instance.Nlog.Error($"Error during the page initialization process. Initialization attempt: {_initialAttempts + 1}");
+                LogHandler.Instance.Nlog.Error(ex.Message);
+
                 if (_initialAttempts > 3)
                     throw;
 
@@ -170,7 +179,7 @@ namespace TrainingManager.ViewModel.Navigation
 
                 _settingsVM.LogoutSuccess += OnLogoutSuccess;
                 _settingsVM.LogoutFailed += OnMessageApplication;
-                _settingsVM.ProfileChangeStarted += OnProfileChangeStarted;
+                _settingsVM.PopUpMessageWithCallBack += OnPopUpMessage;
             });
         }
 
@@ -247,6 +256,13 @@ namespace TrainingManager.ViewModel.Navigation
         //EVENT HANDLERS
         private async void OnPopUpMessage(object send, Messages message) =>
             await _mainNavigationPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(message), MessageLibrary.Instance.GetMessage(message), "Ok");
+
+        private async void OnPopUpMessage(object sender, (Messages message, Action Callback) e)
+        {
+            await _mainNavigationPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(e.message), MessageLibrary.Instance.GetMessage(e.message), "Ok");
+            e.Callback?.Invoke();
+        }
+
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
             string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Details");
@@ -313,11 +329,7 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnMessageApplication(object sender, MessageEventArgs e) =>
             await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
 
-        private async void OnProfileChangeStarted(object sender, (Action Callback, string Title, string Message) e)
-        {
-            await _mainTabbedPage.DisplayAlert(e.Title, e.Message, "Ok");
-            e.Callback?.Invoke();
-        }
+
 
         private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
         private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();

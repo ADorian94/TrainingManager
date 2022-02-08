@@ -20,7 +20,7 @@
                     <RowDefinition Height="auto"/>
                     <RowDefinition Height="auto"/>
                 </Grid.RowDefinitions>
-                <Label Grid.Row="0" Text="User name" Style="{StaticResource CardTitle}"/>
+                <Label Grid.Row="0" Text="Username" Style="{StaticResource CardTitle}"/>
                 <Entry Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=UserName}" Style="{StaticResource CardEntryContent}"/>
                 <Label Grid.Row="2" Text="Password" Style="{StaticResource CardTitle}"/>
                 <Entry Grid.Row="3" Text="{x:Binding Source={x:Reference this}, Path=Password}" IsPassword="True" Style="{StaticResource CardEntryContent}" />

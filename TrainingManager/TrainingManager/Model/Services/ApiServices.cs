@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
+using TrainingManager.Model.LogWriter;
 
 namespace TrainingManager.Model.Services
 {
@@ -19,6 +20,8 @@ namespace TrainingManager.Model.Services
             {
                 BaseAddress = new Uri(baseAddress)
             };
+
+            LogHandler.Instance.Nlog.Info("Api service initialized.");
         }
 
         //WORKOUTS
@@ -35,7 +38,7 @@ namespace TrainingManager.Model.Services
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                LogHandler.Instance.Nlog.Error(ex.Message);
                 throw new Exception(ex.Message);
             }
         }

@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
-using Microsoft.Win32;
 using TrainingManager.Model.Services;
 using System.IO;
 using Xamarin.Forms;
-using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace TrainingManager.ViewModel.WorkoutManager.Settigns
 {
@@ -22,7 +19,6 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         public event EventHandler LogoutSuccess;
         public event EventHandler<MessageEventArgs> LogoutFailed;
         public event EventHandler ProfileChanged;
-        public event EventHandler<(Action, string, string)> ProfileChangeStarted;
 
         //COMMANDS
         public DelegateCommand SignOutCommand { get; private set; }
@@ -42,9 +38,22 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         }
 
         //COMMAND FUNCTION
-        private void UploadImageFunction(object obj)
+        private async void UploadImageFunction(object obj)
         {
-            ProfileChangeStarted?.Invoke(this, (SelectAndUploadFunction, "Upload profile picture", "For the best result use a square image."));
+            var statusCamera = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+            if (statusCamera != PermissionStatus.Granted)
+                statusCamera = await Permissions.RequestAsync<Permissions.Camera>();
+
+            var statusStorageRead = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+            if (statusStorageRead != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.StorageRead>();
+
+            if (statusCamera == PermissionStatus.Granted && statusStorageRead == PermissionStatus.Granted)
+                SendPopUpMessage(Messages.UploadPictureMessage, SelectAndUploadFunction);
+            else
+                SendPopUpMessage(Messages.AssesDeniedProfilePictureMessage);
         }
 
         private async void SelectAndUploadFunction()
