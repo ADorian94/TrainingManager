@@ -19,6 +19,7 @@ namespace TrainingManager.ViewModel.Navigation
         //FIELDS
         private IApiServices _apiServices;
         private IAuthService _authService;
+        private IProfileService _profileService;
         private int _initialAttempts = 0;
 
         //PROPERTIES
@@ -61,10 +62,11 @@ namespace TrainingManager.ViewModel.Navigation
         private HomeVM _homeVM;
         private SettingsVM _settingsVM;
 
-        public PageNavigationManager(IApiServices apiServices, IAuthService authService)
+        public PageNavigationManager(IApiServices apiServices, IAuthService authService, IProfileService profileService)
         {
             _apiServices = apiServices;
             _authService = authService;
+            _profileService = profileService;
             LogHandler.Instance.Nlog.Info("PageNavigation manager initialization succeed.");
         }
 
@@ -173,7 +175,7 @@ namespace TrainingManager.ViewModel.Navigation
         {
             return Task.Run(() =>
             {
-                _settingsVM = new SettingsVM(_apiServices, _authService);
+                _settingsVM = new SettingsVM(_apiServices, _authService, _profileService);
 
                 _settingsPage.BindingContext = _settingsVM;
 
@@ -187,7 +189,7 @@ namespace TrainingManager.ViewModel.Navigation
         {
             return Task.Run(() =>
             {
-                _homeVM = new HomeVM(_apiServices);
+                _homeVM = new HomeVM(_apiServices, _profileService);
 
                 _homePage.BindingContext = _homeVM;
                 _addNewWeightWorkoutPageHome.BindingContext = _homeVM;

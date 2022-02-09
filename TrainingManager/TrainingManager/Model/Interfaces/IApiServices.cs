@@ -11,7 +11,7 @@ namespace TrainingManager.Model
         Task<bool> LogoutAsync();
         Task<IEnumerable<WeightWorkoutDTO>> GetWeightWorkoutsAsync();
         Task<bool> UploadProfilePicture(byte[] image);
-        Task<byte[]> DownloadProfilePicture();
+        Task<byte[]> DownloadProfilePictureAsync();
         Task<string> GetNameOfTheUser();
         Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto);
         Task<bool> EditWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto);

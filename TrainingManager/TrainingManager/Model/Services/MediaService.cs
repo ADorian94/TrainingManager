@@ -9,8 +9,8 @@ namespace TrainingManager.Model.Services
     {
         public async Task<byte[]> SelectPhotoAsync()
         {
-            var photo = await MediaPicker.PickPhotoAsync();
-            var photoArray = await LoadPhotoAsync(photo);
+            FileResult photo = await MediaPicker.PickPhotoAsync();
+            byte[] photoArray = await LoadPhotoAsync(photo);
             return photoArray;
         }
 

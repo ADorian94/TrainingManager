@@ -26,7 +26,7 @@ namespace TrainingManager.Model.Services
             }
             catch (Exception ex)
             {
-                LogHandler.Instance.Nlog.Info($"Excemtion while reading user credentials: {ex.Message}");
+                LogHandler.Instance.Nlog.Error($"Exception while reading user credentials: {ex.Message}");
                 throw ex;
             }
         }
@@ -41,7 +41,7 @@ namespace TrainingManager.Model.Services
             }
             catch (Exception ex)
             {
-                LogHandler.Instance.Nlog.Info($"Excemtion while writeing user credentials: {ex.Message}");
+                LogHandler.Instance.Nlog.Error($"Exception while writeing user credentials: {ex.Message}");
                 FailedToStoreUserCredentials?.Invoke(this, EventArgs.Empty);
             }
         }
