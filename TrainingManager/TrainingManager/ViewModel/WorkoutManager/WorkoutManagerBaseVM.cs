@@ -178,7 +178,7 @@ namespace TrainingManager.ViewModel
             var round = new WeightRoundVM()
             {
                 Reps = originalRound.Reps,
-                RoundNumber = 0,
+                RoundNumber = NewWeightExercise.WeightRounds.Count + 1,
                 WeightOfExercise = originalRound.WeightOfExercise,
                 RoundGuid = Guid.NewGuid()
             };
@@ -287,7 +287,7 @@ namespace TrainingManager.ViewModel
             var round = new WeightRoundVM()
             {
                 Reps = 0,
-                RoundNumber = 0,
+                RoundNumber = 1,
                 WeightOfExercise = 0.0,
                 RoundGuid = Guid.NewGuid()
             };
@@ -302,7 +302,7 @@ namespace TrainingManager.ViewModel
             var round = new WeightRoundVM()
             {
                 Reps = 0,
-                RoundNumber = 0,
+                RoundNumber = NewWeightExercise.WeightRounds.Count + 1,
                 WeightOfExercise = 0.0,
                 RoundGuid = Guid.NewGuid()
             };

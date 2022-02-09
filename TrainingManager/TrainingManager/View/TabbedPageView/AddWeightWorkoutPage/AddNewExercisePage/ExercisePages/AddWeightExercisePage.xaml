@@ -19,7 +19,7 @@
     </ContentPage.Resources>
     <StackLayout>
         <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
-        <Label Text="New Exercise" Style="{StaticResource Title0}"/>
+        <Label Text="Exercise" Style="{StaticResource Title0}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
@@ -40,10 +40,11 @@
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
-                            <controls:DoubleCardWithEntry FirstCardMainText="Weight" FirstCardEntry="{Binding WeightOfExercise, Mode=TwoWay}"
-                                                          SecondCardMainText="Reps" SecondCardEntry="{Binding Reps, Mode=TwoWay}"
-                                                          CardFrameTapped="{Binding BindingContext.ExerciseRoundSelectedCommand, Source={x:Reference WeightExercisePage}}"
-                                                          TapCommandParameter="{Binding RoundGuid}"/>
+                            <controls:LowCardWithEntries CardIndex="{Binding RoundNumber}"
+                                                         CardMainText="Weight" CardMainEntry="{Binding WeightOfExercise, Mode=TwoWay}"
+                                                         CardSecondaryText="Reps" CardSecondaryEntry="{Binding Reps, Mode=TwoWay}"
+                                                         ButtonCommand="{Binding BindingContext.ExerciseRoundSelectedCommand, Source={x:Reference WeightExercisePage}}"
+                                                         ButtonCommandParameter="{Binding RoundGuid}" />
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
