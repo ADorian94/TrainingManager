@@ -169,6 +169,7 @@ namespace TrainingManager.ViewModel
         {
             NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
             RecalculateRoundWeight(this, 0.0);
+            ReIndexRounds();
         }
 
         public void DuplicateRoundByStringGuid(string e)
@@ -178,7 +179,7 @@ namespace TrainingManager.ViewModel
             var round = new WeightRoundVM()
             {
                 Reps = originalRound.Reps,
-                RoundNumber = 0,
+                RoundNumber = NewWeightExercise.WeightRounds.Count + 1,
                 WeightOfExercise = originalRound.WeightOfExercise,
                 RoundGuid = Guid.NewGuid()
             };
@@ -202,6 +203,12 @@ namespace TrainingManager.ViewModel
         }
 
         //PRIVATES
+        private void ReIndexRounds()
+        {
+            for (int i = 0; i < NewWeightExercise.WeightRounds.Count(); ++i)
+                NewWeightExercise.WeightRounds[i].RoundNumber = i + 1;
+        }
+
         private void ExerciseRoundSelectedFunction(object obj) => ExerciseRoundSelected?.Invoke(this, (string)obj);
         private void SaveNoteFunction(object obj) => CloseNoteEditor?.Invoke(this, EventArgs.Empty);
 
@@ -287,7 +294,7 @@ namespace TrainingManager.ViewModel
             var round = new WeightRoundVM()
             {
                 Reps = 0,
-                RoundNumber = 0,
+                RoundNumber = 1,
                 WeightOfExercise = 0.0,
                 RoundGuid = Guid.NewGuid()
             };
@@ -302,7 +309,7 @@ namespace TrainingManager.ViewModel
             var round = new WeightRoundVM()
             {
                 Reps = 0,
-                RoundNumber = 0,
+                RoundNumber = NewWeightExercise.WeightRounds.Count + 1,
                 WeightOfExercise = 0.0,
                 RoundGuid = Guid.NewGuid()
             };

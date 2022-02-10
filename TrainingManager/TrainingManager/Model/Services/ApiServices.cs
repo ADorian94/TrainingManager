@@ -120,7 +120,7 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        public async Task<byte[]> DownloadProfilePicture()
+        public async Task<byte[]> DownloadProfilePictureAsync()
         {
             try
             {

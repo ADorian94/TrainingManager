@@ -34,6 +34,13 @@
         <Setter Property="Margin" Value="15,5,15,0"/>
     </Style>
 
+    <Style x:Key="TitleMedium" TargetType="{x:Type Label}">
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="Margin" Value="5,0,5,0"/>
+    </Style>
+
     <Style x:Key="TitleSmall" TargetType="{x:Type Label}">
         <Setter Property="TextColor" Value="White"/>
         <Setter Property="FontSize" Value="10"/>
@@ -96,6 +103,15 @@
         <Setter Property="TextColor" Value="White"/>
         <Setter Property="BackgroundColor" Value="Transparent"/>
         <Setter Property="FontSize" Value="22"/>
+        <Setter Property="Visual" Value="Material"/>
+    </Style>
+
+    <Style x:Key="LowCardEntryContent" TargetType="{x:Type Label}">
+        <Setter Property="HorizontalTextAlignment" Value="Center"/>
+        <Setter Property="FontAttributes" Value="Bold"/>
+        <Setter Property="TextColor" Value="White"/>
+        <Setter Property="BackgroundColor" Value="Transparent"/>
+        <Setter Property="FontSize" Value="18"/>
         <Setter Property="Visual" Value="Material"/>
     </Style>
 

@@ -14,6 +14,7 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         private readonly IApiServices _apiServices;
         private readonly IAuthService _authServices;
         private readonly IMediaService _mediaService;
+        private readonly IProfileService _profileService;
 
         //EVENTS
         public event EventHandler LogoutSuccess;
@@ -24,10 +25,11 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         public DelegateCommand SignOutCommand { get; private set; }
         public DelegateCommand UploadImageCommand { get; private set; }
 
-        public SettingsVM(IApiServices apiServices, IAuthService authServices)
+        public SettingsVM(IApiServices apiServices, IAuthService authServices, IProfileService profileService)
         {
             _apiServices = apiServices;
             _authServices = authServices;
+            _profileService = profileService;
             _mediaService = new MediaService();
         }
 
@@ -60,7 +62,8 @@ namespace TrainingManager.ViewModel.WorkoutManager.Settigns
         {
             byte[] image = await _mediaService.SelectPhotoAsync();
             await _apiServices.UploadProfilePicture(image);
-            byte[] originalImage = await _apiServices.DownloadProfilePicture();
+            byte[] originalImage = await _apiServices.DownloadProfilePictureAsync();
+            await _profileService.StoreProfilePictureAsync(originalImage);
 
             using (MemoryStream memoryStream = new MemoryStream(originalImage))
             {

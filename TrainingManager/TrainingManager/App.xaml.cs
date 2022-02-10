@@ -18,6 +18,7 @@ namespace TrainingManager
         private PageNavigationManager _pageNavigationManager;
         private IApiServices _apiService;
         private IAuthService _authService;
+        private IProfileService _profileService;
 
         public App()
         {
@@ -28,8 +29,9 @@ namespace TrainingManager
                 CheckPermissions();
                 _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
                 _authService = new AuthService();
+                _profileService = new ProfileService();
                 _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
-                _pageNavigationManager = new PageNavigationManager(_apiService, _authService);
+                _pageNavigationManager = new PageNavigationManager(_apiService, _authService, _profileService);
                 _pageNavigationManager.MainPageChanged += OnMainPageChanged;
                 _pageNavigationManager.Logout += OnLogout;
                 _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;

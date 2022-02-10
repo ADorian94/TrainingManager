@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrainingManager.View.Controls.LowCardWithEntries"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:DoubleValueConverter x:Key="DoubleConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame Style="{StaticResource CardFrame}" Margin="15, 5">
+            <Grid RowDefinitions="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="20"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Row="0" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CardIndex}"
+                       Style="{StaticResource TitleMedium}" VerticalOptions="Center"/>
+                <Label Grid.Row="0" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}"
+                       Style="{StaticResource CardTitle}" VerticalOptions="Center"/>
+                <Entry Grid.Row="0" Grid.Column="2" Text="{x:Binding Source={x:Reference this}, Path=CardMainEntry,
+                       Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                       Style="{StaticResource LowCardEntryContent}" VerticalOptions="Center" Keyboard="Numeric"/>
+                <Label Grid.Row="0" Grid.Column="3" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}"
+                       Style="{StaticResource CardTitle}" VerticalOptions="Center"/>
+                <Entry Grid.Row="0" Grid.Column="4" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryEntry,
+                       Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                       Style="{StaticResource LowCardEntryContent}" VerticalOptions="Center" Keyboard="Numeric"/>
+                <ImageButton Grid.Row="0" Grid.Column="5" Padding="0,10,0,10" BackgroundColor="Transparent"
+                             Source="sharp_more_vert_white_24.png" HeightRequest="20"
+                             Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}"
+                             CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" />
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

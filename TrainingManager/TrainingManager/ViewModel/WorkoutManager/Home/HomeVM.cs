@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel
@@ -13,10 +14,13 @@ namespace TrainingManager.ViewModel
     public class HomeVM : WorkoutManagerBaseVM
     {
         //FIELDS
+        private IProfileService _profileService;
         private byte[] _originalImage;
-        public HomeVM(IApiServices apiServices)
+
+        public HomeVM(IApiServices apiServices, IProfileService profileService)
         {
             ApiServices = apiServices;
+            _profileService = profileService;
             RecentWorkouts = new ObservableCollection<HistoryItemVM>();
             SetupHomeAsync();
             WeightWorkoutMenuSelectedCommand = new DelegateCommand(WeightWorkoutMenuSelectedFunction);
@@ -48,14 +52,14 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                Date = DateTime.Now;
-                WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
-
                 var initializeTasks = new Task[]
                 {
                     InitializeProfilePicture(),
                     UpdateRecentWorkoutsAsync(),
                 };
+
+                Date = DateTime.Now;
+                WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
 
                 await Task.WhenAll(initializeTasks);
             }
@@ -67,7 +71,14 @@ namespace TrainingManager.ViewModel
 
         private async Task InitializeProfilePicture()
         {
-            _originalImage = await ApiServices.DownloadProfilePicture();
+            if (_profileService.IsProfilePictureStored())
+                _originalImage = await _profileService.LoadProfilePictureAsync();
+            else
+            {
+                _originalImage = await ApiServices.DownloadProfilePictureAsync();
+                await _profileService.StoreProfilePictureAsync(_originalImage);
+            }
+
             ProfilePicture = ImageSource.FromStream(() => new MemoryStream(_originalImage));
         }
 
