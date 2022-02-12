@@ -70,7 +70,8 @@ namespace TrainingManager.ViewModel.Tests
             IEnumerable<WeightWorkoutDTO> weightWorkouts = new List<WeightWorkoutDTO>();
             _apiService.Setup(x => x.GetWeightWorkoutsAsync()).Returns(Task.FromResult(weightWorkouts));
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
-            Assert.AreEqual(emptyWorkout, _weightWorkoutManagerVM.NewWeightWorkout);
+            //Assert.AreEqual(emptyWorkout, _weightWorkoutManagerVM.NewWeightWorkout);
+            Assert.Fail();
         }
 
         [TestMethod()]
