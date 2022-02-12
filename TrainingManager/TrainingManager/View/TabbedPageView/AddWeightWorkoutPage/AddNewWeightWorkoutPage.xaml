@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.AddNewWeightWorkoutPage"
              NavigationPage.HasNavigationBar="False"
+             IconImageSource="Workout.png"
              x:Name="WeightWorkoutPage">
     <ContentPage.Resources>
         <ResourceDictionary>

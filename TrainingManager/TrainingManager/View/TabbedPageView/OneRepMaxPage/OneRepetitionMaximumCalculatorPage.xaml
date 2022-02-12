@@ -4,6 +4,7 @@
               xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.OneRepetitionMaximumCalculatorPage"
+             IconImageSource="Statistics.png"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
         <local:Style/>

@@ -116,13 +116,13 @@ namespace TrainingManager.ViewModel.Navigation
             {
                 //INITIALIZE VM
                 _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
-                _homePage = new HomePage() { Title = "Home" };
-                _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
+                _homePage = new HomePage();
+                _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent");
                 _recentWorkoutDetailsPage = new RecentWorkoutDetails();
-                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout") { Title = "Workout" };
+                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout");
                 _settingsPage = new SettingsPage() { Title = "Settings" };
                 _exercisesPage = new ExercisesPage() { Title = "Exercises" };
-                _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage() { Title = "1RM" };
+                _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage();
                 _oneRepetitionMaximumCalculatedPage = new OneRepetitionMaximumCalculatedPage();
                 _addWeightDrillPage = new AddWeightExercisePage();
                 _addSavedWeightExercises = new AddSavedWeightExercises();
@@ -132,10 +132,10 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePage = new NotePage();
                 _calendarHistoryPage = new CalendarPage();
                 _searchHistoryPage = new SearchPage();
-                _historyCaruselPage = new HistoryCaruselPage() { Title = "History" };
+                _historyCaruselPage = new HistoryCaruselPage();
                 _historyCaruselPage.Children.Add(_calendarHistoryPage);
                 _historyCaruselPage.Children.Add(_searchHistoryPage);
-                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout") { Title = "Workout" };
+                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout");
                 _addNewDrillCaruselPageHistory = new AddNewDrillCaruselPage();
                 _addSavedWeightExercisesHistory = new AddSavedWeightExercises();
                 _addWeightDrillPageHistory = new AddWeightExercisePage();
@@ -144,6 +144,8 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePageHistory = new NotePage();
 
                 _mainTabbedPage = new NavigationTabbedPage();
+                //_mainTabbedPage.SelectedTabColor = Color.FromHex("03A9F9");
+                _mainTabbedPage.SelectedTabColor = Color.White;
                 _mainTabbedPage.Children.Add(_homePage);
                 _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
                 _mainTabbedPage.Children.Add(_historyCaruselPage);

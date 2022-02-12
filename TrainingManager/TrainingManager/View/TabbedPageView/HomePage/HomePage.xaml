@@ -6,6 +6,7 @@
              xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.HomePage"
              NavigationPage.HasNavigationBar="False"
+             IconImageSource="Home.png"
              x:Name="Home">
     <ContentPage.Resources>
         <ResourceDictionary>
