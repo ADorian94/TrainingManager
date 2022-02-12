@@ -34,7 +34,7 @@
                     <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None"
                               HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                         <ListView.Header>
-                            <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
+                            <controls:SimpleCard CardMainText="Total weight" Margin="15,0,15,5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
                                                  IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
                         </ListView.Header>
                         <ListView.ItemTemplate >

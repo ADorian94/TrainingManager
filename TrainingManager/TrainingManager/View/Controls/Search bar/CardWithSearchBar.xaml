@@ -8,7 +8,7 @@
         <local:Style/>
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10" Padding="10">
+        <Frame Style="{StaticResource CardFrame}" Margin="15,5,15,0">
             <StackLayout BackgroundColor="Transparent">
                 <SearchBar x:Name="searchBar"
                            SearchCommand="{x:Binding Source={x:Reference this}, Path=CardSearchCommand}"
