@@ -5,7 +5,6 @@ using NLog;
 using NLog.Config;
 using NLog.Targets;
 using TrainingManager.Model.Interfaces;
-using Xamarin.Forms;
 
 namespace TrainingManager.Model.LogWriter
 {
@@ -13,12 +12,13 @@ namespace TrainingManager.Model.LogWriter
     {
         private static Lazy<ILogWriter> Lazy => new Lazy<ILogWriter>(() => new LogHandler(), true);
         public static ILogWriter Instance => Lazy.Value;
+        public static string LogPathDirectory { get; private set; }
         public Logger Nlog { get; set; }
 
-        public LogHandler()
+        private LogHandler()
         {
             //Platform specific 
-            string pathOfLogDirectory = Path.Combine(DependencyService.Get<IDataAcess>().GetExternalStorage(), "logs");
+            string pathOfLogDirectory = Path.Combine(LogPathDirectory, "logs");
 
             if (!Directory.Exists(pathOfLogDirectory))
                 Directory.CreateDirectory(pathOfLogDirectory);
@@ -42,5 +42,8 @@ namespace TrainingManager.Model.LogWriter
             LogManager.Configuration = config;
             Nlog = LogManager.GetCurrentClassLogger();
         }
+
+        //PUBLIC
+        public static void InitializeLogPath(string path) => LogPathDirectory = path;
     }
 }

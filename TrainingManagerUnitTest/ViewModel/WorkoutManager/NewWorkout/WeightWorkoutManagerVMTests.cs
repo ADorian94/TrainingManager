@@ -6,6 +6,8 @@ using Moq;
 using TrainingManager.Model;
 using TrainingManager.Data.DTO;
 using System.Collections.ObjectModel;
+using TrainingManager.Model.LogWriter;
+using System.IO;
 
 namespace TrainingManager.ViewModel.Tests
 {
@@ -39,6 +41,14 @@ namespace TrainingManager.ViewModel.Tests
 
             _apiService.Setup(x => x.GetWeightWorkoutsAsync()).Returns(Task.FromResult(_weightWorkouts));
             _apiService.Setup(x => x.EditWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>())).Returns(Task.FromResult(true));
+            LogHandler.InitializeLogPath("./");
+        }
+
+        [TestCleanup]
+        public void CleanUpLogFiles()
+        {
+            if (File.Exists(Path.Combine(LogHandler.LogPathDirectory, "logs", "LiftIt.log")))
+                Directory.Delete(Path.Combine(LogHandler.LogPathDirectory, "logs"), true);
         }
 
         //SETUP TESTS
