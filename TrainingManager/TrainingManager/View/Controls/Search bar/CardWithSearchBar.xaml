@@ -10,12 +10,11 @@
     <ContentView.Content>
         <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10" Padding="10">
             <StackLayout BackgroundColor="Transparent">
-                <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Start" FontSize="20" TextColor="White"/>
                 <SearchBar x:Name="searchBar"
                            SearchCommand="{x:Binding Source={x:Reference this}, Path=CardSearchCommand}"
                            SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
-                           VerticalTextAlignment="Center" HorizontalTextAlignment="Center"
-                           TextColor="White" FontSize="30" FontAttributes="Bold" BackgroundColor="Transparent" Visual="Material"/>
+                           Style="{StaticResource CardEntryContent}"
+                           Placeholder="Search"/>
             </StackLayout>
         </Frame>
     </ContentView.Content>
