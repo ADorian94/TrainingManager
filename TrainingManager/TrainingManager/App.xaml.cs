@@ -24,6 +24,7 @@ namespace TrainingManager
         {
             try
             {
+                LogHandler.InitializeLogPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
                 LogHandler.Instance.Nlog.Info("**********NEW RUN**********");
                 InitializeComponent();
                 CheckPermissions();
