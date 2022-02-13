@@ -95,11 +95,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private void OnAuthenticationSucceed(object sender, EventArgs e) => AuthenticationSuceed?.Invoke(this, EventArgs.Empty);
 
-        private async void OnPopUpMessageMessage(object sender, Messages e)
-        {
-            MainPage = _loginAndRegisterCaruselPage;
-            MainPageChanged?.Invoke(this, EventArgs.Empty);
+        private async void OnPopUpMessageMessage(object sender, Messages e) =>
             await _loginAndRegisterCaruselPage.DisplayAlert(MessageLibrary.Instance.GetMessageType(e), MessageLibrary.Instance.GetMessage(e), "Ok");
-        }
     }
 }
