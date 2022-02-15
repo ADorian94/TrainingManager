@@ -132,7 +132,7 @@
     <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\ExercisePages\AddWeightExercisePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewExercisePage\ExercisePages\NotePage\NotePage.xaml">
+    <EmbeddedResource Update="View\TabbedPageView\NotePage\NotePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewWeightWorkoutPage.xaml">
