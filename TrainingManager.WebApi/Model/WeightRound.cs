@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using TrainingManager.Data;
 
 namespace TrainingManager.WebApi.Model
 {
@@ -10,6 +11,7 @@ namespace TrainingManager.WebApi.Model
         public int RoundNumber { get; set; }
         public double WeightOfExercise { get; set; }
         public int Reps { get; set; }
+        public MaterialColors Color { get; set; }
         [ForeignKey("Exercise")]
         public int ExerciseId { get; set; }
     }

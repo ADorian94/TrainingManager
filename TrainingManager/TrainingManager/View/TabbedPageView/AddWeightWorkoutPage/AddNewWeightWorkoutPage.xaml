@@ -6,6 +6,7 @@
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.AddNewWeightWorkoutPage"
              NavigationPage.HasNavigationBar="False"
+             IconImageSource="Workout.png"
              x:Name="WeightWorkoutPage">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -33,8 +34,16 @@
                     <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None"
                               HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                         <ListView.Header>
-                            <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
+                            <Grid Margin="10,0,10,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <controls:SimpleCard Grid.Column="0" CardMainText="Total weight" Margin="5,0" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
                                                  IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                                <controls:SimpleCard Grid.Column="1" CardMainText="Comment" Margin="5,0" CardFrameTapped="{Binding OpenNoteEditorCommand}"
+                                                     IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+                            </Grid>
                         </ListView.Header>
                         <ListView.ItemTemplate >
                             <DataTemplate>
@@ -43,7 +52,8 @@
                                                            OpenCardFirstLabel="Total weight" OpenCardFirstValue="{Binding TotalExerciseWeight}"
                                                            OpenCardSecondLabel="Rounds" OpenCardSecondValue="{Binding TotalExerciseRounds}"
                                                            ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference WeightWorkoutPage}}"
-                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="True"/>
+                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="True"
+                                                           CardColor="{Binding ExerciseColor}"/>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>
@@ -56,14 +66,6 @@
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Text="Save" Style="{StaticResource BlueButton}" IsVisible="{Binding HasAnyChanges, Converter={StaticResource BoolNegateConverter}}" Command="{Binding SaveTodayWorkoutCommand}" />
                     <Button Grid.Column="0" Text="Save" Style="{StaticResource RedButton}" IsVisible="{Binding HasAnyChanges}" Command="{Binding SaveTodayWorkoutCommand}" />
-                    <!--<Button Grid.Column="0" Text="Save" Command="{Binding SaveTodayWorkoutCommand}" >
-                        <Button.Style>
-                            <MultiBinding Converter="{StaticResource WorkoutToStyleMultiConverter}">
-                                <Binding Path="WeightWorkoutBookmark"/>
-                                <Binding Path="NewWeightWorkout"/>
-                            </MultiBinding>
-                        </Button.Style>
-                    </Button>-->
                     <Button Grid.Column="1" Text="Exercise" Style="{StaticResource BlueButton}" Command="{Binding OpenAddWeightExerciseCommand}" />
                 </Grid>
             </Grid>

@@ -3,11 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="TrainingManager.View.Controls.LowSimpleCard"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
              x:Name="this">
     <ContentView.Resources>
-        <local:Style/>
+        <ResourceDictionary>
+            <converter:MaterialColorToColor x:Key="MaterialColorToColor" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </ContentView.Resources>
-    <Frame Style="{StaticResource CardFrame}" Margin="15, 5">
+    <Frame x:Name="CardFrame" Style="{StaticResource ColorCardFrame}" BackgroundColor="{x:Binding Source={x:Reference this}, Path=CardColor, Converter={StaticResource MaterialColorToColor}}" Margin="15, 5">
         <Frame.GestureRecognizers>
             <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}" CommandParameter="{x:Binding Source={x:Reference this}, Path=CardFrameTappedParameter}"/>
         </Frame.GestureRecognizers>

@@ -1,4 +1,6 @@
-﻿namespace TrainingManager.Model
+﻿using TrainingManager.Data;
+
+namespace TrainingManager.Model
 {
     public struct MaximumMethod
     {
@@ -48,5 +50,11 @@
         LoginFailedAfterRegistration,
         UploadPictureMessage,
         AssesDeniedProfilePictureMessage,
+    }
+
+    public struct MaterialColorName
+    {
+        public MaterialColors Color { get; set; }
+        public string Name { get; set; }
     }
 }

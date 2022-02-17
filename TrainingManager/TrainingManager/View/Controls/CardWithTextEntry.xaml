@@ -9,7 +9,6 @@
     </ContentView.Resources>
     <Frame Margin="15, 5" Style="{StaticResource CardFrame}">
         <StackLayout BackgroundColor="Transparent">
-            <!--<Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>-->
             <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntry}" Style="{StaticResource CardEntryContent}" Placeholder="{x:Binding Source={x:Reference this}, Path=CardMainText}"/>
         </StackLayout>
     </Frame>

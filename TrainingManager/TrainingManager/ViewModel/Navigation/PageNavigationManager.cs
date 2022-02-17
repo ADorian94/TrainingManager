@@ -2,10 +2,12 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using TrainingManager.Data;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
 using TrainingManager.Model.LogWriter;
 using TrainingManager.View;
+using TrainingManager.View.TabbedPageView;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
 using TrainingManager.ViewModel.WorkoutManager.Settigns;
@@ -46,6 +48,7 @@ namespace TrainingManager.ViewModel.Navigation
         private ExercisesPage _exercisesPage;
         private NotePage _notePage;
         private NotePage _notePageHistory;
+        private ColorSelectPage _colorSelectPage;
 
         private HistoryCaruselPage _historyCaruselPage;
         private CalendarPage _calendarHistoryPage;
@@ -61,6 +64,7 @@ namespace TrainingManager.ViewModel.Navigation
         private WeightHistoryVM _weightHistoryVM;
         private HomeVM _homeVM;
         private SettingsVM _settingsVM;
+        private ColorVM _colorVM;
 
         public PageNavigationManager(IApiServices apiServices, IAuthService authService, IProfileService profileService)
         {
@@ -92,7 +96,8 @@ namespace TrainingManager.ViewModel.Navigation
                     CreateWeightWorkoutManagerVM(),
                     CreateWeightHistoryVM(),
                     CreateHomeVM(),
-                    CreateSettingsVM()
+                    CreateSettingsVM(),
+                    CreateColorVM()
                 };
 
                 await Task.WhenAll(vmInitializations);
@@ -116,13 +121,13 @@ namespace TrainingManager.ViewModel.Navigation
             {
                 //INITIALIZE VM
                 _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
-                _homePage = new HomePage() { Title = "Home" };
-                _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent") { Title = "Workout" };
+                _homePage = new HomePage();
+                _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent");
                 _recentWorkoutDetailsPage = new RecentWorkoutDetails();
-                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout") { Title = "Workout" };
+                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout");
                 _settingsPage = new SettingsPage() { Title = "Settings" };
                 _exercisesPage = new ExercisesPage() { Title = "Exercises" };
-                _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage() { Title = "1RM" };
+                _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage();
                 _oneRepetitionMaximumCalculatedPage = new OneRepetitionMaximumCalculatedPage();
                 _addWeightDrillPage = new AddWeightExercisePage();
                 _addSavedWeightExercises = new AddSavedWeightExercises();
@@ -132,10 +137,10 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePage = new NotePage();
                 _calendarHistoryPage = new CalendarPage();
                 _searchHistoryPage = new SearchPage();
-                _historyCaruselPage = new HistoryCaruselPage() { Title = "History" };
+                _historyCaruselPage = new HistoryCaruselPage();
                 _historyCaruselPage.Children.Add(_calendarHistoryPage);
                 _historyCaruselPage.Children.Add(_searchHistoryPage);
-                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout") { Title = "Workout" };
+                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout");
                 _addNewDrillCaruselPageHistory = new AddNewDrillCaruselPage();
                 _addSavedWeightExercisesHistory = new AddSavedWeightExercises();
                 _addWeightDrillPageHistory = new AddWeightExercisePage();
@@ -144,6 +149,8 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePageHistory = new NotePage();
 
                 _mainTabbedPage = new NavigationTabbedPage();
+                //_mainTabbedPage.SelectedTabColor = Color.FromHex("03A9F9");
+                _mainTabbedPage.SelectedTabColor = Color.White;
                 _mainTabbedPage.Children.Add(_homePage);
                 _mainTabbedPage.Children.Add(_addNewWeightWorkoutPage);
                 _mainTabbedPage.Children.Add(_historyCaruselPage);
@@ -227,6 +234,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
                 _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
                 _weightHistoryVM.PopUpMessage += OnPopUpMessage;
+                _weightHistoryVM.ClosePage += OnCloseNavigationPage;
             });
         }
 
@@ -252,6 +260,15 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
                 _weightWorkoutManagerVM.ExceptionOccured += OnExceptionOccured;
                 _weightWorkoutManagerVM.PopUpMessage += OnPopUpMessage;
+                _weightWorkoutManagerVM.ClosePage += OnCloseNavigationPage;
+            });
+        }
+
+        private Task CreateColorVM()
+        {
+            return Task.Run(() =>
+            {
+                _colorSelectPage = new ColorSelectPage();
             });
         }
 
@@ -286,21 +303,43 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelected(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Delete");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "Delete");
 
             if (action == "Duplicate")
                 _weightWorkoutManagerVM.DuplicateRoundByStringGuid(e);
+
+            if (action == "Color")
+            {
+                ColorVM viewModel = _weightWorkoutManagerVM.GetColorVMByRoundGuid(e);
+                viewModel.ColorSelected += OnColorSelected;
+                _colorSelectPage.BindingContext = viewModel;
+                await _mainNavigationPage.PushAsync(_colorSelectPage);
+            }
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteRoundByStringGuid(e);
         }
 
+        private async void OnColorSelected(object sender, MaterialColors e)
+        {
+            ((ColorVM)_colorSelectPage.BindingContext).ColorSelected -= OnColorSelected;
+            await _mainNavigationPage.PopAsync();
+        }
+
         private async void OnExerciseRoundSelectedHistory(object sender, string e)
         {
-            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Delete");
+            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "Delete");
 
             if (action == "Duplicate")
                 _weightHistoryVM.DuplicateRoundByStringGuid(e);
+
+            if (action == "Color")
+            {
+                ColorVM viewModel = _weightHistoryVM.GetColorVMByRoundGuid(e);
+                viewModel.ColorSelected += OnColorSelected;
+                _colorSelectPage.BindingContext = viewModel;
+                await _mainNavigationPage.PushAsync(_colorSelectPage);
+            }
 
             if (action == "Delete")
                 _weightHistoryVM.DeleteRoundByStringGuid(e);
@@ -308,10 +347,18 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnWeightExerciseMenuSelected(object sender, MessageEventArgs e)
         {
-            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Edit", "Delete");
+            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Edit", "Color", "Delete");
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteExercise(e.Message);
+
+            if (action == "Color")
+            {
+                ColorVM viewModel = _weightWorkoutManagerVM.GetColorVMByExerciseGuid(e.Message);
+                viewModel.ColorSelected += OnColorSelected;
+                _colorSelectPage.BindingContext = viewModel;
+                await _mainNavigationPage.PushAsync(_colorSelectPage);
+            }
 
             if (action == "Edit")
                 _weightWorkoutManagerVM.EditExercise(e.Message);
@@ -319,10 +366,18 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnWeightExerciseMenuSelectedHistory(object sender, MessageEventArgs e)
         {
-            string action = await _addNewWeightWorkoutPageHistory.DisplayActionSheet(e.Title, "Cancel", null, "Edit", "Delete");
+            string action = await _addNewWeightWorkoutPageHistory.DisplayActionSheet(e.Title, "Cancel", null, "Edit", "Color", "Delete");
 
             if (action == "Delete")
                 _weightHistoryVM.DeleteExercise(e.Message);
+
+            if (action == "Color")
+            {
+                ColorVM viewModel = _weightHistoryVM.GetColorVMByExerciseGuid(e.Message);
+                viewModel.ColorSelected += OnColorSelected;
+                _colorSelectPage.BindingContext = viewModel;
+                await _mainNavigationPage.PushAsync(_colorSelectPage);
+            }
 
             if (action == "Edit")
                 _weightHistoryVM.EditExercise(e.Message);
@@ -330,8 +385,6 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnMessageApplication(object sender, MessageEventArgs e) =>
             await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
-
-
 
         private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
         private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();

@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrainingManager.View.TabbedPageView.ColorSelectPage"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             NavigationPage.HasNavigationBar="False"
+             x:Name="ColorPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+            <converter:ColorToNameConverter x:Key="ColorToNameConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Colors" Style="{StaticResource Title0}"/>
+            <ListView x:Name="ColorList" ItemsSource="{Binding Path=Colors}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" SelectedItem="{Binding SelectedColor}" VerticalOptions="FillAndExpand">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:LowSimpleCard CardMainText="{Binding Path=Name}" IsButtonVisible="False" CardColor="{Binding Color}"
+                                                    CardFrameTapped="{Binding BindingContext.ColorSelectedCommand, Source={x:Reference ColorPage}}"
+                                                    CardFrameTappedParameter="{Binding Color}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

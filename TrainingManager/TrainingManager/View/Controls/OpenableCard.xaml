@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:images="clr-namespace:TrainingManager.View.Media"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
              x:Class="TrainingManager.View.Controls.OpenableCard"
              x:Name="this">
     <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:MaterialColorToColor x:Key="MaterialColorToColor" />
+        </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <local:Style/>
@@ -14,7 +18,8 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <StackLayout x:Name="CardStack" BackgroundColor="Transparent">
-        <Frame x:Name="ClosedCard" Margin="15, 5" Style="{StaticResource CardFrame}">
+        <Frame x:Name="ClosedCard" Margin="15, 5" Style="{StaticResource ColorCardFrame}"
+               BackgroundColor="{x:Binding Source={x:Reference this}, Path=CardColor, Converter={StaticResource MaterialColorToColor}}">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped_1"/>
             </Frame.GestureRecognizers>
@@ -27,7 +32,8 @@
                 <ImageButton Grid.Row="0" Grid.Column="1" Padding="0,10,0,10" BackgroundColor="Transparent" Source="{StaticResource TripleDotIcon}" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
             </Grid>
         </Frame>
-        <Frame x:Name="OpenedCard" Margin="15, 5" Style="{StaticResource CardFrame}">
+        <Frame x:Name="OpenedCard" Margin="15, 5" Style="{StaticResource ColorCardFrame}"
+               BackgroundColor="{x:Binding Source={x:Reference this}, Path=CardColor, Converter={StaticResource MaterialColorToColor}}">
             <Frame.GestureRecognizers>
                 <TapGestureRecognizer Tapped="TapGestureRecognizer_Tapped"/>
             </Frame.GestureRecognizers>

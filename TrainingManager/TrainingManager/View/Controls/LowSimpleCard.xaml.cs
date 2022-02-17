@@ -1,4 +1,6 @@
 ﻿
+using System;
+using TrainingManager.Data;
 using TrainingManager.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -30,6 +32,15 @@ namespace TrainingManager.View.Controls
 
         public static readonly BindableProperty IsButtonVisibleProperty =
             BindableProperty.Create("IsButtonVisibles", typeof(bool), typeof(LowSimpleCard), false);
+
+        public MaterialColors CardColor
+        {
+            get { return (MaterialColors)GetValue(CardColorProperty); }
+            set { SetValue(CardColorProperty, value); }
+        }
+
+        public static readonly BindableProperty CardColorProperty =
+            BindableProperty.Create("CardColor", typeof(MaterialColors), typeof(LowSimpleCard), MaterialColors.Default);
 
         public DelegateCommand ButtonCommand
         {

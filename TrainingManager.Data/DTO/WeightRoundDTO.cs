@@ -10,5 +10,6 @@ namespace TrainingManager.Data.DTO
         public double WeightOfExercise { get; set; }
         public int Reps { get; set; }
         public int ExerciseId { get; set; }
+        public MaterialColors Color { get; set; }
     }
 }

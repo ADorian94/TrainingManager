@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using TrainingManager.Data;
 
 namespace TrainingManager.ViewModel
 {
@@ -9,15 +10,23 @@ namespace TrainingManager.ViewModel
         {
             ExerciseName = string.Empty;
             ExerciseNote = string.Empty;
+            InitializeColorVM();
         }
 
         public WeightExerciseVM(WeightExerciseVM weightExercise)
         {
             ExerciseName = weightExercise.ExerciseName;
             ExerciseNote = weightExercise.ExerciseNote;
+            InitializeColorVM();
         }
 
         protected override void InitializeCommands() { }
+
+        private void InitializeColorVM()
+        {
+            ColorVM = new ColorVM();
+            ColorVM.ColorSelected += OnColorSelected;
+        }
 
         //PROPERTIES
         private string _exerciseName;
@@ -37,6 +46,12 @@ namespace TrainingManager.ViewModel
 
         private ObservableCollection<WeightRoundVM> _weightRounds;
         public ObservableCollection<WeightRoundVM> WeightRounds { get => _weightRounds; set { _weightRounds = value; OnPropertyChanged(); } }
+
+        private MaterialColors _exerciseColor;
+        public MaterialColors ExerciseColor { get => _exerciseColor; set { _exerciseColor = value; OnPropertyChanged(); } }
+
+        private ColorVM _colorVM;
+        public ColorVM ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
 
         public void CountTotalWeightOfExercise()
         {
@@ -67,7 +82,7 @@ namespace TrainingManager.ViewModel
             var e2 = (WeightExerciseVM)obj;
 
             return ExerciseName == e2.ExerciseName && ExerciseNote == e2.ExerciseNote && TotalExerciseWeight == e2.TotalExerciseWeight &&
-                   TotalExerciseRounds == e2.TotalExerciseRounds && AreRoundsEquals(e2);
+                   TotalExerciseRounds == e2.TotalExerciseRounds && ExerciseColor == e2.ExerciseColor && AreRoundsEquals(e2);
         }
 
         public override int GetHashCode() => ExerciseName.GetHashCode() ^ ExerciseNote.GetHashCode() ^ TotalExerciseWeight.GetHashCode() ^ TotalExerciseRounds.GetHashCode();
@@ -85,5 +100,8 @@ namespace TrainingManager.ViewModel
 
             return result;
         }
+
+        //EVENT HANDLERS
+        private void OnColorSelected(object sender, MaterialColors Color) => ExerciseColor = Color;
     }
 }
