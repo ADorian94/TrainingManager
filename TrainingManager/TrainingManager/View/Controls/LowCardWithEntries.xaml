@@ -8,6 +8,7 @@
     <ContentView.Resources>
         <ResourceDictionary>
             <converter:DoubleValueConverter x:Key="DoubleConverter" />
+            <converter:MaterialColorToColor x:Key="MaterialColorToColor" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -16,7 +17,7 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame Style="{StaticResource CardFrame}" Margin="15, 5">
+        <Frame Style="{StaticResource ColorCardFrame}" BackgroundColor="{x:Binding Source={x:Reference this}, Path=CardColor, Converter={StaticResource MaterialColorToColor}}" Margin="15, 5">
             <Grid RowDefinitions="40">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="20"/>

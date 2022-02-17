@@ -38,7 +38,8 @@
                                                          CardMainText="Weight" CardMainEntry="{Binding WeightOfExercise, Mode=TwoWay}"
                                                          CardSecondaryText="Reps" CardSecondaryEntry="{Binding Reps, Mode=TwoWay}"
                                                          ButtonCommand="{Binding BindingContext.ExerciseRoundSelectedCommand, Source={x:Reference WeightExercisePage}}"
-                                                         ButtonCommandParameter="{Binding RoundGuid}" />
+                                                         ButtonCommandParameter="{Binding RoundGuid}"
+                                                         CardColor="{Binding RoundColor}"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TrainingManager.Data;
 using TrainingManager.Model;
 using TrainingManager.Model.LogWriter;
 
@@ -12,6 +13,7 @@ namespace TrainingManager.ViewModel
         //FIELDS
         protected IApiServices ApiServices;
         protected internal WeightWorkoutVM WeightWorkoutBookmark;
+        protected ColorVM ColorVM;
 
         //PROPERTIES
         private bool _hasAnyChanges;
@@ -77,6 +79,7 @@ namespace TrainingManager.ViewModel
         public event EventHandler<string> SavedWeightActivitySelected;
         public event EventHandler<string> ExerciseRoundSelected;
         public event EventHandler WorkoutSaved;
+        public event EventHandler ClosePage;
 
         protected override void InitializeCommands()
         {
@@ -181,7 +184,8 @@ namespace TrainingManager.ViewModel
                 Reps = originalRound.Reps,
                 RoundNumber = NewWeightExercise.WeightRounds.Count + 1,
                 WeightOfExercise = originalRound.WeightOfExercise,
-                RoundGuid = Guid.NewGuid()
+                RoundGuid = Guid.NewGuid(),
+                RoundColor = originalRound.RoundColor
             };
 
             round.RoundWeightChanged += RecalculateRoundWeight;
@@ -201,6 +205,9 @@ namespace TrainingManager.ViewModel
             CheckChangesAndSetResult();
             OpenEditWeightExercise?.Invoke(this, EventArgs.Empty);
         }
+
+        public ColorVM GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
+        public ColorVM GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
 
         //PRIVATES
         private void ReIndexRounds()
@@ -290,13 +297,15 @@ namespace TrainingManager.ViewModel
             NewWeightExercise.TotalExerciseWeight = 0.0;
             NewWeightExercise.ExerciseNote = string.Empty;
             NewWeightExercise.ExerciseGuid = Guid.NewGuid();
+            NewWeightExercise.ExerciseColor = MaterialColors.Default;
             NewWeightExercise.WeightRounds = new ObservableCollection<WeightRoundVM>();
             var round = new WeightRoundVM()
             {
                 Reps = 0,
                 RoundNumber = 1,
                 WeightOfExercise = 0.0,
-                RoundGuid = Guid.NewGuid()
+                RoundGuid = Guid.NewGuid(),
+                RoundColor = MaterialColors.Default,
             };
             round.RoundWeightChanged += RecalculateRoundWeight;
             NewWeightExercise.WeightRounds.Add(round);
@@ -311,7 +320,8 @@ namespace TrainingManager.ViewModel
                 Reps = 0,
                 RoundNumber = NewWeightExercise.WeightRounds.Count + 1,
                 WeightOfExercise = 0.0,
-                RoundGuid = Guid.NewGuid()
+                RoundGuid = Guid.NewGuid(),
+                RoundColor = MaterialColors.Default
             };
 
             round.RoundWeightChanged += RecalculateRoundWeight;

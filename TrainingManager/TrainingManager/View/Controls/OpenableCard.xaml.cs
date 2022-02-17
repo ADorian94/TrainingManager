@@ -1,4 +1,5 @@
 ﻿
+using TrainingManager.Data;
 using TrainingManager.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -32,6 +33,15 @@ namespace TrainingManager.View.Controls
 
         public static readonly BindableProperty CloseCardMainValueProperty =
             BindableProperty.Create("CloseCardMainValue", typeof(string), typeof(OpenableCard), string.Empty);
+
+        public MaterialColors CardColor
+        {
+            get { return (MaterialColors)GetValue(CardColorProperty); }
+            set { SetValue(CardColorProperty, value); }
+        }
+
+        public static readonly BindableProperty CardColorProperty =
+            BindableProperty.Create("CardColor", typeof(MaterialColors), typeof(OpenableCard), MaterialColors.Default);
 
         public string OpenCardMainLabel
         {

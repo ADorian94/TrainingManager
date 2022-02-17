@@ -1,4 +1,5 @@
-﻿using TrainingManager.ViewModel;
+﻿using TrainingManager.Data;
+using TrainingManager.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -57,6 +58,15 @@ namespace TrainingManager.View.Controls
 
         public static readonly BindableProperty CardSecondaryEntryProperty =
             BindableProperty.Create("CardSecondaryEntry", typeof(double), typeof(LowCardWithEntries), 0.0);
+
+        public MaterialColors CardColor
+        {
+            get { return (MaterialColors)GetValue(CardColorProperty); }
+            set { SetValue(CardColorProperty, value); }
+        }
+
+        public static readonly BindableProperty CardColorProperty =
+            BindableProperty.Create("CardColor", typeof(MaterialColors), typeof(LowCardWithEntries), MaterialColors.Default);
 
         public DelegateCommand ButtonCommand
         {

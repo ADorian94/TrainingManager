@@ -35,6 +35,7 @@ namespace TrainingManager.ViewModel
                         RoundGuid = round.RoundGuid,
                         RoundNumber = round.RoundNumber,
                         WeightOfExercise = round.WeightOfExercise,
+                        RoundColor = round.RoundColor,
                     });
                 }
 
@@ -45,6 +46,7 @@ namespace TrainingManager.ViewModel
                     ExerciseName = exercise.ExerciseName,
                     TotalExerciseRounds = exercise.WeightRounds.Count,
                     TotalExerciseWeight = exercise.TotalExerciseWeight,
+                    ExerciseColor = exercise.ExerciseColor,
                     WeightRounds = new ObservableCollection<WeightRoundVM>(rounds),
                 });
             }

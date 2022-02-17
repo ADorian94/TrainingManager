@@ -54,13 +54,15 @@ namespace TrainingManager.WebApi.Controllers
                         ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.Color,
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
                             Reps = r.Reps,
                             RoundGuid = r.RoundGuid,
                             RoundNumber = r.RoundNumber,
-                            WeightOfExercise = r.WeightOfExercise
+                            WeightOfExercise = r.WeightOfExercise,
+                            Color = r.Color
                         }).ToList()
                     }).ToList(),
                 }));
@@ -107,13 +109,15 @@ namespace TrainingManager.WebApi.Controllers
                         ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.Color,
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
                             Reps = r.Reps,
                             RoundGuid = r.RoundGuid,
                             RoundNumber = r.RoundNumber,
-                            WeightOfExercise = r.WeightOfExercise
+                            WeightOfExercise = r.WeightOfExercise,
+                            Color = r.Color
                         }).ToList()
                     }).ToList(),
                 }).Single());
@@ -310,7 +314,8 @@ namespace TrainingManager.WebApi.Controllers
                         Note = weightExerciseDto.Note,
                         TotalExerciseWeight = weightExerciseDto.TotalExerciseWeight,
                         WorkoutId = _context.WeightWorkouts.Single(x => x.WorkoutGuid == workoutGuid).Id,
-                        OwnerUserName = user.UserName
+                        OwnerUserName = user.UserName,
+                        Color = weightExerciseDto.Color
                     };
 
                     var addedweightExercise = _context.WeightExercises.Add(weightExercise);
@@ -362,6 +367,7 @@ namespace TrainingManager.WebApi.Controllers
                         RoundNumber = weightRoundDto.RoundNumber,
                         WeightOfExercise = weightRoundDto.WeightOfExercise,
                         ExerciseId = _context.WeightExercises.Single(x => x.ExerciseGuid == exerciseGuid).Id,
+                        Color = weightRoundDto.Color
                     };
 
                     var addedWeightRound = _context.WeightRounds.Add(weightRound);

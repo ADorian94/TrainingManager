@@ -52,7 +52,8 @@
                                                            OpenCardFirstLabel="Total weight" OpenCardFirstValue="{Binding TotalExerciseWeight}"
                                                            OpenCardSecondLabel="Rounds" OpenCardSecondValue="{Binding TotalExerciseRounds}"
                                                            ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference WeightWorkoutPage}}"
-                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="True"/>
+                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="True"
+                                                           CardColor="{Binding ExerciseColor}"/>
                                 </ViewCell>
                             </DataTemplate>
                         </ListView.ItemTemplate>

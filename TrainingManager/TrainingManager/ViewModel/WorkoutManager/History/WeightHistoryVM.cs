@@ -93,12 +93,14 @@ namespace TrainingManager.ViewModel
                         ExerciseNote = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                        ExerciseColor = x.Color,
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
                         {
                             RoundGuid = y.RoundGuid,
                             RoundNumber = y.RoundNumber,
                             Reps = y.Reps,
-                            WeightOfExercise = y.WeightOfExercise
+                            WeightOfExercise = y.WeightOfExercise,
+                            RoundColor = y.Color
                         })),
                     }))
 
@@ -133,12 +135,14 @@ namespace TrainingManager.ViewModel
                         ExerciseNote = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                        ExerciseColor = x.Color,
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
                         {
                             RoundGuid = y.RoundGuid,
                             RoundNumber = y.RoundNumber,
                             Reps = y.Reps,
-                            WeightOfExercise = y.WeightOfExercise
+                            WeightOfExercise = y.WeightOfExercise,
+                            RoundColor = y.Color
                         })),
                     }))
                 };
@@ -168,12 +172,14 @@ namespace TrainingManager.ViewModel
                     ExerciseName = x.ExerciseName,
                     Note = x.ExerciseNote,
                     TotalExerciseWeight = x.TotalExerciseWeight,
+                    Color = x.ExerciseColor,
                     WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                     {
                         Reps = y.Reps,
                         RoundGuid = y.RoundGuid,
                         RoundNumber = y.RoundNumber,
-                        WeightOfExercise = y.WeightOfExercise
+                        WeightOfExercise = y.WeightOfExercise,
+                        Color = y.RoundColor
                     })),
                 })),
             });

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.LogWriter;
@@ -93,6 +94,7 @@ namespace TrainingManager.ViewModel
                         RoundGuid = round.RoundGuid,
                         RoundNumber = round.RoundNumber,
                         WeightOfExercise = round.WeightOfExercise,
+                        RoundColor = round.Color
                     });
                 }
 
@@ -103,6 +105,7 @@ namespace TrainingManager.ViewModel
                     ExerciseName = exercise.ExerciseName,
                     TotalExerciseRounds = exercise.WeightRoundsDto.Count,
                     TotalExerciseWeight = exercise.TotalExerciseWeight,
+                    ExerciseColor = exercise.Color,
                     WeightRounds = new ObservableCollection<WeightRoundVM>(rounds),
                 });
             }
@@ -200,14 +203,6 @@ namespace TrainingManager.ViewModel
             }
             else
                 foundElements = activities.Select(x => x);
-
-            //var items = new List<string>();
-
-            //foreach (var item in foundElements)
-            //{
-            //    if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
-            //        items.Add(item);
-            //}
 
             SavedActivities = new ObservableCollection<string>(foundElements.OrderBy(x => x));
         }

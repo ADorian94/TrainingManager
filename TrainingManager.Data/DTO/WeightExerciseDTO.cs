@@ -11,6 +11,7 @@ namespace TrainingManager.Data.DTO
         public double TotalExerciseWeight { get; set; }
         public string Note { get; set; }
         public int WorkoutId { get; set; }
+        public MaterialColors Color { get; set; }
         public virtual ICollection<WeightRoundDTO> WeightRoundsDto { get; set; }
     }
 }

@@ -1,10 +1,17 @@
 ﻿using System;
+using TrainingManager.Data;
 
 namespace TrainingManager.ViewModel
 {
     public class WeightRoundVM : ViewModelBase
     {
         protected override void InitializeCommands() { }
+
+        public WeightRoundVM()
+        {
+            ColorVM = new ColorVM();
+            ColorVM.ColorSelected += OnColorSelected;
+        }
 
         //EVENTS
         public event EventHandler<double> RoundWeightChanged;
@@ -21,6 +28,12 @@ namespace TrainingManager.ViewModel
 
         private int _roundNumber;
         public int RoundNumber { get => _roundNumber; set { _roundNumber = value; OnPropertyChanged(); } }
+
+        private MaterialColors _roundColor;
+        public MaterialColors RoundColor { get => _roundColor; set { _roundColor = value; OnPropertyChanged(); } }
+
+        private ColorVM _colorVM;
+        public ColorVM ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
 
         public static bool operator ==(WeightRoundVM r1, WeightRoundVM r2)
         {
@@ -39,9 +52,12 @@ namespace TrainingManager.ViewModel
 
             var w2 = (WeightRoundVM)obj;
 
-            return WeightOfExercise == w2.WeightOfExercise && Reps == w2.Reps && RoundNumber == w2.RoundNumber;
+            return WeightOfExercise == w2.WeightOfExercise && Reps == w2.Reps && RoundNumber == w2.RoundNumber && RoundColor == w2.RoundColor;
         }
 
         public override int GetHashCode() => WeightOfExercise.GetHashCode() ^ Reps.GetHashCode() ^ RoundNumber.GetHashCode();
+
+        //EVENT HANDLERS
+        private void OnColorSelected(object sender, MaterialColors Color) => RoundColor = Color;
     }
 }
