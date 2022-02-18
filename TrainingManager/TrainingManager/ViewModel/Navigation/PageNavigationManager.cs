@@ -323,6 +323,8 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnColorSelected(object sender, MaterialColors e)
         {
             ((ColorVM)_colorSelectPage.BindingContext).ColorSelected -= OnColorSelected;
+            _weightWorkoutManagerVM.CheckChangesAndSetResult();
+            _weightHistoryVM.CheckChangesAndSetResult();
             await _mainNavigationPage.PopAsync();
         }
 
