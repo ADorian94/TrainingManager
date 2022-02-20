@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.LogWriter;
@@ -190,7 +189,7 @@ namespace TrainingManager.ViewModel
             InvokeWorkoutSavedEvent(this, null);
         }
 
-        public async void SearchFunction(object obj)
+        private async void SearchFunction(object obj)
         {
             var searchStr = obj.ToString();
             IEnumerable<string> foundElements = new ObservableCollection<string>();

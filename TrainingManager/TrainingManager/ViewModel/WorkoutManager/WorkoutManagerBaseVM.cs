@@ -140,6 +140,7 @@ namespace TrainingManager.ViewModel
                 NewWeightWorkout.TotalExerciseRounds -= NewWeightWorkout.WeightExercises.FirstOrDefault(x => x.ExerciseGuid.ToString() == stringGuid).WeightRounds.Count;
                 NewWeightWorkout.WeightExercises.Remove(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid));
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
+                NewWeightExercise = new WeightExerciseVM();
                 CheckChangesAndSetResult();
             }
             catch (Exception ex)
