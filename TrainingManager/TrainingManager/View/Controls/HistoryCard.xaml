@@ -28,8 +28,8 @@
                                     <RowDefinition Height="auto"/>
                                     <RowDefinition Height="auto"/>
                                 </Grid.RowDefinitions>
-                                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=ShortDate}" Style="{StaticResource Title1}" TextColor="Black" Margin="0" HorizontalOptions="CenterAndExpand"/>
-                                <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=LongDate}" Style="{StaticResource Title2}" TextColor="Black" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=ShortDate}" Style="{StaticResource Title1}" TextColor="WhiteSmoke" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                                <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=LongDate}" Style="{StaticResource Title2}" TextColor="WhiteSmoke" Margin="0" HorizontalOptions="CenterAndExpand"/>
                             </Grid>
                         </StackLayout>
                     </Frame>
