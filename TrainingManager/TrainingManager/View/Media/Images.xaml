@@ -8,4 +8,6 @@
     <ImageSource x:Key="RegistrationBackgroundWide">PlateWide.png</ImageSource>
     <ImageSource x:Key="RegistrationBackgroundPortrait">PlatePortrait.png</ImageSource>
     <ImageSource x:Key="TripleDotIcon">sharp_more_vert_white_24.png</ImageSource>
+    <ImageSource x:Key="NoData">NoData.png</ImageSource>
+    <ImageSource x:Key="NotFound">NotFound.png</ImageSource>
 </ResourceDictionary>

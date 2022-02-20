@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:media="clr-namespace:TrainingManager.View.Media"
              xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.AddSavedWeightExercises"
              NavigationPage.HasNavigationBar="False"
@@ -10,10 +11,13 @@
     <ContentPage.Resources>
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
+            <converter:CollectionToNegateBoolConverter x:Key="CollectionToNegateBoolConverter" />
+            <converter:CollectionToBoolConverter x:Key="CollectionToBoolConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <local:Style/>
+                <media:Images/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -22,7 +26,9 @@
             <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
             <Label Text="Saved Exercises" Style="{StaticResource Title0}"/>
             <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" />
-            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=SavedActivities}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=SavedActivities}" SeparatorVisibility="None" HasUnevenRows="True"
+                      SelectionMode="None" VerticalOptions="FillAndExpand"
+                      IsVisible="{Binding SavedActivities, Converter={StaticResource CollectionToBoolConverter}}">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
@@ -32,6 +38,9 @@
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
+            <Image Source="{StaticResource NotFound}" WidthRequest="300" HeightRequest="300"
+                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
+                       IsVisible="{Binding SavedActivities, Converter={StaticResource CollectionToNegateBoolConverter}}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
