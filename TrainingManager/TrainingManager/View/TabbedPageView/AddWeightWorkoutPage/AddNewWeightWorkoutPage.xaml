@@ -39,7 +39,7 @@
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <controls:SimpleCard Grid.Column="0" CardMainText="Total weight" Margin="5,0" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
+                                <controls:SimpleCard Grid.Column="0" CardMainText="Weight" Margin="5,0" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
                                                  IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
                                 <controls:SimpleCard Grid.Column="1" CardMainText="Comment" Margin="5,0" CardFrameTapped="{Binding OpenNoteEditorCommand}"
                                                      IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>

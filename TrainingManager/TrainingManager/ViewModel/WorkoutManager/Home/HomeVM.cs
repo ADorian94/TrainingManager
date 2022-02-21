@@ -21,7 +21,6 @@ namespace TrainingManager.ViewModel
         {
             ApiServices = apiServices;
             _profileService = profileService;
-            RecentWorkouts = new ObservableCollection<HistoryItemVM>();
             SetupHomeAsync();
             WeightWorkoutMenuSelectedCommand = new DelegateCommand(WeightWorkoutMenuSelectedFunction);
             ProfileSelectedCommand = new DelegateCommand(ProfileSelectedFunction);

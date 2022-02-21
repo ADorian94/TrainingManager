@@ -64,7 +64,6 @@ namespace TrainingManager.ViewModel.Navigation
         private WeightHistoryVM _weightHistoryVM;
         private HomeVM _homeVM;
         private SettingsVM _settingsVM;
-        private ColorVM _colorVM;
 
         public PageNavigationManager(IApiServices apiServices, IAuthService authService, IProfileService profileService)
         {
