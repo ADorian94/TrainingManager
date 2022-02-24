@@ -155,8 +155,6 @@
     </Content>
     <Content Include="History.png" />
     <Content Include="Home.png" />
-    <Content Include="NoData.png" />
-    <Content Include="NotFound.png" />
     <Content Include="PlateWide.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

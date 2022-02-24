@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:TrainingManager.View.Styles" 
-             xmlns:media="clr-namespace:TrainingManager.View.Media" 
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
              xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.HomePage"
@@ -13,13 +12,10 @@
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
             <converter:DateToShortStringConverter x:Key="DateToShortStringConverter" />
-            <converter:CollectionToBoolConverter x:Key="CollectionToBoolConverter" />
-            <converter:CollectionToNegateBoolConverter x:Key="CollectionToNegateBoolConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <local:Style/>
-                <media:Images/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -50,8 +46,7 @@
             </ScrollView>
             <StackLayout>
                 <Label Text="Recent workouts" Style="{StaticResource Title0}"/>
-                <ListView x:Name="RecentList" ItemsSource="{Binding Path=RecentWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand"
-                          IsVisible="{Binding RecentWorkouts, Converter={StaticResource CollectionToBoolConverter}}">
+                <ListView x:Name="RecentList" ItemsSource="{Binding Path=RecentWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                     <ListView.ItemTemplate >
                         <DataTemplate>
                             <ViewCell>
@@ -68,9 +63,6 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
-                <Image Source="{StaticResource NoData}" Opacity="0.9" WidthRequest="300" HeightRequest="300"
-                       HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand"
-                       IsVisible="{Binding RecentWorkouts, Converter={StaticResource CollectionToNegateBoolConverter}}"/>
             </StackLayout>
         </StackLayout>
     </ScrollView>

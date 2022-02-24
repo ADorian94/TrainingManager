@@ -29,7 +29,6 @@ namespace TrainingManager
                 InitializeComponent();
                 CheckPermissions();
                 _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
-                //_apiService = new ApiServices("http://localhost:51426/");
                 _authService = new AuthService();
                 _profileService = new ProfileService();
                 _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);

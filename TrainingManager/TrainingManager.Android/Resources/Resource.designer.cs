@@ -12968,79 +12968,73 @@ namespace TrainingManager.Droid
 			public const int navigation_empty_icon = 2131165527;
 			
 			// aapt resource value: 0x7F070158
-			public const int NoData = 2131165528;
+			public const int notification_action_background = 2131165528;
 			
 			// aapt resource value: 0x7F070159
-			public const int NotFound = 2131165529;
+			public const int notification_bg = 2131165529;
 			
 			// aapt resource value: 0x7F07015A
-			public const int notification_action_background = 2131165530;
+			public const int notification_bg_low = 2131165530;
 			
 			// aapt resource value: 0x7F07015B
-			public const int notification_bg = 2131165531;
+			public const int notification_bg_low_normal = 2131165531;
 			
 			// aapt resource value: 0x7F07015C
-			public const int notification_bg_low = 2131165532;
+			public const int notification_bg_low_pressed = 2131165532;
 			
 			// aapt resource value: 0x7F07015D
-			public const int notification_bg_low_normal = 2131165533;
+			public const int notification_bg_normal = 2131165533;
 			
 			// aapt resource value: 0x7F07015E
-			public const int notification_bg_low_pressed = 2131165534;
+			public const int notification_bg_normal_pressed = 2131165534;
 			
 			// aapt resource value: 0x7F07015F
-			public const int notification_bg_normal = 2131165535;
+			public const int notification_icon_background = 2131165535;
 			
 			// aapt resource value: 0x7F070160
-			public const int notification_bg_normal_pressed = 2131165536;
+			public const int notification_template_icon_bg = 2131165536;
 			
 			// aapt resource value: 0x7F070161
-			public const int notification_icon_background = 2131165537;
+			public const int notification_template_icon_low_bg = 2131165537;
 			
 			// aapt resource value: 0x7F070162
-			public const int notification_template_icon_bg = 2131165538;
+			public const int notification_tile_bg = 2131165538;
 			
 			// aapt resource value: 0x7F070163
-			public const int notification_template_icon_low_bg = 2131165539;
+			public const int notify_panel_notification_icon_bg = 2131165539;
 			
 			// aapt resource value: 0x7F070164
-			public const int notification_tile_bg = 2131165540;
+			public const int PlatePortrait = 2131165540;
 			
 			// aapt resource value: 0x7F070165
-			public const int notify_panel_notification_icon_bg = 2131165541;
+			public const int preference_list_divider_material = 2131165541;
 			
 			// aapt resource value: 0x7F070166
-			public const int PlatePortrait = 2131165542;
+			public const int sharp_more_vert_24 = 2131165542;
 			
 			// aapt resource value: 0x7F070167
-			public const int preference_list_divider_material = 2131165543;
+			public const int sharp_more_vert_white_24 = 2131165543;
 			
 			// aapt resource value: 0x7F070168
-			public const int sharp_more_vert_24 = 2131165544;
+			public const int splash_screen = 2131165544;
 			
 			// aapt resource value: 0x7F070169
-			public const int sharp_more_vert_white_24 = 2131165545;
+			public const int Statistics = 2131165545;
 			
 			// aapt resource value: 0x7F07016A
-			public const int splash_screen = 2131165546;
+			public const int test_custom_background = 2131165546;
 			
 			// aapt resource value: 0x7F07016B
-			public const int Statistics = 2131165547;
+			public const int tooltip_frame_dark = 2131165547;
 			
 			// aapt resource value: 0x7F07016C
-			public const int test_custom_background = 2131165548;
+			public const int tooltip_frame_light = 2131165548;
 			
 			// aapt resource value: 0x7F07016D
-			public const int tooltip_frame_dark = 2131165549;
+			public const int TrainingManagerAppIcon = 2131165549;
 			
 			// aapt resource value: 0x7F07016E
-			public const int tooltip_frame_light = 2131165550;
-			
-			// aapt resource value: 0x7F07016F
-			public const int TrainingManagerAppIcon = 2131165551;
-			
-			// aapt resource value: 0x7F070170
-			public const int Workout = 2131165552;
+			public const int Workout = 2131165550;
 			
 			static Drawable()
 			{
