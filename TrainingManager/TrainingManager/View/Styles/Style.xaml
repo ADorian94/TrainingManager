@@ -149,7 +149,7 @@
     <Style x:Key="Loading" TargetType="{x:Type ActivityIndicator}">
         <Setter Property="VerticalOptions" Value="CenterAndExpand"/>
         <Setter Property="HorizontalOptions" Value="CenterAndExpand"/>
-        <Setter Property="Color" Value="White"/>
+        <Setter Property="Color" Value="{StaticResource MainBlueColor}"/>
         <Setter Property="IsRunning" Value="True"/>
         <Setter Property="WidthRequest">
             <OnIdiom Desktop="150" Phone="50"/>
