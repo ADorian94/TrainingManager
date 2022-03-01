@@ -1,5 +1,6 @@
 ﻿using System;
 using TrainingManager.Model;
+using TrainingManager.Model.DebugSettings;
 using TrainingManager.Model.Interfaces;
 using TrainingManager.Model.LogWriter;
 using TrainingManager.Model.Services;
@@ -26,9 +27,10 @@ namespace TrainingManager
             {
                 LogHandler.InitializeLogPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
                 LogHandler.Instance.Nlog.Info("**********NEW RUN**********");
+                DebugSettingsJSONHandler.InitializeJSONPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
                 InitializeComponent();
                 CheckPermissions();
-                _apiService = new ApiServices("http://trainingmanagerwebapi.azurewebsites.net");
+                _apiService = new ApiServices(GetConnectionAddress());
                 _authService = new AuthService();
                 _profileService = new ProfileService();
                 _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
@@ -47,6 +49,11 @@ namespace TrainingManager
 
             MainPage = _authenticationNavigationManager.MainPage;
         }
+
+        private string GetConnectionAddress() =>
+            string.IsNullOrEmpty(DebugSettingsJSONHandler.Instance.JSONFile.APIConnection) ?
+            "http://trainingmanagerwebapi.azurewebsites.net" :
+            DebugSettingsJSONHandler.Instance.JSONFile.APIConnection;
 
         private async void CheckPermissions()
         {

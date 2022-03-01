@@ -177,6 +177,9 @@
     <None Update="App.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>
+    <None Update="Debug\DebugSettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="View\Controls\CardWithEntry.xaml">
       <Generator>MSBuild:Compile</Generator>
     </None>

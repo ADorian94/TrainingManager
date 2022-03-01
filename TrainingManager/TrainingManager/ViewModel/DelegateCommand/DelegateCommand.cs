@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
+using TrainingManager.Model.LogWriter;
 
 namespace TrainingManager.ViewModel
 {
@@ -21,11 +22,20 @@ namespace TrainingManager.ViewModel
         public bool CanExecute(object parameter) => _canExecute == null || _canExecute(parameter);
         public void Execute(object parameter)
         {
-            if (CanExecute(parameter))
-                _execute(parameter);
 
-            //if (!CanExecute(parameter))
-            //throw new InvalidOperationException("Command execution is disabled.");
+            try
+            {
+                if (CanExecute(parameter))
+                    _execute(parameter);
+
+                //if (!CanExecute(parameter))
+                //throw new InvalidOperationException("Command execution is disabled.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw;
+            }
         }
 
         public void RaiseCanExecuteChanged() => CanExecuteChanged?.Invoke(this, EventArgs.Empty);

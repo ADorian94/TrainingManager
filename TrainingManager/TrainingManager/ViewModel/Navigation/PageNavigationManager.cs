@@ -283,10 +283,18 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnRecentWorkoutItemSelected(object sender, MessageEventArgs e)
         {
-            string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Details");
+            try
+            {
+                string action = await _mainTabbedPage.DisplayActionSheet(e.Title, "Cancel", null, "Details");
 
-            if (action == "Details")
-                await _mainNavigationPage.PushAsync(_recentWorkoutDetailsPage);
+                if (action == "Details")
+                    await _mainNavigationPage.PushAsync(_recentWorkoutDetailsPage);
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw;
+            }
         }
 
         private async void OnHistoryWorkoutItemSelected(object sender, MessageEventArgs e)
