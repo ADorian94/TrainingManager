@@ -16,8 +16,10 @@
         <StackLayout>
             <Label Text="Calendar" Style="{StaticResource Title0}"/>
             <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}" ActualDate="{Binding CurrentDate}"/>
-            <controls:SimpleCard CardMainText="Moved weights in the month"
-                                 CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
+            <controls:SimpleCard
+                Margin="15, 5"
+                CardMainText="Moved weights in the month"
+                CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
