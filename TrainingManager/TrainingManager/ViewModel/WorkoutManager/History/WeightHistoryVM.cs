@@ -25,6 +25,9 @@ namespace TrainingManager.ViewModel
         {
             try
             {
+                CurrentDate = DateTime.Now;
+                MovedWeightsByMonth = new ObservableCollection<(int Year, int Month, double Weight)>(await ApiServices.GetMovedWorkoutsGroupByMonth());
+                SetMovedWeightsInTheMonth();
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 WorkoutDates = new ObservableCollection<SpecialDate>();
                 var items = new List<HistoryItemVM>();
@@ -55,6 +58,17 @@ namespace TrainingManager.ViewModel
 
         private ObservableCollection<HistoryItemVM> _historyWorkoutItems;
         public ObservableCollection<HistoryItemVM> HistoryWorkoutItems { get => _historyWorkoutItems; set { _historyWorkoutItems = value; OnPropertyChanged(); } }
+
+        private DateTime _currentDate;
+        public DateTime CurrentDate { get => _currentDate; set { _currentDate = value; OnPropertyChanged(); SetMovedWeightsInTheMonth(); } }
+
+
+
+        private ObservableCollection<(int Year, int Month, double Weight)> _movedWeightsByMonth;
+        public ObservableCollection<(int Year, int Month, double Weight)> MovedWeightsByMonth { get => _movedWeightsByMonth; set { _movedWeightsByMonth = value; OnPropertyChanged(); } }
+
+        private double _movedWeightsInTheMonth;
+        public double MovedWeightsInTheMonth { get => _movedWeightsInTheMonth; set { _movedWeightsInTheMonth = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand WorkoutDateSelected { get; private set; }
@@ -149,6 +163,21 @@ namespace TrainingManager.ViewModel
 
                 HistoryWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
             }
+        }
+
+        //PRIVATE
+        private void SetMovedWeightsInTheMonth()
+        {
+            if (MovedWeightsByMonth != null)
+            {
+                if (MovedWeightsByMonth.Any(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month))
+                {
+                    MovedWeightsInTheMonth = MovedWeightsByMonth.Single(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month).Weight;
+                    return;
+                }
+            }
+
+            MovedWeightsInTheMonth = 0;
         }
 
         //PROTETED

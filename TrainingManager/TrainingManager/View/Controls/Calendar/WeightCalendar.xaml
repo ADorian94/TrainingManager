@@ -30,7 +30,9 @@
                                VerticalOptions="CenterAndExpand"
                                SelectedBorderColor="{StaticResource MainRedColor}"
                                SelectedTextColor="{StaticResource MainRedColor}"
-                               DateClicked="Calendar_DateClicked"/>
+                               DateClicked="Calendar_DateClicked"
+                               RightArrowClicked="Calendar_RightArrowClicked"
+                               LeftArrowClicked="Calendar_LeftArrowClicked"/>
         </StackLayout>
     </ContentView.Content>
 </ContentView>
