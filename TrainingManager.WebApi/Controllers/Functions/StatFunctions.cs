@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Model;
 
 namespace TrainingManager.WebApi.Controllers.Functions

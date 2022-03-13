@@ -43,6 +43,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetRecentWorkouts");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto)
         {
             try

@@ -10,6 +10,7 @@ namespace TrainingManager.Model
         Task<bool> RegisterAync(string name, string userName, string userEmail, string password, string confirmPassword);
         Task<bool> LogoutAsync();
         Task<IEnumerable<WeightWorkoutDTO>> GetWeightWorkoutsAsync();
+        Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync();
         Task<bool> UploadProfilePicture(byte[] image);
         Task<byte[]> DownloadProfilePictureAsync();
         Task<string> GetNameOfTheUser();
