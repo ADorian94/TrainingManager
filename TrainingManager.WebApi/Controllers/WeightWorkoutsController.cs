@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TrainingManager.Data.DTO;
+using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
@@ -18,10 +19,12 @@ namespace TrainingManager.WebApi.Controllers
     public class WeightWorkoutsController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
+        private readonly StatFunctions _statFunctions;
 
         public WeightWorkoutsController(TrainingManagerContext context)
         {
             _context = context;
+            _statFunctions = new StatFunctions();
         }
 
         // GET: api/WeightWorkouts
@@ -412,6 +415,20 @@ namespace TrainingManager.WebApi.Controllers
             }
 
             await _context.SaveChangesAsync();
+        }
+
+        [HttpGet("MovedWeightsByMonth")]
+        public IActionResult GetMovedWeightsByMonth()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.SumMovedWeightsByMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
     }
 }
