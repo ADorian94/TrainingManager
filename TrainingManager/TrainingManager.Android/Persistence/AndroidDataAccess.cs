@@ -1,4 +1,5 @@
 ﻿using Android.Content;
+using System.IO;
 using TrainingManager.Droid.Persistence;
 using TrainingManager.Model.Interfaces;
 using Xamarin.Forms;

@@ -95,11 +95,11 @@ namespace TrainingManager.View.Controls
             switch (color)
             {
                 case MaterialColors.Red:
-                    return Color.FromHex("#AB000D");
+                    return Color.FromHex("#f05545");
                 case MaterialColors.Purple:
-                    return Color.FromHex("#5C007A");
+                    return Color.FromHex("#d05ce3");
                 case MaterialColors.DeepPurple:
-                    return Color.FromHex("#280680");
+                    return Color.FromHex("#8559da");
                 case MaterialColors.Blue:
                     return Color.FromHex("#005CB2");
                 case MaterialColors.Cyan:
@@ -109,11 +109,11 @@ namespace TrainingManager.View.Controls
                 case MaterialColors.Lime:
                     return Color.FromHex("#8C9900");
                 case MaterialColors.Amber:
-                    return Color.FromHex("#C68400");
+                    return Color.FromHex("#c56000");
                 case MaterialColors.DeepOrange:
-                    return Color.FromHex("#B91400");
+                    return Color.FromHex("#c63f17");
                 case MaterialColors.Brown:
-                    return Color.FromHex("#40241A");
+                    return Color.FromHex("#5d4037");
                 case MaterialColors.Default:
                 default:
                     return Color.FromHex("#666666");

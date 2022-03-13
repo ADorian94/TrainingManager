@@ -8,6 +8,7 @@ using TrainingManager.Data.DTO;
 using System.Collections.ObjectModel;
 using TrainingManager.Model.LogWriter;
 using System.IO;
+using System.Linq;
 
 namespace TrainingManager.ViewModel.Tests
 {
@@ -18,9 +19,14 @@ namespace TrainingManager.ViewModel.Tests
         private WeightWorkoutManagerVM _weightWorkoutManagerVM;
         private Mock<IApiServices> _apiService;
         private IEnumerable<WeightWorkoutDTO> _weightWorkouts;
+        private readonly IEnumerable<string> _savedActivities = new List<string>() { BICEPS, TRICEPS, SQUAT, TRICEPS_PLATE };
 
         private const string WORKOUT_NAME = "TestWorkout";
         private const string EXERCISE_NAME = "TestExercise";
+        private const string BICEPS = "Biceps";
+        private const string TRICEPS = "Triceps";
+        private const string TRICEPS_PLATE = "Triceps with plate";
+        private const string SQUAT = "Squat";
 
         [TestInitialize]
         public void InitializeTest()
@@ -41,6 +47,8 @@ namespace TrainingManager.ViewModel.Tests
 
             _apiService.Setup(x => x.GetWeightWorkoutsAsync()).Returns(Task.FromResult(_weightWorkouts));
             _apiService.Setup(x => x.EditWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>())).Returns(Task.FromResult(true));
+            _apiService.Setup(x => x.GetWeightActivitiesAsync()).Returns(Task.FromResult(_savedActivities));
+            _apiService.Setup(x => x.AddWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>())).Returns(Task.FromResult(true)); ;
             LogHandler.InitializeLogPath("./");
         }
 
@@ -88,9 +96,131 @@ namespace TrainingManager.ViewModel.Tests
                 WeightExercises = new ObservableCollection<WeightExerciseVM>(),
             };
 
-            _apiService.Setup(x => x.GetWeightWorkoutsAsync()).Returns(Task.FromResult(_weightWorkouts));
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
             Assert.AreEqual(emptyWorkout, _weightWorkoutManagerVM.NewWeightWorkout);
+            CollectionAssert.AreEqual(new List<string>(_savedActivities.OrderBy(x => x)), _weightWorkoutManagerVM.SavedActivities);
+        }
+
+        //ADD & DELETE
+        [TestMethod()]
+        public void AddAndDeleteExerciseTest()
+        {
+            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
+            var id = Guid.NewGuid();
+
+            _weightWorkoutManagerVM.NewWeightExercise = new WeightExerciseVM()
+            {
+                ExerciseName = EXERCISE_NAME,
+                ExerciseGuid = id,
+                WeightRounds = new ObservableCollection<WeightRoundVM>()
+                {
+                    new WeightRoundVM()
+                    {
+                        WeightOfExercise = 10,
+                        Reps = 1
+                    }
+                }
+            };
+
+            _weightWorkoutManagerVM.NewWeightExercise.CountTotalWeightOfExercise();
+            _weightWorkoutManagerVM.AddWeightExerciseToWorkoutCommand.Execute(null);
+
+            Assert.AreEqual(1, _weightWorkoutManagerVM.NewWeightWorkout.WeightExercises.Count);
+            Assert.AreEqual(10, _weightWorkoutManagerVM.NewWeightWorkout.TotalWeight);
+            Assert.AreEqual(1, _weightWorkoutManagerVM.NewWeightExercise.TotalExerciseRounds);
+            Assert.IsTrue(_weightWorkoutManagerVM.HasAnyChanges);
+
+            _weightWorkoutManagerVM.DeleteExercise(id.ToString());
+            Assert.AreEqual(0, _weightWorkoutManagerVM.NewWeightWorkout.WeightExercises.Count);
+            Assert.AreEqual(0, _weightWorkoutManagerVM.NewWeightWorkout.TotalWeight);
+            Assert.AreEqual(0, _weightWorkoutManagerVM.NewWeightExercise.TotalExerciseRounds);
+            Assert.IsFalse(_weightWorkoutManagerVM.HasAnyChanges);
+        }
+
+        //ROUND
+        [TestMethod()]
+        public void AddAndDuplicateRoundToExerciseTest()
+        {
+            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
+            _weightWorkoutManagerVM.OpenAddWeightExerciseCommand.Execute(null);
+            Assert.AreEqual(1, _weightWorkoutManagerVM.NewWeightExercise.WeightRounds.Count);
+            _weightWorkoutManagerVM.AddWeightRoundToExerciseCommand.Execute(null);
+            Assert.AreEqual(2, _weightWorkoutManagerVM.NewWeightExercise.WeightRounds.Count);
+            _weightWorkoutManagerVM.DuplicateRoundByStringGuid(_weightWorkoutManagerVM.NewWeightExercise.WeightRounds.First().RoundGuid.ToString());
+            Assert.AreEqual(3, _weightWorkoutManagerVM.NewWeightExercise.WeightRounds.Count);
+        }
+
+        [TestMethod()]
+        public void DeleteRoundToExerciseTest()
+        {
+            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
+            _weightWorkoutManagerVM.OpenAddWeightExerciseCommand.Execute(null);
+            Assert.AreEqual(1, _weightWorkoutManagerVM.NewWeightExercise.WeightRounds.Count);
+            _weightWorkoutManagerVM.DeleteRoundByStringGuid(_weightWorkoutManagerVM.NewWeightExercise.WeightRounds.First().RoundGuid.ToString());
+            Assert.AreEqual(0, _weightWorkoutManagerVM.NewWeightExercise.WeightRounds.Count);
+        }
+
+        //SAVE & EDIT
+        [TestMethod()]
+        public void SaveTodayWorkoutAddTest()
+        {
+            IEnumerable<WeightWorkoutDTO> workouts = new List<WeightWorkoutDTO>();
+            _apiService.Setup(x => x.GetWeightWorkoutsAsync()).Returns(Task.FromResult(workouts));
+            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
+            _weightWorkoutManagerVM.NewWeightWorkout = new WeightWorkoutVM()
+            {
+                WorkoutName = WORKOUT_NAME,
+                TotalWeight = 10,
+                WeightExercises = new ObservableCollection<WeightExerciseVM>()
+                {
+                    new WeightExerciseVM()
+                    {
+                        ExerciseName = EXERCISE_NAME,
+                        WeightRounds = new ObservableCollection<WeightRoundVM>()
+                        {
+                            new WeightRoundVM()
+                            {
+                                WeightOfExercise = 10,
+                                Reps = 1
+                            }
+                        }
+                    }
+                }
+            };
+
+            _weightWorkoutManagerVM.SaveTodayWorkoutCommand.Execute(null);
+            _apiService.Verify(x => x.AddWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>()), Times.Once);
+            _apiService.Verify(x => x.EditWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>()), Times.Never);
+        }
+
+        [TestMethod()]
+        public void SaveTodayWorkoutEditTest()
+        {
+            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
+            _weightWorkoutManagerVM.NewWeightWorkout = new WeightWorkoutVM()
+            {
+                WorkoutName = WORKOUT_NAME,
+                TotalWeight = 10,
+                WeightExercises = new ObservableCollection<WeightExerciseVM>()
+                {
+                    new WeightExerciseVM()
+                    {
+                        ExerciseName = EXERCISE_NAME,
+                        WeightRounds = new ObservableCollection<WeightRoundVM>()
+                        {
+                            new WeightRoundVM()
+                            {
+                                WeightOfExercise = 10,
+                                Reps = 1
+                            }
+                        }
+                    }
+                }
+            };
+
+            _weightWorkoutManagerVM.SaveTodayWorkoutCommand.Execute(null);
+            _apiService.Verify(x => x.EditWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>()), Times.Once);
+            _apiService.Verify(x => x.AddWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>()), Times.Never);
         }
 
         //BOOKMARK TESTS
@@ -154,6 +284,25 @@ namespace TrainingManager.ViewModel.Tests
             _weightWorkoutManagerVM.AddWeightExerciseToWorkoutCommand.Execute(null);
             _weightWorkoutManagerVM.SaveTodayWorkoutCommand.Execute(null);
             Assert.IsTrue(_weightWorkoutManagerVM.WeightWorkoutBookmark == _weightWorkoutManagerVM.NewWeightWorkout);
+        }
+
+        //SEARCH
+        [TestMethod()]
+        public void SearchFunctionTest()
+        {
+            _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
+
+            //ONE STR 
+            _weightWorkoutManagerVM.SearchCommand.Execute(BICEPS);
+            CollectionAssert.AreEqual(new List<string>() { BICEPS }, _weightWorkoutManagerVM.SavedActivities);
+
+            //SUB STR  
+            _weightWorkoutManagerVM.SearchCommand.Execute(TRICEPS);
+            CollectionAssert.AreEqual(new List<string>() { TRICEPS, TRICEPS_PLATE }, _weightWorkoutManagerVM.SavedActivities);
+
+            //NOT FOUND
+            _weightWorkoutManagerVM.SearchCommand.Execute("EMPTY");
+            CollectionAssert.AreEqual(new List<string>(), _weightWorkoutManagerVM.SavedActivities);
         }
     }
 }

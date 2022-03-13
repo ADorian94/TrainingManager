@@ -21,16 +21,18 @@
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <StackLayout Grid.Column="0" BackgroundColor="{StaticResource MainBlueColor}" >
-                        <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="auto"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=ShortDate}" Style="{StaticResource Title1}" Margin="0" HorizontalOptions="CenterAndExpand"/>
-                            <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=LongDate}" Style="{StaticResource Title2}" Margin="0" HorizontalOptions="CenterAndExpand"/>
-                        </Grid>
-                    </StackLayout>
+                    <Frame Grid.Column="0" Style="{StaticResource CardFrame}" Padding="0" BackgroundColor="{StaticResource MainBlueColor}" >
+                        <StackLayout BackgroundColor="Transparent">
+                            <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=ShortDate}" Style="{StaticResource Title1}" TextColor="WhiteSmoke" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                                <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=LongDate}" Style="{StaticResource Title2}" TextColor="WhiteSmoke" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
                     <Grid Grid.Column="1" Margin="10,5,20,5">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="40"/>

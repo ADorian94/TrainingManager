@@ -140,6 +140,7 @@ namespace TrainingManager.ViewModel
                 NewWeightWorkout.TotalExerciseRounds -= NewWeightWorkout.WeightExercises.FirstOrDefault(x => x.ExerciseGuid.ToString() == stringGuid).WeightRounds.Count;
                 NewWeightWorkout.WeightExercises.Remove(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid));
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
+                NewWeightExercise = new WeightExerciseVM();
                 CheckChangesAndSetResult();
             }
             catch (Exception ex)
@@ -227,9 +228,13 @@ namespace TrainingManager.ViewModel
                     return;
 
                 if (NewWeightWorkout.WeightExercises.Any(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid))
-                    NewWeightWorkout.WeightExercises.Remove(NewWeightExercise);
+                {
+                    int indexOfExercise = NewWeightWorkout.WeightExercises.IndexOf(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid));
+                    NewWeightWorkout.WeightExercises[indexOfExercise] = NewWeightExercise;
+                }
+                else
+                    NewWeightWorkout.WeightExercises.Add(NewWeightExercise);
 
-                NewWeightWorkout.WeightExercises.Add(NewWeightExercise);
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
                 NewWeightExercise.TotalExerciseRounds = NewWeightWorkout.WeightExercises.FirstOrDefault(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid).WeightRounds.Count;
                 NewWeightWorkout.TotalExerciseRounds = NewWeightExercise.TotalExerciseRounds;
