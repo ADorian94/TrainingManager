@@ -121,7 +121,7 @@ namespace TrainingManager.ViewModel
             return sumWorkoutWeight;
         }
 
-        protected void CheckChangesAndSetResult()
+        public void CheckChangesAndSetResult()
         {
             if (WeightWorkoutBookmark != null && NewWeightWorkout != null)
                 HasAnyChanges = WeightWorkoutBookmark != NewWeightWorkout;

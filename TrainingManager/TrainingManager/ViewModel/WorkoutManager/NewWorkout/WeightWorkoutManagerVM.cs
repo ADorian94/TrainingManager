@@ -139,12 +139,14 @@ namespace TrainingManager.ViewModel
                         ExerciseName = x.ExerciseName,
                         Note = x.ExerciseNote,
                         TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.ExerciseColor,
                         WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                         {
                             Reps = y.Reps,
                             RoundGuid = y.RoundGuid,
                             RoundNumber = y.RoundNumber,
-                            WeightOfExercise = y.WeightOfExercise
+                            WeightOfExercise = y.WeightOfExercise,
+                            Color = y.RoundColor
                         })),
                     })),
                 });
@@ -170,12 +172,14 @@ namespace TrainingManager.ViewModel
                         ExerciseName = x.ExerciseName,
                         Note = x.ExerciseNote,
                         TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.ExerciseColor,
                         WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                         {
                             Reps = y.Reps,
                             RoundGuid = y.RoundGuid,
                             RoundNumber = y.RoundNumber,
-                            WeightOfExercise = y.WeightOfExercise
+                            WeightOfExercise = y.WeightOfExercise,
+                            Color = y.RoundColor
                         })),
                     })),
                 };
