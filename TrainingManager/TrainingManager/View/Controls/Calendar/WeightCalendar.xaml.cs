@@ -57,7 +57,7 @@ namespace TrainingManager.View.Controls.Calendar
         public static readonly BindableProperty ActualDateProperty =
             BindableProperty.Create("ActualDate", typeof(DateTime), typeof(WeightCalendar), null, BindingMode.TwoWay);
         //EVENT HANDLERS
-        private void Calendar_DateClicked(object sender, DateTimeEventArgs e) => DateSelectedCommand?.Execute(e);
+        private void Calendar_DateClicked(object sender, DateTimeEventArgs e) => DateSelectedCommand?.Execute(e.DateTime);
         private void Calendar_RightArrowClicked(object sender, DateTimeEventArgs e) => ActualDate = ActualDate.AddMonths(1);
         private void Calendar_LeftArrowClicked(object sender, DateTimeEventArgs e) => ActualDate = ActualDate.AddMonths(-1);
     }

@@ -9,6 +9,26 @@ namespace TrainingManager.ViewModel
 
         public WeightWorkoutVM()
         {
+            Note = string.Empty;
+            TotalExerciseRounds = 0.0;
+            TotalWeight = 0.0;
+            WorkoutDate = DateTime.Now;
+            WorkoutGuid = Guid.NewGuid();
+            WorkoutName = string.Empty;
+            WorkoutType = Data.DTO.WorkoutType.WeightWorkout;
+            WeightExercises = new ObservableCollection<WeightExerciseVM>();
+        }
+
+        public WeightWorkoutVM(DateTime dateTime)
+        {
+            Note = string.Empty;
+            TotalExerciseRounds = 0.0;
+            TotalWeight = 0.0;
+            WorkoutDate = dateTime;
+            WorkoutGuid = Guid.NewGuid();
+            WorkoutName = string.Empty;
+            WorkoutType = Data.DTO.WorkoutType.WeightWorkout;
+            WeightExercises = new ObservableCollection<WeightExerciseVM>();
         }
 
         public WeightWorkoutVM(WeightWorkoutVM baseWorkout)

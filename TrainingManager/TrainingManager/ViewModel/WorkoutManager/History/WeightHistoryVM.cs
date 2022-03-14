@@ -36,7 +36,7 @@ namespace TrainingManager.ViewModel
                 {
                     WorkoutDates.Add(new SpecialDate(workout.WorkoutDate)
                     {
-                        TextColor = Color.FromHex("#03A9F9"),
+                        TextColor = Color.FromHex(workout.WorkoutDate < DateTime.Now ? "#03A9F9" : "#ff6961"),
                         Selectable = true,
                         FontAttributes = FontAttributes.Bold,
                     });
@@ -62,8 +62,6 @@ namespace TrainingManager.ViewModel
         private DateTime _currentDate;
         public DateTime CurrentDate { get => _currentDate; set { _currentDate = value; OnPropertyChanged(); SetMovedWeightsInTheMonth(); } }
 
-
-
         private ObservableCollection<(int Year, int Month, double Weight)> _movedWeightsByMonth;
         public ObservableCollection<(int Year, int Month, double Weight)> MovedWeightsByMonth { get => _movedWeightsByMonth; set { _movedWeightsByMonth = value; OnPropertyChanged(); } }
 
@@ -83,12 +81,13 @@ namespace TrainingManager.ViewModel
         //COMMAND FUNCTIONS
         private async void WorkoutDateSelectedFunction(object obj)
         {
+            var selectedDate = (DateTime)obj;
             var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
 
-            if (workouts.Any(x => x.WorkoutDate.Year == ((DateTimeEventArgs)obj).DateTime.Year && x.WorkoutDate.DayOfYear == ((DateTimeEventArgs)obj).DateTime.DayOfYear))
+            if (workouts.Any(x => x.WorkoutDate.Year == selectedDate.Year && x.WorkoutDate.DayOfYear == selectedDate.DayOfYear))
             {
-                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutDate.Year == ((DateTimeEventArgs)obj).DateTime.Year &&
-                x.WorkoutDate.DayOfYear == ((DateTimeEventArgs)obj).DateTime.DayOfYear);
+                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutDate.Year == selectedDate.Year &&
+                x.WorkoutDate.DayOfYear == selectedDate.DayOfYear);
 
                 NewWeightWorkout = new WeightWorkoutVM()
                 {
@@ -119,9 +118,14 @@ namespace TrainingManager.ViewModel
                     }))
 
                 };
-
-                WeightWorkoutDateSelected?.Invoke(this, ((DateTimeEventArgs)obj).DateTime);
             }
+            else
+            {
+                NewWeightWorkout = new WeightWorkoutVM(selectedDate);
+            }
+
+            WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
+            WeightWorkoutDateSelected?.Invoke(this, selectedDate);
         }
 
         private async void HistoryWorkoutItemSelectedFunction(object obj)
@@ -161,6 +165,7 @@ namespace TrainingManager.ViewModel
                     }))
                 };
 
+                WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
                 HistoryWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
             }
         }
@@ -185,13 +190,11 @@ namespace TrainingManager.ViewModel
         {
             IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
 
-            await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
+            var workoutToSave = new WeightWorkoutDTO
             {
-                Id = NewWeightWorkout.Id,
                 WorkoutDate = NewWeightWorkout.WorkoutDate,
                 TotalWeight = NewWeightWorkout.TotalWeight,
                 WorkoutName = NewWeightWorkout.WorkoutName,
-                WorkoutGuid = NewWeightWorkout.WorkoutGuid,
                 Note = NewWeightWorkout.Note,
                 WorkoutType = WorkoutType.WeightWorkout,
                 WorkoutImages = null,
@@ -211,10 +214,26 @@ namespace TrainingManager.ViewModel
                         Color = y.RoundColor
                     })),
                 })),
-            });
+            };
 
-            if (DateTime.Now.Year == NewWeightWorkout.WorkoutDate.Year && DateTime.Now.DayOfYear == NewWeightWorkout.WorkoutDate.DayOfYear)
-                InvokeWorkoutSavedEvent(this, null);
+            if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == NewWeightWorkout.WorkoutDate.Date))
+            {
+                workoutToSave.Id = NewWeightWorkout.Id;
+                workoutToSave.WorkoutGuid = NewWeightWorkout.WorkoutGuid;
+                await ApiServices.EditWeightWorkoutAsync(workoutToSave);
+            }
+            else
+            {
+                workoutToSave.WorkoutGuid = Guid.NewGuid();
+                await ApiServices.AddWeightWorkoutAsync(workoutToSave);
+                NewWeightWorkout.Id = workoutToSave.Id;
+            }
+
+            WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
+            CheckChangesAndSetResult();
+            InvokeWorkoutSavedEvent(this, EventArgs.Empty);
+            RefreshWorkouts(this, EventArgs.Empty);
+            InvokeClosePageEvent(this, EventArgs.Empty);
         }
 
         //PUBLIC

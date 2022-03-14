@@ -23,7 +23,10 @@ namespace TrainingManager.WebApi.Controllers.Functions
                     double weightOfTheMonth = 0;
 
                     foreach (var workout in monthWorkout)
-                        weightOfTheMonth += workout.TotalWeight;
+                    {
+                        if (workout.WorkoutDate < DateTime.Now)
+                            weightOfTheMonth += workout.TotalWeight;
+                    }
 
                     resutWeights.Add((yearWorkouts.Key, monthWorkout.Key, weightOfTheMonth));
                 }

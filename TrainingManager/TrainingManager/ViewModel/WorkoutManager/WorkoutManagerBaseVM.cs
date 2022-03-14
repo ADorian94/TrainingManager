@@ -100,6 +100,7 @@ namespace TrainingManager.ViewModel
 
         //PROTECTED FUNCTIONS
         protected void InvokeWorkoutSavedEvent(object obj, EventArgs args) => WorkoutSaved?.Invoke(obj, args);
+        protected void InvokeClosePageEvent(object obj, EventArgs args) => ClosePage?.Invoke(obj, args);
 
         protected double CountTotalWeightOfWorkout()
         {

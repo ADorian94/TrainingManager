@@ -252,7 +252,7 @@ namespace TrainingManager.WebApi.Controllers
             try
             {
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                return Ok(GetUserWorkouts(user).OrderByDescending(x => x.WorkoutDate.Date).Take(5));
+                return Ok(GetUserWorkouts(user).OrderByDescending(x => x.WorkoutDate.Date).Where(w => w.WorkoutDate < DateTime.Now).Take(5));
             }
             catch
             {

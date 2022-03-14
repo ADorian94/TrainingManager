@@ -107,6 +107,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
                 _weightHistoryVM.WorkoutDeleted += _homeVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightHistoryVM.WorkoutSaved += _homeVM.RefreshWorkouts;
                 _homeVM.ProfileSelected += OnProfileSelected;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
@@ -123,7 +124,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _homePage = new HomePage();
                 _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent");
                 _recentWorkoutDetailsPage = new RecentWorkoutDetails();
-                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("New Workout");
+                _addNewWeightWorkoutPage = new AddNewWeightWorkoutPage("Today Workout");
                 _settingsPage = new SettingsPage() { Title = "Settings" };
                 _exercisesPage = new ExercisesPage() { Title = "Exercises" };
                 _oneRepetitionMaximumCalculatorPage = new OneRepetitionMaximumCalculatorPage();
@@ -139,7 +140,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _historyCaruselPage = new HistoryCaruselPage();
                 _historyCaruselPage.Children.Add(_calendarHistoryPage);
                 _historyCaruselPage.Children.Add(_searchHistoryPage);
-                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Recent Workout");
+                _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Workout");
                 _addNewDrillCaruselPageHistory = new AddNewDrillCaruselPage();
                 _addSavedWeightExercisesHistory = new AddSavedWeightExercises();
                 _addWeightDrillPageHistory = new AddWeightExercisePage();
