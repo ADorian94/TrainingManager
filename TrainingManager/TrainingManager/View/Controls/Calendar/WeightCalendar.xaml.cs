@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using TrainingManager.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -47,9 +48,17 @@ namespace TrainingManager.View.Controls.Calendar
         //public static readonly BindableProperty DateCommandParameterProperty =
         //    BindableProperty.Create("DateCommandParameter", typeof(string), typeof(WeightCalendar), string.Empty);
 
-        private void Calendar_DateClicked(object sender, DateTimeEventArgs e)
+        public DateTime ActualDate
         {
-            DateSelectedCommand?.Execute(e);
+            get { return (DateTime)GetValue(ActualDateProperty); }
+            set { SetValue(ActualDateProperty, value); }
         }
+
+        public static readonly BindableProperty ActualDateProperty =
+            BindableProperty.Create("ActualDate", typeof(DateTime), typeof(WeightCalendar), null, BindingMode.TwoWay);
+        //EVENT HANDLERS
+        private void Calendar_DateClicked(object sender, DateTimeEventArgs e) => DateSelectedCommand?.Execute(e.DateTime);
+        private void Calendar_RightArrowClicked(object sender, DateTimeEventArgs e) => ActualDate = ActualDate.AddMonths(1);
+        private void Calendar_LeftArrowClicked(object sender, DateTimeEventArgs e) => ActualDate = ActualDate.AddMonths(-1);
     }
 }

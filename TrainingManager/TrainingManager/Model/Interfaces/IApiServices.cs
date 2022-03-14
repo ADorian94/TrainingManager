@@ -10,6 +10,7 @@ namespace TrainingManager.Model
         Task<bool> RegisterAync(string name, string userName, string userEmail, string password, string confirmPassword);
         Task<bool> LogoutAsync();
         Task<IEnumerable<WeightWorkoutDTO>> GetWeightWorkoutsAsync();
+        Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync();
         Task<bool> UploadProfilePicture(byte[] image);
         Task<byte[]> DownloadProfilePictureAsync();
         Task<string> GetNameOfTheUser();
@@ -20,6 +21,6 @@ namespace TrainingManager.Model
         Task<IEnumerable<WeightExerciseDTO>> GetWeightExercisesAsync();
         Task<bool> AddWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto);
         Task<bool> UpdateWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto);
-
+        Task<IEnumerable<(int year, int month, double weight)>> GetMovedWorkoutsGroupByMonth();
     }
 }

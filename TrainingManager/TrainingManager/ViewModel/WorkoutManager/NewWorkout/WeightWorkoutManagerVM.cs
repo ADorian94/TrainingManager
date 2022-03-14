@@ -37,18 +37,7 @@ namespace TrainingManager.ViewModel
                     SetupTodayWeightWorkoutDetails(weightWorkoutDTOs);
                 else
                 {
-                    NewWeightWorkout = new WeightWorkoutVM()
-                    {
-                        Note = string.Empty,
-                        TotalExerciseRounds = 0.0,
-                        TotalWeight = 0.0,
-                        WorkoutDate = DateTime.Now,
-                        WorkoutGuid = Guid.NewGuid(),
-                        WorkoutName = string.Empty,
-                        WorkoutType = WorkoutType.WeightWorkout,
-                        WeightExercises = new ObservableCollection<WeightExerciseVM>(),
-                    };
-
+                    NewWeightWorkout = new WeightWorkoutVM();
                     LogHandler.Instance.Nlog.Info("Empty new workout created.");
                 }
 

@@ -34,41 +34,7 @@ namespace TrainingManager.WebApi.Controllers
             try
             {
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                return Ok(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
-                {
-                    Id = weightWorkout.Id,
-                    WorkoutName = weightWorkout.WorkoutName,
-                    WorkoutGuid = weightWorkout.WorkoutGuid,
-                    Note = weightWorkout.Note,
-                    TotalWeight = weightWorkout.TotalWeight,
-                    WorkoutType = weightWorkout.WorkoutType,
-                    WorkoutDate = weightWorkout.WorkoutDate,
-                    WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
-                    {
-                        Id = i.Id,
-                        WorkoutId = weightWorkout.Id,
-                        ImageLarge = i.ImageLarge,
-                        ImageSmall = i.ImageSmall,
-                    }).ToList(),
-                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
-                    {
-                        ExerciseGuid = x.ExerciseGuid,
-                        Id = x.Id,
-                        ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
-                        Note = x.Note,
-                        TotalExerciseWeight = x.TotalExerciseWeight,
-                        Color = x.Color,
-                        WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
-                        {
-                            Id = r.Id,
-                            Reps = r.Reps,
-                            RoundGuid = r.RoundGuid,
-                            RoundNumber = r.RoundNumber,
-                            WeightOfExercise = r.WeightOfExercise,
-                            Color = r.Color
-                        }).ToList()
-                    }).ToList(),
-                }));
+                return Ok(GetUserWorkouts(user));
             }
             catch (Exception ex)
             {
@@ -234,8 +200,6 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
-
-
         // DELETE: api/WeightWorkouts/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteWeightWorkout([FromRoute] int id)
@@ -264,6 +228,34 @@ namespace TrainingManager.WebApi.Controllers
             catch
             {
                 // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("MovedWeightsByMonth")]
+        public IActionResult GetMovedWeightsByMonth()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.SumMovedWeightsByMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("GetRecentWorkouts")]
+        public IActionResult GetRecentWorkouts()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(GetUserWorkouts(user).OrderByDescending(x => x.WorkoutDate.Date).Where(w => w.WorkoutDate < DateTime.Now).Take(5));
+            }
+            catch
+            {
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
         }
@@ -417,18 +409,43 @@ namespace TrainingManager.WebApi.Controllers
             await _context.SaveChangesAsync();
         }
 
-        [HttpGet("MovedWeightsByMonth")]
-        public IActionResult GetMovedWeightsByMonth()
+        private IEnumerable<WeightWorkoutDTO> GetUserWorkouts(ApplicationUser user)
         {
-            try
+            return _context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
             {
-                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                return Ok(_statFunctions.SumMovedWeightsByMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName)));
-            }
-            catch
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError);
-            }
+                Id = weightWorkout.Id,
+                WorkoutName = weightWorkout.WorkoutName,
+                WorkoutGuid = weightWorkout.WorkoutGuid,
+                Note = weightWorkout.Note,
+                TotalWeight = weightWorkout.TotalWeight,
+                WorkoutType = weightWorkout.WorkoutType,
+                WorkoutDate = weightWorkout.WorkoutDate,
+                WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                {
+                    Id = i.Id,
+                    WorkoutId = weightWorkout.Id,
+                    ImageLarge = i.ImageLarge,
+                    ImageSmall = i.ImageSmall,
+                }).ToList(),
+                WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
+                {
+                    ExerciseGuid = x.ExerciseGuid,
+                    Id = x.Id,
+                    ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
+                    Note = x.Note,
+                    TotalExerciseWeight = x.TotalExerciseWeight,
+                    Color = x.Color,
+                    WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
+                    {
+                        Id = r.Id,
+                        Reps = r.Reps,
+                        RoundGuid = r.RoundGuid,
+                        RoundNumber = r.RoundNumber,
+                        WeightOfExercise = r.WeightOfExercise,
+                        Color = r.Color
+                    }).ToList()
+                }).ToList(),
+            });
         }
     }
 }

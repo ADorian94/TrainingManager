@@ -43,6 +43,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetRecentWorkouts");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto)
         {
             try
@@ -251,6 +269,17 @@ namespace TrainingManager.Model.Services
                 return true;
 
             throw new Exception($"Service returned response: {response.StatusCode}");
+        }
+
+        //STATS
+        public async Task<IEnumerable<(int year, int month, double weight)>> GetMovedWorkoutsGroupByMonth()
+        {
+            HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/MovedWeightsByMonth");
+
+            if (response.IsSuccessStatusCode)
+                return await response.Content.ReadAsAsync<IEnumerable<(int year, int month, double weight)>>();
+            else
+                throw new Exception("Server respond is not success.");
         }
     }
 }
