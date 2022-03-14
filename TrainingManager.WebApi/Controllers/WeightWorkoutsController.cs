@@ -177,7 +177,7 @@ namespace TrainingManager.WebApi.Controllers
                     Note = weightWorkoutDTO.Note,
                     TotalWeight = weightWorkoutDTO.TotalWeight,
                     WorkoutType = weightWorkoutDTO.WorkoutType,
-                    WorkoutDate = weightWorkoutDTO.WorkoutDate,
+                    WorkoutDate = weightWorkoutDTO.WorkoutDate.Date,
                     OwnerUserName = user.UserName,
                 };
 
