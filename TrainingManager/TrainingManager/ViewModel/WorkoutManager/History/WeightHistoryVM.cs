@@ -192,7 +192,7 @@ namespace TrainingManager.ViewModel
 
             var workoutToSave = new WeightWorkoutDTO
             {
-                WorkoutDate = NewWeightWorkout.WorkoutDate,
+                WorkoutDate = NewWeightWorkout.WorkoutDate.Date,
                 TotalWeight = NewWeightWorkout.TotalWeight,
                 WorkoutName = NewWeightWorkout.WorkoutName,
                 Note = NewWeightWorkout.Note,
