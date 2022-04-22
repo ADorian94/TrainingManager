@@ -115,7 +115,7 @@ namespace TrainingManager.ViewModel
                 await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
                 {
                     Id = NewWeightWorkout.Id,
-                    WorkoutDate = DateTime.Now,
+                    WorkoutDate = DateTime.Now.ToUniversalTime(),
                     TotalWeight = NewWeightWorkout.TotalWeight,
                     WorkoutName = NewWeightWorkout.WorkoutName,
                     WorkoutGuid = NewWeightWorkout.WorkoutGuid,
@@ -148,7 +148,7 @@ namespace TrainingManager.ViewModel
                 //ha még nincs a mai naphoz workout, akkor létrehozzuk és feltöltjük
                 var newWorkout = new WeightWorkoutDTO
                 {
-                    WorkoutDate = DateTime.Now,
+                    WorkoutDate = DateTime.Now.ToUniversalTime(),
                     TotalWeight = NewWeightWorkout.TotalWeight,
                     WorkoutGuid = Guid.NewGuid(),
                     WorkoutName = NewWeightWorkout.WorkoutName,

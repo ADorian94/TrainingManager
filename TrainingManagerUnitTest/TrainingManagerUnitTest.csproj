@@ -74,6 +74,7 @@
   <ItemGroup>
     <Compile Include="Model\OneRepetitionMaximumModelTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ViewModel\WorkoutManager\History\WeightHistoryVMTests.cs" />
     <Compile Include="ViewModel\WorkoutManager\NewWorkout\WeightWorkoutManagerVMTests.cs" />
   </ItemGroup>
   <ItemGroup>
