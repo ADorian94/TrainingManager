@@ -25,7 +25,7 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                CurrentDate = DateTime.Now;
+                CurrentDate = DateTime.Now.ToUniversalTime();
                 MovedWeightsByMonth = new ObservableCollection<(int Year, int Month, double Weight)>(await ApiServices.GetMovedWorkoutsGroupByMonth());
                 SetMovedWeightsInTheMonth();
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
@@ -36,7 +36,7 @@ namespace TrainingManager.ViewModel
                 {
                     WorkoutDates.Add(new SpecialDate(workout.WorkoutDate)
                     {
-                        TextColor = Color.FromHex(workout.WorkoutDate < DateTime.Now ? "#03A9F9" : "#ff6961"),
+                        TextColor = Color.FromHex(workout.WorkoutDate.ToUniversalTime() < DateTime.Now.ToUniversalTime() ? "#03A9F9" : "#ff6961"),
                         Selectable = true,
                         FontAttributes = FontAttributes.Bold,
                     });
@@ -81,20 +81,19 @@ namespace TrainingManager.ViewModel
         //COMMAND FUNCTIONS
         private async void WorkoutDateSelectedFunction(object obj)
         {
-            var selectedDate = (DateTime)obj;
+            DateTime selectedDateUTC = new DateTime(((DateTime)obj).Ticks, DateTimeKind.Utc);
             var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
 
-            if (workouts.Any(x => x.WorkoutDate.Year == selectedDate.Year && x.WorkoutDate.DayOfYear == selectedDate.DayOfYear))
+            if (workouts.Any(x => x.WorkoutDate.Year == selectedDateUTC.Year && x.WorkoutDate.DayOfYear == selectedDateUTC.DayOfYear))
             {
-                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutDate.Year == selectedDate.Year &&
-                x.WorkoutDate.DayOfYear == selectedDate.DayOfYear);
+                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutDate.Year == selectedDateUTC.Year &&
+                x.WorkoutDate.DayOfYear == selectedDateUTC.DayOfYear);
 
                 NewWeightWorkout = new WeightWorkoutVM()
                 {
                     Id = workout.Id,
                     WorkoutName = workout.WorkoutName,
                     WorkoutDate = workout.WorkoutDate,
-                    //TotalExerciseRounds = workout.WeightExercisesDto.FirstOrDefault(x => x.WorkoutId == workout.Id).WeightRoundsDto.Count,
                     TotalWeight = workout.TotalWeight,
                     WorkoutGuid = workout.WorkoutGuid,
                     WorkoutType = workout.WorkoutType,
@@ -116,16 +115,15 @@ namespace TrainingManager.ViewModel
                             RoundColor = y.Color
                         })),
                     }))
-
                 };
             }
             else
             {
-                NewWeightWorkout = new WeightWorkoutVM(selectedDate);
+                NewWeightWorkout = new WeightWorkoutVM(selectedDateUTC);
             }
 
             WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
-            WeightWorkoutDateSelected?.Invoke(this, selectedDate);
+            WeightWorkoutDateSelected?.Invoke(this, selectedDateUTC);
         }
 
         private async void HistoryWorkoutItemSelectedFunction(object obj)
@@ -141,7 +139,6 @@ namespace TrainingManager.ViewModel
                     Id = workout.Id,
                     WorkoutName = workout.WorkoutName,
                     WorkoutDate = workout.WorkoutDate,
-                    //TotalExerciseRounds = workout.WeightExercisesDto.FirstOrDefault(x => x.WorkoutId == workout.Id).WeightRoundsDto.Count,
                     TotalWeight = workout.TotalWeight,
                     WorkoutGuid = workout.WorkoutGuid,
                     WorkoutType = workout.WorkoutType,
@@ -192,7 +189,7 @@ namespace TrainingManager.ViewModel
 
             var workoutToSave = new WeightWorkoutDTO
             {
-                WorkoutDate = NewWeightWorkout.WorkoutDate.Date,
+                WorkoutDate = NewWeightWorkout.WorkoutDate,
                 TotalWeight = NewWeightWorkout.TotalWeight,
                 WorkoutName = NewWeightWorkout.WorkoutName,
                 Note = NewWeightWorkout.Note,
@@ -254,6 +251,7 @@ namespace TrainingManager.ViewModel
             }
         }
 
+        //áthelyezni szerver oldalra
         public async void SearchFunction(object obj)
         {
             var searchStr = obj.ToString();

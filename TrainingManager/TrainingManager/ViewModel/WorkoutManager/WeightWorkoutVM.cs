@@ -12,7 +12,7 @@ namespace TrainingManager.ViewModel
             Note = string.Empty;
             TotalExerciseRounds = 0.0;
             TotalWeight = 0.0;
-            WorkoutDate = DateTime.Now;
+            WorkoutDate = DateTime.Now.ToUniversalTime();
             WorkoutGuid = Guid.NewGuid();
             WorkoutName = string.Empty;
             WorkoutType = Data.DTO.WorkoutType.WeightWorkout;
@@ -24,7 +24,7 @@ namespace TrainingManager.ViewModel
             Note = string.Empty;
             TotalExerciseRounds = 0.0;
             TotalWeight = 0.0;
-            WorkoutDate = dateTime;
+            WorkoutDate = dateTime.ToUniversalTime();
             WorkoutGuid = Guid.NewGuid();
             WorkoutName = string.Empty;
             WorkoutType = Data.DTO.WorkoutType.WeightWorkout;
@@ -37,7 +37,7 @@ namespace TrainingManager.ViewModel
             Note = baseWorkout.Note;
             TotalExerciseRounds = baseWorkout.WeightExercises.Count;
             TotalWeight = baseWorkout.TotalWeight;
-            WorkoutDate = baseWorkout.WorkoutDate;
+            WorkoutDate = baseWorkout.WorkoutDate.ToUniversalTime();
             WorkoutGuid = baseWorkout.WorkoutGuid;
             WorkoutName = baseWorkout.WorkoutName;
             WorkoutType = baseWorkout.WorkoutType;
