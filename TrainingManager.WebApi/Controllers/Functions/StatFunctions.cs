@@ -34,5 +34,11 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
             return resutWeights;
         }
+
+        public IEnumerable<Tuple<DateTime, double>> CollectMovedWeightsInTheMonth(IQueryable<WeightWorkout> workouts, int year, int month)
+        {
+            return workouts.Where(x => x.WorkoutDate.Year == year && x.WorkoutDate.Month == month)
+                           .Select(w => new Tuple<DateTime, double>(w.WorkoutDate, w.TotalWeight));
+        }
     }
 }

@@ -281,5 +281,15 @@ namespace TrainingManager.Model.Services
             else
                 throw new Exception("Server respond is not success.");
         }
+
+        public async Task<IEnumerable<(DateTime date, double weight)>> GetMovedWeightsInTheMonth(int year, int month)
+        {
+            HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/MovedWeightsInTheMonth/{year}/{month}");
+
+            if (response.IsSuccessStatusCode)
+                return await response.Content.ReadAsAsync<IEnumerable<(DateTime date, double weight)>>();
+            else
+                throw new Exception("Server respond is not success.");
+        }
     }
 }

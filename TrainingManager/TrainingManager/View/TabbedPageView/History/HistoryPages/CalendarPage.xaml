@@ -13,13 +13,16 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.Content>
-        <StackLayout>
-            <Label Text="Calendar" Style="{StaticResource Title0}"/>
-            <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}" ActualDate="{Binding CurrentDate}"/>
-            <controls:SimpleCard
+        <ScrollView>
+            <StackLayout>
+                <Label Text="Calendar" Style="{StaticResource Title0}"/>
+                <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}" ActualDate="{Binding CurrentDate}"/>
+                <controls:SimpleCard
                 Margin="15, 5"
                 CardMainText="Moved weights in the month"
                 CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
-        </StackLayout>
+                <controls:LinearChart ChartEntries="{Binding WeightsOfTheMonth}"/>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

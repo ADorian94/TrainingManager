@@ -246,6 +246,20 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("MovedWeightsInTheMonth/{year}/{month}")]
+        public IActionResult GetMovedWeightsInTheMonth([FromRoute] int year, int month)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.CollectMovedWeightsInTheMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName), year, month));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetRecentWorkouts")]
         public IActionResult GetRecentWorkouts()
         {
