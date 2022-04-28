@@ -45,13 +45,26 @@ namespace TrainingManager.View.Controls
                         ValueLabelColor = x.weight < 15000 ? blueColor : redColor,
                     }),
                     ValueLabelOrientation = Orientation.Vertical,
-                    LabelTextSize = 20,
+                    LabelTextSize = GetSizeByDevice(),
                     LabelOrientation = Orientation.Horizontal,
                     LineMode = LineMode.Spline,
                     LabelColor = redColor,
                     IsAnimated = true,
                     BackgroundColor = SkiaSharp.SKColor.Empty,
                 };
+            }
+        }
+
+        private static float GetSizeByDevice()
+        {
+            switch (Device.RuntimePlatform)
+            {
+                case Device.Android:
+                    return 40;
+                case Device.UWP:
+                    return 20;
+                default:
+                    return 25;
             }
         }
     }
