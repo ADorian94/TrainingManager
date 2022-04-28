@@ -27,6 +27,7 @@ namespace TrainingManager.ViewModel
             {
                 CurrentDate = DateTime.Now.ToUniversalTime();
                 MovedWeightsByMonth = new ObservableCollection<(int Year, int Month, double Weight)>(await ApiServices.GetMovedWorkoutsGroupByMonth());
+                WeightsOfTheMonth = new ObservableCollection<(DateTime date, double Weight)>(await ApiServices.GetMovedWeightsInTheMonth(CurrentDate.Year, CurrentDate.Month));
                 SetMovedWeightsInTheMonth();
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 WorkoutDates = new ObservableCollection<SpecialDate>();
@@ -60,10 +61,13 @@ namespace TrainingManager.ViewModel
         public ObservableCollection<HistoryItemVM> HistoryWorkoutItems { get => _historyWorkoutItems; set { _historyWorkoutItems = value; OnPropertyChanged(); } }
 
         private DateTime _currentDate;
-        public DateTime CurrentDate { get => _currentDate; set { _currentDate = value; OnPropertyChanged(); SetMovedWeightsInTheMonth(); } }
+        public DateTime CurrentDate { get => _currentDate; set { _currentDate = value; OnPropertyChanged(); UpdateMonthData(); } }
 
         private ObservableCollection<(int Year, int Month, double Weight)> _movedWeightsByMonth;
         public ObservableCollection<(int Year, int Month, double Weight)> MovedWeightsByMonth { get => _movedWeightsByMonth; set { _movedWeightsByMonth = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<(DateTime date, double Weight)> _weightsOfTheMonth;
+        public ObservableCollection<(DateTime date, double Weight)> WeightsOfTheMonth { get => _weightsOfTheMonth; set { _weightsOfTheMonth = value; OnPropertyChanged(); } }
 
         private double _movedWeightsInTheMonth;
         public double MovedWeightsInTheMonth { get => _movedWeightsInTheMonth; set { _movedWeightsInTheMonth = value; OnPropertyChanged(); } }
@@ -168,6 +172,12 @@ namespace TrainingManager.ViewModel
         }
 
         //PRIVATE
+        private async void UpdateMonthData()
+        {
+            SetMovedWeightsInTheMonth();
+            WeightsOfTheMonth = new ObservableCollection<(DateTime date, double Weight)>(await ApiServices.GetMovedWeightsInTheMonth(CurrentDate.Year, CurrentDate.Month));
+        }
+
         private void SetMovedWeightsInTheMonth()
         {
             if (MovedWeightsByMonth != null)

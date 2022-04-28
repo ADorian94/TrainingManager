@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:microcharts1="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             x:Class="TrainingManager.View.Controls.LinearChart"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" Padding="0" CornerRadius="10">
+            <microcharts1:ChartView x:Name="LinearChartItem" HeightRequest="350" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand"/>
+        </Frame>
+    </ContentView.Content>
+</ContentView>
