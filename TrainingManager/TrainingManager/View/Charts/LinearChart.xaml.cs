@@ -42,10 +42,12 @@ namespace TrainingManager.View.Controls
                         Label = x.date.ToString("dd"),
                         Color = x.weight < 15000 ? blueColor : redColor,
                         ValueLabel = (x.weight / 1000).ToString("0.##"),
-                        ValueLabelColor = x.weight < 15000 ? blueColor : redColor
+                        ValueLabelColor = x.weight < 15000 ? blueColor : redColor,
                     }),
                     ValueLabelOrientation = Orientation.Vertical,
+                    LabelTextSize = 20,
                     LabelOrientation = Orientation.Horizontal,
+                    LineMode = LineMode.Spline,
                     LabelColor = redColor,
                     IsAnimated = true,
                     BackgroundColor = SkiaSharp.SKColor.Empty,
