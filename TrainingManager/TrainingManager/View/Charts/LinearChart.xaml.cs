@@ -40,10 +40,11 @@ namespace TrainingManager.View.Controls
                     Entries = newEntries.Select(x => new ChartEntry((float)x.weight)
                     {
                         Label = x.date.ToString("dd"),
-                        Color = x.date < DateTime.Now.ToUniversalTime() ? blueColor : redColor,
-                        ValueLabel = x.weight.ToString()
+                        Color = x.weight < 15000 ? blueColor : redColor,
+                        ValueLabel = (x.weight / 1000).ToString("0.##"),
+                        ValueLabelColor = x.weight < 15000 ? blueColor : redColor
                     }),
-                    ValueLabelOrientation = Orientation.Horizontal,
+                    ValueLabelOrientation = Orientation.Vertical,
                     LabelOrientation = Orientation.Horizontal,
                     LabelColor = redColor,
                     IsAnimated = true,
