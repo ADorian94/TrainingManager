@@ -46,7 +46,7 @@ namespace TrainingManager.View.Controls
                     }),
                     ValueLabelOrientation = Orientation.Vertical,
                     LabelTextSize = GetSizeByDevice(),
-                    LabelOrientation = Orientation.Horizontal,
+                    LabelOrientation = GetLabelOrientation(),
                     LineMode = LineMode.Spline,
                     LabelColor = redColor,
                     IsAnimated = true,
@@ -55,16 +55,27 @@ namespace TrainingManager.View.Controls
             }
         }
 
+        private static Orientation GetLabelOrientation()
+        {
+            switch (Device.Idiom)
+            {
+                case TargetIdiom.Phone:
+                    return Orientation.Vertical;
+                case TargetIdiom.Desktop:
+                default:
+                    return Orientation.Horizontal;
+            }
+        }
+
         private static float GetSizeByDevice()
         {
-            switch (Device.RuntimePlatform)
+            switch (Device.Idiom)
             {
-                case Device.Android:
+                case TargetIdiom.Phone:
                     return 40;
-                case Device.UWP:
-                    return 20;
+                case TargetIdiom.Desktop:
                 default:
-                    return 25;
+                    return 20;
             }
         }
     }
