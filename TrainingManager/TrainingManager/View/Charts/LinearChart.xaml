@@ -14,7 +14,7 @@
     </ContentView.Resources>
     <ContentView.Content>
         <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" Padding="0" CornerRadius="10">
-            <microcharts1:ChartView x:Name="LinearChartItem" HeightRequest="350" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand"/>
+            <microcharts1:ChartView x:Name="LinearChartItem" HeightRequest="350" BackgroundColor="Transparent"/>
         </Frame>
     </ContentView.Content>
 </ContentView>

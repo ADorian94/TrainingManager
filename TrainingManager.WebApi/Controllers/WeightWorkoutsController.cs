@@ -260,6 +260,20 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetMovedWeightsGroupByMonth")]
+        public IActionResult GetMovedWeightsGroupByMonth()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.CollectMovedWeightsGroupByMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetRecentWorkouts")]
         public IActionResult GetRecentWorkouts()
         {

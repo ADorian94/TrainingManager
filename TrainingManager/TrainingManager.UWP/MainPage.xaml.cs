@@ -28,6 +28,7 @@ namespace TrainingManager.UWP
             ApplicationView.PreferredLaunchViewSize = new Size(900, 800);
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size(900, 800));
+            TrainingManager.App.ScreenWidth = ApplicationView.PreferredLaunchViewSize.Width;
         }
     }
 }

@@ -120,7 +120,7 @@ namespace TrainingManager.ViewModel.Navigation
             try
             {
                 //INITIALIZE VM
-                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM();
+                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM(_apiServices);
                 _homePage = new HomePage();
                 _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent");
                 _recentWorkoutDetailsPage = new RecentWorkoutDetails();

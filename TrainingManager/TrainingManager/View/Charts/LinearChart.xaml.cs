@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using Xamarin.Essentials;
 
 namespace TrainingManager.View.Controls
 {
@@ -17,6 +18,7 @@ namespace TrainingManager.View.Controls
         public LinearChart()
         {
             InitializeComponent();
+            LinearChartItem.WidthRequest = App.ScreenWidth;
         }
 
         public ObservableCollection<(DateTime date, double weight)> ChartEntries

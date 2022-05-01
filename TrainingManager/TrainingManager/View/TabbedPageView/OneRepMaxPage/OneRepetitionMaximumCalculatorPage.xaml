@@ -10,6 +10,27 @@
         <local:Style/>
     </ContentPage.Resources>
     <StackLayout Padding="0">
+        <StackLayout Orientation="Horizontal">
+            <CollectionView ItemsSource="{Binding GroupedWorkouts}" ItemSizingStrategy="MeasureFirstItem">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout>
+                        <x:Arguments>
+                            <ItemsLayoutOrientation>Horizontal</ItemsLayoutOrientation>
+                        </x:Arguments>
+                    </LinearItemsLayout>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <controls:LinearChart HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
         <Label Text="One Repetition Maximum" Style="{StaticResource Title0}"/>
         <Grid>
             <Grid.RowDefinitions>

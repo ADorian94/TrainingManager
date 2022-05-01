@@ -14,6 +14,9 @@ namespace TrainingManager
 {
     public partial class App : Application
     {
+        //SCREEN WIDTH
+        public static double ScreenWidth { get; set; }
+
         //FIELDS
         private AuthenticationNavigationManager _authenticationNavigationManager;
         private PageNavigationManager _pageNavigationManager;
