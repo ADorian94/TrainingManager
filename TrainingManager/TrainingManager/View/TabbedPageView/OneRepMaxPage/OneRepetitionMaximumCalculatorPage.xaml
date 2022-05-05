@@ -25,7 +25,7 @@
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <controls:LinearChart HorizontalOptions="FillAndExpand" ChartEntries="{Binding }"/>
+                        <controls:LinearChart HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" HeightRequest="350"/>
                     </Grid>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
