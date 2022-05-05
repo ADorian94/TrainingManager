@@ -18,8 +18,17 @@ namespace TrainingManager.View.Controls
         public LinearChart()
         {
             InitializeComponent();
-            LinearChartItem.WidthRequest = App.ScreenWidth;
+            LinearChartItem.WidthRequest = Application.Current.MainPage.Width * 0.90;
         }
+
+        public string CardMainText
+        {
+            get { return (string)GetValue(CardMainTextProperty); }
+            set { SetValue(CardMainTextProperty, value); }
+        }
+
+        public static readonly BindableProperty CardMainTextProperty =
+            BindableProperty.Create("CardMainText", typeof(string), typeof(CardWithEntry), string.Empty);
 
         public ObservableCollection<(DateTime date, double weight)> ChartEntries
         {
@@ -36,6 +45,9 @@ namespace TrainingManager.View.Controls
             {
                 SkiaSharp.SKColor.TryParse("03A9F9", out SkiaSharp.SKColor blueColor);
                 SkiaSharp.SKColor.TryParse("ff6961", out SkiaSharp.SKColor redColor);
+
+                if (newEntries != null && newEntries.Count > 0)
+                    headerTemplate.CardMainText = newEntries.First().date.ToString("MMMM");
 
                 headerTemplate.LinearChartItem.Chart = new LineChart()
                 {

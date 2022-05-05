@@ -17,9 +17,6 @@ namespace TrainingManager.Droid
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             XamForms.Controls.Droid.Calendar.Init();
-
-            App.ScreenWidth = (int)(Resources.DisplayMetrics.WidthPixels / Resources.DisplayMetrics.Density);
-
             LoadApplication(new App());
         }
 
