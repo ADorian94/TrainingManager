@@ -16,7 +16,7 @@
         <Frame Style="{StaticResource CardFrame}" Margin="15, 5">
             <StackLayout BackgroundColor="Transparent">
                 <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
-                <microcharts1:ChartView x:Name="LinearChartItem" HeightRequest="350" BackgroundColor="Transparent"/>
+                <microcharts1:ChartView x:Name="LinearChartItem" HeightRequest="300" BackgroundColor="Transparent"/>
             </StackLayout>
         </Frame>
     </ContentView.Content>

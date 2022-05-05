@@ -12,14 +12,22 @@ namespace TrainingManager.View
         public OneRepetitionMaximumCalculatorPage()
         {
             InitializeComponent();
-            //ChartCollection.ChildAdded += ChartCollection_ChildAdded;
+            ChartCollection.ChildAdded += ChartCollection_ChildAdded;
+            Appearing += OneRepetitionMaximumCalculatorPage_Appearing;
         }
 
-        //private void ChartCollection_ChildAdded(object sender, ElementEventArgs e)
-        //{
-        //    OneRepetitionMaximumVM viewModel = BindingContext as OneRepetitionMaximumVM;
-        //    var chart = viewModel.GroupedWorkouts.Last();
-        //    ChartCollection.ScrollTo(chart);
-        //}
+        private void OneRepetitionMaximumCalculatorPage_Appearing(object sender, System.EventArgs e)
+        {
+            OneRepetitionMaximumVM viewModel = BindingContext as OneRepetitionMaximumVM;
+            ChartCollection.ItemsSource = viewModel.GroupedWorkouts;
+            //ChartCollection.ScrollTo(viewModel.GroupedWorkouts.Last());
+        }
+
+        private void ChartCollection_ChildAdded(object sender, ElementEventArgs e)
+        {
+            OneRepetitionMaximumVM viewModel = BindingContext as OneRepetitionMaximumVM;
+            var chart = viewModel.GroupedWorkouts.Last();
+            ChartCollection.ScrollTo(chart);
+        }
     }
 }
