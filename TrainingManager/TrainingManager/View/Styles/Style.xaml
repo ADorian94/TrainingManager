@@ -160,4 +160,13 @@
             <OnIdiom Desktop="150" Phone="50"/>
         </Setter>
     </Style>
+
+    <Style x:Key="ChartCollection" TargetType="{x:Type CollectionView}">
+        <Setter Property="HeightRequest">
+            <OnIdiom Desktop="420" Phone="210"/>
+        </Setter>
+        <Setter Property="ItemSizingStrategy" Value="MeasureAllItems"/>
+        <Setter Property="SelectionMode" Value="None"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Never"/>
+    </Style>
 </ResourceDictionary>
