@@ -11,7 +11,7 @@
     </ContentPage.Resources>
     <StackLayout Padding="0">
         <Label Text="Weight charts" Style="{StaticResource Title0}"/>
-        <CollectionView x:Name="ChartCollection" ItemsSource="{Binding GroupedWorkouts}" Style="{StaticResource CollectionView}">
+        <CollectionView x:Name="ChartCollection" ItemsSource="{Binding GroupedWorkouts}" Style="{StaticResource ChartCollection}">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout>
                     <x:Arguments>
