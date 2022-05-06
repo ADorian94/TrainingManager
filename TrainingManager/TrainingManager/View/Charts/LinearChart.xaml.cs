@@ -19,6 +19,12 @@ namespace TrainingManager.View.Controls
         {
             InitializeComponent();
             LinearChartItem.WidthRequest = Application.Current.MainPage.Width * 0.90;
+            Application.Current.MainPage.SizeChanged += MainPage_SizeChanged;
+        }
+
+        private void MainPage_SizeChanged(object sender, EventArgs e)
+        {
+            LinearChartItem.WidthRequest = Application.Current.MainPage.Width * 0.90;
         }
 
         public string CardMainText
