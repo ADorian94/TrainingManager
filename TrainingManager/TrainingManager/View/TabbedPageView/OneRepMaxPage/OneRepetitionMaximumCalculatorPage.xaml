@@ -11,7 +11,8 @@
     </ContentPage.Resources>
     <StackLayout Padding="0">
         <Label Text="Weight charts" Style="{StaticResource Title0}"/>
-        <CollectionView x:Name="ChartCollection" ItemsSource="{Binding GroupedWorkouts}" ItemSizingStrategy="MeasureAllItems" SelectionMode="None" HorizontalScrollBarVisibility="Never" HeightRequest="370">
+        <CollectionView x:Name="ChartCollection" ItemsSource="{Binding GroupedWorkouts}" HeightRequest="420"
+                        ItemSizingStrategy="MeasureAllItems" SelectionMode="None" HorizontalScrollBarVisibility="Never">
             <CollectionView.ItemsLayout>
                 <LinearItemsLayout>
                     <x:Arguments>
@@ -21,12 +22,7 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <!--<Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                        </Grid.ColumnDefinitions>-->
                     <controls:LinearChart VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" />
-                    <!--</Grid>-->
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>

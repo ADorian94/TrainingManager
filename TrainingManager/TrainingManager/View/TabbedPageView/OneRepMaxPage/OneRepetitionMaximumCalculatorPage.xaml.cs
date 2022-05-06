@@ -20,7 +20,6 @@ namespace TrainingManager.View
         {
             OneRepetitionMaximumVM viewModel = BindingContext as OneRepetitionMaximumVM;
             ChartCollection.ItemsSource = viewModel.GroupedWorkouts;
-            //ChartCollection.ScrollTo(viewModel.GroupedWorkouts.Last());
         }
 
         private void ChartCollection_ChildAdded(object sender, ElementEventArgs e)
@@ -28,6 +27,7 @@ namespace TrainingManager.View
             OneRepetitionMaximumVM viewModel = BindingContext as OneRepetitionMaximumVM;
             var chart = viewModel.GroupedWorkouts.Last();
             ChartCollection.ScrollTo(chart);
+            ChartCollection.ChildAdded -= ChartCollection_ChildAdded;
         }
     }
 }
