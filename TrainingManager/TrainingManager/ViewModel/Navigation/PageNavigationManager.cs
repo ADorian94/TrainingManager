@@ -96,7 +96,8 @@ namespace TrainingManager.ViewModel.Navigation
                     CreateWeightHistoryVM(),
                     CreateHomeVM(),
                     CreateSettingsVM(),
-                    CreateColorVM()
+                    CreateColorVM(),
+                    CreateOneRepMaximumVM()
                 };
 
                 await Task.WhenAll(vmInitializations);
@@ -104,10 +105,12 @@ namespace TrainingManager.ViewModel.Navigation
                 //EVENT SUBSCRIBE
                 _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
                 _weightWorkoutManagerVM.WorkoutSaved += _homeVM.RefreshWorkouts;
+                _weightWorkoutManagerVM.WorkoutSaved += _oneRepetitionMaximumVM.RefreshCharts;
                 _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
                 _weightHistoryVM.WorkoutDeleted += _homeVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutSaved += _homeVM.RefreshWorkouts;
+                _weightHistoryVM.WorkoutSaved += _oneRepetitionMaximumVM.RefreshCharts;
                 _homeVM.ProfileSelected += OnProfileSelected;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
@@ -119,8 +122,6 @@ namespace TrainingManager.ViewModel.Navigation
         {
             try
             {
-                //INITIALIZE VM
-                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM(_apiServices);
                 _homePage = new HomePage();
                 _addNewWeightWorkoutPageHome = new AddNewWeightWorkoutPage("Recent");
                 _recentWorkoutDetailsPage = new RecentWorkoutDetails();
@@ -157,12 +158,6 @@ namespace TrainingManager.ViewModel.Navigation
                 //_mainTabbedPage.Children.Add(_exercisesPage);
                 _mainTabbedPage.Children.Add(_oneRepetitionMaximumCalculatorPage);
                 _mainNavigationPage = new NavigationPage(_mainTabbedPage);
-
-                _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
-                _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
-
-                _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
-                _oneRepetitionMaximumVM.PopUpMessage += OnPopUpMessage;
             }
             catch (Exception ex)
             {
@@ -269,6 +264,20 @@ namespace TrainingManager.ViewModel.Navigation
             return Task.Run(() =>
             {
                 _colorSelectPage = new ColorSelectPage();
+            });
+        }
+
+        private Task CreateOneRepMaximumVM()
+        {
+            return Task.Run(() =>
+            {
+                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM(_apiServices);
+
+                _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
+                _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
+
+                _oneRepetitionMaximumVM.CalculationStartEvent += OnCalculationStarted;
+                _oneRepetitionMaximumVM.PopUpMessage += OnPopUpMessage;
             });
         }
 

@@ -15,7 +15,8 @@ namespace TrainingManager.ViewModel
         public event EventHandler CalculationStartEvent;
 
         //PROPERTIES
-        public ObservableCollection<ObservableCollection<(DateTime date, double Weight)>> GroupedWorkouts { get; set; }
+        private ObservableCollection<ObservableCollection<(DateTime date, double Weight)>> _groupedWorkouts;
+        public ObservableCollection<ObservableCollection<(DateTime date, double Weight)>> GroupedWorkouts { get => _groupedWorkouts; set { _groupedWorkouts = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand CalculateMaximumCommand { get; private set; }
@@ -66,6 +67,8 @@ namespace TrainingManager.ViewModel
                 OnPropertyChanged();
             }
         }
+
+        public void RefreshCharts(object sender, EventArgs e) => GetWorkoutDetailsFromServer();
 
         private async void GetWorkoutDetailsFromServer()
         {
