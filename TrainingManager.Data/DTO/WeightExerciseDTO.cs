@@ -12,6 +12,7 @@ namespace TrainingManager.Data.DTO
         public string Note { get; set; }
         public int WorkoutId { get; set; }
         public MaterialColors Color { get; set; }
+        public Muscle MainMuscleGroup { get; set; }
         public virtual ICollection<WeightRoundDTO> WeightRoundsDto { get; set; }
     }
 }
