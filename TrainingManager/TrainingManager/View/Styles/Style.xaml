@@ -13,6 +13,13 @@
         <Setter Property="BackgroundColor" Value="{StaticResource AppBackgroundColor}"/>
     </Style>
 
+    <Style TargetType="{x:Type IndicatorView}">
+        <Setter Property="IndicatorsShape" Value="Circle"/>
+        <Setter Property="IndicatorColor" Value="Gray"/>
+        <Setter Property="SelectedIndicatorColor" Value="White"/>
+        <Setter Property="HorizontalOptions" Value="Center"/>
+    </Style>
+
     <Style x:Key="Title0" TargetType="{x:Type Label}">
         <Setter Property="TextColor" Value="White"/>
         <Setter Property="FontSize" Value="35"/>
@@ -161,12 +168,12 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ChartCollection" TargetType="{x:Type CollectionView}">
+    <Style x:Key="CarouselViewStyle" TargetType="{x:Type CarouselView}">
         <Setter Property="HeightRequest">
             <OnIdiom Desktop="420" Phone="210"/>
         </Setter>
-        <Setter Property="ItemSizingStrategy" Value="MeasureAllItems"/>
-        <Setter Property="SelectionMode" Value="None"/>
         <Setter Property="HorizontalScrollBarVisibility" Value="Never"/>
+        <Setter Property="Loop" Value="False"/>
+        <Setter Property="VerticalOptions" Value="FillAndExpand"/>
     </Style>
 </ResourceDictionary>

@@ -11,25 +11,20 @@
     </ContentPage.Resources>
     <StackLayout Padding="0">
         <Label Text="Weight charts" Style="{StaticResource Title0}"/>
-        <CollectionView x:Name="ChartCollection" ItemsSource="{Binding GroupedWorkouts}" Style="{StaticResource ChartCollection}">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout>
-                    <x:Arguments>
-                        <ItemsLayoutOrientation>Horizontal</ItemsLayoutOrientation>
-                    </x:Arguments>
-                </LinearItemsLayout>
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
+        <CarouselView x:Name="CarouselChartCollection" ItemsSource="{Binding GroupedWorkouts}"
+                      IndicatorView="MonthIndicator" Style="{StaticResource CarouselViewStyle}">
+            <CarouselView.ItemTemplate>
                 <DataTemplate>
                     <controls:LinearChart VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" />
                 </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+        <IndicatorView x:Name="MonthIndicator"/>
         <Label Text="One Repetition Maximum" Style="{StaticResource Title0}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0" ColumnDefinitions="*, *">
             <controls:CardWithEntry Grid.Column="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}" Margin="10,0,5,0"/>

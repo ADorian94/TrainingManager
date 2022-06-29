@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using TrainingManager.Model;
 
 namespace TrainingManager.ViewModel
@@ -72,7 +73,7 @@ namespace TrainingManager.ViewModel
 
         private async void GetWorkoutDetailsFromServer()
         {
-            IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)> workouts = await _apiServices.GetMovedWeightsGroupByMonth();
+            IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)> workouts = (await _apiServices.GetMovedWeightsGroupByMonth()).Reverse();
             GroupedWorkouts = new ObservableCollection<ObservableCollection<(DateTime date, double Weight)>>();
 
             foreach (var workout in workouts)
