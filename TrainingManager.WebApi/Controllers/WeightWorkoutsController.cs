@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
@@ -79,6 +80,7 @@ namespace TrainingManager.WebApi.Controllers
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.Color,
+                        MainMuscleGroup = GetMianMuscleGroup(x.ActivityId),
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
@@ -260,6 +262,20 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetMovedWeightsGroupByMonth")]
+        public IActionResult GetMovedWeightsGroupByMonth()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.CollectMovedWeightsGroupByMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetRecentWorkouts")]
         public IActionResult GetRecentWorkouts()
         {
@@ -314,7 +330,7 @@ namespace TrainingManager.WebApi.Controllers
 
                 foreach (var weightExerciseDto in weightExercisesDto)
                 {
-                    int actId = AddActivityByNameIfNeeded(weightExerciseDto.ExerciseName);
+                    int actId = AddActivityByNameIfNeeded(weightExerciseDto.ExerciseName, weightExerciseDto.MainMuscleGroup);
 
                     var weightExercise = new WeightExercise()
                     {
@@ -340,7 +356,7 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
-        private int AddActivityByNameIfNeeded(string exerciseName)
+        private int AddActivityByNameIfNeeded(string exerciseName, Muscle mainMuscleGroup)
         {
             ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
@@ -355,6 +371,7 @@ namespace TrainingManager.WebApi.Controllers
                     ActivityGuid = Guid.NewGuid(),
                     ActivityName = exerciseName,
                     OwnerUserName = user.UserName,
+                    MainMuscleGroup = mainMuscleGroup
                 };
 
                 var addedActivity = _context.WeightActivities.Add(newActivity);
@@ -460,6 +477,18 @@ namespace TrainingManager.WebApi.Controllers
                     }).ToList()
                 }).ToList(),
             });
+        }
+
+        private Muscle GetMianMuscleGroup(int activityId)
+        {
+            try
+            {
+                return _context.WeightActivities.Single(a => a.Id == activityId).MainMuscleGroup;
+            }
+            catch
+            {
+                return Muscle.Unknown;
+            }
         }
     }
 }

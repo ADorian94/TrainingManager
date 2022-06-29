@@ -24,5 +24,6 @@ namespace TrainingManager.Model
         Task<bool> UpdateWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto);
         Task<IEnumerable<(int year, int month, double weight)>> GetMovedWorkoutsGroupByMonth();
         Task<IEnumerable<(DateTime date, double weight)>> GetMovedWeightsInTheMonth(int year, int month);
+        Task<IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)>> GetMovedWeightsGroupByMonth();
     }
 }

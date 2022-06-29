@@ -40,5 +40,31 @@ namespace TrainingManager.WebApi.Controllers.Functions
             return workouts.Where(x => x.WorkoutDate.Year == year && x.WorkoutDate.Month == month)
                            .Select(w => new Tuple<DateTime, double>(w.WorkoutDate, w.TotalWeight));
         }
+
+        public IEnumerable<(int year, int month, IEnumerable<(DateTime, double)> weight)> CollectMovedWeightsGroupByMonth(IQueryable<WeightWorkout> workouts)
+        {
+            var allWorkouts = workouts.GroupBy(w => w.WorkoutDate.Year).ToList();
+            var resutWeights = new List<(int, int, IEnumerable<(DateTime, double)>)>();
+
+            foreach (var yearWorkouts in allWorkouts)
+            {
+                var monthWorkouts = yearWorkouts.GroupBy(m => m.WorkoutDate.Month);
+
+                foreach (var monthWorkout in monthWorkouts)
+                {
+                    var workoutsInTheMonth = new List<(DateTime, double)>();
+
+                    foreach (var workout in monthWorkout)
+                    {
+                        if (workout.WorkoutDate < DateTime.Now)
+                            workoutsInTheMonth.Add((workout.WorkoutDate, workout.TotalWeight));
+                    }
+
+                    resutWeights.Add((yearWorkouts.Key, monthWorkout.Key, workoutsInTheMonth));
+                }
+            }
+
+            return resutWeights;
+        }
     }
 }

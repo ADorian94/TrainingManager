@@ -13,8 +13,11 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <ContentView.Content>
-        <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" Padding="0" CornerRadius="10">
-            <microcharts1:ChartView x:Name="LinearChartItem" HeightRequest="350" BackgroundColor="Transparent" HorizontalOptions="FillAndExpand"/>
+        <Frame Style="{StaticResource CardFrame}" Margin="15, 5">
+            <StackLayout BackgroundColor="Transparent">
+                <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+                <microcharts1:ChartView x:Name="LinearChartItem" VerticalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+            </StackLayout>
         </Frame>
     </ContentView.Content>
 </ContentView>

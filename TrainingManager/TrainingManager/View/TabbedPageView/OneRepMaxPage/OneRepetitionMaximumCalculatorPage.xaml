@@ -10,15 +10,27 @@
         <local:Style/>
     </ContentPage.Resources>
     <StackLayout Padding="0">
+        <Label Text="Weight charts" Style="{StaticResource Title0}"/>
+        <CarouselView x:Name="CarouselChartCollection" ItemsSource="{Binding GroupedWorkouts}"
+                      IndicatorView="MonthIndicator" Style="{StaticResource CarouselViewStyle}">
+            <CarouselView.ItemTemplate>
+                <DataTemplate>
+                    <controls:LinearChart VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" />
+                </DataTemplate>
+            </CarouselView.ItemTemplate>
+        </CarouselView>
+        <IndicatorView x:Name="MonthIndicator"/>
         <Label Text="One Repetition Maximum" Style="{StaticResource Title0}"/>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <controls:CardWithEntry Grid.Row="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}" Margin="10,0"/>
-            <controls:CardWithEntry Grid.Row="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}" Margin="10,0"/>
+            <Grid Grid.Row="0" ColumnDefinitions="*, *">
+            <controls:CardWithEntry Grid.Column="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}" Margin="10,0,5,0"/>
+            <controls:CardWithEntry Grid.Column="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}" Margin="0,0,5,0"/>
+            </Grid>
+            <Button Grid.Row="1" Text="Calculate" Command="{Binding CalculateMaximumCommand}" Style="{StaticResource BlueButton}"/>
         </Grid>
-        <Button Text="Calculate" Command="{Binding CalculateMaximumCommand}" Style="{StaticResource BlueButton}"/>
     </StackLayout>
 </ContentPage>

@@ -21,7 +21,6 @@
                 Margin="15, 5"
                 CardMainText="Moved weights in the month"
                 CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
-                <controls:LinearChart ChartEntries="{Binding WeightsOfTheMonth}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>
