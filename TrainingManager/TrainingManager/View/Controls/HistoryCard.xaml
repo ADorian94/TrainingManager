@@ -21,7 +21,7 @@
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <Frame Grid.Column="0" Style="{StaticResource CardFrame}" Padding="0" BackgroundColor="{StaticResource MainBlueColor}" >
+                    <Frame x:Name="BluePart" Grid.Column="0" Style="{StaticResource CardFrame}" Padding="0" BackgroundColor="{StaticResource MainBlueColor}" >
                         <StackLayout BackgroundColor="Transparent">
                             <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
                                 <Grid.RowDefinitions>

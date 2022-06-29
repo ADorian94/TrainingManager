@@ -16,6 +16,18 @@ namespace TrainingManager.View.Controls
         {
             InitializeComponent();
             History.IsVisible = true;
+            BluePart.Scale = 0;
+            BluePart.Opacity = 0;
+            Animate();
+        }
+
+        private async void Animate()
+        {
+            BluePart.FadeTo(1, 400);
+            await BluePart.ScaleTo(1.2, 800);
+            await BluePart.ScaleTo(0.9, 400);
+            await BluePart.ScaleTo(1.1, 200);
+            await BluePart.ScaleTo(1, 100);
         }
 
         public string CloseCardMainLabel
