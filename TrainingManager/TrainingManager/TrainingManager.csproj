@@ -139,6 +139,9 @@
     <EmbeddedResource Update="View\TabbedPageView\ColorPage\ColorSelectPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
+    <EmbeddedResource Update="View\TabbedPageView\MusclePage\MusclePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="View\TabbedPageView\NotePage\NotePage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>

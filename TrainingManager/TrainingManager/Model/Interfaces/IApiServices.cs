@@ -18,7 +18,7 @@ namespace TrainingManager.Model
         Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto);
         Task<bool> EditWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto);
         Task<bool> DeleteWeightWorkoutAsync(int workoutId);
-        Task<IEnumerable<string>> GetWeightActivitiesAsync();
+        Task<IEnumerable<WeightActivityDTO>> GetWeightActivitiesAsync();
         Task<IEnumerable<WeightExerciseDTO>> GetWeightExercisesAsync();
         Task<bool> AddWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto);
         Task<bool> UpdateWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto);

@@ -80,7 +80,7 @@ namespace TrainingManager.WebApi.Controllers
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.Color,
-                        MainMuscleGroup = GetMianMuscleGroup(x.ActivityId),
+                        MainMuscleGroup = _context.WeightActivities.Single(a => a.Id == x.ActivityId).MainMuscleGroup,
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
@@ -147,11 +147,11 @@ namespace TrainingManager.WebApi.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+                await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
 
                 if (weightWorkoutDTO.WorkoutImages != null)
                     await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
 
-                await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
                 return Ok();
             }
             catch
@@ -362,7 +362,17 @@ namespace TrainingManager.WebApi.Controllers
 
             if (_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Any(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()))
             {
-                return _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()).Id;
+                var activity = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper());
+
+                //ez így nem jó, más logika mentén kéne az izomcsoortokat bevezetni
+                if (activity.MainMuscleGroup == Muscle.Unknown)
+                {
+                    activity.MainMuscleGroup = mainMuscleGroup;
+                    var addedActivity = _context.WeightActivities.Update(activity);
+                    _context.SaveChanges();
+                }
+
+                return activity.Id;
             }
             else
             {
@@ -466,6 +476,7 @@ namespace TrainingManager.WebApi.Controllers
                     Note = x.Note,
                     TotalExerciseWeight = x.TotalExerciseWeight,
                     Color = x.Color,
+                    MainMuscleGroup = _context.WeightActivities.Single(a => a.Id == x.ActivityId).MainMuscleGroup,
                     WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                     {
                         Id = r.Id,
@@ -477,18 +488,6 @@ namespace TrainingManager.WebApi.Controllers
                     }).ToList()
                 }).ToList(),
             });
-        }
-
-        private Muscle GetMianMuscleGroup(int activityId)
-        {
-            try
-            {
-                return _context.WeightActivities.Single(a => a.Id == activityId).MainMuscleGroup;
-            }
-            catch
-            {
-                return Muscle.Unknown;
-            }
         }
     }
 }

@@ -106,6 +106,7 @@ namespace TrainingManager.ViewModel
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
                         ExerciseColor = x.Color,
+                        MainMuscle = x.MainMuscleGroup,
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
                         {
                             RoundGuid = y.RoundGuid,
@@ -151,6 +152,7 @@ namespace TrainingManager.ViewModel
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         TotalExerciseRounds = x.WeightRoundsDto.Count(),
                         ExerciseColor = x.Color,
+                        MainMuscle = x.MainMuscleGroup,
                         WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
                         {
                             RoundGuid = y.RoundGuid,

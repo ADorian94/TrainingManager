@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Data;
+using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.LogWriter;
+using TrainingManager.ViewModel.WorkoutManager;
 
 namespace TrainingManager.ViewModel
 {
@@ -55,15 +57,16 @@ namespace TrainingManager.ViewModel
         private double _totalExerciseRounds;
         public double TotalExerciseRounds { get => _totalExerciseRounds; set { _totalExerciseRounds = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<string> _savedActivities;
-        public ObservableCollection<string> SavedActivities { get => _savedActivities; set { _savedActivities = value; OnPropertyChanged(); } }
-
+        private ObservableCollection<VeightActivityVM> _savedActivities;
+        public ObservableCollection<VeightActivityVM> SavedActivities { get => _savedActivities; set { _savedActivities = value; OnPropertyChanged(); } }       
+        
         //COMMANDS
         public DelegateCommand SaveTodayWorkoutCommand { get; private set; }
         public DelegateCommand OpenAddWeightExerciseCommand { get; private set; }
         public DelegateCommand AddWeightExerciseToWorkoutCommand { get; private set; }
         public DelegateCommand AddWeightRoundToExerciseCommand { get; private set; }
         public DelegateCommand OpenNoteEditorCommand { get; private set; }
+        public DelegateCommand OpenMuscleSelectorCommand { get; private set; }
         public DelegateCommand SaveNoteCommand { get; private set; }
         public DelegateCommand WeightExerciseMenuSelectedCommand { get; private set; }
         public DelegateCommand SavedActivitiySelected { get; private set; }
@@ -75,8 +78,9 @@ namespace TrainingManager.ViewModel
         public event EventHandler CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
         public event EventHandler CloseNoteEditor;
+        public event EventHandler<MessageEventArgs> OpenMuscleSelector;
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
-        public event EventHandler<string> SavedWeightActivitySelected;
+        public event EventHandler SavedWeightActivitySelected;
         public event EventHandler<string> ExerciseRoundSelected;
         public event EventHandler WorkoutSaved;
         public event EventHandler ClosePage;
@@ -88,6 +92,7 @@ namespace TrainingManager.ViewModel
             AddWeightExerciseToWorkoutCommand = new DelegateCommand(AddWeightExerciseToWorkoutFunction);
             AddWeightRoundToExerciseCommand = new DelegateCommand(AddWeightRoundToExerciseFunction);
             OpenNoteEditorCommand = new DelegateCommand(OpenNoteEditorFuncton);
+            OpenMuscleSelectorCommand = new DelegateCommand(OpenMuscleSelectorFunction);
             WeightExerciseMenuSelectedCommand = new DelegateCommand(WeightExerciseMenuSelectedFunction);
             SavedActivitiySelected = new DelegateCommand(SavedActivitiySelectedFunction);
             SaveNoteCommand = new DelegateCommand(SaveNoteFunction);
@@ -160,8 +165,15 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                IEnumerable<string> activities = await ApiServices.GetWeightActivitiesAsync();
-                SavedActivities = new ObservableCollection<string>(activities.OrderBy(x => x));
+                IEnumerable<WeightActivityDTO> activities = await ApiServices.GetWeightActivitiesAsync();
+                activities = activities.OrderBy(x => x.ActivityName);
+                SavedActivities = new ObservableCollection<VeightActivityVM>();
+
+                int i = 0;
+                foreach (var activity in activities)
+                {
+                    SavedActivities.Add(new VeightActivityVM(activity, i++));
+                }
             }
             catch (Exception ex)
             {
@@ -200,8 +212,7 @@ namespace TrainingManager.ViewModel
         /// <param name="stringGuid"></param>
         public void EditExercise(string stringGuid)
         {
-            WeightExerciseVM exerciseForEdit = NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid);
-            NewWeightExercise = exerciseForEdit;
+            NewWeightExercise = NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == stringGuid);
             NewWeightExercise.CountTotalWeightOfExercise();
             TotalExerciseWeight = NewWeightExercise.TotalExerciseWeight;
             CheckChangesAndSetResult();
@@ -210,6 +221,7 @@ namespace TrainingManager.ViewModel
 
         public ColorVM GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
         public ColorVM GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
+        public MuscleVM GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
 
         //PRIVATES
         private void ReIndexRounds()
@@ -228,12 +240,8 @@ namespace TrainingManager.ViewModel
                 if (!IsExerciseReadyToAdd())
                     return;
 
-                if (NewWeightWorkout.WeightExercises.Any(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid))
-                {
-                    int indexOfExercise = NewWeightWorkout.WeightExercises.IndexOf(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid));
-                    NewWeightWorkout.WeightExercises[indexOfExercise] = NewWeightExercise;
-                }
-                else
+                //referencia szerint töltöttük be az adatokat, csak akkor adjuk hozzá, ha még nem szerepel
+                if (!NewWeightWorkout.WeightExercises.Any(x => x.ExerciseGuid == NewWeightExercise.ExerciseGuid))
                     NewWeightWorkout.WeightExercises.Add(NewWeightExercise);
 
                 NewWeightWorkout.TotalWeight = CountTotalWeightOfWorkout();
@@ -255,6 +263,12 @@ namespace TrainingManager.ViewModel
             if (string.IsNullOrEmpty(NewWeightExercise.ExerciseName))
             {
                 SendPopUpMessage(Messages.EmptyExerciseName);
+                return false;
+            }
+
+            if (NewWeightExercise.MainMuscle == Muscle.Unknown)
+            {
+                SendPopUpMessage(Messages.UnknownMuscle);
                 return false;
             }
 
@@ -335,12 +349,15 @@ namespace TrainingManager.ViewModel
         }
 
         private void OpenNoteEditorFuncton(object obj) => OpenNoteEditor?.Invoke(this, null);
+        private void OpenMuscleSelectorFunction(object obj) => OpenMuscleSelector?.Invoke(this, new MessageEventArgs(NewWeightExercise.ExerciseGuid.ToString()));
         private void WeightExerciseMenuSelectedFunction(object obj) => WeightExerciseMenuSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == obj.ToString()).ExerciseName, obj.ToString()));
         private void SavedActivitiySelectedFunction(object obj)
         {
-            NewWeightExercise.ExerciseName = (string)obj;
-            ExerciseName = (string)obj;
-            SavedWeightActivitySelected?.Invoke(this, (string)obj);
+            var index = int.Parse((string)obj);
+            NewWeightExercise.ExerciseName = SavedActivities[index].ActivityName;
+            NewWeightExercise.MainMuscle = SavedActivities[index].MainMuscleGroup;
+            ExerciseName = SavedActivities[index].ActivityName;
+            SavedWeightActivitySelected?.Invoke(this, EventArgs.Empty);
         }
     }
 }

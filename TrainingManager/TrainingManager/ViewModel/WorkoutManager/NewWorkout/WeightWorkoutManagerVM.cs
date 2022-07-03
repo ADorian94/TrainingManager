@@ -5,6 +5,7 @@ using System.Linq;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.LogWriter;
+using TrainingManager.ViewModel.WorkoutManager;
 
 namespace TrainingManager.ViewModel
 {
@@ -94,6 +95,7 @@ namespace TrainingManager.ViewModel
                     TotalExerciseRounds = exercise.WeightRoundsDto.Count,
                     TotalExerciseWeight = exercise.TotalExerciseWeight,
                     ExerciseColor = exercise.Color,
+                    MainMuscle = exercise.MainMuscleGroup,
                     WeightRounds = new ObservableCollection<WeightRoundVM>(rounds),
                 });
             }
@@ -129,6 +131,7 @@ namespace TrainingManager.ViewModel
                         Note = x.ExerciseNote,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.ExerciseColor,
+                        MainMuscleGroup = x.MainMuscle,
                         WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                         {
                             Reps = y.Reps,
@@ -162,6 +165,7 @@ namespace TrainingManager.ViewModel
                         Note = x.ExerciseNote,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.ExerciseColor,
+                        MainMuscleGroup = x.MainMuscle,
                         WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                         {
                             Reps = y.Reps,
@@ -185,18 +189,23 @@ namespace TrainingManager.ViewModel
         private async void SearchFunction(object obj)
         {
             var searchStr = obj.ToString();
-            IEnumerable<string> foundElements = new ObservableCollection<string>();
-            IEnumerable<string> activities = await ApiServices.GetWeightActivitiesAsync();
+            IEnumerable<WeightActivityDTO> foundElements = new ObservableCollection<WeightActivityDTO>();
+            IEnumerable<WeightActivityDTO> activities = await ApiServices.GetWeightActivitiesAsync();
 
             if (!string.IsNullOrEmpty(searchStr))
             {
                 string[] searchStrings = searchStr.Trim().Split(' ');
-                foundElements = searchStrings.SelectMany(str => activities.Where(x => x.ToUpper().Contains(str.ToUpper())).Select(x => x));
+                foundElements = searchStrings.SelectMany(str => activities.Where(x => x.ActivityName.ToUpper().Contains(str.ToUpper())).Select(x => x));
             }
             else
                 foundElements = activities.Select(x => x);
 
-            SavedActivities = new ObservableCollection<string>(foundElements.OrderBy(x => x));
+            foundElements = foundElements.OrderBy(x => x);
+            SavedActivities = new ObservableCollection<VeightActivityVM>();
+            int i = 0;
+
+            foreach (var element in foundElements)
+                SavedActivities.Add(new VeightActivityVM(element, ++i));
         }
     }
 }

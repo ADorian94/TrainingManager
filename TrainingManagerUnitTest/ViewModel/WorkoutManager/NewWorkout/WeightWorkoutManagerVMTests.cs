@@ -19,7 +19,13 @@ namespace TrainingManager.ViewModel.Tests
         private WeightWorkoutManagerVM _weightWorkoutManagerVM;
         private Mock<IApiServices> _apiService;
         private IEnumerable<WeightWorkoutDTO> _weightWorkouts;
-        private readonly IEnumerable<string> _savedActivities = new List<string>() { BICEPS, TRICEPS, SQUAT, TRICEPS_PLATE };
+        private readonly IEnumerable<WeightActivityDTO> _savedActivities = new List<WeightActivityDTO>()
+        {
+            new WeightActivityDTO() { ActivityName = BICEPS, MainMuscleGroup = Data.Muscle.Biceps },
+            new WeightActivityDTO() { ActivityName = TRICEPS, MainMuscleGroup = Data.Muscle.Triceps },
+            new WeightActivityDTO() { ActivityName = SQUAT, MainMuscleGroup = Data.Muscle.Quadriceps },
+            new WeightActivityDTO() { ActivityName = TRICEPS_PLATE, MainMuscleGroup = Data.Muscle.Triceps }
+        };
 
         private const string WORKOUT_NAME = "TestWorkout";
         private const string EXERCISE_NAME = "TestExercise";
@@ -98,7 +104,7 @@ namespace TrainingManager.ViewModel.Tests
 
             _weightWorkoutManagerVM = new WeightWorkoutManagerVM(_apiService.Object);
             Assert.AreEqual(emptyWorkout, _weightWorkoutManagerVM.NewWeightWorkout);
-            CollectionAssert.AreEqual(new List<string>(_savedActivities.OrderBy(x => x)), _weightWorkoutManagerVM.SavedActivities);
+            CollectionAssert.AreEqual(new List<WeightActivityDTO>(_savedActivities.OrderBy(x => x)), _weightWorkoutManagerVM.SavedActivities);
         }
 
         //ADD & DELETE

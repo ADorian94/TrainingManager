@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Model;
 
@@ -9,6 +10,8 @@ namespace TrainingManager.WebApi.Controllers.Functions
 {
     public class StatFunctions
     {
+        private static object _lock = new object();
+
         public List<(int year, int month, double weight)> SumMovedWeightsByMonth(IQueryable<WeightWorkout> workouts)
         {
             var allWorkouts = workouts.GroupBy(w => w.WorkoutDate.Year).ToList();
@@ -33,6 +36,21 @@ namespace TrainingManager.WebApi.Controllers.Functions
             }
 
             return resutWeights;
+        }
+
+        public Muscle GetMuscleOfActivity(IQueryable<WeightActivity> activities, int activityId)
+        {
+            try
+            {
+                lock (_lock) 
+                {
+                    return activities.Single(a => a.Id == activityId).MainMuscleGroup;
+                } 
+            }
+            catch
+            {
+                return Muscle.Unknown;
+            }
         }
 
         public IEnumerable<Tuple<DateTime, double>> CollectMovedWeightsInTheMonth(IQueryable<WeightWorkout> workouts, int year, int month)

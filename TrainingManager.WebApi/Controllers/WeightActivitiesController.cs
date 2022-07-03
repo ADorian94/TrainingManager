@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrainingManager.Data;
+using TrainingManager.Data.DTO;
+using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
@@ -15,10 +18,12 @@ namespace TrainingManager.WebApi.Controllers
     public class WeightActivitiesController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
+        private readonly StatFunctions _statFunctions;
 
         public WeightActivitiesController(TrainingManagerContext context)
         {
             _context = context;
+            _statFunctions = new StatFunctions();
         }
 
         // GET: api/WeightActivities
@@ -26,7 +31,12 @@ namespace TrainingManager.WebApi.Controllers
         public async Task<IActionResult> GetWeightActivities()
         {
             ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            return Ok(_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => x.ActivityName));
+            
+            return Ok(_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => new WeightActivityDTO()
+            { 
+                ActivityName = x.ActivityName,
+                MainMuscleGroup = x.MainMuscleGroup
+            }));
         }
 
         // GET: api/WeightActivities/5

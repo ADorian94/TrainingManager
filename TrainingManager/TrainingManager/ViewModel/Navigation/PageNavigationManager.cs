@@ -49,6 +49,7 @@ namespace TrainingManager.ViewModel.Navigation
         private NotePage _notePage;
         private NotePage _notePageHistory;
         private ColorSelectPage _colorSelectPage;
+        private MusclePage _muscleSelectPage;
 
         private HistoryCaruselPage _historyCaruselPage;
         private CalendarPage _calendarHistoryPage;
@@ -230,6 +231,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
                 _weightHistoryVM.PopUpMessage += OnPopUpMessage;
                 _weightHistoryVM.ClosePage += OnCloseNavigationPage;
+                _weightHistoryVM.OpenMuscleSelector += OnOpenMuscleSelectPage;
             });
         }
 
@@ -256,6 +258,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightWorkoutManagerVM.ExceptionOccured += OnExceptionOccured;
                 _weightWorkoutManagerVM.PopUpMessage += OnPopUpMessage;
                 _weightWorkoutManagerVM.ClosePage += OnCloseNavigationPage;
+                _weightWorkoutManagerVM.OpenMuscleSelector += OnOpenMuscleSelectPage;
             });
         }
 
@@ -264,6 +267,7 @@ namespace TrainingManager.ViewModel.Navigation
             return Task.Run(() =>
             {
                 _colorSelectPage = new ColorSelectPage();
+                _muscleSelectPage = new MusclePage();
             });
         }
 
@@ -345,6 +349,14 @@ namespace TrainingManager.ViewModel.Navigation
             await _mainNavigationPage.PopAsync();
         }
 
+        private async void OnMuscleSelected(object sender, Muscle e)
+        {
+            ((MuscleVM)_muscleSelectPage.BindingContext).MuscleSelected -= OnMuscleSelected;
+            _weightWorkoutManagerVM.CheckChangesAndSetResult();
+            _weightHistoryVM.CheckChangesAndSetResult();
+            await _mainNavigationPage.PopAsync();
+        }
+
         private async void OnExerciseRoundSelectedHistory(object sender, string e)
         {
             string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "Delete");
@@ -405,8 +417,8 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnMessageApplication(object sender, MessageEventArgs e) =>
             await _mainTabbedPage.DisplayAlert(e.Message, e.Message, "Ok");
 
-        private void OnSavedWeightActivitySelectedHistory(object sender, string e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
-        private void OnSavedWeightActivitySelected(object sender, string e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();
+        private void OnSavedWeightActivitySelectedHistory(object sender, EventArgs e) => _addNewDrillCaruselPageHistory.CurrentPage = _addNewDrillCaruselPageHistory.Children.First();
+        private void OnSavedWeightActivitySelected(object sender, EventArgs e) => _addNewDrillCaruselPage.CurrentPage = _addNewDrillCaruselPage.Children.First();
         private async void OnExceptionOccured(object sender, ExceptionArgs e) => await _mainTabbedPage.DisplayAlert("Error", e.Message, "Ok");
         private async void OnCalculationStarted(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
         private async void OnCloseNavigationPage(object sender, EventArgs e) => await _mainNavigationPage.PopAsync();
@@ -414,6 +426,13 @@ namespace TrainingManager.ViewModel.Navigation
         private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
         private async void OnOpenAddWeightExercise(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
         private async void OnOpenAddWeightExerciseHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addNewDrillCaruselPageHistory);
+        private async void OnOpenMuscleSelectPage(object sender, MessageEventArgs e)
+        {
+            MuscleVM viewModel = ((WorkoutManagerBaseVM)sender).GetMuscleVMByExerciseGuid(e.Message);
+            viewModel.MuscleSelected += OnMuscleSelected;
+            _muscleSelectPage.BindingContext = viewModel;
+            await _mainNavigationPage.PushAsync(_muscleSelectPage);
+        }
         private async void OnOpenEditWeightExercise(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addWeightDrillPage);
         private async void OnOpenEditWeightExerciseHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addWeightDrillPageHistory);
         private async void OnOpenNoteEditor(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_notePage);
