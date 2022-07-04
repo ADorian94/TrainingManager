@@ -80,7 +80,7 @@ namespace TrainingManager.WebApi.Controllers
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.Color,
-                        MainMuscleGroup = _context.WeightActivities.Single(a => a.Id == x.ActivityId).MainMuscleGroup,
+                        MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
@@ -476,7 +476,7 @@ namespace TrainingManager.WebApi.Controllers
                     Note = x.Note,
                     TotalExerciseWeight = x.TotalExerciseWeight,
                     Color = x.Color,
-                    MainMuscleGroup = _context.WeightActivities.Single(a => a.Id == x.ActivityId).MainMuscleGroup,
+                    MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
                     WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                     {
                         Id = r.Id,

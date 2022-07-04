@@ -31,11 +31,11 @@ namespace TrainingManager.WebApi.Controllers
         public async Task<IActionResult> GetWeightActivities()
         {
             ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            
+
             return Ok(_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => new WeightActivityDTO()
-            { 
+            {
                 ActivityName = x.ActivityName,
-                MainMuscleGroup = x.MainMuscleGroup
+                MainMuscleGroup = _statFunctions.TryGetMuscle(x)
             }));
         }
 

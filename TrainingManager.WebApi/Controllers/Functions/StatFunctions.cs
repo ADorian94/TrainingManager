@@ -38,14 +38,11 @@ namespace TrainingManager.WebApi.Controllers.Functions
             return resutWeights;
         }
 
-        public Muscle GetMuscleOfActivity(IQueryable<WeightActivity> activities, int activityId)
+        public Muscle TryGetMuscle(WeightActivity x)
         {
             try
             {
-                lock (_lock) 
-                {
-                    return activities.Single(a => a.Id == activityId).MainMuscleGroup;
-                } 
+                return x.MainMuscleGroup;
             }
             catch
             {
