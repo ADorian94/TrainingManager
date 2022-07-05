@@ -21,7 +21,10 @@ namespace TrainingManager.ViewModel
             Muscles = new ObservableCollection<Muscle>();
 
             foreach (Muscle muscle in Enum.GetValues(typeof(Muscle)))
-                Muscles.Add(muscle);
+            {
+                if(muscle != Muscle.Unknown)
+                    Muscles.Add(muscle);
+            }
         }
 
         protected override void InitializeCommands()
