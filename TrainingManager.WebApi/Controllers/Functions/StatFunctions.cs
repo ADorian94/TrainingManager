@@ -81,5 +81,41 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
             return resutWeights;
         }
+
+        public IEnumerable<(Muscle muscle, double weight)> CollectRecentMovedWeightsGroupByMuscle(IQueryable<WeightWorkout> workouts, IQueryable<WeightExercise> exercises, IQueryable<WeightActivity> activities)
+        {
+            var thisWeeksWorkoutsIds = workouts.Where(x => IsThisWorkoutInThisWeek(x.WorkoutDate)).Select(x => x.Id);
+            var relatedExercises = exercises.Where(x => thisWeeksWorkoutsIds.Contains(x.WorkoutId));
+            var resutWeights = new List<(Muscle muscle, double weight)>();
+
+            foreach (var exercise in relatedExercises)
+            {
+                var muscle = activities.FirstOrDefault(x => x.Id == exercise.ActivityId).MainMuscleGroup;
+
+                if (resutWeights.Any(x => x.muscle == muscle))
+                {
+                    var element = resutWeights.Single(x => x.muscle == muscle);
+                    element.weight += exercise.TotalExerciseWeight;
+                }
+                else
+                    resutWeights.Add((muscle, exercise.TotalExerciseWeight));
+            }
+
+            return resutWeights;
+        }
+
+        private bool IsThisWorkoutInThisWeek(DateTime workoutDate)
+        {
+            var actualDate = DateTime.Now;
+            var actualDay = actualDate.DayOfWeek;
+            var days = new List<DayOfWeek>() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday };
+            int dayIndex = days.IndexOf(actualDay);
+
+            if (actualDate.DayOfYear - (dayIndex + 1) < workoutDate.DayOfYear &&
+                actualDate.DayOfYear + (days.Count - 1 - dayIndex) > workoutDate.DayOfYear)
+                return true;
+
+            return false;
+        }
     }
 }

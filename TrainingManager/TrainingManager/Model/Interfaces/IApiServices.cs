@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 
 namespace TrainingManager.Model
@@ -25,5 +26,6 @@ namespace TrainingManager.Model
         Task<IEnumerable<(int year, int month, double weight)>> GetMovedWorkoutsGroupByMonth();
         Task<IEnumerable<(DateTime date, double weight)>> GetMovedWeightsInTheMonth(int year, int month);
         Task<IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)>> GetMovedWeightsGroupByMonth();
+        Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync();
     }
 }

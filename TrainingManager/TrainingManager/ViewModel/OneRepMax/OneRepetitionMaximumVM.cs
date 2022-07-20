@@ -19,6 +19,9 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<ObservableCollection<(DateTime date, double Weight)>> _groupedWorkouts;
         public ObservableCollection<ObservableCollection<(DateTime date, double Weight)>> GroupedWorkouts { get => _groupedWorkouts; set { _groupedWorkouts = value; OnPropertyChanged(); } }
 
+        private DateTime _date;
+        public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand CalculateMaximumCommand { get; private set; }
         public DelegateCommand SetupCommand { get; private set; }
@@ -29,6 +32,7 @@ namespace TrainingManager.ViewModel
             _apiServices = apiServices;
             RecomendedMaximums = new ObservableCollection<MaximumMethod>();
             GetWorkoutDetailsFromServer();
+            Date = DateTime.Now;
         }
 
         protected override void InitializeCommands()

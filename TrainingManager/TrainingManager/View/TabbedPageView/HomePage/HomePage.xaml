@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
             <converter:DateToShortStringConverter x:Key="DateToShortStringConverter" />
+            <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -35,17 +36,10 @@
                     </ImageButton>
                 </StackLayout>
             </Grid>
-            <Label Text="Your personal records" Style="{StaticResource Title1}" IsVisible="False"/>
-            <ScrollView Orientation="Horizontal" Margin="15, 0" IsVisible="False">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <controls:TallSimpleCard CardMainText="Biceps" CardSecondaryText="12"/>
-                    <controls:TallSimpleCard CardMainText="Triceps" CardSecondaryText="12" />
-                    <controls:TallSimpleCard CardMainText="Squat" CardSecondaryText="12" />
-                    <controls:TallSimpleCard CardMainText="Bench Press" CardSecondaryText="12" />
-                </StackLayout>
-            </ScrollView>
+            <Label Text="Moved weights on this week" Style="{StaticResource Title1}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+            <controls:RoundChart CardMainText="{Binding WeeklyWeight}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding MovedWeightByMuscle}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}" />
             <StackLayout>
-                <Label Text="Recent workouts" Style="{StaticResource Title0}"/>
+                <Label Text="Recent workouts" Style="{StaticResource Title1}"/>
                 <ListView x:Name="RecentList" ItemsSource="{Binding Path=RecentWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                     <ListView.ItemTemplate >
                         <DataTemplate>

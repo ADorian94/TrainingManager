@@ -3,14 +3,24 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.OneRepetitionMaximumCalculatorPage"
              IconImageSource="Statistics.png"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
-        <local:Style/>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </ContentPage.Resources>
     <StackLayout Padding="0">
-        <Label Text="Weight charts" Style="{StaticResource Title0}"/>
+        <Label Text="{Binding Date, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+        <Label Text="Statistics" Style="{StaticResource Title0}"/>
+        <Label Text="Weight charts" Style="{StaticResource Title1}"/>
         <CarouselView x:Name="CarouselChartCollection" ItemsSource="{Binding GroupedWorkouts}"
                       IndicatorView="MonthIndicator" Style="{StaticResource CarouselViewStyle}">
             <CarouselView.ItemTemplate>
@@ -20,7 +30,7 @@
             </CarouselView.ItemTemplate>
         </CarouselView>
         <IndicatorView x:Name="MonthIndicator"/>
-        <Label Text="One Repetition Maximum" Style="{StaticResource Title0}"/>
+        <Label Text="One Repetition Maximum" Style="{StaticResource Title1}"/>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>

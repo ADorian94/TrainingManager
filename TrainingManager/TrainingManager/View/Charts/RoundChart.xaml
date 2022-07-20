@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:local="clr-namespace:TrainingManager.View.Styles" xmlns:microcharts1="clr-namespace:Microcharts.Forms;assembly=Microcharts.Forms"
+             x:Class="TrainingManager.View.Controls.RoundChart"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame Style="{StaticResource CardFrame}" Margin="15, 5">
+            <StackLayout BackgroundColor="Transparent">
+                <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+                <microcharts1:ChartView x:Name="RoundChartItem" VerticalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+            </StackLayout>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

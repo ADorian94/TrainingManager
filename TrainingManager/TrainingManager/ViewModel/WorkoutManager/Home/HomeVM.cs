@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
@@ -39,6 +40,13 @@ namespace TrainingManager.ViewModel
         private DateTime _date;
         public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
 
+
+        private double _weeklyWeight;
+        public double WeeklyWeight { get => _weeklyWeight; set { _weeklyWeight = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<(Muscle muscle, double weight)> _movedWeightByMuscle;
+        public ObservableCollection<(Muscle muscle, double weight)> MovedWeightByMuscle { get => _movedWeightByMuscle; set { _movedWeightByMuscle = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }
         public DelegateCommand ProfileSelectedCommand { get; private set; }
@@ -55,6 +63,7 @@ namespace TrainingManager.ViewModel
                 {
                     InitializeProfilePicture(),
                     UpdateRecentWorkoutsAsync(),
+                    InitializeWeeklyMuscleDataAsync()
                 };
 
                 Date = DateTime.Now;
@@ -66,6 +75,17 @@ namespace TrainingManager.ViewModel
             {
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
+        }
+
+        private async Task InitializeWeeklyMuscleDataAsync()
+        {
+            var muslceData = await ApiServices.GetWeeklyMuscleDataAsync();
+            MovedWeightByMuscle = new ObservableCollection<(Muscle muscle, double weight)>(muslceData);
+
+            WeeklyWeight = 0.0;
+
+            foreach (var data in muslceData)
+                WeeklyWeight += data.weight;
         }
 
         private async Task InitializeProfilePicture()
@@ -81,7 +101,16 @@ namespace TrainingManager.ViewModel
             ProfilePicture = ImageSource.FromStream(() => new MemoryStream(_originalImage));
         }
 
-        public override async void RefreshWorkouts(object sender, EventArgs e) => await UpdateRecentWorkoutsAsync();
+        public override async void RefreshWorkouts(object sender, EventArgs e)
+        {
+            var initializeTasks = new Task[]
+            {
+                    UpdateRecentWorkoutsAsync(),
+                    InitializeWeeklyMuscleDataAsync()
+            };
+
+            await Task.WhenAll(initializeTasks);
+        }
 
         protected override void SaveTodayWorkoutFunctionAsync(object obj)
         {
@@ -92,6 +121,7 @@ namespace TrainingManager.ViewModel
         {
             IEnumerable<WeightWorkoutDTO> recentWorkouts = await ApiServices.GetRecentWeightWorkoutsAsync();
             RecentWorkouts = new ObservableCollection<HistoryItemVM>(recentWorkouts.Select(w => new HistoryItemVM(w)));
+
         }
 
         private async void WeightWorkoutMenuSelectedFunction(object obj)

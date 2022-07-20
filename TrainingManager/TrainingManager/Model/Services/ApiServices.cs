@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model.LogWriter;
 
@@ -51,6 +52,24 @@ namespace TrainingManager.Model.Services
 
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetThisweekWeightsByMuscle");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<(Muscle muscle, double weight)>>();
                 else
                     throw new Exception("Server respond is not success.");
             }

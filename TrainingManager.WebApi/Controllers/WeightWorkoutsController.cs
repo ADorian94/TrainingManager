@@ -290,6 +290,23 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetThisweekWeightsByMuscle")]
+        public IActionResult GetThisweekWeightsByMuscle()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.CollectRecentMovedWeightsGroupByMuscle(
+                    _context.WeightWorkouts.Where(u => u.OwnerUserName == user.UserName),
+                    _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
+                    _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         private async Task RemoveExercises(int id)
         {
             ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
