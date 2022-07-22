@@ -89,6 +89,19 @@ namespace TrainingManager.ViewModel
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException("The converter is not implemeted.");
     }
 
+    public class DoubleToMowedWeightsStringConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return "NaN";
+
+            return $"Moved weights: {(double)value}";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException("The converter is not implemeted.");
+    }
+
     public class BoolNegateConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture) => value != null ? !(bool)value : false;

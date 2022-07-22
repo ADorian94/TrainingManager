@@ -12,6 +12,7 @@
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
             <converter:DateToShortStringConverter x:Key="DateToShortStringConverter" />
+            <converter:DoubleToMowedWeightsStringConverter x:Key="DoubleToMowedWeightsStringConverter" />
             <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
@@ -36,8 +37,9 @@
                     </ImageButton>
                 </StackLayout>
             </Grid>
-            <Label Text="Moved weights on this week" Style="{StaticResource Title1}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
-            <controls:RoundChart CardMainText="{Binding WeeklyWeight}" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding MovedWeightByMuscle}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}" />
+            <Label Text="This week" Style="{StaticResource Title1}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+            <controls:RoundChart CardMainText="{Binding WeeklyWeight, Converter={StaticResource DoubleToMowedWeightsStringConverter}}"
+                                 VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding MovedWeightByMuscle}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}" />
             <StackLayout>
                 <Label Text="Recent workouts" Style="{StaticResource Title1}"/>
                 <ListView x:Name="RecentList" ItemsSource="{Binding Path=RecentWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">

@@ -19,7 +19,7 @@
                 <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}" ActualDate="{Binding CurrentDate}"/>
                 <controls:SimpleCard
                 Margin="15, 5"
-                CardMainText="Moved weights in the month"
+                CardMainText="Moved weights"
                 CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
             </StackLayout>
         </ScrollView>
