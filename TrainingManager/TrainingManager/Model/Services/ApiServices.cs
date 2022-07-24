@@ -80,6 +80,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetMaxMovedWeightsByActivites()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetMaxMovedWeightsByActivites");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto)
         {
             try

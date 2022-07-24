@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:images="clr-namespace:TrainingManager.View.Media"
+             x:Class="TrainingManager.View.Controls.HighCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:MaterialColorToColor x:Key="MaterialColorToColor" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+                <images:Images/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame Margin="15, 5" Style="{StaticResource CardFrame}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="40"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=MainLabel}" Style="{StaticResource CardTitle}" VerticalOptions="Center" FontAttributes="Bold"/>
+                    <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="{StaticResource TripleDotIcon}" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
+                        <RowDefinition Height="35"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=FirstLabel}" Style="{StaticResource OpenCardLabelContent}" Margin="15, 0, 0, 0"/>
+                    <Label Grid.Row="0" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=FirstValue}" Style="{StaticResource OpenCardValueContent}"/>
+                    <Label Grid.Row="1" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=SecondLabel}" Style="{StaticResource OpenCardLabelContent}" Margin="15, 5, 0, 0"/>
+                    <Label Grid.Row="1" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=SecondValue}" Style="{StaticResource OpenCardValueContent}" Margin="0, 5, 0, 0"/>
+                </Grid>
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

@@ -40,12 +40,14 @@ namespace TrainingManager.ViewModel
         private DateTime _date;
         public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
 
-
         private double _weeklyWeight;
         public double WeeklyWeight { get => _weeklyWeight; set { _weeklyWeight = value; OnPropertyChanged(); } }
 
         private ObservableCollection<(Muscle muscle, double weight)> _movedWeightByMuscle;
         public ObservableCollection<(Muscle muscle, double weight)> MovedWeightByMuscle { get => _movedWeightByMuscle; set { _movedWeightByMuscle = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<PersonalRecordVM> _personalRecords;
+        public ObservableCollection<PersonalRecordVM> PersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }
@@ -63,7 +65,8 @@ namespace TrainingManager.ViewModel
                 {
                     InitializeProfilePicture(),
                     UpdateRecentWorkoutsAsync(),
-                    InitializeWeeklyMuscleDataAsync()
+                    InitializeWeeklyMuscleDataAsync(),
+                    InitPersonalRecords(),
                 };
 
                 Date = DateTime.Now;
@@ -75,6 +78,12 @@ namespace TrainingManager.ViewModel
             {
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
+        }
+
+        private async Task InitPersonalRecords()
+        {
+            var records = await ApiServices.GetMaxMovedWeightsByActivites();
+            PersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x)));
         }
 
         private async Task InitializeWeeklyMuscleDataAsync()
@@ -106,7 +115,8 @@ namespace TrainingManager.ViewModel
             var initializeTasks = new Task[]
             {
                     UpdateRecentWorkoutsAsync(),
-                    InitializeWeeklyMuscleDataAsync()
+                    InitializeWeeklyMuscleDataAsync(),
+                    InitPersonalRecords(),
             };
 
             await Task.WhenAll(initializeTasks);

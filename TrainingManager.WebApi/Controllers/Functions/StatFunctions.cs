@@ -55,7 +55,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
                 }
             }
 
-            return result;
+            return result.OrderByDescending(x => x.weight);
         }
 
         public List<(int year, int month, double weight)> SumMovedWeightsByMonth(IQueryable<WeightWorkout> workouts)
