@@ -4,13 +4,59 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
+using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
 namespace TrainingManager.WebApi.Controllers.Functions
 {
     public class StatFunctions
     {
-        private static object _lock = new object();
+        private readonly TrainingManagerContext _context;
+
+        public StatFunctions(TrainingManagerContext context)
+        {
+            _context = context;
+        }
+
+        public IEnumerable<(WeightActivityDTO activity, double weight, int reps)> FindMaxMovedWeightsByActivites(IQueryable<WeightExercise> exercises, IQueryable<WeightActivity> activities)
+        {
+            var result = new List<(WeightActivityDTO activity, double weight, int reps)>();
+
+            foreach (var item in activities)
+            {
+                var relatedExercises = exercises.Where(x => x.ActivityId == item.Id);
+
+                if(relatedExercises.Count() > 0)
+                {
+                    List<WeightRound> weightRounds = new List<WeightRound>();
+
+                    foreach (var exercise in relatedExercises)
+                        weightRounds = weightRounds.Concat(_context.WeightRounds.Where(x => x.ExerciseId == exercise.Id)).ToList();
+                    
+                    if(weightRounds.Count() > 0)
+                    {
+                        (double weight, int reps) max = (weightRounds[0].WeightOfExercise, weightRounds[0].Reps);
+
+                        for (int i = 1; i < weightRounds.Count; i++)
+                        {
+                            if (max.weight < weightRounds[i].WeightOfExercise)
+                            {
+                                max = (weightRounds[i].WeightOfExercise, weightRounds[i].Reps);
+                            }
+                        }
+
+                        result.Add((new WeightActivityDTO()
+                        { 
+                        ActivityName = item.ActivityName,
+                        MainMuscleGroup = item.MainMuscleGroup
+                        },
+                        max.weight, max.reps));
+                    }
+                }
+            }
+
+            return result;
+        }
 
         public List<(int year, int month, double weight)> SumMovedWeightsByMonth(IQueryable<WeightWorkout> workouts)
         {
@@ -95,7 +141,9 @@ namespace TrainingManager.WebApi.Controllers.Functions
                 if (resutWeights.Any(x => x.muscle == muscle))
                 {
                     var element = resutWeights.Single(x => x.muscle == muscle);
+                    resutWeights.Remove(element);
                     element.weight += exercise.TotalExerciseWeight;
+                    resutWeights.Add(element);
                 }
                 else
                     resutWeights.Add((muscle, exercise.TotalExerciseWeight));

@@ -23,7 +23,7 @@ namespace TrainingManager.WebApi.Controllers
         public WeightActivitiesController(TrainingManagerContext context)
         {
             _context = context;
-            _statFunctions = new StatFunctions();
+            _statFunctions = new StatFunctions(context);
         }
 
         // GET: api/WeightActivities

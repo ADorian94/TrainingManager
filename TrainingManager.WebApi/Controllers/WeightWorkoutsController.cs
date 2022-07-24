@@ -25,7 +25,7 @@ namespace TrainingManager.WebApi.Controllers
         public WeightWorkoutsController(TrainingManagerContext context)
         {
             _context = context;
-            _statFunctions = new StatFunctions();
+            _statFunctions = new StatFunctions(context);
         }
 
         // GET: api/WeightWorkouts
@@ -241,6 +241,22 @@ namespace TrainingManager.WebApi.Controllers
             {
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 return Ok(_statFunctions.SumMovedWeightsByMonth(_context.WeightWorkouts.Where(x => x.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("GetMaxMovedWeightsByActivites")]
+        public IActionResult GetMaxMovedWeightsByActivites()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.FindMaxMovedWeightsByActivites(
+                    _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
+                    _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
             }
             catch
             {
