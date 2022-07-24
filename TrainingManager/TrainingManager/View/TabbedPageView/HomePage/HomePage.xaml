@@ -43,7 +43,7 @@
             <Label Text="Something to be proud of" Style="{StaticResource Title1}" />
             <StackLayout HeightRequest="150">
                 <CollectionView ItemsSource="{Binding PersonalRecords}" VerticalOptions="Start" HorizontalScrollBarVisibility="Never">
-T                   <CollectionView.ItemsLayout>
+                   <CollectionView.ItemsLayout>
                         <LinearItemsLayout>
                             <x:Arguments>
                                 <ItemsLayoutOrientation>Horizontal</ItemsLayoutOrientation>
