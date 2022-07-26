@@ -15,7 +15,7 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout>
-                <Label Text="Calendar" Style="{StaticResource Title0}"/>
+                <!--<Label Text="Calendar" Style="{StaticResource Title0}"/>-->
                 <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}" ActualDate="{Binding CurrentDate}"/>
                 <controls:SimpleCard
                 Margin="15, 5"

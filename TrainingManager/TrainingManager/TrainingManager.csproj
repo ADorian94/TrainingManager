@@ -154,9 +154,6 @@
     <EmbeddedResource Update="View\TabbedPageView\AddWeightWorkoutPage\AddNewWeightWorkoutPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="View\TabbedPageView\ExercisesPage\ExercisesPage.xaml">
-      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
-    </EmbeddedResource>
     <EmbeddedResource Update="View\TabbedPageView\History\HistoryCaruselPage.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
