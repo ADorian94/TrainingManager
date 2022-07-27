@@ -47,8 +47,10 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
                         result.Add((new WeightActivityDTO()
                         { 
-                        ActivityName = item.ActivityName,
-                        MainMuscleGroup = item.MainMuscleGroup
+                            ActivityName = item.ActivityName,
+                            MainMuscleGroup = item.MainMuscleGroup,
+                            ActivityGuid = item.ActivityGuid,
+                            IsWatched = item.IsWatched
                         },
                         max.weight, max.reps));
                     }
@@ -57,6 +59,9 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
             return result.OrderByDescending(x => x.weight);
         }
+
+        public IEnumerable<(WeightActivityDTO activity, double weight, int reps)> FindWatchedMaxMovedWeightsByActivites(IQueryable<WeightExercise> exercises, IQueryable<WeightActivity> activities)
+          => FindMaxMovedWeightsByActivites(exercises, activities).Where(x => x.activity.IsWatched);
 
         public List<(int year, int month, double weight)> SumMovedWeightsByMonth(IQueryable<WeightWorkout> workouts)
         {

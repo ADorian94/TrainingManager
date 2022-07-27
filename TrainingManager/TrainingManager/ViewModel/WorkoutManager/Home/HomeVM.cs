@@ -47,7 +47,7 @@ namespace TrainingManager.ViewModel
         public ObservableCollection<(Muscle muscle, double weight)> MovedWeightByMuscle { get => _movedWeightByMuscle; set { _movedWeightByMuscle = value; OnPropertyChanged(); } }
 
         private ObservableCollection<PersonalRecordVM> _personalRecords;
-        public ObservableCollection<PersonalRecordVM> PersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
+        public ObservableCollection<PersonalRecordVM> WatchedPersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }
@@ -82,8 +82,8 @@ namespace TrainingManager.ViewModel
 
         private async Task InitPersonalRecords()
         {
-            var records = await ApiServices.GetMaxMovedWeightsByActivites();
-            PersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x)));
+            var records = await ApiServices.GetWatchedWeightActivitiesAsync();
+            WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x)));
         }
 
         private async Task InitializeWeeklyMuscleDataAsync()

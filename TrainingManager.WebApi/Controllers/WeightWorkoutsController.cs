@@ -392,19 +392,15 @@ namespace TrainingManager.WebApi.Controllers
         private int AddActivityByNameIfNeeded(string exerciseName, Muscle mainMuscleGroup)
         {
             ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var trimmedExerciseName = exerciseName.Trim();
 
-            if (_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Any(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()))
+            if (_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Any(x => x.ActivityName.ToUpper() == trimmedExerciseName.ToUpper()))
             {
-                var activity = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper());
-
-                //ez így nem jó, más logika mentén kéne az izomcsoortokat bevezetni
-                if (activity.MainMuscleGroup == Muscle.Unknown)
-                {
-                    activity.MainMuscleGroup = mainMuscleGroup;
-                    var addedActivity = _context.WeightActivities.Update(activity);
-                    _context.SaveChanges();
-                }
-
+                //Ha már szerepel az adatbázisban, akkor újra elmentjük a muscle-t
+                var activity = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == trimmedExerciseName.ToUpper());
+                activity.MainMuscleGroup = mainMuscleGroup;
+                var addedActivity = _context.WeightActivities.Update(activity);
+                _context.SaveChanges();
                 return activity.Id;
             }
             else
@@ -412,9 +408,9 @@ namespace TrainingManager.WebApi.Controllers
                 var newActivity = new WeightActivity()
                 {
                     ActivityGuid = Guid.NewGuid(),
-                    ActivityName = exerciseName,
+                    ActivityName = trimmedExerciseName,
                     OwnerUserName = user.UserName,
-                    MainMuscleGroup = mainMuscleGroup
+                    MainMuscleGroup = mainMuscleGroup,
                 };
 
                 var addedActivity = _context.WeightActivities.Add(newActivity);

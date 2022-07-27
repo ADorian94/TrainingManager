@@ -201,11 +201,11 @@ namespace TrainingManager.ViewModel
                 foundElements = activities.Select(x => x);
 
             foundElements = foundElements.OrderBy(x => x);
-            SavedActivities = new ObservableCollection<VeightActivityVM>();
+            SavedActivities = new ObservableCollection<WeightActivityVM>();
             int i = 0;
 
             foreach (var element in foundElements)
-                SavedActivities.Add(new VeightActivityVM(element, ++i));
+                SavedActivities.Add(new WeightActivityVM(element, ++i));
         }
     }
 }

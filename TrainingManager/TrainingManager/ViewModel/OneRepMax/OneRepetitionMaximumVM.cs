@@ -22,6 +22,9 @@ namespace TrainingManager.ViewModel
         private DateTime _date;
         public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
 
+        private ObservableCollection<PersonalRecordVM> _personalRecords;
+        public ObservableCollection<PersonalRecordVM> PersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand CalculateMaximumCommand { get; private set; }
         public DelegateCommand SetupCommand { get; private set; }
@@ -32,6 +35,7 @@ namespace TrainingManager.ViewModel
             _apiServices = apiServices;
             RecomendedMaximums = new ObservableCollection<MaximumMethod>();
             GetWorkoutDetailsFromServer();
+            InitPersonalRecords();
             Date = DateTime.Now;
         }
 
@@ -73,8 +77,13 @@ namespace TrainingManager.ViewModel
             }
         }
 
-        public void RefreshCharts(object sender, EventArgs e) => GetWorkoutDetailsFromServer();
-
+        public void Refresh(object sender, EventArgs e) 
+        { 
+            GetWorkoutDetailsFromServer();
+            InitPersonalRecords();
+        }
+        
+        //PRIVATES
         private async void GetWorkoutDetailsFromServer()
         {
             IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)> workouts = (await _apiServices.GetMovedWeightsGroupByMonth()).Reverse();
@@ -111,6 +120,12 @@ namespace TrainingManager.ViewModel
             }
 
             return true;
+        }
+
+        private async void InitPersonalRecords()
+        {
+            var records = await _apiServices.GetMaxMovedWeightsByActivites();
+            PersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x)));
         }
     }
 }

@@ -42,7 +42,7 @@
                                  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding MovedWeightByMuscle}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}" />
             <Label Text="Something to be proud of" Style="{StaticResource Title1}" />
             <StackLayout HeightRequest="150">
-                <CollectionView ItemsSource="{Binding PersonalRecords}" VerticalOptions="Start" HorizontalScrollBarVisibility="Never">
+                <CollectionView ItemsSource="{Binding WatchedPersonalRecords}" VerticalOptions="Start" HorizontalScrollBarVisibility="Never">
                    <CollectionView.ItemsLayout>
                         <LinearItemsLayout>
                             <x:Arguments>

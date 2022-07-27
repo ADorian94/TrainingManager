@@ -49,14 +49,15 @@ namespace TrainingManager.ViewModel.Navigation
         private NotePage _notePageHistory;
         private ColorSelectPage _colorSelectPage;
         private MusclePage _muscleSelectPage;
-
         private HistoryTabbedPage _historyTabbedPage;
         private CalendarPage _calendarHistoryPage;
         private SearchPage _searchHistoryPage;
+        private ActivitiesPage _activitiesPage;
         private AddNewWeightWorkoutPage _addNewWeightWorkoutPageHistory;
         private AddNewDrillCaruselPage _addNewDrillCaruselPageHistory;
         private AddSavedWeightExercises _addSavedWeightExercisesHistory;
         private AddWeightExercisePage _addWeightDrillPageHistory;
+        private ActivityDetailsPage _activityDetailsPage;
 
         //VIEWMODELLS
         private OneRepetitionMaximumVM _oneRepetitionMaximumVM;
@@ -64,6 +65,7 @@ namespace TrainingManager.ViewModel.Navigation
         private WeightHistoryVM _weightHistoryVM;
         private HomeVM _homeVM;
         private SettingsVM _settingsVM;
+        private WeightActivityManagerVM _weightActivityManagerVM;
 
         public PageNavigationManager(IApiServices apiServices, IAuthService authService, IProfileService profileService)
         {
@@ -96,6 +98,7 @@ namespace TrainingManager.ViewModel.Navigation
                     CreateWeightHistoryVM(),
                     CreateHomeVM(),
                     CreateSettingsVM(),
+                    CreateActivitiesVM(),
                     CreateColorVM(),
                     CreateOneRepMaximumVM()
                 };
@@ -105,13 +108,17 @@ namespace TrainingManager.ViewModel.Navigation
                 //EVENT SUBSCRIBE
                 _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
                 _weightWorkoutManagerVM.WorkoutSaved += _homeVM.RefreshWorkouts;
-                _weightWorkoutManagerVM.WorkoutSaved += _oneRepetitionMaximumVM.RefreshCharts;
+                _weightWorkoutManagerVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
                 _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
                 _weightHistoryVM.WorkoutDeleted += _homeVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutSaved += _homeVM.RefreshWorkouts;
-                _weightHistoryVM.WorkoutSaved += _oneRepetitionMaximumVM.RefreshCharts;
+                _weightHistoryVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
                 _homeVM.ProfileSelected += OnProfileSelected;
+                _weightActivityManagerVM.NeedToRefresh += _homeVM.RefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _weightHistoryVM.RefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _oneRepetitionMaximumVM.Refresh;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
                 LogHandler.Instance.Nlog.Info("PageNavigation manager initialization after authentication finished.");
@@ -137,9 +144,11 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePage = new NotePage();
                 _calendarHistoryPage = new CalendarPage() { Title = "Calendar" };
                 _searchHistoryPage = new SearchPage() { Title = "History" };
+                _activitiesPage = new ActivitiesPage() { Title = "Exercises" };
                 _historyTabbedPage = new HistoryTabbedPage();
                 _historyTabbedPage.Children.Add(_calendarHistoryPage);
                 _historyTabbedPage.Children.Add(_searchHistoryPage);
+                _historyTabbedPage.Children.Add(_activitiesPage);
                 _addNewWeightWorkoutPageHistory = new AddNewWeightWorkoutPage("Workout");
                 _addNewDrillCaruselPageHistory = new AddNewDrillCaruselPage();
                 _addSavedWeightExercisesHistory = new AddSavedWeightExercises();
@@ -147,6 +156,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _addNewDrillCaruselPageHistory.Children.Add(_addWeightDrillPageHistory);
                 _addNewDrillCaruselPageHistory.Children.Add(_addSavedWeightExercisesHistory);
                 _notePageHistory = new NotePage();
+                _activityDetailsPage = new ActivityDetailsPage();
 
                 _mainTabbedPage = new NavigationTabbedPage();
                 _mainTabbedPage.SelectedTabColor = Color.White;
@@ -181,6 +191,18 @@ namespace TrainingManager.ViewModel.Navigation
                 _settingsVM.LogoutSuccess += OnLogoutSuccess;
                 _settingsVM.LogoutFailed += OnMessageApplication;
                 _settingsVM.PopUpMessageWithCallBack += OnPopUpMessage;
+            });
+        }
+
+        private Task CreateActivitiesVM()
+        {
+            return Task.Run(() =>
+            {
+                _weightActivityManagerVM = new WeightActivityManagerVM(_apiServices);
+                _weightActivityManagerVM.WeightActivitySelected += OnWeightActivitySelected;
+                _weightActivityManagerVM.MuscleSetup += OnMuscleSetup;
+                _activitiesPage.BindingContext = _weightActivityManagerVM;
+                _activityDetailsPage.BindingContext = _weightActivityManagerVM;
             });
         }
 
@@ -418,6 +440,7 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnExceptionOccured(object sender, ExceptionArgs e) => await _mainTabbedPage.DisplayAlert("Error", e.Message, "Ok");
         private async void OnCalculationStarted(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_oneRepetitionMaximumCalculatedPage);
         private async void OnCloseNavigationPage(object sender, EventArgs e) => await _mainNavigationPage.PopAsync();
+        private async void OnCloseNavigationPage(object sender, Muscle e) => await _mainNavigationPage.PopAsync();
         private async void OnWeightWorkoutDateSelected(object sender, DateTime e) => await _mainNavigationPage.PushAsync(_addNewWeightWorkoutPageHistory);
         private void OnLogoutSuccess(object sender, EventArgs e) => Logout?.Invoke(this, EventArgs.Empty);
         private async void OnOpenAddWeightExercise(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addNewDrillCaruselPage);
@@ -434,5 +457,13 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnOpenNoteEditor(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_notePage);
         private async void OnOpenNoteEditorHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_notePageHistory);
         private async void OnProfileSelected(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_settingsPage);
+        private async void OnWeightActivitySelected(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_activityDetailsPage);
+
+        private async void OnMuscleSetup(object sender, EventArgs e)
+        {
+            _weightActivityManagerVM.MuscleVM.MuscleSelected += OnCloseNavigationPage;
+            _muscleSelectPage.BindingContext = _weightActivityManagerVM.MuscleVM;
+            await _mainNavigationPage.PushAsync(_muscleSelectPage);
+        }
     }
 }

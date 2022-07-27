@@ -28,5 +28,8 @@ namespace TrainingManager.Model
         Task<IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)>> GetMovedWeightsGroupByMonth();
         Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync();
         Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetMaxMovedWeightsByActivites();
+        Task<(WeightActivityDTO activity, double weight, int reps)> GetWeightActivityPRAsync(Guid id);
+        Task<bool> EditWeightActivityAsync(WeightActivityDTO weigthActivityDto);
+        Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetWatchedWeightActivitiesAsync();
     }
 }

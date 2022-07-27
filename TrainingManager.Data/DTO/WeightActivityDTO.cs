@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TrainingManager.Data.DTO
 {
     public class WeightActivityDTO
     {
+        public Guid ActivityGuid { get; set; }
         public string ActivityName { get; set; }
         public Muscle MainMuscleGroup { get; set; }
+        public bool IsWatched { get; set; }
     }
 }

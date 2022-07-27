@@ -149,6 +149,8 @@
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="baseline_star_border_white_20.png" />
+    <Content Include="baseline_star_white_20.png" />
     <Content Include="closeIcon.png" />
     <Content Include="DeadliftWide.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

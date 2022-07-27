@@ -161,6 +161,56 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<(WeightActivityDTO activity, double weight, int reps)> GetWeightActivityPRAsync(Guid id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/MaxWeightActivity/{id}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<(WeightActivityDTO activity, double weight, int reps)>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetWatchedWeightActivitiesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/GetWatchedMaxWeightActivities");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync< ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> EditWeightActivityAsync(WeightActivityDTO weigthActivityDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.PutAsJsonAsync("api/WeightActivities", weigthActivityDto);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         //IMAGES
         public async Task<bool> UploadProfilePicture(byte[] image)
         {

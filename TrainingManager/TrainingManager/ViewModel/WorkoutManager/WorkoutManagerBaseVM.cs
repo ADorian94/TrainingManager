@@ -57,8 +57,8 @@ namespace TrainingManager.ViewModel
         private double _totalExerciseRounds;
         public double TotalExerciseRounds { get => _totalExerciseRounds; set { _totalExerciseRounds = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<VeightActivityVM> _savedActivities;
-        public ObservableCollection<VeightActivityVM> SavedActivities { get => _savedActivities; set { _savedActivities = value; OnPropertyChanged(); } }       
+        private ObservableCollection<WeightActivityVM> _savedActivities;
+        public ObservableCollection<WeightActivityVM> SavedActivities { get => _savedActivities; set { _savedActivities = value; OnPropertyChanged(); } }       
         
         //COMMANDS
         public DelegateCommand SaveTodayWorkoutCommand { get; private set; }
@@ -167,12 +167,12 @@ namespace TrainingManager.ViewModel
             {
                 IEnumerable<WeightActivityDTO> activities = await ApiServices.GetWeightActivitiesAsync();
                 activities = activities.OrderBy(x => x.ActivityName);
-                SavedActivities = new ObservableCollection<VeightActivityVM>();
+                SavedActivities = new ObservableCollection<WeightActivityVM>();
 
                 int i = 0;
                 foreach (var activity in activities)
                 {
-                    SavedActivities.Add(new VeightActivityVM(activity, i++));
+                    SavedActivities.Add(new WeightActivityVM(activity, i++));
                 }
             }
             catch (Exception ex)
