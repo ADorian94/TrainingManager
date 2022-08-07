@@ -9,6 +9,6 @@
     </ContentView.Resources>
 
     <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" HeightRequest="200" WidthRequest="200" CornerRadius="200">
-        <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="35" TextColor="White"/>
+        <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="35" TextColor="{StaticResource MainTextColor}"/>
     </Frame>
 </ContentView>
