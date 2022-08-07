@@ -46,8 +46,11 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<(Muscle muscle, double weight)> _movedWeightByMuscle;
         public ObservableCollection<(Muscle muscle, double weight)> MovedWeightByMuscle { get => _movedWeightByMuscle; set { _movedWeightByMuscle = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<PersonalRecordVM> _personalRecords;
-        public ObservableCollection<PersonalRecordVM> WatchedPersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
+        private ObservableCollection<PersonalRecordVM> _watchedPersonalRecords;
+        public ObservableCollection<PersonalRecordVM> WatchedPersonalRecords { get => _watchedPersonalRecords; set { _watchedPersonalRecords = value; OnPropertyChanged(); } }
+
+        //ACTIONS
+        public Action<Guid> SelectPersonalRecord;
 
         //COMMANDS
         public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }

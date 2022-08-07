@@ -43,7 +43,7 @@
             <controls:RoundChart CardMainText="{Binding WeeklyWeight, Converter={StaticResource DoubleToMowedWeightsStringConverter}}"
                                  VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding MovedWeightByMuscle}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}" />
             <Label Text="Something to be proud of" Style="{StaticResource Title1}" IsVisible="{Binding WatchedPersonalRecords, Converter={StaticResource PersonalRecordToBoolConverter}}" />
-            <StackLayout HeightRequest="150">
+            <StackLayout HeightRequest="150" IsVisible="{Binding WatchedPersonalRecords, Converter={StaticResource PersonalRecordToBoolConverter}}">
                 <CollectionView ItemsSource="{Binding WatchedPersonalRecords}" VerticalOptions="Start" HorizontalScrollBarVisibility="Never"
                                 IsVisible="{Binding WatchedPersonalRecords, Converter={StaticResource PersonalRecordToBoolConverter}}">
                     <CollectionView.ItemsLayout>
@@ -61,7 +61,8 @@
                                                SecondLabel="Reps"
                                                SecondValue="{Binding Reps}"
                                                ButtonVisibility="False"
-                                               VerticalOptions="Fill"/>
+                                               VerticalOptions="Fill"
+                                               CardFrameTapped="{Binding PersonalRecordSelectedCommand}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

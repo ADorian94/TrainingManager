@@ -114,7 +114,6 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutSaved += _homeVM.RefreshWorkouts;
                 _weightHistoryVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
-                _homeVM.ProfileSelected += OnProfileSelected;
                 _weightActivityManagerVM.NeedToRefresh += _homeVM.RefreshWorkouts;
                 _weightActivityManagerVM.NeedToRefresh += _weightHistoryVM.RefreshWorkouts;
                 _weightActivityManagerVM.NeedToRefresh += _weightWorkoutManagerVM.RefreshWorkouts;
@@ -201,6 +200,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _weightActivityManagerVM = new WeightActivityManagerVM(_apiServices);
                 _weightActivityManagerVM.WeightActivitySelected += OnWeightActivitySelected;
                 _weightActivityManagerVM.MuscleSetup += OnMuscleSetup;
+                _weightActivityManagerVM.NeedToRefresh += OnCloseNavigationPage;
                 _activitiesPage.BindingContext = _weightActivityManagerVM;
                 _activityDetailsPage.BindingContext = _weightActivityManagerVM;
             });
@@ -217,6 +217,7 @@ namespace TrainingManager.ViewModel.Navigation
                 _recentWorkoutDetailsPage.BindingContext = _homeVM;
 
                 _homeVM.RecentWorkoutItemSelected += OnRecentWorkoutItemSelected;
+                _homeVM.ProfileSelected += OnProfileSelected;
             });
         }
 

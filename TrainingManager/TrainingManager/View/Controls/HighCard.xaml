@@ -19,6 +19,10 @@
     </ContentView.Resources>
     <ContentView.Content>
         <Frame Margin="15, 5" Style="{StaticResource CardFrame}">
+            <Frame.GestureRecognizers>
+                <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}"
+                                      CommandParameter="{x:Binding Source={x:Reference this}, Path=CardFrameParameter}"/>
+            </Frame.GestureRecognizers>
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>

@@ -206,6 +206,7 @@ namespace TrainingManager.ViewModel
                     Note = x.ExerciseNote,
                     TotalExerciseWeight = x.TotalExerciseWeight,
                     Color = x.ExerciseColor,
+                    MainMuscleGroup = x.MainMuscle,
                     WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
                     {
                         Reps = y.Reps,

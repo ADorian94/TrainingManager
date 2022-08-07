@@ -77,9 +77,7 @@ namespace TrainingManager.View.Controls
         private static void OnFrameTapCommandPropertyChanged(BindableObject bindable, object oldValue, object newValue)
         {
             if (bindable is SimpleCard headerTemplate && newValue is DelegateCommand command)
-            {
                 headerTemplate.CardFrameTapped = command;
-            }
         }
     }
 }
