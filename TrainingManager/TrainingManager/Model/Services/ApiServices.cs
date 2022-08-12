@@ -142,6 +142,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<WeightWorkoutDTO>> SearchWorkoutAsync(string keyWords)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/SearchWorkout/{keyWords}");
+                
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         //ACTIVITIES
         public async Task<IEnumerable<WeightActivityDTO>> GetWeightActivitiesAsync()
         {

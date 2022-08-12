@@ -256,30 +256,14 @@ namespace TrainingManager.ViewModel
             }
         }
 
-        //áthelyezni szerver oldalra
         public async void SearchFunction(object obj)
         {
-            var searchStr = obj.ToString();
-            IEnumerable<HistoryItemVM> foundElements = new ObservableCollection<HistoryItemVM>();
-            IEnumerable<WeightWorkoutDTO> workouts = await ApiServices.GetWeightWorkoutsAsync();
+            var keyWords = obj.ToString();
+            IEnumerable<WeightWorkoutDTO> workouts = string.IsNullOrEmpty(keyWords) ?
+                await ApiServices.GetWeightWorkoutsAsync() :
+                await ApiServices.SearchWorkoutAsync(keyWords);
 
-            if (!string.IsNullOrEmpty(searchStr))
-            {
-                string[] searchStrings = searchStr.Trim().Split(' ');
-                foundElements = searchStrings.SelectMany(str => workouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))).Select(x => new HistoryItemVM(x)));
-            }
-            else
-                foundElements = workouts.Select(x => new HistoryItemVM(x));
-
-            var items = new List<HistoryItemVM>();
-
-            foreach (var item in foundElements)
-            {
-                if (!HistoryWorkoutItems.Any(x => x.WorkoutGuid == item.WorkoutGuid))
-                    items.Add(item);
-            }
-
-            HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(items.OrderByDescending(x => x.WorkoutDate.Date));
+            HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(workouts.Select(x => new HistoryItemVM(x)));
         }
     }
 }

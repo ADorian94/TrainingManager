@@ -31,5 +31,6 @@ namespace TrainingManager.Model
         Task<(WeightActivityDTO activity, double weight, int reps)> GetWeightActivityPRAsync(Guid id);
         Task<bool> EditWeightActivityAsync(WeightActivityDTO weigthActivityDto);
         Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetWatchedWeightActivitiesAsync();
+        Task<IEnumerable<WeightWorkoutDTO>> SearchWorkoutAsync(string keyWords);
     }
 }

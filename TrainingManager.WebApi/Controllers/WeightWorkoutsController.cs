@@ -72,7 +72,7 @@ namespace TrainingManager.WebApi.Controllers
                         ImageLarge = i.ImageLarge,
                         ImageSmall = i.ImageSmall,
                     }).ToList(),
-                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
+                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         Id = x.Id,
@@ -323,6 +323,38 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("SearchWorkout/{keyWords}")]
+        public IActionResult SearchInWorkouts([FromRoute] string keyWords)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var allAvailableWorkouts = GetUserWorkouts(user);
+
+                if (!string.IsNullOrEmpty(keyWords))
+                {
+                    string[] searchStrings = keyWords.Trim().Split(' ');
+                    var foundElements = searchStrings.SelectMany(str => allAvailableWorkouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))));
+                    List<WeightWorkoutDTO> uniqueFoundElements = new List<WeightWorkoutDTO>();
+
+                    foreach (var item in foundElements)
+                    {
+                        if (!uniqueFoundElements.Any(x => x.WorkoutGuid == item.WorkoutGuid))
+                            uniqueFoundElements.Add(item);
+                    }
+
+                    return Ok(uniqueFoundElements.OrderByDescending(x => x.WorkoutDate.Date));
+                }
+                else
+                    return Ok(allAvailableWorkouts.OrderByDescending(x => x.WorkoutDate.Date));
+
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         private async Task RemoveExercises(int id)
         {
             ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -497,7 +529,7 @@ namespace TrainingManager.WebApi.Controllers
                     ImageLarge = i.ImageLarge,
                     ImageSmall = i.ImageSmall,
                 }).ToList(),
-                WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
+                WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
                 {
                     ExerciseGuid = x.ExerciseGuid,
                     Id = x.Id,
