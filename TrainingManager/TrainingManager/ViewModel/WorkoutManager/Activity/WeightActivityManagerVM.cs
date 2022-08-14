@@ -120,5 +120,14 @@ namespace TrainingManager.ViewModel
             MuscleVM.MuscleSelected -= OnMuscleSelected;
             MuscleVM = null;
         }
+
+        public async void SetupRecord(PersonalRecordVM record)
+        {
+            SelectedActivity = new WeightActivityVM(Activites.Single(x => x.Id == record.Id));
+            var activityDetails = await _apiServices.GetWeightActivityPRAsync(SelectedActivity.Id);
+            SelectedActivityReps = activityDetails.reps;
+            SelectedActivityWeight = activityDetails.weight;
+            WeightActivitySelected?.Invoke(this, EventArgs.Empty);
+        }
     }
 }

@@ -61,7 +61,8 @@
                                                    SecondLabel="Reps"
                                                    SecondValue="{Binding Reps}"
                                                    ButtonVisibility="False"
-                                                   VerticalOptions="Fill"/>
+                                                   VerticalOptions="Fill"
+                                                   CardFrameTapped="{Binding PersonalRecordSelectedCommand}"/>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>

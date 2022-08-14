@@ -6,6 +6,9 @@ namespace TrainingManager.ViewModel
 {
     public class PersonalRecordVM : ViewModelBase
     {
+        //FIELDS
+        private Action<PersonalRecordVM> _recordSelection;
+
         //PROPERTIES
         private Guid _id;
         public Guid Id { get => _id; set { _id = value; OnPropertyChanged(); } }
@@ -22,17 +25,18 @@ namespace TrainingManager.ViewModel
         private int _reps;
         public int Reps { get => _reps; set { _reps = value; OnPropertyChanged(); } }
 
-        public PersonalRecordVM((WeightActivityDTO activity, double weight, int reps) personalRecord)
+        public PersonalRecordVM((WeightActivityDTO activity, double weight, int reps) personalRecord, Action<PersonalRecordVM> recordSelection)
         {
             Id = personalRecord.activity.ActivityGuid;
             ActivityName = personalRecord.activity.ActivityName;
             MainMuscleGroup = personalRecord.activity.MainMuscleGroup;
             Weight = personalRecord.weight;
             Reps = personalRecord.reps;
+            _recordSelection = recordSelection;
         }
 
-        //EVENTS
-        public event EventHandler<Guid> PersonalRecordSelected;
+        ////EVENTS
+        //public event EventHandler<Guid> PersonalRecordSelected;
 
         //COMMANDS
         public DelegateCommand PersonalRecordSelectedCommand { get; private set; }
@@ -43,6 +47,6 @@ namespace TrainingManager.ViewModel
         }
 
         //COMMAND FUNCTION
-        private void PersonalRecordSelectedFunction(object obj) => PersonalRecordSelected?.Invoke(this, Id);
+        private void PersonalRecordSelectedFunction(object obj) => _recordSelection?.Invoke(this);
     }
 }

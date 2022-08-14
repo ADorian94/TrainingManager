@@ -210,7 +210,7 @@ namespace TrainingManager.ViewModel.Navigation
         {
             return Task.Run(() =>
             {
-                _homeVM = new HomeVM(_apiServices, _profileService);
+                _homeVM = new HomeVM(_apiServices, _profileService, WeightRecordSelected);
 
                 _homePage.BindingContext = _homeVM;
                 _addNewWeightWorkoutPageHome.BindingContext = _homeVM;
@@ -294,7 +294,7 @@ namespace TrainingManager.ViewModel.Navigation
         {
             return Task.Run(() =>
             {
-                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM(_apiServices);
+                _oneRepetitionMaximumVM = new OneRepetitionMaximumVM(_apiServices, WeightRecordSelected);
 
                 _oneRepetitionMaximumCalculatorPage.BindingContext = _oneRepetitionMaximumVM;
                 _oneRepetitionMaximumCalculatedPage.BindingContext = _oneRepetitionMaximumVM;
@@ -466,5 +466,7 @@ namespace TrainingManager.ViewModel.Navigation
             _muscleSelectPage.BindingContext = _weightActivityManagerVM.MuscleVM;
             await _mainNavigationPage.PushAsync(_muscleSelectPage);
         }
+
+        private void WeightRecordSelected(PersonalRecordVM record) => _weightActivityManagerVM.SetupRecord(record);
     }
 }

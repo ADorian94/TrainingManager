@@ -17,14 +17,16 @@ namespace TrainingManager.ViewModel
         //FIELDS
         private IProfileService _profileService;
         private byte[] _originalImage;
+        private Action<PersonalRecordVM> _recordSelection;
 
-        public HomeVM(IApiServices apiServices, IProfileService profileService)
+        public HomeVM(IApiServices apiServices, IProfileService profileService, Action<PersonalRecordVM> recordSelection)
         {
             ApiServices = apiServices;
             _profileService = profileService;
             SetupHomeAsync();
             WeightWorkoutMenuSelectedCommand = new DelegateCommand(WeightWorkoutMenuSelectedFunction);
             ProfileSelectedCommand = new DelegateCommand(ProfileSelectedFunction);
+            _recordSelection = recordSelection;
         }
 
         //PROPERTIES
@@ -86,7 +88,7 @@ namespace TrainingManager.ViewModel
         private async Task InitPersonalRecords()
         {
             var records = await ApiServices.GetWatchedWeightActivitiesAsync();
-            WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x)));
+            WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x, _recordSelection)));
         }
 
         private async Task InitializeWeeklyMuscleDataAsync()
