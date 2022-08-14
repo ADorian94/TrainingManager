@@ -38,7 +38,7 @@ namespace TrainingManager.WebApi.Controllers
                 ActivityName = x.ActivityName,
                 MainMuscleGroup = _statFunctions.TryGetMuscle(x),
                 IsWatched = x.IsWatched
-            }));
+            }).OrderBy(x => x.ActivityName));
         }
 
         // GET: api/WeightActivities/5
@@ -99,6 +99,44 @@ namespace TrainingManager.WebApi.Controllers
                 return Ok(_statFunctions.FindWatchedMaxMovedWeightsByActivites(
                         _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
                         _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("SearchActivity/{keyWords}")]
+        public IActionResult SearchInWeightActivities([FromRoute] string keyWords)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                var allAvailableExercises = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => new WeightActivityDTO()
+                {
+                    ActivityGuid = x.ActivityGuid,
+                    ActivityName = x.ActivityName,
+                    MainMuscleGroup = _statFunctions.TryGetMuscle(x),
+                    IsWatched = x.IsWatched
+                });
+
+                if (!string.IsNullOrEmpty(keyWords))
+                {
+                    string[] searchStrings = keyWords.Trim().Split(' ');
+                    var foundElements = searchStrings.SelectMany(str => allAvailableExercises.Where(x => x.ActivityName.ToUpper().Contains(str.ToUpper())));
+                    List<WeightActivityDTO> uniqueFoundElements = new List<WeightActivityDTO>();
+
+                    foreach (var item in foundElements)
+                    {
+                        if (!uniqueFoundElements.Any(x => x.ActivityGuid  == item.ActivityGuid))
+                            uniqueFoundElements.Add(item);
+                    }
+
+                    return Ok(uniqueFoundElements.OrderBy(x => x.ActivityName));
+                }
+                else
+                    return Ok(allAvailableExercises.OrderBy(x => x.ActivityName));
             }
             catch
             {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using TrainingManager.Data;
@@ -36,6 +37,7 @@ namespace TrainingManager.ViewModel
         public DelegateCommand ActivitiySelectedCommand { get; private set; }
         public DelegateCommand MuscleSetupCommand { get; private set; }
         public DelegateCommand UpdateExerciseCommand { get; private set; }
+        public DelegateCommand SearchCommand { get; private set; }
 
         //EVENTS
         public event EventHandler WeightActivitySelected;
@@ -61,6 +63,7 @@ namespace TrainingManager.ViewModel
             ActivitiySelectedCommand = new DelegateCommand(ActivitiySelectedFunction);
             MuscleSetupCommand = new DelegateCommand(MuscleSetupFunctions);
             UpdateExerciseCommand = new DelegateCommand(UpdateExerciseFunction);
+            SearchCommand = new DelegateCommand(SearchFunction);
         }
 
         //COMMAND FUNCTIONS
@@ -90,6 +93,17 @@ namespace TrainingManager.ViewModel
             SelectedActivityReps = activityDetails.reps;
             SelectedActivityWeight = activityDetails.weight;
             WeightActivitySelected?.Invoke(this, EventArgs.Empty);
+        }
+
+        private async void SearchFunction(object obj)
+        {
+            var keyWords = obj.ToString();
+            IEnumerable<WeightActivityDTO> workouts = string.IsNullOrEmpty(keyWords) ?
+                await _apiServices.GetWeightActivitiesAsync() :
+                await _apiServices.SearchActivityAsync(keyWords);
+            int i = 0;
+
+            Activites = new ObservableCollection<WeightActivityVM>(workouts.Select(x => new WeightActivityVM(x, ++i)));
         }
 
         //PRIVATES

@@ -188,24 +188,13 @@ namespace TrainingManager.ViewModel
 
         private async void SearchFunction(object obj)
         {
-            var searchStr = obj.ToString();
-            IEnumerable<WeightActivityDTO> foundElements = new ObservableCollection<WeightActivityDTO>();
-            IEnumerable<WeightActivityDTO> activities = await ApiServices.GetWeightActivitiesAsync();
-
-            if (!string.IsNullOrEmpty(searchStr))
-            {
-                string[] searchStrings = searchStr.Trim().Split(' ');
-                foundElements = searchStrings.SelectMany(str => activities.Where(x => x.ActivityName.ToUpper().Contains(str.ToUpper())).Select(x => x));
-            }
-            else
-                foundElements = activities.Select(x => x);
-
-            foundElements = foundElements.OrderBy(x => x);
-            SavedActivities = new ObservableCollection<WeightActivityVM>();
+            var keyWords = obj.ToString();
+            IEnumerable<WeightActivityDTO> workouts = string.IsNullOrEmpty(keyWords) ?
+                await ApiServices.GetWeightActivitiesAsync() :
+                await ApiServices.SearchActivityAsync(keyWords);
             int i = 0;
 
-            foreach (var element in foundElements)
-                SavedActivities.Add(new WeightActivityVM(element, ++i));
+            SavedActivities = new ObservableCollection<WeightActivityVM>(workouts.Select(x => new WeightActivityVM(x, ++i)));
         }
     }
 }

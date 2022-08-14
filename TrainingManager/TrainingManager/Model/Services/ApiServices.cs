@@ -229,6 +229,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<WeightActivityDTO>> SearchActivityAsync(string keyWords)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/SearchActivity/{keyWords}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightActivityDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         //IMAGES
         public async Task<bool> UploadProfilePicture(byte[] image)
         {
