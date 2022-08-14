@@ -35,9 +35,6 @@ namespace TrainingManager.ViewModel
             _recordSelection = recordSelection;
         }
 
-        ////EVENTS
-        //public event EventHandler<Guid> PersonalRecordSelected;
-
         //COMMANDS
         public DelegateCommand PersonalRecordSelectedCommand { get; private set; }
 

@@ -76,6 +76,7 @@ namespace TrainingManager.ViewModel
                 MainMuscleGroup = SelectedActivity.MainMuscleGroup,
                 IsWatched = SelectedActivity.IsWatched
             });
+            SetupWeightActivitiesManagerAsync();
             NeedToRefresh?.Invoke(this, EventArgs.Empty);
         }
 
