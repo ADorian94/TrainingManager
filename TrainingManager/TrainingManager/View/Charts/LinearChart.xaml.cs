@@ -34,7 +34,7 @@ namespace TrainingManager.View.Controls
         }
 
         public static readonly BindableProperty CardMainTextProperty =
-            BindableProperty.Create("CardMainText", typeof(string), typeof(CardWithEntry), string.Empty);
+            BindableProperty.Create("CardMainText", typeof(string), typeof(LinearChart), string.Empty);
 
         public ObservableCollection<(DateTime date, double weight)> ChartEntries
         {

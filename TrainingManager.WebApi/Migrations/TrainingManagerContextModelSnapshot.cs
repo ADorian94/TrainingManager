@@ -189,6 +189,8 @@ namespace TrainingManager.WebApi.Migrations
 
                     b.Property<string>("ActivityName");
 
+                    b.Property<bool>("IsWatched");
+
                     b.Property<int>("MainMuscleGroup");
 
                     b.Property<string>("OwnerUserName");

@@ -10,14 +10,18 @@ namespace TrainingManager.ViewModel
         {
             ExerciseName = string.Empty;
             ExerciseNote = string.Empty;
+            MainMuscle = Muscle.Unknown;
             InitializeColorVM();
+            InitializeMuscleVM();
         }
 
         public WeightExerciseVM(WeightExerciseVM weightExercise)
         {
             ExerciseName = weightExercise.ExerciseName;
             ExerciseNote = weightExercise.ExerciseNote;
+            MainMuscle = weightExercise.MainMuscle;
             InitializeColorVM();
+            InitializeMuscleVM();
         }
 
         protected override void InitializeCommands() { }
@@ -26,6 +30,12 @@ namespace TrainingManager.ViewModel
         {
             ColorVM = new ColorVM();
             ColorVM.ColorSelected += OnColorSelected;
+        }
+
+        private void InitializeMuscleVM()
+        {
+            MuscleVM = new MuscleVM();
+            MuscleVM.MuscleSelected += OnMuscleSelected;
         }
 
         //PROPERTIES
@@ -52,6 +62,12 @@ namespace TrainingManager.ViewModel
 
         private ColorVM _colorVM;
         public ColorVM ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
+
+        private Muscle _mainMuscle;
+        public Muscle MainMuscle { get => _mainMuscle; set { _mainMuscle = value; OnPropertyChanged(); } }
+
+        private MuscleVM _muscleVM;
+        public MuscleVM MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
 
         public void CountTotalWeightOfExercise()
         {
@@ -102,6 +118,7 @@ namespace TrainingManager.ViewModel
         }
 
         //EVENT HANDLERS
-        private void OnColorSelected(object sender, MaterialColors Color) => ExerciseColor = Color;
+        private void OnColorSelected(object sender, MaterialColors color) => ExerciseColor = color;
+        private void OnMuscleSelected(object sender, Muscle muscle) => MainMuscle = muscle;
     }
 }

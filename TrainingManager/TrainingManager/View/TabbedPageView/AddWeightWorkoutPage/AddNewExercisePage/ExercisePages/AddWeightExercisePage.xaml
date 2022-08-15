@@ -29,7 +29,15 @@
             <controls:CardWithTextEntry Grid.Row="0" CardMainText="Exercise name" CardEntry="{Binding NewWeightExercise.ExerciseName, Mode=TwoWay}"/>
             <ListView ItemsSource="{Binding NewWeightExercise.WeightRounds}" x:Name="WorkoutRounds" SeparatorVisibility="None" Grid.Row="1" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
                 <ListView.Header>
-                            <controls:SimpleCard Grid.Column="0" CardMainText="Weight" CardSecondaryText="{Binding TotalExerciseWeight}" Margin="15,0,15,5"/>
+                    <Grid Margin="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <controls:SimpleCard Grid.Column="0" CardMainText="Weight" CardSecondaryText="{Binding TotalExerciseWeight}" Margin="15,0,5,5"/>
+                        <controls:SimpleCard Grid.Column="1" CardMainText="Muscle" CardSecondaryText="{Binding NewWeightExercise.MainMuscle}" Margin="0,0,15,5"
+                                             CardFrameTapped="{Binding OpenMuscleSelectorCommand}"/>
+                    </Grid>
                 </ListView.Header>
                 <ListView.ItemTemplate>
                     <DataTemplate>

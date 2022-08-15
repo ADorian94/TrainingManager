@@ -15,9 +15,9 @@
                 <RowDefinition Height="2"/>
                 <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Center" FontSize="30" TextColor="White"/>
+            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="Center" FontSize="30" TextColor="{StaticResource MainTextColor}"/>
             <Frame Grid.Row="1" WidthRequest="100" HeightRequest="2" BackgroundColor="White"/>
-            <Label Grid.Row="2" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}" HorizontalOptions="Center" FontSize="35" TextColor="White"/>
+            <Label Grid.Row="2" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}" HorizontalOptions="Center" FontSize="35" TextColor="{StaticResource MainTextColor}"/>
         </Grid>
     </Frame>
 </ContentView>

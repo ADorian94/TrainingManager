@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <TabbedPage 
-    xmlns:daddoon="clr-namespace:Xamarin.Forms.Daddoon;assembly=Xamarin.Forms.Daddoon.IconTabbedPage"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="TrainingManager.View.NavigationTabbedPage"
@@ -9,6 +8,7 @@
     BarTextColor="White"
     xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
     android:TabbedPage.ToolbarPlacement="Bottom"
+    android:TabbedPage.IsSwipePagingEnabled="False"
     NavigationPage.HasNavigationBar="False">
     <!--Pages can be added as references or inline-->
 </TabbedPage>

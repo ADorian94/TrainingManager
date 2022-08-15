@@ -25,7 +25,7 @@ namespace TrainingManager.WebApi.Controllers
         public WeightWorkoutsController(TrainingManagerContext context)
         {
             _context = context;
-            _statFunctions = new StatFunctions();
+            _statFunctions = new StatFunctions(context);
         }
 
         // GET: api/WeightWorkouts
@@ -72,7 +72,7 @@ namespace TrainingManager.WebApi.Controllers
                         ImageLarge = i.ImageLarge,
                         ImageSmall = i.ImageSmall,
                     }).ToList(),
-                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
+                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         Id = x.Id,
@@ -80,7 +80,7 @@ namespace TrainingManager.WebApi.Controllers
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.Color,
-                        MainMuscleGroup = GetMianMuscleGroup(x.ActivityId),
+                        MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
                         WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
@@ -147,11 +147,11 @@ namespace TrainingManager.WebApi.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+                await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
 
                 if (weightWorkoutDTO.WorkoutImages != null)
                     await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
 
-                await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
                 return Ok();
             }
             catch
@@ -248,6 +248,22 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetMaxMovedWeightsByActivites")]
+        public IActionResult GetMaxMovedWeightsByActivites()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.FindMaxMovedWeightsByActivites(
+                    _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
+                    _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("MovedWeightsInTheMonth/{year}/{month}")]
         public IActionResult GetMovedWeightsInTheMonth([FromRoute] int year, int month)
         {
@@ -283,6 +299,55 @@ namespace TrainingManager.WebApi.Controllers
             {
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
                 return Ok(GetUserWorkouts(user).OrderByDescending(x => x.WorkoutDate.Date).Where(w => w.WorkoutDate < DateTime.Now).Take(5));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("GetThisweekWeightsByMuscle")]
+        public IActionResult GetThisweekWeightsByMuscle()
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_statFunctions.CollectRecentMovedWeightsGroupByMuscle(
+                    _context.WeightWorkouts.Where(u => u.OwnerUserName == user.UserName),
+                    _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
+                    _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("SearchWorkout/{keyWords}")]
+        public IActionResult SearchInWorkouts([FromRoute] string keyWords)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var allAvailableWorkouts = GetUserWorkouts(user);
+
+                if (!string.IsNullOrEmpty(keyWords))
+                {
+                    string[] searchStrings = keyWords.Trim().Split(' ');
+                    var foundElements = searchStrings.SelectMany(str => allAvailableWorkouts.Where(x => x.WorkoutName.ToUpper().Contains(str.ToUpper()) || x.WeightExercisesDto.Any(ex => ex.ExerciseName.ToUpper().Contains(str.ToUpper()))));
+                    List<WeightWorkoutDTO> uniqueFoundElements = new List<WeightWorkoutDTO>();
+
+                    foreach (var item in foundElements)
+                    {
+                        if (!uniqueFoundElements.Any(x => x.WorkoutGuid == item.WorkoutGuid))
+                            uniqueFoundElements.Add(item);
+                    }
+
+                    return Ok(uniqueFoundElements.OrderByDescending(x => x.WorkoutDate.Date));
+                }
+                else
+                    return Ok(allAvailableWorkouts.OrderByDescending(x => x.WorkoutDate.Date));
+
             }
             catch
             {
@@ -359,19 +424,25 @@ namespace TrainingManager.WebApi.Controllers
         private int AddActivityByNameIfNeeded(string exerciseName, Muscle mainMuscleGroup)
         {
             ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            var trimmedExerciseName = exerciseName.Trim();
 
-            if (_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Any(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()))
+            if (_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Any(x => x.ActivityName.ToUpper() == trimmedExerciseName.ToUpper()))
             {
-                return _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == exerciseName.ToUpper()).Id;
+                //Ha már szerepel az adatbázisban, akkor újra elmentjük a muscle-t
+                var activity = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Single(x => x.ActivityName.ToUpper() == trimmedExerciseName.ToUpper());
+                activity.MainMuscleGroup = mainMuscleGroup;
+                var addedActivity = _context.WeightActivities.Update(activity);
+                _context.SaveChanges();
+                return activity.Id;
             }
             else
             {
                 var newActivity = new WeightActivity()
                 {
                     ActivityGuid = Guid.NewGuid(),
-                    ActivityName = exerciseName,
+                    ActivityName = trimmedExerciseName,
                     OwnerUserName = user.UserName,
-                    MainMuscleGroup = mainMuscleGroup
+                    MainMuscleGroup = mainMuscleGroup,
                 };
 
                 var addedActivity = _context.WeightActivities.Add(newActivity);
@@ -458,7 +529,7 @@ namespace TrainingManager.WebApi.Controllers
                     ImageLarge = i.ImageLarge,
                     ImageSmall = i.ImageSmall,
                 }).ToList(),
-                WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id).Select(x => new WeightExerciseDTO()
+                WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
                 {
                     ExerciseGuid = x.ExerciseGuid,
                     Id = x.Id,
@@ -466,6 +537,7 @@ namespace TrainingManager.WebApi.Controllers
                     Note = x.Note,
                     TotalExerciseWeight = x.TotalExerciseWeight,
                     Color = x.Color,
+                    MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
                     WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                     {
                         Id = r.Id,
@@ -477,18 +549,6 @@ namespace TrainingManager.WebApi.Controllers
                     }).ToList()
                 }).ToList(),
             });
-        }
-
-        private Muscle GetMianMuscleGroup(int activityId)
-        {
-            try
-            {
-                return _context.WeightActivities.Single(a => a.Id == activityId).MainMuscleGroup;
-            }
-            catch
-            {
-                return Muscle.Unknown;
-            }
         }
     }
 }

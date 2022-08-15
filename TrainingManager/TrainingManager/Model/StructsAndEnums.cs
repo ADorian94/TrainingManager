@@ -50,6 +50,7 @@ namespace TrainingManager.Model
         LoginFailedAfterRegistration,
         UploadPictureMessage,
         AssesDeniedProfilePictureMessage,
+        UnknownMuscle,
     }
 
     public struct MaterialColorName

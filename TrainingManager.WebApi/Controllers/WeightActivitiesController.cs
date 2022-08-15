@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TrainingManager.Data;
+using TrainingManager.Data.DTO;
+using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
@@ -15,10 +18,12 @@ namespace TrainingManager.WebApi.Controllers
     public class WeightActivitiesController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
+        private readonly StatFunctions _statFunctions;
 
         public WeightActivitiesController(TrainingManagerContext context)
         {
             _context = context;
+            _statFunctions = new StatFunctions(context);
         }
 
         // GET: api/WeightActivities
@@ -26,7 +31,14 @@ namespace TrainingManager.WebApi.Controllers
         public async Task<IActionResult> GetWeightActivities()
         {
             ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
-            return Ok(_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => x.ActivityName));
+
+            return Ok(_context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => new WeightActivityDTO()
+            {
+                ActivityGuid = x.ActivityGuid,
+                ActivityName = x.ActivityName,
+                MainMuscleGroup = _statFunctions.TryGetMuscle(x),
+                IsWatched = x.IsWatched
+            }).OrderBy(x => x.ActivityName));
         }
 
         // GET: api/WeightActivities/5
@@ -48,39 +60,117 @@ namespace TrainingManager.WebApi.Controllers
             return Ok(weightActivity);
         }
 
-        // PUT: api/WeightActivities/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutWeightActivity([FromRoute] int id, [FromBody] WeightActivity weightActivity)
+        [HttpGet("MaxWeightActivity/{id}")]
+        public IActionResult GetMaxWeightActivity([FromRoute] Guid id)
         {
-            if (!ModelState.IsValid)
+            try 
             {
-                return BadRequest(ModelState);
-            }
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
 
-            if (id != weightActivity.Id)
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                var maximums = _statFunctions.FindMaxMovedWeightsByActivites(
+                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
+                        _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)
+                        .Where(x => x.ActivityGuid == id));
+
+                if (maximums == null || maximums.Count() == 0)
+                    return NotFound();
+            
+                return Ok(maximums.FirstOrDefault());
+            }
+            catch
             {
-                return BadRequest();
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
+        }
 
-            _context.Entry(weightActivity).State = EntityState.Modified;
-
+        [HttpGet("GetWatchedMaxWeightActivities")]
+        public IActionResult GetWatchedMaxWeightActivities()
+        {
             try
             {
-                await _context.SaveChangesAsync();
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                return Ok(_statFunctions.FindWatchedMaxMovedWeightsByActivites(
+                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
+                        _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
             }
-            catch (DbUpdateConcurrencyException)
+            catch
             {
-                if (!WeightActivityExists(id))
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("SearchActivity/{keyWords}")]
+        public IActionResult SearchInWeightActivities([FromRoute] string keyWords)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                var allAvailableExercises = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).Select(x => new WeightActivityDTO()
                 {
-                    return NotFound();
+                    ActivityGuid = x.ActivityGuid,
+                    ActivityName = x.ActivityName,
+                    MainMuscleGroup = _statFunctions.TryGetMuscle(x),
+                    IsWatched = x.IsWatched
+                });
+
+                if (!string.IsNullOrEmpty(keyWords))
+                {
+                    string[] searchStrings = keyWords.Trim().Split(' ');
+                    var foundElements = searchStrings.SelectMany(str => allAvailableExercises.Where(x => x.ActivityName.ToUpper().Contains(str.ToUpper())));
+                    List<WeightActivityDTO> uniqueFoundElements = new List<WeightActivityDTO>();
+
+                    foreach (var item in foundElements)
+                    {
+                        if (!uniqueFoundElements.Any(x => x.ActivityGuid  == item.ActivityGuid))
+                            uniqueFoundElements.Add(item);
+                    }
+
+                    return Ok(uniqueFoundElements.OrderBy(x => x.ActivityName));
                 }
                 else
-                {
-                    throw;
-                }
+                    return Ok(allAvailableExercises.OrderBy(x => x.ActivityName));
             }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
-            return NoContent();
+        [HttpPut]
+        public async Task<IActionResult> PutWeightActivity([FromBody] WeightActivityDTO weightActivity)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var originalActivity = _context.WeightActivities.Single(u => u.OwnerUserName == user.UserName && u.ActivityGuid == weightActivity.ActivityGuid);
+
+                if (originalActivity.ActivityName != weightActivity.ActivityName)
+                    originalActivity.ActivityName = weightActivity.ActivityName;
+
+                if (originalActivity.IsWatched != weightActivity.IsWatched)
+                    originalActivity.IsWatched = weightActivity.IsWatched;
+
+                if (originalActivity.MainMuscleGroup != weightActivity.MainMuscleGroup)
+                    originalActivity.MainMuscleGroup = weightActivity.MainMuscleGroup;
+
+                await _context.SaveChangesAsync();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
         }
 
         // POST: api/WeightActivities

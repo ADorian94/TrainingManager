@@ -12,6 +12,10 @@
         <ResourceDictionary>
             <converter:DateToStringConverter x:Key="DateToStringConverter" />
             <converter:DateToShortStringConverter x:Key="DateToShortStringConverter" />
+            <converter:DoubleToMowedWeightsStringConverter x:Key="DoubleToMowedWeightsStringConverter" />
+            <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
+            <converter:PersonalRecordToBoolConverter x:Key="PersonalRecordToBoolConverter" />
+            <converter:RecentWorkoutsToBoolConverter x:Key="RecentWorkoutsToBoolConverter" />
         </ResourceDictionary>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
@@ -19,9 +23,9 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ScrollView BackgroundColor="{StaticResource AppBackgroundColor}" >
-        <StackLayout >
-            <Grid Grid.Row="0">
+    <ScrollView BackgroundColor="{StaticResource AppBackgroundColor}">
+        <StackLayout>
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
@@ -35,35 +39,49 @@
                     </ImageButton>
                 </StackLayout>
             </Grid>
-            <Label Text="Your personal records" Style="{StaticResource Title1}" IsVisible="False"/>
-            <ScrollView Orientation="Horizontal" Margin="15, 0" IsVisible="False">
-                <StackLayout Orientation="Horizontal" HorizontalOptions="FillAndExpand">
-                    <controls:TallSimpleCard CardMainText="Biceps" CardSecondaryText="12"/>
-                    <controls:TallSimpleCard CardMainText="Triceps" CardSecondaryText="12" />
-                    <controls:TallSimpleCard CardMainText="Squat" CardSecondaryText="12" />
-                    <controls:TallSimpleCard CardMainText="Bench Press" CardSecondaryText="12" />
-                </StackLayout>
-            </ScrollView>
-            <StackLayout>
-                <Label Text="Recent workouts" Style="{StaticResource Title0}"/>
-                <ListView x:Name="RecentList" ItemsSource="{Binding Path=RecentWorkouts}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
-                    <ListView.ItemTemplate >
+            <Label Text="This week" Style="{StaticResource Title1}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+            <controls:RoundChart CardMainText="{Binding WeeklyWeight, Converter={StaticResource DoubleToMowedWeightsStringConverter}}"
+                                 VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding MovedWeightByMuscle}" IsVisible="{Binding WeeklyWeight, Converter={StaticResource DoubleToBoolConverter}}" />
+            <Label Text="Something to be proud of" Style="{StaticResource Title1}" IsVisible="{Binding WatchedPersonalRecords, Converter={StaticResource PersonalRecordToBoolConverter}}" />
+            <StackLayout HeightRequest="150" IsVisible="{Binding WatchedPersonalRecords, Converter={StaticResource PersonalRecordToBoolConverter}}">
+                <CollectionView ItemsSource="{Binding WatchedPersonalRecords}" VerticalOptions="Start" HorizontalScrollBarVisibility="Never"
+                                IsVisible="{Binding WatchedPersonalRecords, Converter={StaticResource PersonalRecordToBoolConverter}}">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout>
+                            <x:Arguments>
+                                <ItemsLayoutOrientation>Horizontal</ItemsLayoutOrientation>
+                            </x:Arguments>
+                        </LinearItemsLayout>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <ViewCell>
-                                <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
-                                                      ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
-                                                      CloseCardMainLabel="{Binding WorkoutName}"
-                                                      OpenCardFirstLabel="Weight" 
-                                                      OpenCardFirstValue="{Binding TotalWeight}"
-                                                      ButtonCommand="{Binding BindingContext.WeightWorkoutMenuSelectedCommand, Source={x:Reference Home}}"
-                                                      ButtonCommandParameter="{Binding WorkoutGuid}"
-                                                      ButtonVisibility="True"/>
-
-                            </ViewCell>
+                            <controls:HighCard MainLabel="{Binding ActivityName}"
+                                               FirstLabel="Weight"
+                                               FirstValue="{Binding Weight}"
+                                               SecondLabel="Reps"
+                                               SecondValue="{Binding Reps}"
+                                               ButtonVisibility="False"
+                                               VerticalOptions="Fill"
+                                               CardFrameTapped="{Binding PersonalRecordSelectedCommand}"/>
                         </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </StackLayout>
+            <Label Text="Recent workouts" Style="{StaticResource Title1}" IsVisible="{Binding RecentWorkouts, Converter={StaticResource RecentWorkoutsToBoolConverter}}"/>
+            <CollectionView x:Name="RecentList" ItemsSource="{Binding RecentWorkouts}" VerticalOptions="FillAndExpand"  IsVisible="{Binding RecentWorkouts, Converter={StaticResource RecentWorkoutsToBoolConverter}}">
+                <CollectionView.ItemTemplate >
+                    <DataTemplate>
+                        <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
+                                              ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
+                                              CloseCardMainLabel="{Binding WorkoutName}"
+                                              OpenCardFirstLabel="Weight" 
+                                              OpenCardFirstValue="{Binding TotalWeight}"
+                                              ButtonCommand="{Binding BindingContext.WeightWorkoutMenuSelectedCommand, Source={x:Reference Home}}"
+                                              ButtonCommandParameter="{Binding WorkoutGuid}"
+                                              ButtonVisibility="True"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ScrollView>
 </ContentPage>

@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model.LogWriter;
 
@@ -61,6 +62,42 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetThisweekWeightsByMuscle");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<(Muscle muscle, double weight)>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetMaxMovedWeightsByActivites()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetMaxMovedWeightsByActivites");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto)
         {
             try
@@ -105,15 +142,33 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<WeightWorkoutDTO>> SearchWorkoutAsync(string keyWords)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/SearchWorkout/{keyWords}");
+                
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         //ACTIVITIES
-        public async Task<IEnumerable<string>> GetWeightActivitiesAsync()
+        public async Task<IEnumerable<WeightActivityDTO>> GetWeightActivitiesAsync()
         {
             try
             {
                 HttpResponseMessage response = await _client.GetAsync("api/WeightActivities");
 
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadAsAsync<ICollection<string>>();
+                    return await response.Content.ReadAsAsync<ICollection<WeightActivityDTO>>();
                 else
                     throw new Exception("Server respond is not success.");
             }
@@ -121,6 +176,74 @@ namespace TrainingManager.Model.Services
             {
                 Console.WriteLine(ex.Message);
                 throw;
+            }
+        }
+
+        public async Task<(WeightActivityDTO activity, double weight, int reps)> GetWeightActivityPRAsync(Guid id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/MaxWeightActivity/{id}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<(WeightActivityDTO activity, double weight, int reps)>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetWatchedWeightActivitiesAsync()
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/GetWatchedMaxWeightActivities");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync< ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<bool> EditWeightActivityAsync(WeightActivityDTO weigthActivityDto)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.PutAsJsonAsync("api/WeightActivities", weigthActivityDto);
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<WeightActivityDTO>> SearchActivityAsync(string keyWords)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/SearchActivity/{keyWords}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightActivityDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
             }
         }
 

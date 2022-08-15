@@ -3,34 +3,70 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
               xmlns:local="clr-namespace:TrainingManager.View.Styles"
              xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
              x:Class="TrainingManager.View.OneRepetitionMaximumCalculatorPage"
              IconImageSource="Statistics.png"
              NavigationPage.HasNavigationBar="False">
     <ContentPage.Resources>
-        <local:Style/>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </ContentPage.Resources>
-    <StackLayout Padding="0">
-        <Label Text="Weight charts" Style="{StaticResource Title0}"/>
-        <CarouselView x:Name="CarouselChartCollection" ItemsSource="{Binding GroupedWorkouts}"
-                      IndicatorView="MonthIndicator" Style="{StaticResource CarouselViewStyle}">
-            <CarouselView.ItemTemplate>
-                <DataTemplate>
-                    <controls:LinearChart VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" />
-                </DataTemplate>
-            </CarouselView.ItemTemplate>
-        </CarouselView>
-        <IndicatorView x:Name="MonthIndicator"/>
-        <Label Text="One Repetition Maximum" Style="{StaticResource Title0}"/>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0" ColumnDefinitions="*, *">
-            <controls:CardWithEntry Grid.Column="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}" Margin="10,0,5,0"/>
-            <controls:CardWithEntry Grid.Column="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}" Margin="0,0,5,0"/>
+    <ScrollView>
+        <StackLayout Padding="0">
+            <Label Text="{Binding Date, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+            <Label Text="Statistics" Style="{StaticResource Title0}"/>
+            <Label Text="Weight charts" Style="{StaticResource Title1}"/>
+            <CarouselView x:Name="CarouselChartCollection" ItemsSource="{Binding GroupedWorkouts}"
+                          IndicatorView="MonthIndicator" Style="{StaticResource CarouselViewStyle}">
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <controls:LinearChart VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding }" />
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <IndicatorView x:Name="MonthIndicator"/>
+            <Label Text="One Repetition Maximum" Style="{StaticResource Title1}"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" ColumnDefinitions="*, *">
+                <controls:CardWithEntry Grid.Column="0" CardMainText="Weight" CardEntry="{Binding Weight, Mode=TwoWay}" Margin="10,0,5,0"/>
+                <controls:CardWithEntry Grid.Column="1" CardMainText="Reps" CardEntry="{Binding Reps, Mode=TwoWay}" Margin="0,0,5,0"/>
+                </Grid>
+                <Button Grid.Row="1" Text="Calculate" Command="{Binding CalculateMaximumCommand}" Style="{StaticResource BlueButton}"/>
             </Grid>
-            <Button Grid.Row="1" Text="Calculate" Command="{Binding CalculateMaximumCommand}" Style="{StaticResource BlueButton}"/>
-        </Grid>
-    </StackLayout>
+            <Label Text="Personal records" Style="{StaticResource Title1}" />
+            <StackLayout HeightRequest="150">
+                <CollectionView ItemsSource="{Binding PersonalRecords}" VerticalOptions="Start" HorizontalScrollBarVisibility="Never">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout>
+                            <x:Arguments>
+                                <ItemsLayoutOrientation>Horizontal</ItemsLayoutOrientation>
+                            </x:Arguments>
+                        </LinearItemsLayout>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <controls:HighCard MainLabel="{Binding ActivityName}"
+                                                   FirstLabel="Weight"
+                                                   FirstValue="{Binding Weight}"
+                                                   SecondLabel="Reps"
+                                                   SecondValue="{Binding Reps}"
+                                                   ButtonVisibility="False"
+                                                   VerticalOptions="Fill"
+                                                   CardFrameTapped="{Binding PersonalRecordSelectedCommand}"/>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
 </ContentPage>

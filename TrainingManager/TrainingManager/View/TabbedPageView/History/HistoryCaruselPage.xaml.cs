@@ -4,9 +4,9 @@ using Xamarin.Forms.Xaml;
 namespace TrainingManager.View.TabbedPageView.History
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HistoryCaruselPage : CarouselPage
+    public partial class HistoryTabbedPage : TabbedPage
     {
-        public HistoryCaruselPage()
+        public HistoryTabbedPage()
         {
             InitializeComponent();
         }

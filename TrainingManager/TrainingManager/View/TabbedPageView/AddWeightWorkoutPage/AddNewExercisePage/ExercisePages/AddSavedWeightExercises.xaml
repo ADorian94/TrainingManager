@@ -26,7 +26,7 @@
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
-                            <controls:LowSimpleCard CardMainText="{Binding}" IsButtonVisible="False" CardFrameTappedParameter="{Binding}"
+                            <controls:LowSimpleCard CardMainText="{Binding ActivityName}" IsButtonVisible="False" CardFrameTappedParameter="{Binding Index}"
                                                     CardFrameTapped="{Binding BindingContext.SavedActivitiySelected, Source={x:Reference Saved}}"/>
                         </ViewCell>
                     </DataTemplate>
