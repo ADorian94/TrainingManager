@@ -15,7 +15,7 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </ContentView.Resources>
-    <Frame Margin="5" Style="{StaticResource CardFrame}">
+    <Frame Margin="5" Style="{StaticResource CardFrame}" >
         <StackLayout BackgroundColor="Transparent">
             <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
             <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntry, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
