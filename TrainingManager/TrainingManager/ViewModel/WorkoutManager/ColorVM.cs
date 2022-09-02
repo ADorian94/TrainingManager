@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.ObjectModel;
 using TrainingManager.Data;
 using TrainingManager.Model;
+using System.Linq;
 
 namespace TrainingManager.ViewModel
 {

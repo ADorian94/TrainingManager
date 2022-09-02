@@ -106,17 +106,17 @@ namespace TrainingManager.ViewModel.Navigation
                 await Task.WhenAll(vmInitializations);
 
                 //EVENT SUBSCRIBE
-                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
-                _weightWorkoutManagerVM.WorkoutSaved += _homeVM.RefreshWorkouts;
+                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.OnRefreshWorkouts;
+                _weightWorkoutManagerVM.WorkoutSaved += _homeVM.OnRefreshWorkouts;
                 _weightWorkoutManagerVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
                 _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
-                _weightHistoryVM.WorkoutDeleted += _homeVM.RefreshWorkouts;
-                _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
-                _weightHistoryVM.WorkoutSaved += _homeVM.RefreshWorkouts;
+                _weightHistoryVM.WorkoutDeleted += _homeVM.OnRefreshWorkouts;
+                _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.OnRefreshWorkouts;
+                _weightHistoryVM.WorkoutSaved += _homeVM.OnRefreshWorkouts;
                 _weightHistoryVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
-                _weightActivityManagerVM.NeedToRefresh += _homeVM.RefreshWorkouts;
-                _weightActivityManagerVM.NeedToRefresh += _weightHistoryVM.RefreshWorkouts;
-                _weightActivityManagerVM.NeedToRefresh += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _homeVM.OnRefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _weightHistoryVM.OnRefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _weightWorkoutManagerVM.OnRefreshWorkouts;
                 _weightActivityManagerVM.NeedToRefresh += _oneRepetitionMaximumVM.Refresh;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
@@ -237,16 +237,14 @@ namespace TrainingManager.ViewModel.Navigation
 
                 _weightHistoryVM.WeightWorkoutDateSelected += OnWeightWorkoutDateSelected;
                 _weightHistoryVM.OpenAddWeightExercise += OnOpenAddWeightExerciseHistory;
-                _weightHistoryVM.CloseAddWeightExercise += OnCloseNavigationPage;
                 _weightHistoryVM.OpenNoteEditor += OnOpenNoteEditorHistory;
                 _weightHistoryVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelectedHistory;
                 _weightHistoryVM.SavedWeightActivitySelected += OnSavedWeightActivitySelectedHistory;
                 _weightHistoryVM.OpenEditWeightExercise += OnOpenEditWeightExerciseHistory;
                 _weightHistoryVM.MessageApplication += OnMessageApplication;
-                _weightHistoryVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightHistoryVM.ExerciseRoundSelected += OnExerciseRoundSelectedHistory;
                 _weightHistoryVM.ExceptionOccured += OnExceptionOccured;
-                _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.OnRefreshWorkouts;
                 _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
                 _weightHistoryVM.PopUpMessage += OnPopUpMessage;
                 _weightHistoryVM.ClosePage += OnCloseNavigationPage;
@@ -266,13 +264,11 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePage.BindingContext = _weightWorkoutManagerVM;
 
                 _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
-                _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
                 _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
                 _weightWorkoutManagerVM.SavedWeightActivitySelected += OnSavedWeightActivitySelected;
                 _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
                 _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
-                _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
                 _weightWorkoutManagerVM.ExceptionOccured += OnExceptionOccured;
                 _weightWorkoutManagerVM.PopUpMessage += OnPopUpMessage;

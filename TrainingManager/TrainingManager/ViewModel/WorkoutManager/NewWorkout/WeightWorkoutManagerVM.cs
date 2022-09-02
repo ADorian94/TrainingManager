@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.LogWriter;
@@ -15,42 +16,14 @@ namespace TrainingManager.ViewModel
 
         public WeightWorkoutManagerVM(IApiServices apiServices)
         {
-            NewWeightWorkout = new WeightWorkoutVM
-            {
-                WeightExercises = new ObservableCollection<WeightExerciseVM>()
-            };
+            NewWeightWorkout = new WeightWorkoutVM;
             ApiServices = apiServices;
             SetupActivitiesAsync();
-            SetupTodayWeightWorkoutAsync();
+            SetupManagerAsync();
             SearchCommand = new DelegateCommand(SearchFunction);
         }
 
-        public override void RefreshWorkouts(object sender, EventArgs e) => SetupTodayWeightWorkoutAsync();
-
         //PRIVATES
-        private async void SetupTodayWeightWorkoutAsync()
-        {
-            try
-            {
-                IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
-
-                if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
-                    SetupTodayWeightWorkoutDetails(weightWorkoutDTOs);
-                else
-                {
-                    NewWeightWorkout = new WeightWorkoutVM();
-                    LogHandler.Instance.Nlog.Info("Empty new workout created.");
-                }
-
-                WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
-            }
-            catch (Exception ex)
-            {
-                LogHandler.Instance.Nlog.Error(ex.Message);
-                OnExeptionOccured(new ExceptionArgs(ex));
-            }
-        }
-
         /// <summary>
         /// A szerverről lekérdezzük a mai naphoz tartozó edzést. 
         /// </summary>
@@ -73,19 +46,15 @@ namespace TrainingManager.ViewModel
 
             foreach (var exercise in weightWorkoutDTO.WeightExercisesDto)
             {
-                var rounds = new ObservableCollection<WeightRoundVM>();
-
-                foreach (var round in exercise.WeightRoundsDto)
-                {
-                    rounds.Add(new WeightRoundVM()
+                var rounds = new ObservableCollection<WeightRoundVM>(
+                    exercise.WeightRoundsDto.Select(round => new WeightRoundVM()
                     {
                         Reps = round.Reps,
                         RoundGuid = round.RoundGuid,
                         RoundNumber = round.RoundNumber,
                         WeightOfExercise = round.WeightOfExercise,
                         RoundColor = round.Color
-                    });
-                }
+                    }));
 
                 NewWeightWorkout.WeightExercises.Add(new WeightExerciseVM()
                 {
@@ -104,7 +73,30 @@ namespace TrainingManager.ViewModel
         }
 
         //PROTECTED
-        protected override async void SaveTodayWorkoutFunctionAsync(object obj)
+        protected override async Task SetupManagerAsync()
+        {
+            try
+            {
+                IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
+
+                if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
+                    SetupTodayWeightWorkoutDetails(weightWorkoutDTOs);
+                else
+                {
+                    NewWeightWorkout = new WeightWorkoutVM();
+                    LogHandler.Instance.Nlog.Info("Empty new workout created.");
+                }
+
+                WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                OnExeptionOccured(new ExceptionArgs(ex));
+            }
+        }
+
+        protected override async void SaveWorkoutFunctionAsync(object obj)
         {
             if (!IsReadyReadyToSave())
                 return;

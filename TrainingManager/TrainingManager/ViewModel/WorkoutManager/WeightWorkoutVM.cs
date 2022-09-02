@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace TrainingManager.ViewModel
 {
@@ -41,25 +42,8 @@ namespace TrainingManager.ViewModel
             WorkoutGuid = baseWorkout.WorkoutGuid;
             WorkoutName = baseWorkout.WorkoutName;
             WorkoutType = baseWorkout.WorkoutType;
-            WeightExercises = new ObservableCollection<WeightExerciseVM>();
-
-            foreach (var exercise in baseWorkout.WeightExercises)
-            {
-                var rounds = new ObservableCollection<WeightRoundVM>();
-
-                foreach (var round in exercise.WeightRounds)
-                {
-                    rounds.Add(new WeightRoundVM()
-                    {
-                        Reps = round.Reps,
-                        RoundGuid = round.RoundGuid,
-                        RoundNumber = round.RoundNumber,
-                        WeightOfExercise = round.WeightOfExercise,
-                        RoundColor = round.RoundColor,
-                    });
-                }
-
-                WeightExercises.Add(new WeightExerciseVM()
+            WeightExercises = new ObservableCollection<WeightExerciseVM>(
+                baseWorkout.WeightExercises.Select(exercise => new WeightExerciseVM()
                 {
                     ExerciseNote = exercise.ExerciseNote,
                     ExerciseGuid = exercise.ExerciseGuid,
@@ -67,9 +51,16 @@ namespace TrainingManager.ViewModel
                     TotalExerciseRounds = exercise.WeightRounds.Count,
                     TotalExerciseWeight = exercise.TotalExerciseWeight,
                     ExerciseColor = exercise.ExerciseColor,
-                    WeightRounds = new ObservableCollection<WeightRoundVM>(rounds),
-                });
-            }
+                    WeightRounds = new ObservableCollection<WeightRoundVM>(
+                        exercise.WeightRounds.Select(round => new WeightRoundVM()
+                        {
+                            Reps = round.Reps,
+                            RoundGuid = round.RoundGuid,
+                            RoundNumber = round.RoundNumber,
+                            WeightOfExercise = round.WeightOfExercise,
+                            RoundColor = round.RoundColor
+                        }))
+                }));
         }
 
         //PROPERTIES

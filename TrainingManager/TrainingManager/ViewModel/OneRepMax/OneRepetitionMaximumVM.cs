@@ -28,7 +28,6 @@ namespace TrainingManager.ViewModel
 
         //COMMANDS
         public DelegateCommand CalculateMaximumCommand { get; private set; }
-        public DelegateCommand SetupCommand { get; private set; }
 
         public OneRepetitionMaximumVM(IApiServices apiServices, Action<PersonalRecordVM> recordSelection)
         {
@@ -47,37 +46,13 @@ namespace TrainingManager.ViewModel
         }
 
         private double _weight = 0;
-        public double Weight
-        {
-            get => _weight;
-            set
-            {
-                _weight = value;
-                OnPropertyChanged();
-            }
-        }
+        public double Weight { get => _weight; set { _weight = value; OnPropertyChanged(); } }
 
         private int _reps = 0;
-        public int Reps
-        {
-            get => _reps;
-            set
-            {
-                _reps = value;
-                OnPropertyChanged();
-            }
-        }
+        public int Reps { get => _reps; set { _reps = value; OnPropertyChanged(); } }
 
         private ObservableCollection<MaximumMethod> _recomendedMaximums;
-        public ObservableCollection<MaximumMethod> RecomendedMaximums
-        {
-            get => _recomendedMaximums;
-            set
-            {
-                _recomendedMaximums = value;
-                OnPropertyChanged();
-            }
-        }
+        public ObservableCollection<MaximumMethod> RecomendedMaximums { get => _recomendedMaximums; set { _recomendedMaximums = value; OnPropertyChanged(); } }
 
         public void Refresh(object sender, EventArgs e) 
         { 
@@ -89,10 +64,10 @@ namespace TrainingManager.ViewModel
         private async void GetWorkoutDetailsFromServer()
         {
             IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)> workouts = (await _apiServices.GetMovedWeightsGroupByMonth()).Reverse();
-            GroupedWorkouts = new ObservableCollection<ObservableCollection<(DateTime date, double Weight)>>();
-
-            foreach (var workout in workouts)
-                GroupedWorkouts.Add(new ObservableCollection<(DateTime date, double Weight)>(workout.Item3));
+            GroupedWorkouts = new ObservableCollection<ObservableCollection<(DateTime date, double Weight)>>(
+                workouts.Select(
+                    workout => new ObservableCollection<(DateTime date, double Weight)>(workout.Item3)
+                ));
         }
 
         private void CalculateMaximum(object obj)
