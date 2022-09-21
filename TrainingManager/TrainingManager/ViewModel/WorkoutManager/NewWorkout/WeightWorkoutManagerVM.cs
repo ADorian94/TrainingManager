@@ -16,7 +16,7 @@ namespace TrainingManager.ViewModel
 
         public WeightWorkoutManagerVM(IApiServices apiServices)
         {
-            NewWeightWorkout = new WeightWorkoutVM;
+            NewWeightWorkout = new WeightWorkoutVM();
             ApiServices = apiServices;
             SetupActivitiesAsync();
             SetupManagerAsync();

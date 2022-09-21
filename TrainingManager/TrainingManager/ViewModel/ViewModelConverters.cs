@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using TrainingManager.Data;
+using TrainingManager.ViewModel.WorkoutManager;
 using Xamarin.Forms;
 using Xamarin.Forms.Internals;
 
@@ -114,14 +115,17 @@ namespace TrainingManager.ViewModel
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value == null)
-                return null;
-
-            var colors = (IEnumerable<MaterialColors>)value;
-
-            return colors.Select(x =>
+            try 
             {
-                switch (x)
+                if (value == null)
+                    return null;
+
+                if (!(value is MaterialColors))
+                    return null;
+
+                var color = (MaterialColors)value;
+
+                switch (color)
                 {
                     case MaterialColors.Default:
                         return "Default";
@@ -148,7 +152,11 @@ namespace TrainingManager.ViewModel
                     default:
                         throw new NotImplementedException();
                 }
-            });
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException("The converter is not implemeted.");

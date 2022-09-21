@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using TrainingManager.Data;
+using TrainingManager.ViewModel.WorkoutManager;
 
 namespace TrainingManager.ViewModel
 {
@@ -28,8 +29,8 @@ namespace TrainingManager.ViewModel
 
         private void InitializeColorVM()
         {
-            ColorVM = new ColorVM();
-            ColorVM.ColorSelected += OnColorSelected;
+            ColorVM = new EnumeratorVM<MaterialColors>(MaterialColors.None);
+            ColorVM.ItemSelected += OnColorSelected;
         }
 
         private void InitializeMuscleVM()
@@ -60,8 +61,8 @@ namespace TrainingManager.ViewModel
         private MaterialColors _exerciseColor;
         public MaterialColors ExerciseColor { get => _exerciseColor; set { _exerciseColor = value; OnPropertyChanged(); } }
 
-        private ColorVM _colorVM;
-        public ColorVM ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
+        private EnumeratorVM<MaterialColors> _colorVM;
+        public EnumeratorVM<MaterialColors> ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
 
         private Muscle _mainMuscle;
         public Muscle MainMuscle { get => _mainMuscle; set { _mainMuscle = value; OnPropertyChanged(); } }

@@ -1,5 +1,6 @@
 ﻿using System;
 using TrainingManager.Data;
+using TrainingManager.ViewModel.WorkoutManager;
 
 namespace TrainingManager.ViewModel
 {
@@ -9,8 +10,8 @@ namespace TrainingManager.ViewModel
 
         public WeightRoundVM()
         {
-            ColorVM = new ColorVM();
-            ColorVM.ColorSelected += OnColorSelected;
+            ColorVM = new EnumeratorVM<MaterialColors>(MaterialColors.None);
+            ColorVM.ItemSelected += OnColorSelected;
         }
 
         //EVENTS
@@ -32,8 +33,8 @@ namespace TrainingManager.ViewModel
         private MaterialColors _roundColor;
         public MaterialColors RoundColor { get => _roundColor; set { _roundColor = value; OnPropertyChanged(); } }
 
-        private ColorVM _colorVM;
-        public ColorVM ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
+        private EnumeratorVM<MaterialColors> _colorVM;
+        public EnumeratorVM<MaterialColors> ColorVM { get => _colorVM; set { _colorVM = value; OnPropertyChanged(); } }
 
         public static bool operator ==(WeightRoundVM r1, WeightRoundVM r2)
         {

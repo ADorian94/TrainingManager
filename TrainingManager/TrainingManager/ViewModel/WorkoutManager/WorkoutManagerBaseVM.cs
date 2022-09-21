@@ -16,7 +16,7 @@ namespace TrainingManager.ViewModel
         //FIELDS
         protected IApiServices ApiServices;
         protected internal WeightWorkoutVM WeightWorkoutBookmark;
-        protected ColorVM ColorVM;
+        
 
         //PROPERTIES
         private bool _hasAnyChanges;
@@ -211,8 +211,8 @@ namespace TrainingManager.ViewModel
             OpenEditWeightExercise?.Invoke(this, EventArgs.Empty);
         }
 
-        public ColorVM GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
-        public ColorVM GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
+        public EnumeratorVM<MaterialColors> GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
+        public EnumeratorVM<MaterialColors> GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
         public MuscleVM GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
 
         //PRIVATES

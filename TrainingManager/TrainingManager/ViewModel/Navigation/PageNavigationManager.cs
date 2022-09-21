@@ -10,6 +10,7 @@ using TrainingManager.View;
 using TrainingManager.View.TabbedPageView;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
+using TrainingManager.ViewModel.WorkoutManager;
 using TrainingManager.ViewModel.WorkoutManager.Settigns;
 using Xamarin.Forms;
 
@@ -346,8 +347,8 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightWorkoutManagerVM.GetColorVMByRoundGuid(e);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightWorkoutManagerVM.GetColorVMByRoundGuid(e);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
@@ -358,7 +359,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnColorSelected(object sender, MaterialColors e)
         {
-            ((ColorVM)_colorSelectPage.BindingContext).ColorSelected -= OnColorSelected;
+            ((EnumeratorVM<MaterialColors>)_colorSelectPage.BindingContext).ItemSelected -= OnColorSelected;
             _weightWorkoutManagerVM.CheckChangesAndSetResult();
             _weightHistoryVM.CheckChangesAndSetResult();
             await _mainNavigationPage.PopAsync();
@@ -381,8 +382,8 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightHistoryVM.GetColorVMByRoundGuid(e);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightHistoryVM.GetColorVMByRoundGuid(e);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
@@ -400,8 +401,8 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightWorkoutManagerVM.GetColorVMByExerciseGuid(e.Message);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightWorkoutManagerVM.GetColorVMByExerciseGuid(e.Message);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
@@ -419,8 +420,8 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightHistoryVM.GetColorVMByExerciseGuid(e.Message);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightHistoryVM.GetColorVMByExerciseGuid(e.Message);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }

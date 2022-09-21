@@ -64,6 +64,8 @@ namespace TrainingManager.ViewModel
                     return "Deep Orange";
                 case MaterialColors.Brown:
                     return "Brown";
+                case MaterialColors.None:
+                    return string.Empty;
                 default:
                     throw new NotImplementedException();
             }
