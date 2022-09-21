@@ -198,6 +198,12 @@ namespace TrainingManager.ViewModel
             NewWeightExercise.WeightRounds.Add(round);
         }
 
+        public (double, double) Estimate1RM(string e)
+        { 
+            var round = NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e);
+            return (round.WeightOfExercise, round.Reps);
+        }
+        
         /// <summary>
         /// Kiválasztunk egy gyakorlatot az edzésből, amit szerkeszteni fogunk.
         /// </summary>
@@ -214,6 +220,7 @@ namespace TrainingManager.ViewModel
         public EnumeratorVM<MaterialColors> GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
         public EnumeratorVM<MaterialColors> GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
         public MuscleVM GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
+
 
         //PRIVATES
         private void ReIndexRounds()

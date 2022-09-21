@@ -188,5 +188,6 @@ namespace TrainingManager.ViewModel
 
             SavedActivities = new ObservableCollection<WeightActivityVM>(workouts.Select(x => new WeightActivityVM(x, ++i)));
         }
+
     }
 }

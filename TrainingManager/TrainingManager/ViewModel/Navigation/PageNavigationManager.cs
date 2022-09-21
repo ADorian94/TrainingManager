@@ -13,6 +13,7 @@ using TrainingManager.View.TabbedPageView.History.HistoryPages;
 using TrainingManager.ViewModel.WorkoutManager;
 using TrainingManager.ViewModel.WorkoutManager.Settigns;
 using Xamarin.Forms;
+using Utility;
 
 namespace TrainingManager.ViewModel.Navigation
 {
@@ -278,6 +279,11 @@ namespace TrainingManager.ViewModel.Navigation
             });
         }
 
+        private async void OnEstimated1RMWeight(object sender, (string id, double weight) e)
+        {
+            
+        }
+
         private Task CreateColorVM()
         {
             return Task.Run(() =>
@@ -340,7 +346,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelected(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "Delete");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "E1RM%","Delete");
 
             if (action == "Duplicate")
                 _weightWorkoutManagerVM.DuplicateRoundByStringGuid(e);
@@ -351,6 +357,17 @@ namespace TrainingManager.ViewModel.Navigation
                 viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
+            }
+
+            if (action == "E1RM%") 
+            {
+                (double weight, double reps) round = _weightWorkoutManagerVM.Estimate1RM(e);
+                string resultRPE_str = await _mainNavigationPage.DisplayPromptAsync("Set RPE", $"What is the RPE of this weight {round.weight}", initialValue: "8", maxLength: 2, keyboard: Keyboard.Numeric);
+                string resultPercentage_str = await _mainNavigationPage.DisplayPromptAsync("Set percentage", $"Calculate the percentage of the original weight.", initialValue: "75", maxLength: 2, keyboard: Keyboard.Numeric);
+                double.TryParse(resultRPE_str, out double resultRPE);
+                double.TryParse(resultPercentage_str, out double resultPercentage);
+                double x = EstimatedPercentageCalculator.Instance.CalculateEstimated1RMPercentage(round.weight, resultRPE, round.reps, resultPercentage);
+                await _mainNavigationPage.DisplayAlert("Esimated weight percentage",  $"{x}", "Ok");
             }
 
             if (action == "Delete")
