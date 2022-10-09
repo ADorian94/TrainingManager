@@ -30,8 +30,8 @@ namespace TrainingManager.ViewModel
         private int _selectedActivityReps;
         public int SelectedActivityReps { get => _selectedActivityReps; set { _selectedActivityReps = value; OnPropertyChanged(); } }
 
-        private MuscleVM _muscleVM;
-        public MuscleVM MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
+        private EnumeratorVM<Muscle> _muscleVM;
+        public EnumeratorVM<Muscle> MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
         
         //COMMANDS
         public DelegateCommand ActivitiySelectedCommand { get; private set; }
@@ -110,15 +110,15 @@ namespace TrainingManager.ViewModel
         //PRIVATES
         private void InitializeMuscleVM()
         {
-            MuscleVM = new MuscleVM();
-            MuscleVM.MuscleSelected += OnMuscleSelected;
+            MuscleVM = new EnumeratorVM<Muscle>(Muscle.Unknown);
+            MuscleVM.ItemSelected += OnMuscleSelected;
         }
 
         //EVENT HANDLERS
         private void OnMuscleSelected(object sender, Muscle muscle) 
         {
             SelectedActivity.MainMuscleGroup = muscle;
-            MuscleVM.MuscleSelected -= OnMuscleSelected;
+            MuscleVM.ItemSelected -= OnMuscleSelected;
             MuscleVM = null;
         }
 

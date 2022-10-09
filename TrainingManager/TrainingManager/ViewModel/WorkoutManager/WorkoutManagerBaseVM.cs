@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
@@ -10,12 +11,12 @@ using TrainingManager.ViewModel.WorkoutManager;
 
 namespace TrainingManager.ViewModel
 {
-    public abstract class WorkoutManagerBaseVM : ViewModelBase
+    public abstract class WorkoutManagerBaseVM : ViewModelBase 
     {
         //FIELDS
         protected IApiServices ApiServices;
         protected internal WeightWorkoutVM WeightWorkoutBookmark;
-        protected ColorVM ColorVM;
+        
 
         //PROPERTIES
         private bool _hasAnyChanges;
@@ -75,9 +76,7 @@ namespace TrainingManager.ViewModel
         //EVENTS
         public event EventHandler OpenAddWeightExercise;
         public event EventHandler OpenEditWeightExercise;
-        public event EventHandler CloseAddWeightExercise;
         public event EventHandler OpenNoteEditor;
-        public event EventHandler CloseNoteEditor;
         public event EventHandler<MessageEventArgs> OpenMuscleSelector;
         public event EventHandler<MessageEventArgs> WeightExerciseMenuSelected;
         public event EventHandler SavedWeightActivitySelected;
@@ -87,7 +86,7 @@ namespace TrainingManager.ViewModel
 
         protected override void InitializeCommands()
         {
-            SaveTodayWorkoutCommand = new DelegateCommand(SaveTodayWorkoutFunctionAsync);
+            SaveTodayWorkoutCommand = new DelegateCommand(SaveWorkoutFunctionAsync);
             OpenAddWeightExerciseCommand = new DelegateCommand(OpenAddWeightExerciseFunction);
             AddWeightExerciseToWorkoutCommand = new DelegateCommand(AddWeightExerciseToWorkoutFunction);
             AddWeightRoundToExerciseCommand = new DelegateCommand(AddWeightRoundToExerciseFunction);
@@ -100,8 +99,8 @@ namespace TrainingManager.ViewModel
         }
 
         //ABSTRACT FUNCTIONS
-        protected abstract void SaveTodayWorkoutFunctionAsync(object obj);
-        public abstract void RefreshWorkouts(object sender, EventArgs e);
+        protected abstract void SaveWorkoutFunctionAsync(object obj);
+        protected abstract Task SetupManagerAsync();
 
         //PROTECTED FUNCTIONS
         protected void InvokeWorkoutSavedEvent(object obj, EventArgs args) => WorkoutSaved?.Invoke(obj, args);
@@ -127,13 +126,10 @@ namespace TrainingManager.ViewModel
             return sumWorkoutWeight;
         }
 
-        public void CheckChangesAndSetResult()
-        {
-            if (WeightWorkoutBookmark != null && NewWeightWorkout != null)
-                HasAnyChanges = WeightWorkoutBookmark != NewWeightWorkout;
-            else
-                HasAnyChanges = false;
-        }
+        public void CheckChangesAndSetResult() => 
+            HasAnyChanges = WeightWorkoutBookmark != null && NewWeightWorkout != null ?
+                WeightWorkoutBookmark != NewWeightWorkout :
+                false;
 
         /// <summary>
         /// Töröljük az adott GUID-al rendelkező gyakorlatot
@@ -165,15 +161,9 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                IEnumerable<WeightActivityDTO> activities = await ApiServices.GetWeightActivitiesAsync();
-                activities = activities.OrderBy(x => x.ActivityName);
-                SavedActivities = new ObservableCollection<WeightActivityVM>();
-
                 int i = 0;
-                foreach (var activity in activities)
-                {
-                    SavedActivities.Add(new WeightActivityVM(activity, i++));
-                }
+                IEnumerable<WeightActivityDTO> activities = await ApiServices.GetWeightActivitiesAsync();
+                SavedActivities = new ObservableCollection<WeightActivityVM>(activities.OrderBy(x => x.ActivityName).Select(x => new WeightActivityVM(x, i++)));
             }
             catch (Exception ex)
             {
@@ -182,6 +172,8 @@ namespace TrainingManager.ViewModel
         }
 
         //PUBLIC 
+        public async void OnRefreshWorkouts(object sender, EventArgs e) => await SetupManagerAsync();
+
         public void DeleteRoundByStringGuid(string e)
         {
             NewWeightExercise.WeightRounds.Remove(NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e));
@@ -206,6 +198,12 @@ namespace TrainingManager.ViewModel
             NewWeightExercise.WeightRounds.Add(round);
         }
 
+        public (double, double) Estimate1RM(string e)
+        { 
+            var round = NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e);
+            return (round.WeightOfExercise, round.Reps);
+        }
+        
         /// <summary>
         /// Kiválasztunk egy gyakorlatot az edzésből, amit szerkeszteni fogunk.
         /// </summary>
@@ -219,9 +217,10 @@ namespace TrainingManager.ViewModel
             OpenEditWeightExercise?.Invoke(this, EventArgs.Empty);
         }
 
-        public ColorVM GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
-        public ColorVM GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
-        public MuscleVM GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
+        public EnumeratorVM<MaterialColors> GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
+        public EnumeratorVM<MaterialColors> GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
+        public EnumeratorVM<Muscle> GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
+
 
         //PRIVATES
         private void ReIndexRounds()
@@ -231,7 +230,7 @@ namespace TrainingManager.ViewModel
         }
 
         private void ExerciseRoundSelectedFunction(object obj) => ExerciseRoundSelected?.Invoke(this, (string)obj);
-        private void SaveNoteFunction(object obj) => CloseNoteEditor?.Invoke(this, EventArgs.Empty);
+        private void SaveNoteFunction(object obj) => ClosePage?.Invoke(this, EventArgs.Empty);
 
         private void AddWeightExerciseToWorkoutFunction(object obj)
         {
@@ -255,7 +254,7 @@ namespace TrainingManager.ViewModel
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
 
-            CloseAddWeightExercise?.Invoke(this, EventArgs.Empty);
+            ClosePage?.Invoke(this, EventArgs.Empty);
         }
 
         private bool IsExerciseReadyToAdd()

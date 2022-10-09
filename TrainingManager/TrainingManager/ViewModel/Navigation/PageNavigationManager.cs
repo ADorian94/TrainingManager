@@ -10,7 +10,9 @@ using TrainingManager.View;
 using TrainingManager.View.TabbedPageView;
 using TrainingManager.View.TabbedPageView.History;
 using TrainingManager.View.TabbedPageView.History.HistoryPages;
+using TrainingManager.ViewModel.WorkoutManager;
 using TrainingManager.ViewModel.WorkoutManager.Settigns;
+using Utility;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel.Navigation
@@ -106,17 +108,17 @@ namespace TrainingManager.ViewModel.Navigation
                 await Task.WhenAll(vmInitializations);
 
                 //EVENT SUBSCRIBE
-                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.RefreshWorkouts;
-                _weightWorkoutManagerVM.WorkoutSaved += _homeVM.RefreshWorkouts;
+                _weightWorkoutManagerVM.WorkoutSaved += _weightHistoryVM.OnRefreshWorkouts;
+                _weightWorkoutManagerVM.WorkoutSaved += _homeVM.OnRefreshWorkouts;
                 _weightWorkoutManagerVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
                 _settingsVM.ProfileChanged += _homeVM.OnProfileChanged;
-                _weightHistoryVM.WorkoutDeleted += _homeVM.RefreshWorkouts;
-                _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.RefreshWorkouts;
-                _weightHistoryVM.WorkoutSaved += _homeVM.RefreshWorkouts;
+                _weightHistoryVM.WorkoutDeleted += _homeVM.OnRefreshWorkouts;
+                _weightHistoryVM.WorkoutDeleted += _weightWorkoutManagerVM.OnRefreshWorkouts;
+                _weightHistoryVM.WorkoutSaved += _homeVM.OnRefreshWorkouts;
                 _weightHistoryVM.WorkoutSaved += _oneRepetitionMaximumVM.Refresh;
-                _weightActivityManagerVM.NeedToRefresh += _homeVM.RefreshWorkouts;
-                _weightActivityManagerVM.NeedToRefresh += _weightHistoryVM.RefreshWorkouts;
-                _weightActivityManagerVM.NeedToRefresh += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _homeVM.OnRefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _weightHistoryVM.OnRefreshWorkouts;
+                _weightActivityManagerVM.NeedToRefresh += _weightWorkoutManagerVM.OnRefreshWorkouts;
                 _weightActivityManagerVM.NeedToRefresh += _oneRepetitionMaximumVM.Refresh;
                 MainPage = _mainNavigationPage;
                 MainPageChanged?.Invoke(this, EventArgs.Empty);
@@ -237,16 +239,14 @@ namespace TrainingManager.ViewModel.Navigation
 
                 _weightHistoryVM.WeightWorkoutDateSelected += OnWeightWorkoutDateSelected;
                 _weightHistoryVM.OpenAddWeightExercise += OnOpenAddWeightExerciseHistory;
-                _weightHistoryVM.CloseAddWeightExercise += OnCloseNavigationPage;
                 _weightHistoryVM.OpenNoteEditor += OnOpenNoteEditorHistory;
                 _weightHistoryVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelectedHistory;
                 _weightHistoryVM.SavedWeightActivitySelected += OnSavedWeightActivitySelectedHistory;
                 _weightHistoryVM.OpenEditWeightExercise += OnOpenEditWeightExerciseHistory;
                 _weightHistoryVM.MessageApplication += OnMessageApplication;
-                _weightHistoryVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightHistoryVM.ExerciseRoundSelected += OnExerciseRoundSelectedHistory;
                 _weightHistoryVM.ExceptionOccured += OnExceptionOccured;
-                _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.RefreshWorkouts;
+                _weightHistoryVM.WorkoutSaved += _weightWorkoutManagerVM.OnRefreshWorkouts;
                 _weightHistoryVM.HistoryWorkoutItemSelected += OnHistoryWorkoutItemSelected;
                 _weightHistoryVM.PopUpMessage += OnPopUpMessage;
                 _weightHistoryVM.ClosePage += OnCloseNavigationPage;
@@ -266,13 +266,11 @@ namespace TrainingManager.ViewModel.Navigation
                 _notePage.BindingContext = _weightWorkoutManagerVM;
 
                 _weightWorkoutManagerVM.OpenAddWeightExercise += OnOpenAddWeightExercise;
-                _weightWorkoutManagerVM.CloseAddWeightExercise += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.OpenNoteEditor += OnOpenNoteEditor;
                 _weightWorkoutManagerVM.WeightExerciseMenuSelected += OnWeightExerciseMenuSelected;
                 _weightWorkoutManagerVM.SavedWeightActivitySelected += OnSavedWeightActivitySelected;
                 _weightWorkoutManagerVM.OpenEditWeightExercise += OnOpenEditWeightExercise;
                 _weightWorkoutManagerVM.MessageApplication += OnMessageApplication;
-                _weightWorkoutManagerVM.CloseNoteEditor += OnCloseNavigationPage;
                 _weightWorkoutManagerVM.ExerciseRoundSelected += OnExerciseRoundSelected;
                 _weightWorkoutManagerVM.ExceptionOccured += OnExceptionOccured;
                 _weightWorkoutManagerVM.PopUpMessage += OnPopUpMessage;
@@ -343,18 +341,21 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelected(object sender, string e)
         {
-            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "Delete");
+            string action = await _addWeightDrillPage.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "E1RM%", "Delete");
 
             if (action == "Duplicate")
                 _weightWorkoutManagerVM.DuplicateRoundByStringGuid(e);
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightWorkoutManagerVM.GetColorVMByRoundGuid(e);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightWorkoutManagerVM.GetColorVMByRoundGuid(e);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
+
+            if (action == "E1RM%")
+                await Estimate1RMDialog(_mainNavigationPage, _weightWorkoutManagerVM, e);
 
             if (action == "Delete")
                 _weightWorkoutManagerVM.DeleteRoundByStringGuid(e);
@@ -362,7 +363,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnColorSelected(object sender, MaterialColors e)
         {
-            ((ColorVM)_colorSelectPage.BindingContext).ColorSelected -= OnColorSelected;
+            ((EnumeratorVM<MaterialColors>)_colorSelectPage.BindingContext).ItemSelected -= OnColorSelected;
             _weightWorkoutManagerVM.CheckChangesAndSetResult();
             _weightHistoryVM.CheckChangesAndSetResult();
             await _mainNavigationPage.PopAsync();
@@ -370,7 +371,7 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnMuscleSelected(object sender, Muscle e)
         {
-            ((MuscleVM)_muscleSelectPage.BindingContext).MuscleSelected -= OnMuscleSelected;
+            ((EnumeratorVM<Muscle>)_muscleSelectPage.BindingContext).ItemSelected -= OnMuscleSelected;
             _weightWorkoutManagerVM.CheckChangesAndSetResult();
             _weightHistoryVM.CheckChangesAndSetResult();
             await _mainNavigationPage.PopAsync();
@@ -378,18 +379,21 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnExerciseRoundSelectedHistory(object sender, string e)
         {
-            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "Delete");
+            string action = await _addWeightDrillPageHistory.DisplayActionSheet("Round selected.", "Cancel", null, "Duplicate", "Color", "E1RM%", "Delete");
 
             if (action == "Duplicate")
                 _weightHistoryVM.DuplicateRoundByStringGuid(e);
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightHistoryVM.GetColorVMByRoundGuid(e);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightHistoryVM.GetColorVMByRoundGuid(e);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
+
+            if (action == "E1RM%")
+                await Estimate1RMDialog(_mainNavigationPage, _weightHistoryVM, e);
 
             if (action == "Delete")
                 _weightHistoryVM.DeleteRoundByStringGuid(e);
@@ -404,8 +408,8 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightWorkoutManagerVM.GetColorVMByExerciseGuid(e.Message);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightWorkoutManagerVM.GetColorVMByExerciseGuid(e.Message);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
@@ -423,8 +427,8 @@ namespace TrainingManager.ViewModel.Navigation
 
             if (action == "Color")
             {
-                ColorVM viewModel = _weightHistoryVM.GetColorVMByExerciseGuid(e.Message);
-                viewModel.ColorSelected += OnColorSelected;
+                EnumeratorVM<MaterialColors> viewModel = _weightHistoryVM.GetColorVMByExerciseGuid(e.Message);
+                viewModel.ItemSelected += OnColorSelected;
                 _colorSelectPage.BindingContext = viewModel;
                 await _mainNavigationPage.PushAsync(_colorSelectPage);
             }
@@ -448,8 +452,8 @@ namespace TrainingManager.ViewModel.Navigation
         private async void OnOpenAddWeightExerciseHistory(object sender, EventArgs e) => await _mainNavigationPage.PushAsync(_addNewDrillCaruselPageHistory);
         private async void OnOpenMuscleSelectPage(object sender, MessageEventArgs e)
         {
-            MuscleVM viewModel = ((WorkoutManagerBaseVM)sender).GetMuscleVMByExerciseGuid(e.Message);
-            viewModel.MuscleSelected += OnMuscleSelected;
+            EnumeratorVM<Muscle> viewModel = ((WorkoutManagerBaseVM)sender).GetMuscleVMByExerciseGuid(e.Message);
+            viewModel.ItemSelected += OnMuscleSelected;
             _muscleSelectPage.BindingContext = viewModel;
             await _mainNavigationPage.PushAsync(_muscleSelectPage);
         }
@@ -462,11 +466,21 @@ namespace TrainingManager.ViewModel.Navigation
 
         private async void OnMuscleSetup(object sender, EventArgs e)
         {
-            _weightActivityManagerVM.MuscleVM.MuscleSelected += OnCloseNavigationPage;
+            _weightActivityManagerVM.MuscleVM.ItemSelected += OnCloseNavigationPage;
             _muscleSelectPage.BindingContext = _weightActivityManagerVM.MuscleVM;
             await _mainNavigationPage.PushAsync(_muscleSelectPage);
         }
 
         private void WeightRecordSelected(PersonalRecordVM record) => _weightActivityManagerVM.SetupRecord(record);
+        private async Task Estimate1RMDialog(Page page, WorkoutManagerBaseVM viewModel, string id)
+        {
+            (double weight, double reps) round = viewModel.Estimate1RM(id);
+            string resultRPE_str = await page.DisplayPromptAsync("Set RPE", $"What is the RPE of this weight {round.weight}", initialValue: "8", maxLength: 2, keyboard: Keyboard.Numeric);
+            string resultPercentage_str = await page.DisplayPromptAsync("Set percentage", $"Calculate the percentage of the original weight.", initialValue: "75", maxLength: 2, keyboard: Keyboard.Numeric);
+            double.TryParse(resultRPE_str, out double resultRPE);
+            double.TryParse(resultPercentage_str, out double resultPercentage);
+            (double e1rm, double e1rmPercentage) calculated = EstimatedPercentageCalculator.Instance.CalculateEstimated1RMPercentage(round.weight, resultRPE, round.reps, resultPercentage);
+            await page.DisplayAlert($"Esimated 1RM {calculated.e1rm} and the {resultPercentage}% of it", $"{calculated.e1rmPercentage}", "Ok");
+        }
     }
 }

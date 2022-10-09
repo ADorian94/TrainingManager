@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using Xamarin.Forms;
@@ -15,13 +16,13 @@ namespace TrainingManager.ViewModel
         {
             ApiServices = apiServices;
             SetupActivitiesAsync();
-            SetupHistoryAsync();
+            SetupManagerAsync();
             WorkoutDateSelected = new DelegateCommand(WorkoutDateSelectedFunction);
             HistoryWorkoutItemSelectedCommand = new DelegateCommand(HistoryWorkoutItemSelectedFunction);
             SearchCommand = new DelegateCommand(SearchFunction);
         }
 
-        private async void SetupHistoryAsync()
+        protected override async Task SetupManagerAsync()
         {
             try
             {
@@ -172,22 +173,13 @@ namespace TrainingManager.ViewModel
         //PRIVATE
         private void UpdateMonthData() => SetMovedWeightsInTheMonth();
 
-        private void SetMovedWeightsInTheMonth()
-        {
-            if (MovedWeightsByMonth != null)
-            {
-                if (MovedWeightsByMonth.Any(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month))
-                {
-                    MovedWeightsInTheMonth = MovedWeightsByMonth.Single(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month).Weight;
-                    return;
-                }
-            }
-
-            MovedWeightsInTheMonth = 0;
-        }
+        private void SetMovedWeightsInTheMonth() => 
+            MovedWeightsInTheMonth = MovedWeightsByMonth != null && MovedWeightsByMonth.Any(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month) ?
+                MovedWeightsByMonth.Single(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month).Weight :
+                0.0;
 
         //PROTETED
-        protected override async void SaveTodayWorkoutFunctionAsync(object obj)
+        protected override async void SaveWorkoutFunctionAsync(object obj)
         {
             IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
 
@@ -234,13 +226,11 @@ namespace TrainingManager.ViewModel
             WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
             CheckChangesAndSetResult();
             InvokeWorkoutSavedEvent(this, EventArgs.Empty);
-            RefreshWorkouts(this, EventArgs.Empty);
+            OnRefreshWorkouts(this, EventArgs.Empty);
             InvokeClosePageEvent(this, EventArgs.Empty);
         }
 
         //PUBLIC
-        public override void RefreshWorkouts(object sender, EventArgs e) => SetupHistoryAsync();
-
         public async void DeleteWeightWorkoutByStringGuid(string wokroutGuid)
         {
             try
@@ -248,7 +238,7 @@ namespace TrainingManager.ViewModel
                 var workouts = await ApiServices.GetWeightWorkoutsAsync();
                 await ApiServices.DeleteWeightWorkoutAsync(workouts.Single(x => x.WorkoutGuid.ToString() == wokroutGuid).Id);
                 WorkoutDeleted?.Invoke(this, EventArgs.Empty);
-                SetupHistoryAsync();
+                await SetupManagerAsync();
             }
             catch (Exception ex)
             {

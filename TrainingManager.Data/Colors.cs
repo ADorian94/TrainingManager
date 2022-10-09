@@ -6,7 +6,8 @@ namespace TrainingManager.Data
 {
     public enum MaterialColors
     {
-        Default = 0,
+        None = 0,
+        Default,
         Red,
         Purple,
         DeepPurple,

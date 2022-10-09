@@ -21,13 +21,13 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Colors" Style="{StaticResource Title0}"/>
-            <ListView x:Name="ColorList" ItemsSource="{Binding Path=Colors}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" SelectedItem="{Binding SelectedColor}" VerticalOptions="FillAndExpand">
+            <ListView x:Name="ColorList" ItemsSource="{Binding EnumContainer}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" SelectedItem="{Binding SelectedColor}" VerticalOptions="FillAndExpand">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
-                            <controls:LowSimpleCard CardMainText="{Binding Path=Name}" IsButtonVisible="False" CardColor="{Binding Color}"
-                                                    CardFrameTapped="{Binding BindingContext.ColorSelectedCommand, Source={x:Reference ColorPage}}"
-                                                    CardFrameTappedParameter="{Binding Color}"/>
+                            <controls:LowSimpleCard CardMainText="{Binding ., Converter={StaticResource ColorToNameConverter}}" IsButtonVisible="False" CardColor="{Binding }"
+                                                    CardFrameTapped="{Binding BindingContext.ItemSelectedCommand, Source={x:Reference ColorPage}}"
+                                                    CardFrameTappedParameter="{Binding }"/>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>

@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.View.Styles"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.Controls.SwitchButton"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:BoolToNegateConverter x:Key="BoolToNegateConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:Style/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame Margin="5" Padding="2" CornerRadius="10" BackgroundColor="{StaticResource MainBlueColor}">
+            <Frame Margin="0" Padding="3" CornerRadius="10" BackgroundColor="{StaticResource AppBackgroundColor}" BorderColor="{StaticResource MainBlueColor}">
+                <Grid ColumnSpacing="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Frame Grid.Column="0" x:Name="OffButton" BackgroundColor="{StaticResource MainBlueColor}" Style="{StaticResource CardFrame}" 
+                           Padding="0" Margin="0"></Frame>
+                    <Button Grid.Column="0" WidthRequest="10" Text="Off" Clicked="Button_Clicked" Margin="0" BackgroundColor="Transparent"/>
+                    <Frame Grid.Column="1" x:Name="OnButton" BackgroundColor="{StaticResource MainBlueColor}" Style="{StaticResource CardFrame}"
+                           Padding="0" Margin="0"></Frame>
+                    <Button Grid.Column="1" WidthRequest="10" Text="On" Clicked="Button_Clicked" Margin="0" BackgroundColor="Transparent"/>
+                </Grid>
+            </Frame>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

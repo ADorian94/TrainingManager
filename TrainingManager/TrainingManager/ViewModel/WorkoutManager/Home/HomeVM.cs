@@ -8,6 +8,7 @@ using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
 using Xamarin.Forms;
 
 namespace TrainingManager.ViewModel
@@ -66,18 +67,10 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                var initializeTasks = new Task[]
-                {
-                    InitializeProfilePicture(),
-                    UpdateRecentWorkoutsAsync(),
-                    InitializeWeeklyMuscleDataAsync(),
-                    InitPersonalRecords(),
-                };
-
                 Date = DateTime.Now;
                 WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
-
-                await Task.WhenAll(initializeTasks);
+                await SetupManagerAsync();
+                LogHandler.Instance.Nlog.Info("Setup home vm finished.");
             }
             catch (Exception ex)
             {
@@ -89,33 +82,35 @@ namespace TrainingManager.ViewModel
         {
             var records = await ApiServices.GetWatchedWeightActivitiesAsync();
             WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x, _recordSelection)));
+            LogHandler.Instance.Nlog.Info("Personal records initialized.");
         }
 
         private async Task InitializeWeeklyMuscleDataAsync()
         {
             var muslceData = await ApiServices.GetWeeklyMuscleDataAsync();
             MovedWeightByMuscle = new ObservableCollection<(Muscle muscle, double weight)>(muslceData);
-
-            WeeklyWeight = 0.0;
-
-            foreach (var data in muslceData)
-                WeeklyWeight += data.weight;
+            muslceData.Aggregate(0.0, (weight, data) => weight += data.weight, (weight) => WeeklyWeight = weight);
+            LogHandler.Instance.Nlog.Info("Weekly muscle data initialized.");
         }
 
         private async Task InitializeProfilePicture()
         {
             if (_profileService.IsProfilePictureStored())
+            {
                 _originalImage = await _profileService.LoadProfilePictureAsync();
+                LogHandler.Instance.Nlog.Info("Profile picture loaded from device.");
+            }
             else
             {
                 _originalImage = await ApiServices.DownloadProfilePictureAsync();
                 await _profileService.StoreProfilePictureAsync(_originalImage);
+                LogHandler.Instance.Nlog.Info("Profile picture downloaded and stored.");
             }
 
             ProfilePicture = ImageSource.FromStream(() => new MemoryStream(_originalImage));
         }
 
-        public override async void RefreshWorkouts(object sender, EventArgs e)
+        protected override async Task SetupManagerAsync()
         {
             var initializeTasks = new Task[]
             {
@@ -127,7 +122,7 @@ namespace TrainingManager.ViewModel
             await Task.WhenAll(initializeTasks);
         }
 
-        protected override void SaveTodayWorkoutFunctionAsync(object obj)
+        protected override void SaveWorkoutFunctionAsync(object obj)
         {
         }
 
@@ -136,7 +131,6 @@ namespace TrainingManager.ViewModel
         {
             IEnumerable<WeightWorkoutDTO> recentWorkouts = await ApiServices.GetRecentWeightWorkoutsAsync();
             RecentWorkouts = new ObservableCollection<HistoryItemVM>(recentWorkouts.Select(w => new HistoryItemVM(w)));
-
         }
 
         private async void WeightWorkoutMenuSelectedFunction(object obj)
