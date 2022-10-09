@@ -14,7 +14,7 @@
         <Frame Style="{StaticResource CardFrame}" Margin="15, 5" HeightRequest="{OnIdiom Desktop=420, Phone=210}">
             <StackLayout BackgroundColor="Transparent">
                 <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
-                <microcharts1:ChartView x:Name="RoundChartItem" VerticalOptions="FillAndExpand" BackgroundColor="Transparent"/>
+                <microcharts1:ChartView x:Name="RoundChartItem" VerticalOptions="FillAndExpand" BackgroundColor="Transparent" HeightRequest="{OnIdiom Desktop=415, Phone=205}"/>
             </StackLayout>
         </Frame>
     </ContentView.Content>

@@ -219,7 +219,7 @@ namespace TrainingManager.ViewModel
 
         public EnumeratorVM<MaterialColors> GetColorVMByRoundGuid(string e) => NewWeightExercise.WeightRounds.Single(x => x.RoundGuid.ToString() == e).ColorVM;
         public EnumeratorVM<MaterialColors> GetColorVMByExerciseGuid(string e) => NewWeightWorkout.WeightExercises.Single(x => x.ExerciseGuid.ToString() == e).ColorVM;
-        public MuscleVM GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
+        public EnumeratorVM<Muscle> GetMuscleVMByExerciseGuid(string e) => NewWeightExercise.MuscleVM;
 
 
         //PRIVATES

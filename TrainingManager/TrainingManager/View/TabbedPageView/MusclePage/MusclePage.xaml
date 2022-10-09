@@ -21,7 +21,7 @@
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Muscles" Style="{StaticResource Title0}"/>
-            <ListView x:Name="MuscleList" ItemsSource="{Binding Muscles}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" SelectedItem="{Binding SelectedColor}" VerticalOptions="FillAndExpand">
+            <ListView x:Name="MuscleList" ItemsSource="{Binding EnumContainer}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" SelectedItem="{Binding SelectedColor}" VerticalOptions="FillAndExpand">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>

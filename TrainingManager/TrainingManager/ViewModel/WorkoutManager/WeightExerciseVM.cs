@@ -35,8 +35,8 @@ namespace TrainingManager.ViewModel
 
         private void InitializeMuscleVM()
         {
-            MuscleVM = new MuscleVM();
-            MuscleVM.MuscleSelected += OnMuscleSelected;
+            MuscleVM = new EnumeratorVM<Muscle>(Muscle.Unknown);
+            MuscleVM.ItemSelected += OnMuscleSelected;
         }
 
         //PROPERTIES
@@ -67,8 +67,8 @@ namespace TrainingManager.ViewModel
         private Muscle _mainMuscle;
         public Muscle MainMuscle { get => _mainMuscle; set { _mainMuscle = value; OnPropertyChanged(); } }
 
-        private MuscleVM _muscleVM;
-        public MuscleVM MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
+        private EnumeratorVM<Muscle> _muscleVM;
+        public EnumeratorVM<Muscle> MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
 
         public void CountTotalWeightOfExercise()
         {
