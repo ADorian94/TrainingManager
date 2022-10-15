@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             x:Class="TrainingManager.View.NotePage">
+    <ContentPage.Resources>
+        <local:DarkTheme/>
+    </ContentPage.Resources>
+    <StackLayout>
+        <Label Text="{Binding NewWeightWorkout.WorkoutName}" Style="{StaticResource Title0}"/>
+        <Grid VerticalOptions="FillAndExpand">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <ScrollView Grid.Row="0" VerticalOptions="Fill" Padding="0">
+                <Editor Text="{Binding NewWeightWorkout.Note}" BackgroundColor="Transparent" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" Margin="15,0" TextColor="White"/>
+            </ScrollView>
+            <Button Grid.Row="1" Text="Save" Command="{Binding SaveNoteCommand}" Style="{StaticResource RedButton}"/>
+        </Grid>
+    </StackLayout>
+</ContentPage>

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             x:Class="TrainingManager.View.Controls.CardWithTextEditor"
+             x:Name="this"
+             HeightRequest="200">
+    <ContentView.Resources>
+        <local:DarkTheme/>
+    </ContentView.Resources>
+
+    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" CornerRadius="10">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}"/>
+        </Frame.GestureRecognizers>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" HorizontalOptions="StartAndExpand" FontSize="30" TextColor="{StaticResource MainTextColor}"/>
+            <StackLayout Grid.Row="1" BackgroundColor="Transparent">
+                <Label Text="{x:Binding Source={x:Reference this}, Path=EditorText}" FontSize="25" HeightRequest="50" HorizontalOptions="FillAndExpand" TextColor="{StaticResource SecondaryTextColor}" />
+            </StackLayout>
+        </Grid>
+    </Frame>
+</ContentView>

@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             x:Class="TrainingManager.View.Controls.ToggleButtonCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:MaterialColorToColor x:Key="MaterialColorToColor" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame x:Name="CardFrame" Style="{StaticResource ColorCardFrame}" BackgroundColor="{x:Binding Source={x:Reference this}, Path=CardColor, Converter={StaticResource MaterialColorToColor}}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}" VerticalOptions="Center"/>
+                <Switch Grid.Row="1" HorizontalOptions="CenterAndExpand"
+                        IsToggled="{x:Binding Source={x:Reference this}, Path=ToggleValue, Mode=TwoWay}"
+                        OnColor="{StaticResource MainBlueColor}"/>
+            </Grid>
+        </Frame>
+    </ContentView.Content>
+</ContentView>

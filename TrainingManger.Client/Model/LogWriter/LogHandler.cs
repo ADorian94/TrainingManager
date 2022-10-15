@@ -1,0 +1,47 @@
+﻿using NLog;
+using NLog.Config;
+using NLog.Targets;
+using System.Text;
+using TrainingManager.Model.Interfaces;
+
+namespace TrainingManager.Model.LogWriter
+{
+    public sealed class LogHandler : ILogWriter
+    {
+        private static Lazy<ILogWriter> Lazy => new Lazy<ILogWriter>(() => new LogHandler(), true);
+        public static ILogWriter Instance => Lazy.Value;
+        public static string LogPathDirectory { get; private set; }
+        public Logger Nlog { get; set; }
+
+        private LogHandler()
+        {
+            //Platform specific 
+            string pathOfLogDirectory = Path.Combine(LogPathDirectory, "logs");
+
+            if (!Directory.Exists(pathOfLogDirectory))
+                Directory.CreateDirectory(pathOfLogDirectory);
+
+            string pathOfLogFile = Path.Combine(Path.Combine(pathOfLogDirectory, "LiftIt.log"));
+            var config = new LoggingConfiguration();
+            var target = new FileTarget
+            {
+                FileName = pathOfLogFile,
+                Layout = "${longdate} ${uppercase:${level}} ${message}",
+                ArchiveFileName = Path.Combine(pathOfLogDirectory, @"archives/liftit-{#}.log"),
+                ArchiveEvery = FileArchivePeriod.Hour,
+                ArchiveNumbering = ArchiveNumberingMode.Date,
+                MaxArchiveFiles = 5,
+                ArchiveDateFormat = "yyyy-MM-dd-HH-mm",
+                Encoding = Encoding.UTF8,
+            };
+            config.AddTarget("logfile", target);
+            var rule = new LoggingRule("*", LogLevel.Debug, target);
+            config.LoggingRules.Add(rule);
+            LogManager.Configuration = config;
+            Nlog = LogManager.GetCurrentClassLogger();
+        }
+
+        //PUBLIC
+        public static void InitializeLogPath(string path) => LogPathDirectory = path;
+    }
+}

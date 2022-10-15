@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.RecentWorkoutDetails"
+             x:Name="RecentWorkoutDetailsPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DoubleToBoolConverter x:Key="DoubleToBoolConverter" />
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <StackLayout>
+        <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+        <Label Text="Details" Style="{StaticResource Title0}"/>
+        <controls:SimpleCard x:Name="NameCard" CardMainText="Workout name" Margin="15, 5, 15, 0" CardSecondaryText="{Binding NewWeightWorkout.WorkoutName}"/>
+        <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=NewWeightWorkout.WeightExercises}" SeparatorVisibility="None"
+                  HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+            <ListView.Header>
+                <controls:SimpleCard CardMainText="Total weight" Margin="15, 5" CardSecondaryText="{Binding NewWeightWorkout.TotalWeight}"
+                                     IsVisible="{Binding NewWeightWorkout.TotalWeight, Converter={StaticResource DoubleToBoolConverter}}"/>
+            </ListView.Header>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <controls:OpenableCard CloseCardMainLabel="{Binding ExerciseName}" OpenCardMainLabel="{Binding ExerciseName}"
+                                                           OpenCardFirstLabel="Total weight" OpenCardFirstValue="{Binding TotalExerciseWeight}"
+                                                           OpenCardSecondLabel="Rounds" OpenCardSecondValue="{Binding TotalExerciseRounds}"
+                                                           ButtonCommand="{Binding BindingContext.WeightExerciseMenuSelectedCommand, Source={x:Reference RecentWorkoutDetailsPage}}"
+                                                           ButtonCommandParameter="{Binding ExerciseGuid }" ButtonVisibility="False"/>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </StackLayout>
+</ContentPage>

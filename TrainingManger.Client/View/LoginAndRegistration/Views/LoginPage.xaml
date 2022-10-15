@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:images="clr-namespace:TrainingManager.View.Media"
+             xmlns:overlays="clr-namespace:TrainingManager.View.Controls.Overlays"
+             x:Class="TrainingManager.View.LoginAndRegistration.LoginPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <images:Images/>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Image Source="{OnIdiom Default={StaticResource LoginBackgroundWide}, Phone={StaticResource LoginBackgroundPortrait}}" Aspect="AspectFill" />
+            <overlays:MainOverlay/>
+            <Grid VerticalOptions="End" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="Login" Style="{StaticResource Title0}"/>
+                <controls:LoginCard Grid.Row="1" UserName="{Binding UserName, Mode=TwoWay}"
+                                Password="{Binding Password, Mode=TwoWay}"/>
+                <Button Grid.Row="2" Text="Login" Style="{StaticResource BlueButton}" Command="{Binding LoginCommand}"/>
+                <Label Grid.Row="3" Text="Swipe left to Sign up" FontSize="13" TextColor="White" HorizontalOptions="CenterAndExpand" Margin="0,0,0,10"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

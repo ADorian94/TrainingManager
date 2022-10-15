@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<BoxView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+         xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+         xmlns:local="clr-namespace:TrainingManager.Themes"
+         x:Class="TrainingManager.View.Controls.Overlays.MainOverlay">
+    <BoxView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </BoxView.Resources>
+    <BoxView.Background>
+        <LinearGradientBrush StartPoint="1,0" EndPoint="1,1">
+            <GradientStop Color="Transparent" Offset="0"/>
+            <GradientStop Color="{StaticResource AppBackgroundColor}" Offset="0.7"/>
+            <GradientStop Color="{StaticResource AppBackgroundColor}" Offset="1"/>
+        </LinearGradientBrush>
+    </BoxView.Background>
+</BoxView>

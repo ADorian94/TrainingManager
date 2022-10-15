@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrainingManager.View.Controls.CardWithEntry"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:DoubleValueConverter x:Key="DoubleConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Frame Margin="5" Style="{StaticResource CardFrame}" >
+        <StackLayout BackgroundColor="Transparent">
+            <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+            <Entry Text="{x:Binding Source={x:Reference this}, Path=CardEntry, Converter={StaticResource DoubleConverter}, Mode=TwoWay}"
+                   Keyboard="Numeric" Style="{StaticResource CardEntryContent}"/>
+        </StackLayout>
+    </Frame>
+</ContentView>

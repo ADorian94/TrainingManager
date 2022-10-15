@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
+             x:Class="TrainingManager.View.AddSavedWeightExercises"
+             x:Name="Saved">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="{Binding NewWeightWorkout.WorkoutDate, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
+            <Label Text="Saved Exercises" Style="{StaticResource Title0}"/>
+            <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" />
+            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=SavedActivities}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:LowSimpleCard CardMainText="{Binding ActivityName}" IsButtonVisible="False" CardFrameTappedParameter="{Binding Index}"
+                                                    CardFrameTapped="{Binding BindingContext.SavedActivitiySelected, Source={x:Reference Saved}}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

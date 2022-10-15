@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:images="clr-namespace:TrainingManager.View.Media"
+             x:Class="TrainingManager.View.Controls.HistoryCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+                <images:Images/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <StackLayout x:Name="CardStack" BackgroundColor="Transparent">
+            <Frame x:Name="History" Style="{StaticResource CardFrame}" Margin="15, 5" Padding="0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Frame x:Name="BluePart" Grid.Column="0" Style="{StaticResource CardFrame}" Padding="0" BackgroundColor="{StaticResource MainBlueColor}" >
+                        <StackLayout BackgroundColor="Transparent">
+                            <Grid HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0" Text="{x:Binding Source={x:Reference this}, Path=ShortDate}" Style="{StaticResource Title1}" TextColor="WhiteSmoke" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                                <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=LongDate}" Style="{StaticResource Title2}" TextColor="WhiteSmoke" Margin="0" HorizontalOptions="CenterAndExpand"/>
+                            </Grid>
+                        </StackLayout>
+                    </Frame>
+                    <Grid Grid.Column="1" Margin="10,5,20,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="40"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CloseCardMainLabel}" Style="{StaticResource CardTitle}" VerticalOptions="Center"/>
+                            <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="{StaticResource TripleDotIcon}" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="35"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Label Grid.Row="0" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=OpenCardFirstLabel}" Style="{StaticResource OpenCardLabelContent}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="{x:Binding Source={x:Reference this}, Path=OpenCardFirstValue}" Style="{StaticResource OpenCardValueContent}"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Frame>
+        </StackLayout>
+    </ContentView.Content>
+</ContentView>

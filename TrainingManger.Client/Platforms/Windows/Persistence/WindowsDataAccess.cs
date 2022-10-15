@@ -1,0 +1,12 @@
+﻿using TrainingManager.Model.Interfaces;
+using TrainingManager.UWP.Persistence;
+
+
+[assembly: Dependency(typeof(WindowsDataAccess))]
+namespace TrainingManager.UWP.Persistence
+{
+    class WindowsDataAccess : IDataAcess
+    {
+        public string GetExternalStorage() => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+    }
+}

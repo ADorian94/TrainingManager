@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converter="clr-namespace:TrainingManager.ViewModel"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             x:Class="TrainingManager.View.TabbedPageView.MusclePage"
+             x:Name="MusclePg">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converter:DateToStringConverter x:Key="DateToStringConverter" />
+            <converter:ColorToNameConverter x:Key="ColorToNameConverter" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <StackLayout>
+            <Label Text="Muscles" Style="{StaticResource Title0}"/>
+            <ListView x:Name="MuscleList" ItemsSource="{Binding EnumContainer}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" SelectedItem="{Binding SelectedColor}" VerticalOptions="FillAndExpand">
+                <ListView.ItemTemplate >
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:LowSimpleCard CardMainText="{Binding }" IsButtonVisible="False"
+                                                    CardFrameTapped="{Binding BindingContext.MuscleSelectedCommand, Source={x:Reference MusclePg}}"
+                                                    CardFrameTappedParameter="{Binding}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

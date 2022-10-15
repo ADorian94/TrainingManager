@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:images="clr-namespace:TrainingManager.View.Media"
+             xmlns:controls="clr-namespace:TrainingManager.View.Controls"
+             xmlns:overlays="clr-namespace:TrainingManager.View.Controls.Overlays"
+             x:Class="TrainingManager.View.LoginAndRegistration.RegistrationPage"
+             BackgroundColor="Transparent">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <images:Images/>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Image Source="{OnIdiom Default={StaticResource RegistrationBackgroundWide}, Phone={StaticResource RegistrationBackgroundPortrait}}" Aspect="AspectFill" />
+            <overlays:MainOverlay/>
+            <Grid VerticalOptions="End">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Label Grid.Row="0" Text="Registration" Style="{StaticResource Title0}"/>
+                <controls:RegistrationCard Grid.Row="1" 
+                                        Name="{Binding Name, Mode=TwoWay}"
+                                        UserName="{Binding UserName, Mode=TwoWay}"
+                                        Email="{Binding UserEmail, Mode=TwoWay}"
+                                        Password="{Binding Password, Mode=TwoWay}"
+                                        ConfirmPassword="{Binding ConfirmPassword, Mode=TwoWay}"/>
+                <Button Grid.Row="2" Text="Register now" Style="{StaticResource BlueButton}" Command="{Binding RegisterCommand}"/>
+                <Label Grid.Row="3" Text="Swipe right to Sign in" FontSize="13" TextColor="White" HorizontalOptions="CenterAndExpand" Margin="0,0,0,10"/>
+            </Grid>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

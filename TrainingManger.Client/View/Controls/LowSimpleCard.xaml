@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="TrainingManager.View.Controls.LowSimpleCard"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             xmlns:converter="clr-namespace:TrainingManager.View.Controls"
+             x:Name="this">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <converter:MaterialColorToColor x:Key="MaterialColorToColor" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <local:DarkTheme/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Frame x:Name="CardFrame" Style="{StaticResource ColorCardFrame}" BackgroundColor="{x:Binding Source={x:Reference this}, Path=CardColor, Converter={StaticResource MaterialColorToColor}}" Margin="15, 5">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}" CommandParameter="{x:Binding Source={x:Reference this}, Path=CardFrameTappedParameter}"/>
+        </Frame.GestureRecognizers>
+        <Grid RowDefinitions="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="40"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}" VerticalOptions="Center"/>
+            <ImageButton Grid.Row="0" Grid.Column="1" Padding="0,10,0,10" BackgroundColor="Transparent" Source="sharp_more_vert_white_24.png" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=IsButtonVisible}"/>
+        </Grid>
+    </Frame>
+</ContentView>

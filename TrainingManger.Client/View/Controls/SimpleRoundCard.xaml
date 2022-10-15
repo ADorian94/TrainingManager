@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             x:Class="TrainingManager.View.Controls.SimpleRoundCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:DarkTheme/>
+    </ContentView.Resources>
+
+    <Frame IsClippedToBounds="True" HasShadow="True" BackgroundColor="{StaticResource CardBackgroundColor}" Margin="15, 5" HeightRequest="200" WidthRequest="200" CornerRadius="200">
+        <Label Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" VerticalOptions="Center" HorizontalOptions="Center" FontSize="35" TextColor="{StaticResource MainTextColor}"/>
+    </Frame>
+</ContentView>

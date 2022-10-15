@@ -1,0 +1,171 @@
+﻿using System.Collections.ObjectModel;
+using TrainingManager.Data;
+using TrainingManager.Data.DTO;
+using TrainingManager.Model;
+using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
+
+namespace TrainingManager.ViewModel
+{
+    public class HomeVM : WorkoutManagerBaseVM
+    {
+        //FIELDS
+        private IProfileService _profileService;
+        private byte[] _originalImage;
+        private Action<PersonalRecordVM> _recordSelection;
+
+        public HomeVM(IApiServices apiServices, IProfileService profileService, Action<PersonalRecordVM> recordSelection)
+        {
+            ApiServices = apiServices;
+            _profileService = profileService;
+            SetupHomeAsync();
+            WeightWorkoutMenuSelectedCommand = new DelegateCommand(WeightWorkoutMenuSelectedFunction);
+            ProfileSelectedCommand = new DelegateCommand(ProfileSelectedFunction);
+            _recordSelection = recordSelection;
+        }
+
+        //PROPERTIES
+        private ObservableCollection<HistoryItemVM> _recentWorkouts;
+        public ObservableCollection<HistoryItemVM> RecentWorkouts { get => _recentWorkouts; set { _recentWorkouts = value; OnPropertyChanged(); } }
+
+        private ImageSource _profilePicture;
+        public ImageSource ProfilePicture { get => _profilePicture; set { _profilePicture = value; OnPropertyChanged(); } }
+
+        private string _wellcomeMessage;
+        public string WellcomeMessage { get => _wellcomeMessage; set { _wellcomeMessage = value; OnPropertyChanged(); } }
+
+        private DateTime _date;
+        public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
+
+        private double _weeklyWeight;
+        public double WeeklyWeight { get => _weeklyWeight; set { _weeklyWeight = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<(Muscle muscle, double weight)> _movedWeightByMuscle;
+        public ObservableCollection<(Muscle muscle, double weight)> MovedWeightByMuscle { get => _movedWeightByMuscle; set { _movedWeightByMuscle = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<PersonalRecordVM> _watchedPersonalRecords;
+        public ObservableCollection<PersonalRecordVM> WatchedPersonalRecords { get => _watchedPersonalRecords; set { _watchedPersonalRecords = value; OnPropertyChanged(); } }
+
+        //ACTIONS
+        public Action<Guid> SelectPersonalRecord;
+
+        //COMMANDS
+        public DelegateCommand WeightWorkoutMenuSelectedCommand { get; private set; }
+        public DelegateCommand ProfileSelectedCommand { get; private set; }
+
+        //EVENTS
+        public event EventHandler<MessageEventArgs> RecentWorkoutItemSelected;
+        public event EventHandler ProfileSelected;
+
+        private async void SetupHomeAsync()
+        {
+            try
+            {
+                Date = DateTime.Now;
+                WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
+                await SetupManagerAsync();
+                LogHandler.Instance.Nlog.Info("Setup home vm finished.");
+            }
+            catch (Exception ex)
+            {
+                OnExeptionOccured(new ExceptionArgs(ex));
+            }
+        }
+
+        private async Task InitPersonalRecords()
+        {
+            var records = await ApiServices.GetWatchedWeightActivitiesAsync();
+            WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x, _recordSelection)));
+            LogHandler.Instance.Nlog.Info("Personal records initialized.");
+        }
+
+        private async Task InitializeWeeklyMuscleDataAsync()
+        {
+            var muslceData = await ApiServices.GetWeeklyMuscleDataAsync();
+            MovedWeightByMuscle = new ObservableCollection<(Muscle muscle, double weight)>(muslceData);
+            muslceData.Aggregate(0.0, (weight, data) => weight += data.weight, (weight) => WeeklyWeight = weight);
+            LogHandler.Instance.Nlog.Info("Weekly muscle data initialized.");
+        }
+
+        private async Task InitializeProfilePicture()
+        {
+            if (_profileService.IsProfilePictureStored())
+            {
+                _originalImage = await _profileService.LoadProfilePictureAsync();
+                LogHandler.Instance.Nlog.Info("Profile picture loaded from device.");
+            }
+            else
+            {
+                _originalImage = await ApiServices.DownloadProfilePictureAsync();
+                await _profileService.StoreProfilePictureAsync(_originalImage);
+                LogHandler.Instance.Nlog.Info("Profile picture downloaded and stored.");
+            }
+
+            ProfilePicture = ImageSource.FromStream(() => new MemoryStream(_originalImage));
+        }
+
+        protected override async Task SetupManagerAsync()
+        {
+            var initializeTasks = new Task[]
+            {
+                    UpdateRecentWorkoutsAsync(),
+                    InitializeWeeklyMuscleDataAsync(),
+                    InitPersonalRecords(),
+            };
+
+            await Task.WhenAll(initializeTasks);
+        }
+
+        protected override void SaveWorkoutFunctionAsync(object obj)
+        {
+        }
+
+        //PRIVATES
+        private async Task UpdateRecentWorkoutsAsync()
+        {
+            IEnumerable<WeightWorkoutDTO> recentWorkouts = await ApiServices.GetRecentWeightWorkoutsAsync();
+            RecentWorkouts = new ObservableCollection<HistoryItemVM>(recentWorkouts.Select(w => new HistoryItemVM(w)));
+        }
+
+        private async void WeightWorkoutMenuSelectedFunction(object obj)
+        {
+            var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
+
+            if (workouts.Any(x => x.WorkoutGuid.ToString() == ((string)obj)))
+            {
+                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutGuid.ToString() == ((string)obj));
+
+                NewWeightWorkout = new WeightWorkoutVM()
+                {
+                    Id = workout.Id,
+                    WorkoutName = workout.WorkoutName,
+                    WorkoutDate = workout.WorkoutDate,
+                    TotalWeight = workout.TotalWeight,
+                    WorkoutGuid = workout.WorkoutGuid,
+                    WorkoutType = workout.WorkoutType,
+                    Note = workout.Note,
+                    WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
+                    {
+                        ExerciseGuid = x.ExerciseGuid,
+                        ExerciseName = x.ExerciseName,
+                        ExerciseNote = x.Note,
+                        TotalExerciseWeight = x.TotalExerciseWeight,
+                        TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                        WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
+                        {
+                            RoundGuid = y.RoundGuid,
+                            RoundNumber = y.RoundNumber,
+                            Reps = y.Reps,
+                            WeightOfExercise = y.WeightOfExercise
+                        })),
+                    }))
+                };
+
+                RecentWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
+            }
+        }
+
+        public async void OnProfileChanged(object sender, EventArgs e) => await InitializeProfilePicture();
+        private void ProfileSelectedFunction(object obj) => ProfileSelected?.Invoke(this, EventArgs.Empty);
+    }
+}

@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"             
+             x:Class="TrainingManager.View.Controls.SimpleCard"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:DarkTheme/>
+    </ContentView.Resources>
+    <Frame Style="{StaticResource CardFrame}">
+        <Frame.GestureRecognizers>
+            <TapGestureRecognizer NumberOfTapsRequired="1" Command="{x:Binding Source={x:Reference this}, Path=CardFrameTapped}"/>
+        </Frame.GestureRecognizers>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="40"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" Text="{x:Binding Source={x:Reference this}, Path=CardMainText}" Style="{StaticResource CardTitle}"/>
+                <ImageButton Padding="0,10,0,10" Grid.Column="1" BackgroundColor="Transparent" Source="sharp_more_vert_white_24.png" HeightRequest="20" Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}" CommandParameter="{x:Binding Source={x:Reference this}, Path=ButtonCommandParameter}" IsVisible="{x:Binding Source={x:Reference this}, Path=ButtonVisibility}"/>
+            </Grid>
+            <Label Grid.Row="1" Text="{x:Binding Source={x:Reference this}, Path=CardSecondaryText}" Style="{StaticResource CardContent}"/>
+        </Grid>
+    </Frame>
+</ContentView>

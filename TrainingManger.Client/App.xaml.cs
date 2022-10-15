@@ -1,0 +1,80 @@
+﻿using TrainingManager.Model.DebugSettings;
+using TrainingManager.Model.Interfaces;
+using TrainingManager.Model.LogWriter;
+using TrainingManager.ViewModel.Navigation;
+using TrainingManager.Model.Services;
+
+namespace TrainingManger.Client
+{
+    public partial class App : Application
+    {
+        //FIELDS
+        private AuthenticationNavigationManager _authenticationNavigationManager;
+        private PageNavigationManager _pageNavigationManager;
+        private IApiServices _apiService;
+        private IAuthService _authService;
+        private IProfileService _profileService;
+
+        public App()
+        {
+            //InitializeComponent();
+            try
+            {
+                LogHandler.InitializeLogPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
+                LogHandler.Instance.Nlog.Info("**********NEW RUN**********");
+                DebugSettingsJSONHandler.InitializeJSONPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
+                InitializeComponent();
+                CheckPermissions();
+                _apiService = new ApiServices(GetConnectionAddress());
+                _authService = new AuthService();
+                _profileService = new ProfileService();
+                _authenticationNavigationManager = new AuthenticationNavigationManager(_apiService, _authService);
+                _pageNavigationManager = new PageNavigationManager(_apiService, _authService, _profileService);
+                _pageNavigationManager.MainPageChanged += OnMainPageChanged;
+                _pageNavigationManager.Logout += OnLogout;
+                _authenticationNavigationManager.MainPageChanged += OnAuthenticationMainPageChanged;
+                _authenticationNavigationManager.AuthenticationSuceed += OnAuthenticationSuceed;
+                LogHandler.Instance.Nlog.Info("Application initialization succeed.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw;
+            }
+
+            MainPage = _authenticationNavigationManager.MainPage;
+        }
+
+        private string GetConnectionAddress() =>
+            string.IsNullOrEmpty(DebugSettingsJSONHandler.Instance.JSONFile.APIConnection) ?
+            "http://trainingmanagerwebapi.azurewebsites.net" :
+            DebugSettingsJSONHandler.Instance.JSONFile.APIConnection;
+
+        private async void CheckPermissions()
+        {
+            var status = await Permissions.CheckStatusAsync<Permissions.Camera>();
+
+            if (status != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.Camera>();
+
+            status = await Permissions.CheckStatusAsync<Permissions.StorageWrite>();
+
+            if (status != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.StorageWrite>();
+
+            status = await Permissions.CheckStatusAsync<Permissions.StorageRead>();
+
+            if (status != PermissionStatus.Granted)
+                await Permissions.RequestAsync<Permissions.StorageRead>();
+
+            LogHandler.Instance.Nlog.Info("Permissions checked");
+        }
+
+        private void OnLogout(object sender, EventArgs e) => _authenticationNavigationManager.Logout();
+        private void OnAuthenticationSuceed(object sender, EventArgs e) =>
+            MainThread.BeginInvokeOnMainThread(async () => await _pageNavigationManager.InitializeAfterAuthenticationAsync());
+        private void OnMainPageChanged(object sender, EventArgs e) => MainThread.BeginInvokeOnMainThread(() => MainPage = _pageNavigationManager.MainPage);
+        private void OnAuthenticationMainPageChanged(object sender, EventArgs e) => MainPage = _authenticationNavigationManager.MainPage;
+
+    }
+}

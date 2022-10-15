@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:TrainingManager.Themes"
+             x:Class="TrainingManager.View.Controls.CardWithSearchBar"
+             x:Name="this">
+    <ContentView.Resources>
+        <local:DarkTheme/>
+    </ContentView.Resources>
+    <ContentView.Content>
+        <Frame Style="{StaticResource CardFrame}" Margin="15,5,15,0">
+            <StackLayout BackgroundColor="Transparent">
+                <SearchBar x:Name="searchBar"
+                           SearchCommand="{x:Binding Source={x:Reference this}, Path=CardSearchCommand}"
+                           SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}"
+                           Style="{StaticResource CardEntryContent}"
+                           Placeholder="Search"/>
+            </StackLayout>
+        </Frame>
+    </ContentView.Content>
+</ContentView>
