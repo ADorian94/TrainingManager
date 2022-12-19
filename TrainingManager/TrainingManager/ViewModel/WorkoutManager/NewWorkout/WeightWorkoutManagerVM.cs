@@ -186,7 +186,7 @@ namespace TrainingManager.ViewModel
                 await ApiServices.SearchActivityAsync(keyWords);
             int i = 0;
 
-            SavedActivities = new ObservableCollection<WeightActivityVM>(workouts.Select(x => new WeightActivityVM(x, ++i)));
+            SavedActivities = new ObservableCollection<WeightActivityVM>(workouts.Select(x => new WeightActivityVM(x, i++)));
         }
 
     }
