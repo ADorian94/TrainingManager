@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
@@ -63,7 +62,7 @@ namespace TrainingManager.WebApi.Controllers
         [HttpGet("MaxWeightActivity/{id}")]
         public IActionResult GetMaxWeightActivity([FromRoute] Guid id)
         {
-            try 
+            try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
@@ -77,7 +76,7 @@ namespace TrainingManager.WebApi.Controllers
 
                 if (maximums == null || maximums.Count() == 0)
                     return NotFound();
-            
+
                 return Ok(maximums.FirstOrDefault());
             }
             catch
@@ -129,7 +128,7 @@ namespace TrainingManager.WebApi.Controllers
 
                     foreach (var item in foundElements)
                     {
-                        if (!uniqueFoundElements.Any(x => x.ActivityGuid  == item.ActivityGuid))
+                        if (!uniqueFoundElements.Any(x => x.ActivityGuid == item.ActivityGuid))
                             uniqueFoundElements.Add(item);
                     }
 

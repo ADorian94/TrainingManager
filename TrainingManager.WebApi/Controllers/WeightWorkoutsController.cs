@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
@@ -191,6 +191,7 @@ namespace TrainingManager.WebApi.Controllers
                     await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
 
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
+                await MergeMultipleActivities();
 
                 return CreatedAtAction("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
             }
@@ -477,6 +478,78 @@ namespace TrainingManager.WebApi.Controllers
             {
                 return false;
             }
+        }
+
+        [HttpGet("Merge")]
+        public async Task<IActionResult> CommonMergeMultipleActivities()
+        {
+            try
+            {
+                await MergeMultipleActivities();
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+
+        private Task MergeMultipleActivities()
+        {
+            return Task.Run(() =>
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var userActivities = _context.WeightActivities.Where(x => x.OwnerUserName == user.UserName).ToArray();
+
+                List<string> activityIds = new List<string>();
+
+                for (int i = 0; i < userActivities.Count(); i++)
+                {
+                    if (userActivities.Count(x => x.ActivityName.ToUpper().Trim() == userActivities[i].ActivityName.ToUpper().Trim()) > 1 &&
+                        !activityIds.Any(x => x.ToUpper().Trim() == userActivities[i].ActivityName.ToUpper().Trim()))
+                    {
+                        activityIds.Add(userActivities[i].ActivityName.ToUpper().Trim());
+                    }
+                }
+
+                foreach (var activityId in activityIds)
+                {
+                    var exercisesToRemove = userActivities.Where(x => x.ActivityName.ToUpper().Trim() == activityId).ToList();
+                    int index = 0;
+
+                    //keep the first instance
+                    var original = exercisesToRemove[index];
+                    ++index;
+
+                    while (index <= exercisesToRemove.Count() - 1)
+                    {
+                        if (exercisesToRemove[index].IsWatched)
+                        {
+                            original.IsWatched = true;
+                            _context.SaveChanges();
+                        }
+
+                        if (exercisesToRemove[index].MainMuscleGroup != Muscle.Unknown)
+                        {
+                            original.MainMuscleGroup = exercisesToRemove[index].MainMuscleGroup;
+                            _context.SaveChanges();
+                        }
+
+                        if (_context.WeightExercises.Any(x => x.ActivityId == exercisesToRemove[index].Id))
+                        {
+                            var exercises = _context.WeightExercises.Where(x => x.ActivityId == exercisesToRemove[index].Id);
+
+                            foreach (var item in exercises)
+                                item.ActivityId = original.Id;
+                        }
+
+                        _context.WeightActivities.Remove(exercisesToRemove[index]);
+                        _context.SaveChanges();
+                        ++index;
+                    }
+                }
+            });
         }
 
         private async Task AddImagesForWorkoutAsync(ICollection<ImageDTO> workoutImages, Guid workoutGuid)
