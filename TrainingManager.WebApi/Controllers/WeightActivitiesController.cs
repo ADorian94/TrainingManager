@@ -85,6 +85,28 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("LastRounds/{id}")]
+        public IActionResult GetLastRounds([FromRoute] int id)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var lastRounds = _statFunctions.GetLastRoundsOfActivity(id, user);
+
+                if (lastRounds == null || lastRounds.Count() == 0)
+                    return NotFound();
+
+                return Ok(lastRounds);
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetWatchedMaxWeightActivities")]
         public IActionResult GetWatchedMaxWeightActivities()
         {

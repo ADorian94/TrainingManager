@@ -170,5 +170,32 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
             return false;
         }
+
+        internal IEnumerable<WeightRoundDTO> GetLastRoundsOfActivity(int id, ApplicationUser user)
+        {
+            var exercises = _context.WeightExercises.Where(x => x.OwnerUserName == user.UserName && x.ActivityId == id).Take(10).Select(x => x.Id);
+            var result = new List<WeightRoundDTO>();
+
+            foreach (var exercise in exercises)
+            {
+                var rounds = _context.WeightRounds.Where(x => x.ExerciseId == exercise);
+
+                foreach (var round in rounds)
+                {
+                    result.Add(new WeightRoundDTO()
+                    {
+                        Id = round.Id,
+                        Color = round.Color,
+                        ExerciseId = round.ExerciseId,
+                        Reps = round.Reps,
+                        RoundGuid = round.RoundGuid,
+                        RoundNumber = round.RoundNumber,
+                        WeightOfExercise = round.WeightOfExercise
+                    });
+                }
+            }
+
+            return result;
+        }
     }
 }
