@@ -103,7 +103,7 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                var lastRounds = await _apiServices.GetPreviousRoundsAsync(id);
+                var lastRounds = await _apiServices.GetPreviousRoundsAsync(id, 5);
                 PreviousRounds = new ObservableCollection<WeightRoundVM>(lastRounds.Select(x => new WeightRoundVM()
                 {
                     Reps = x.Reps,

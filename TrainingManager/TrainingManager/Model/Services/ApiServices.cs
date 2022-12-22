@@ -247,11 +247,11 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        public async Task<IEnumerable<WeightRoundDTO>> GetPreviousRoundsAsync(Guid id)
+        public async Task<IEnumerable<WeightRoundDTO>> GetPreviousRoundsAsync(Guid id, int take)
         {
             try
             {
-                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/LastRounds/{id}");
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/LastRounds/{id}/{take}");
 
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<ICollection<WeightRoundDTO>>();

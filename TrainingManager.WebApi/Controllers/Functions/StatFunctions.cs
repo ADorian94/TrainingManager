@@ -171,7 +171,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
             return false;
         }
 
-        internal IEnumerable<WeightRoundDTO> GetLastRoundsOfActivity(int id, ApplicationUser user)
+        internal IEnumerable<WeightRoundDTO> GetLastRoundsOfActivity(int id, ApplicationUser user, int take)
         {
             IEnumerable<Tuple<int, DateTime>> exerciseWithDate =
                          _context.WeightExercises.
@@ -179,7 +179,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
                          ToList().
                          Select(x => new Tuple<int, DateTime>(x.Id, GetLastWorkoutIdsOfExercise(x.WorkoutId))).
                          OrderByDescending(x => x.Item2).
-                         Take(10);
+                         Take(take);
 
             var result = new List<WeightRoundDTO>(); 
 
