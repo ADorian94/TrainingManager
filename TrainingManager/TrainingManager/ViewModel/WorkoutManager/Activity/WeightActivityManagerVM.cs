@@ -109,7 +109,8 @@ namespace TrainingManager.ViewModel
                     Reps = x.Reps,
                     WeightOfExercise = x.WeightOfExercise,
                     RoundNumber = x.RoundNumber,
-                    RoundGuid = x.RoundGuid
+                    RoundGuid = x.RoundGuid,
+                    RoundColor = x.Color
                 }));
             }
             catch
@@ -162,9 +163,8 @@ namespace TrainingManager.ViewModel
         public async void SetupRecord(PersonalRecordVM record)
         {
             SelectedActivity = new WeightActivityVM(Activites.Single(x => x.Id == record.Id));
-            var activityDetails = await _apiServices.GetWeightActivityPRAsync(SelectedActivity.Id);
-            SelectedActivityReps = activityDetails.reps;
-            SelectedActivityWeight = activityDetails.weight;
+            await SetPrOfActvity(SelectedActivity.Id);
+            await SetLAtestRoundsOfActivity(SelectedActivity.Id);
             WeightActivitySelected?.Invoke(this, EventArgs.Empty);
         }
     }

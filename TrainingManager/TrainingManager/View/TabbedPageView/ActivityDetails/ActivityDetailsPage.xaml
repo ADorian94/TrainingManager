@@ -44,7 +44,7 @@
                                             CardSecondaryText="{Binding SelectedActivity.MainMuscleGroup}"
                                             CardFrameTapped="{Binding MuscleSetupCommand}"/>
                 </Grid>
-                <ListView Grid.Row="2" ItemsSource="{Binding PreviousRounds}">
+                <ListView Grid.Row="2" ItemsSource="{Binding PreviousRounds}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
                     <ListView.Header>
                         <StackLayout>
                             <Label Text="Personal record" Style="{StaticResource Title1}" />
@@ -61,7 +61,8 @@
                                 <controls:LowCardWithLabels CardMainText="Weight"
                                         CardMainEntry="{Binding WeightOfExercise}"
                                         CardSecondaryText="Reps"
-                                        CardSecondaryEntry="{Binding Reps}"/>
+                                        CardSecondaryEntry="{Binding Reps}"
+                                        CardColor="{Binding RoundColor}"/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
