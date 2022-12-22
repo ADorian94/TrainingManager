@@ -247,6 +247,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<WeightRoundDTO>> GetPreviousRoundsAsync(Guid id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/LastRounds/{id}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightRoundDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         //IMAGES
         public async Task<bool> UploadProfilePicture(byte[] image)
         {

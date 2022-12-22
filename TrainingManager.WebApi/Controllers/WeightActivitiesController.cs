@@ -86,7 +86,7 @@ namespace TrainingManager.WebApi.Controllers
         }
 
         [HttpGet("LastRounds/{id}")]
-        public IActionResult GetLastRounds([FromRoute] int id)
+        public IActionResult GetLastRounds([FromRoute] Guid id)
         {
             try
             {
@@ -94,7 +94,7 @@ namespace TrainingManager.WebApi.Controllers
                     return BadRequest(ModelState);
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                var lastRounds = _statFunctions.GetLastRoundsOfActivity(id, user);
+                var lastRounds = _statFunctions.GetLastRoundsOfActivity(_context.WeightActivities.Single(x => x.ActivityGuid == id).Id, user);
 
                 if (lastRounds == null || lastRounds.Count() == 0)
                     return NotFound();

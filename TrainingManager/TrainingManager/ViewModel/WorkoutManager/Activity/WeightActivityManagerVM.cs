@@ -32,7 +32,10 @@ namespace TrainingManager.ViewModel
 
         private EnumeratorVM<Muscle> _muscleVM;
         public EnumeratorVM<Muscle> MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
-        
+
+        private ObservableCollection<WeightRoundVM> _previousRounds;
+        public ObservableCollection<WeightRoundVM> PreviousRounds { get => _previousRounds; set { _previousRounds = value; OnPropertyChanged(); } }
+
         //COMMANDS
         public DelegateCommand ActivitiySelectedCommand { get; private set; }
         public DelegateCommand MuscleSetupCommand { get; private set; }
@@ -89,10 +92,18 @@ namespace TrainingManager.ViewModel
         private async void ActivitiySelectedFunction(object obj)
         {
             var index = int.Parse((string)obj);
-            SelectedActivity = new WeightActivityVM(Activites[index-1]);
+            SelectedActivity = new WeightActivityVM(Activites[index - 1]);
             var activityDetails = await _apiServices.GetWeightActivityPRAsync(SelectedActivity.Id);
             SelectedActivityReps = activityDetails.reps;
             SelectedActivityWeight = activityDetails.weight;
+            var lastRounds = await _apiServices.GetPreviousRoundsAsync(SelectedActivity.Id);
+            PreviousRounds = new ObservableCollection<WeightRoundVM>(lastRounds.Select(x => new WeightRoundVM() 
+            {
+                Reps = x.Reps,
+                WeightOfExercise = x.WeightOfExercise,
+                RoundNumber = x.RoundNumber,
+                RoundGuid = x.RoundGuid
+            }));
             WeightActivitySelected?.Invoke(this, EventArgs.Empty);
         }
 

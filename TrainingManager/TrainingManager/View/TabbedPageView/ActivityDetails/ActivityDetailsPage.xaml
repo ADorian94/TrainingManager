@@ -42,7 +42,19 @@
                                         CardMainEntry="{Binding SelectedActivityWeight}"
                                         CardSecondaryText="Reps"
                                         CardSecondaryEntry="{Binding SelectedActivityReps}"/>
-            
+            <Label Text="Last time you did it" Style="{StaticResource Title1}" />
+            <ListView ItemsSource="{Binding PreviousRounds}">
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <controls:LowCardWithLabels CardMainText="Weight"
+                                        CardMainEntry="{Binding WeightOfExercise}"
+                                        CardSecondaryText="Reps"
+                                        CardSecondaryEntry="{Binding Reps}"/>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
             <Button Text="Update" Command="{Binding UpdateExerciseCommand}" Style="{StaticResource RedButton}" VerticalOptions="EndAndExpand"/>
         </StackLayout>
     </ContentPage.Content>
