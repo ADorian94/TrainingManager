@@ -171,14 +171,15 @@ namespace TrainingManager.WebApi.Controllers.Functions
             return false;
         }
 
-        internal IEnumerable<WeightRoundDTO> GetLastRoundsOfActivity(int id, ApplicationUser user, int take)
+        public IEnumerable<WeightRoundDTO> GetLastRoundsOfActivity(int id, ApplicationUser user, int take)
         {
-            IEnumerable<Tuple<int, DateTime>> exerciseWithDate =
+            IEnumerable<Tuple<int, DateTime?>> exerciseWithDate =
                          _context.WeightExercises.
                          Where(x => x.OwnerUserName == user.UserName && x.ActivityId == id).
                          ToList().
-                         Select(x => new Tuple<int, DateTime>(x.Id, GetLastWorkoutIdsOfExercise(x.WorkoutId))).
+                         Select(x => new Tuple<int, DateTime?>(x.Id, GetLastWorkoutIdsOfExercise(x.WorkoutId))).
                          OrderByDescending(x => x.Item2).
+                         Where(x => x.Item2 != null).
                          Take(take);
 
             var result = new List<WeightRoundDTO>(); 
@@ -205,9 +206,9 @@ namespace TrainingManager.WebApi.Controllers.Functions
             return result;
         }
 
-        private DateTime GetLastWorkoutIdsOfExercise(int workoutId) =>
+        private DateTime? GetLastWorkoutIdsOfExercise(int workoutId) =>
             _context.WeightWorkouts.
-                     Single(x => x.Id == workoutId).
+                     FirstOrDefault(x => x.Id == workoutId)?.
                      WorkoutDate;
     }
 }
