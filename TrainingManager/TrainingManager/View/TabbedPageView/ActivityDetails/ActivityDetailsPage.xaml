@@ -23,39 +23,51 @@
         <StackLayout>
             <Label Text="{Binding Date, Converter={StaticResource DateToStringConverter}}" Style="{StaticResource TitleSmall}" Margin="15,15,15,-25"/>
             <Label Text="Exercise details" Style="{StaticResource Title0}"/>
-            <controls:CardWithTextEntry CardMainText="Exercise name" CardEntry="{Binding SelectedActivity.ActivityName, Mode=TwoWay}"/>
-            <Grid Margin="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <controls:ToggleButtonCard Grid.Column="0" Margin="15,0,5,5"
-                                           CardMainText="Pin to home"
-                                           ToggleValue="{Binding SelectedActivity.IsWatched, Mode=TwoWay}"/>
-                <controls:SimpleCard Grid.Column="1" Margin="0,0,15,5"
-                                     CardMainText="Muscle"
-                                     CardSecondaryText="{Binding SelectedActivity.MainMuscleGroup}"
-                                     CardFrameTapped="{Binding MuscleSetupCommand}"/>
-            </Grid>
-            <Label Text="Personal record" Style="{StaticResource Title1}" />
-            <controls:LowCardWithLabels CardMainText="Weight"
-                                        CardMainEntry="{Binding SelectedActivityWeight}"
-                                        CardSecondaryText="Reps"
-                                        CardSecondaryEntry="{Binding SelectedActivityReps}"/>
-            <Label Text="Last time you did it" Style="{StaticResource Title1}" />
-            <ListView ItemsSource="{Binding PreviousRounds}">
-                <ListView.ItemTemplate>
-                    <DataTemplate>
-                        <ViewCell>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="auto"/>
+                </Grid.RowDefinitions>
+                <controls:CardWithTextEntry Grid.Row="0" CardMainText="Exercise name" CardEntry="{Binding SelectedActivity.ActivityName, Mode=TwoWay}"/>
+                <Grid Grid.Row="1" Margin="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:ToggleButtonCard Grid.Column="0" Margin="15,0,5,5"
+                                                CardMainText="Pin to home"
+                                                ToggleValue="{Binding SelectedActivity.IsWatched, Mode=TwoWay}"/>
+                    <controls:SimpleCard Grid.Column="1" Margin="0,0,15,5"
+                                            CardMainText="Muscle"
+                                            CardSecondaryText="{Binding SelectedActivity.MainMuscleGroup}"
+                                            CardFrameTapped="{Binding MuscleSetupCommand}"/>
+                </Grid>
+                <ListView Grid.Row="2" ItemsSource="{Binding PreviousRounds}">
+                    <ListView.Header>
+                        <StackLayout>
+                            <Label Text="Personal record" Style="{StaticResource Title1}" />
                             <controls:LowCardWithLabels CardMainText="Weight"
+                                            CardMainEntry="{Binding SelectedActivityWeight}"
+                                            CardSecondaryText="Reps"
+                                            CardSecondaryEntry="{Binding SelectedActivityReps}"/>
+                            <Label Text="Last time you did it" Style="{StaticResource Title1}" />
+                        </StackLayout>
+                    </ListView.Header>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <controls:LowCardWithLabels CardMainText="Weight"
                                         CardMainEntry="{Binding WeightOfExercise}"
                                         CardSecondaryText="Reps"
                                         CardSecondaryEntry="{Binding Reps}"/>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
-            <Button Text="Update" Command="{Binding UpdateExerciseCommand}" Style="{StaticResource RedButton}" VerticalOptions="EndAndExpand"/>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+                <Button Grid.Row="3" Text="Update" Command="{Binding UpdateExerciseCommand}" Style="{StaticResource RedButton}" VerticalOptions="EndAndExpand"/>
+            </Grid>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

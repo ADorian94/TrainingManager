@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.Model;
@@ -93,18 +94,43 @@ namespace TrainingManager.ViewModel
         {
             var index = int.Parse((string)obj);
             SelectedActivity = new WeightActivityVM(Activites[index - 1]);
-            var activityDetails = await _apiServices.GetWeightActivityPRAsync(SelectedActivity.Id);
-            SelectedActivityReps = activityDetails.reps;
-            SelectedActivityWeight = activityDetails.weight;
-            var lastRounds = await _apiServices.GetPreviousRoundsAsync(SelectedActivity.Id);
-            PreviousRounds = new ObservableCollection<WeightRoundVM>(lastRounds.Select(x => new WeightRoundVM() 
-            {
-                Reps = x.Reps,
-                WeightOfExercise = x.WeightOfExercise,
-                RoundNumber = x.RoundNumber,
-                RoundGuid = x.RoundGuid
-            }));
+            await SetPrOfActvity(SelectedActivity.Id);
+            await SetLAtestRoundsOfActivity(SelectedActivity.Id);
             WeightActivitySelected?.Invoke(this, EventArgs.Empty);
+        }
+
+        private async Task SetLAtestRoundsOfActivity(Guid id)
+        {
+            try
+            {
+                var lastRounds = await _apiServices.GetPreviousRoundsAsync(id);
+                PreviousRounds = new ObservableCollection<WeightRoundVM>(lastRounds.Select(x => new WeightRoundVM()
+                {
+                    Reps = x.Reps,
+                    WeightOfExercise = x.WeightOfExercise,
+                    RoundNumber = x.RoundNumber,
+                    RoundGuid = x.RoundGuid
+                }));
+            }
+            catch
+            {
+                PreviousRounds = new ObservableCollection<WeightRoundVM>();
+            }
+        }
+
+        private async Task SetPrOfActvity(Guid id)
+        {
+            try
+            {
+                var activityDetails = await _apiServices.GetWeightActivityPRAsync(id);
+                SelectedActivityReps = activityDetails.reps;
+                SelectedActivityWeight = activityDetails.weight;
+            }
+            catch
+            {
+                SelectedActivityReps = 0;
+                SelectedActivityWeight = 0;
+            }
         }
 
         private async void SearchFunction(object obj)
