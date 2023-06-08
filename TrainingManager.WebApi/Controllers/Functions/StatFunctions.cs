@@ -161,12 +161,16 @@ namespace TrainingManager.WebApi.Controllers.Functions
         {
             var actualDate = DateTime.Now;
             var actualDay = actualDate.DayOfWeek;
-            var days = new List<DayOfWeek>() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday };
-            int dayIndex = days.IndexOf(actualDay);
+            
+            if(actualDate.Year == workoutDate.Year)
+            {
+                var days = new List<DayOfWeek>() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday };
+                int dayIndex = days.IndexOf(actualDay);
 
-            if (actualDate.DayOfYear - (dayIndex + 1) < workoutDate.DayOfYear &&
-                actualDate.DayOfYear + (days.Count - 1 - dayIndex) > workoutDate.DayOfYear)
-                return true;
+                if (actualDate.DayOfYear - (dayIndex + 1) < workoutDate.DayOfYear &&
+                    actualDate.DayOfYear + (days.Count - 1 - dayIndex) > workoutDate.DayOfYear)
+                    return true;
+            }
 
             return false;
         }

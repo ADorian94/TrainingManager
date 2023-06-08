@@ -101,6 +101,61 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("{date}")]
+        public IActionResult GetWeightWorkout([FromRoute] DateTime date)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                return Ok(_context.WeightWorkouts.Where(x => x.WorkoutDate.Year == date.Year && x.WorkoutDate.DayOfYear == date.DayOfYear && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
+                {
+                    Id = weightWorkout.Id,
+                    WorkoutName = weightWorkout.WorkoutName,
+                    WorkoutGuid = weightWorkout.WorkoutGuid,
+                    Note = weightWorkout.Note,
+                    TotalWeight = weightWorkout.TotalWeight,
+                    WorkoutType = weightWorkout.WorkoutType,
+                    WorkoutDate = weightWorkout.WorkoutDate,
+                    WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    {
+                        Id = i.Id,
+                        WorkoutId = weightWorkout.Id,
+                        ImageLarge = i.ImageLarge,
+                        ImageSmall = i.ImageSmall,
+                    }).ToList(),
+                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
+                    {
+                        ExerciseGuid = x.ExerciseGuid,
+                        Id = x.Id,
+                        ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
+                        Note = x.Note,
+                        TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.Color,
+                        MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
+                        WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
+                        {
+                            Id = r.Id,
+                            Reps = r.Reps,
+                            RoundGuid = r.RoundGuid,
+                            RoundNumber = r.RoundNumber,
+                            WeightOfExercise = r.WeightOfExercise,
+                            Color = r.Color
+                        }).ToList()
+                    }).ToList(),
+                }).Single());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // PUT: api/WeightWorkouts/5
         [HttpPut]
         public async Task<IActionResult> PutWeightWorkout([FromBody] WeightWorkoutDTO weightWorkoutDTO)
