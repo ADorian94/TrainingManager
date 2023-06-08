@@ -83,6 +83,46 @@ namespace TrainingManager.ViewModel
         private async void WorkoutDateSelectedFunction(object obj)
         {
             DateTime selectedDateUTC = new DateTime(((DateTime)obj).Ticks, DateTimeKind.Utc);
+
+            if (WorkoutDates.Any(x => x.Date.Year == selectedDateUTC.Year && x.Date.DayOfYear == selectedDateUTC.DayOfYear))
+            {
+                WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync(selectedDateUTC);
+
+                NewWeightWorkout = new WeightWorkoutVM()
+                {
+                    Id = workout.Id,
+                    WorkoutName = workout.WorkoutName,
+                    WorkoutDate = workout.WorkoutDate,
+                    TotalWeight = workout.TotalWeight,
+                    WorkoutGuid = workout.WorkoutGuid,
+                    WorkoutType = workout.WorkoutType,
+                    Note = workout.Note,
+                    WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
+                    {
+                        ExerciseGuid = x.ExerciseGuid,
+                        ExerciseName = x.ExerciseName,
+                        ExerciseNote = x.Note,
+                        TotalExerciseWeight = x.TotalExerciseWeight,
+                        TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                        ExerciseColor = x.Color,
+                        MainMuscle = x.MainMuscleGroup,
+                        WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
+                        {
+                            RoundGuid = y.RoundGuid,
+                            RoundNumber = y.RoundNumber,
+                            Reps = y.Reps,
+                            WeightOfExercise = y.WeightOfExercise,
+                            RoundColor = y.Color
+                        })),
+                    }))
+                };
+            }
+            else
+            {
+                NewWeightWorkout = new WeightWorkoutVM(selectedDateUTC);
+            }
+
+            /*
             var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
 
             if (workouts.Any(x => x.WorkoutDate.Year == selectedDateUTC.Year && x.WorkoutDate.DayOfYear == selectedDateUTC.DayOfYear))
@@ -122,7 +162,7 @@ namespace TrainingManager.ViewModel
             else
             {
                 NewWeightWorkout = new WeightWorkoutVM(selectedDateUTC);
-            }
+            }*/
 
             WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
             WeightWorkoutDateSelected?.Invoke(this, selectedDateUTC);
@@ -173,7 +213,7 @@ namespace TrainingManager.ViewModel
         //PRIVATE
         private void UpdateMonthData() => SetMovedWeightsInTheMonth();
 
-        private void SetMovedWeightsInTheMonth() => 
+        private void SetMovedWeightsInTheMonth() =>
             MovedWeightsInTheMonth = MovedWeightsByMonth != null && MovedWeightsByMonth.Any(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month) ?
                 MovedWeightsByMonth.Single(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month).Weight :
                 0.0;

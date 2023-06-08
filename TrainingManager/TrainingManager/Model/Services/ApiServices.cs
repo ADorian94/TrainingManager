@@ -44,6 +44,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<WeightWorkoutDTO> GetWeightWorkoutAsync(DateTime date)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/{date}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<WeightWorkoutDTO>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync()
         {
             try
@@ -147,7 +165,7 @@ namespace TrainingManager.Model.Services
             try
             {
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/SearchWorkout/{keyWords}");
-                
+
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
                 else
@@ -204,7 +222,7 @@ namespace TrainingManager.Model.Services
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/GetWatchedMaxWeightActivities");
 
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadAsAsync< ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
+                    return await response.Content.ReadAsAsync<ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
                 else
                     throw new Exception("Server respond is not success.");
             }
