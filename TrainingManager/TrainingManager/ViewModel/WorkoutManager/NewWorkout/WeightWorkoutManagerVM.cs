@@ -101,10 +101,8 @@ namespace TrainingManager.ViewModel
             if (!IsReadyReadyToSave())
                 return;
 
-            IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
-
             //Meglévő edzés szerkesztése
-            if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
+            if (await ApiServices.IsWeightWorkoutExitsAsync(DateTime.Now.Date))
             {
                 await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
                 {

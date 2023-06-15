@@ -135,40 +135,35 @@ namespace TrainingManager.ViewModel
 
         private async void WeightWorkoutMenuSelectedFunction(object obj)
         {
-            var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
+            WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync((string)obj);
 
-            if (workouts.Any(x => x.WorkoutGuid.ToString() == ((string)obj)))
+            NewWeightWorkout = new WeightWorkoutVM()
             {
-                WeightWorkoutDTO workout = workouts.Single(x => x.WorkoutGuid.ToString() == ((string)obj));
-
-                NewWeightWorkout = new WeightWorkoutVM()
+                Id = workout.Id,
+                WorkoutName = workout.WorkoutName,
+                WorkoutDate = workout.WorkoutDate,
+                TotalWeight = workout.TotalWeight,
+                WorkoutGuid = workout.WorkoutGuid,
+                WorkoutType = workout.WorkoutType,
+                Note = workout.Note,
+                WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
                 {
-                    Id = workout.Id,
-                    WorkoutName = workout.WorkoutName,
-                    WorkoutDate = workout.WorkoutDate,
-                    TotalWeight = workout.TotalWeight,
-                    WorkoutGuid = workout.WorkoutGuid,
-                    WorkoutType = workout.WorkoutType,
-                    Note = workout.Note,
-                    WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
+                    ExerciseGuid = x.ExerciseGuid,
+                    ExerciseName = x.ExerciseName,
+                    ExerciseNote = x.Note,
+                    TotalExerciseWeight = x.TotalExerciseWeight,
+                    TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                    WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
                     {
-                        ExerciseGuid = x.ExerciseGuid,
-                        ExerciseName = x.ExerciseName,
-                        ExerciseNote = x.Note,
-                        TotalExerciseWeight = x.TotalExerciseWeight,
-                        TotalExerciseRounds = x.WeightRoundsDto.Count(),
-                        WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
-                        {
-                            RoundGuid = y.RoundGuid,
-                            RoundNumber = y.RoundNumber,
-                            Reps = y.Reps,
-                            WeightOfExercise = y.WeightOfExercise
-                        })),
-                    }))
-                };
+                        RoundGuid = y.RoundGuid,
+                        RoundNumber = y.RoundNumber,
+                        Reps = y.Reps,
+                        WeightOfExercise = y.WeightOfExercise
+                    })),
+                }))
+            };
 
-                RecentWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
-            }
+            RecentWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
         }
 
         public async void OnProfileChanged(object sender, EventArgs e) => await InitializeProfilePicture();

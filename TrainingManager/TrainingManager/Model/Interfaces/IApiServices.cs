@@ -13,6 +13,9 @@ namespace TrainingManager.Model
         Task<bool> LogoutAsync();
         Task<IEnumerable<WeightWorkoutDTO>> GetWeightWorkoutsAsync();
         Task<WeightWorkoutDTO> GetWeightWorkoutAsync(DateTime date);
+        Task<WeightWorkoutDTO> GetWeightWorkoutAsync(string guid);
+        Task<bool> IsWeightWorkoutExitsAsync(string guid);
+        Task<bool> IsWeightWorkoutExitsAsync(DateTime date);
         Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync();
         Task<bool> UploadProfilePicture(byte[] image);
         Task<byte[]> DownloadProfilePictureAsync();
@@ -20,6 +23,7 @@ namespace TrainingManager.Model
         Task<bool> AddWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto);
         Task<bool> EditWeightWorkoutAsync(WeightWorkoutDTO weigthWorkoutDto);
         Task<bool> DeleteWeightWorkoutAsync(int workoutId);
+        Task<bool> DeleteWeightWorkoutAsync(string guid);
         Task<IEnumerable<WeightActivityDTO>> GetWeightActivitiesAsync();
         Task<IEnumerable<WeightRoundDTO>> GetPreviousRoundsAsync(Guid id, int take);
         Task<IEnumerable<WeightExerciseDTO>> GetWeightExercisesAsync();

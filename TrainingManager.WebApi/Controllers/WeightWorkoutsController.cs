@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
@@ -56,7 +58,7 @@ namespace TrainingManager.WebApi.Controllers
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                return Ok(_context.WeightWorkouts.Where(x => x.Id == id && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
+                return Ok(_context.WeightWorkouts.AsNoTracking().Where(x => x.Id == id && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
                 {
                     Id = weightWorkout.Id,
                     WorkoutName = weightWorkout.WorkoutName,
@@ -65,23 +67,23 @@ namespace TrainingManager.WebApi.Controllers
                     TotalWeight = weightWorkout.TotalWeight,
                     WorkoutType = weightWorkout.WorkoutType,
                     WorkoutDate = weightWorkout.WorkoutDate,
-                    WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    WorkoutImages = _context.WorkoutImages.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
                     {
                         Id = i.Id,
                         WorkoutId = weightWorkout.Id,
                         ImageLarge = i.ImageLarge,
                         ImageSmall = i.ImageSmall,
                     }).ToList(),
-                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
+                    WeightExercisesDto = _context.WeightExercises.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         Id = x.Id,
-                        ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
+                        ExerciseName = _context.WeightActivities.AsNoTracking().Single(a => a.Id == x.ActivityId).ActivityName,
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.Color,
                         MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
-                        WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
+                        WeightRoundsDto = _context.WeightRounds.AsNoTracking().Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
                             Reps = r.Reps,
@@ -111,7 +113,7 @@ namespace TrainingManager.WebApi.Controllers
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                return Ok(_context.WeightWorkouts.Where(x => x.WorkoutDate.Year == date.Year && x.WorkoutDate.DayOfYear == date.DayOfYear && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
+                return Ok(_context.WeightWorkouts.AsNoTracking().Where(x => x.WorkoutDate.Year == date.Year && x.WorkoutDate.DayOfYear == date.DayOfYear && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
                 {
                     Id = weightWorkout.Id,
                     WorkoutName = weightWorkout.WorkoutName,
@@ -120,23 +122,23 @@ namespace TrainingManager.WebApi.Controllers
                     TotalWeight = weightWorkout.TotalWeight,
                     WorkoutType = weightWorkout.WorkoutType,
                     WorkoutDate = weightWorkout.WorkoutDate,
-                    WorkoutImages = _context.WorkoutImages.Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    WorkoutImages = _context.WorkoutImages.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
                     {
                         Id = i.Id,
                         WorkoutId = weightWorkout.Id,
                         ImageLarge = i.ImageLarge,
                         ImageSmall = i.ImageSmall,
                     }).ToList(),
-                    WeightExercisesDto = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
+                    WeightExercisesDto = _context.WeightExercises.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
                     {
                         ExerciseGuid = x.ExerciseGuid,
                         Id = x.Id,
-                        ExerciseName = _context.WeightActivities.Single(a => a.Id == x.ActivityId).ActivityName,
+                        ExerciseName = _context.WeightActivities.AsNoTracking().Single(a => a.Id == x.ActivityId).ActivityName,
                         Note = x.Note,
                         TotalExerciseWeight = x.TotalExerciseWeight,
                         Color = x.Color,
                         MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
-                        WeightRoundsDto = _context.WeightRounds.Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
+                        WeightRoundsDto = _context.WeightRounds.AsNoTracking().Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
                         {
                             Id = r.Id,
                             Reps = r.Reps,
@@ -151,6 +153,97 @@ namespace TrainingManager.WebApi.Controllers
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("GetWeightWorkoutByGuid/{guid}")]
+        public IActionResult GetWeightWorkout([FromRoute] string guid)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                return Ok(_context.WeightWorkouts.AsNoTracking().Where(x => x.WorkoutGuid.ToString() == guid && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
+                {
+                    Id = weightWorkout.Id,
+                    WorkoutName = weightWorkout.WorkoutName,
+                    WorkoutGuid = weightWorkout.WorkoutGuid,
+                    Note = weightWorkout.Note,
+                    TotalWeight = weightWorkout.TotalWeight,
+                    WorkoutType = weightWorkout.WorkoutType,
+                    WorkoutDate = weightWorkout.WorkoutDate,
+                    WorkoutImages = _context.WorkoutImages.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    {
+                        Id = i.Id,
+                        WorkoutId = weightWorkout.Id,
+                        ImageLarge = i.ImageLarge,
+                        ImageSmall = i.ImageSmall,
+                    }).ToList(),
+                    WeightExercisesDto = _context.WeightExercises.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
+                    {
+                        ExerciseGuid = x.ExerciseGuid,
+                        Id = x.Id,
+                        ExerciseName = _context.WeightActivities.AsNoTracking().Single(a => a.Id == x.ActivityId).ActivityName,
+                        Note = x.Note,
+                        TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.Color,
+                        MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
+                        WeightRoundsDto = _context.WeightRounds.AsNoTracking().Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
+                        {
+                            Id = r.Id,
+                            Reps = r.Reps,
+                            RoundGuid = r.RoundGuid,
+                            RoundNumber = r.RoundNumber,
+                            WeightOfExercise = r.WeightOfExercise,
+                            Color = r.Color
+                        }).ToList()
+                    }).ToList(),
+                }).Single());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("IsWeightWorkoutExistsByGuid/{guid}")]
+        public IActionResult IsWeightWorkoutExists([FromRoute] string guid)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_context.WeightWorkouts.Any(x => x.OwnerUserName == user.UserName && x.WorkoutGuid.ToString() == guid));
+            }
+            catch (Exception ex)
+            {
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        [HttpGet("IsWeightWorkoutExistsByDate/{date}")]
+        public IActionResult IsWeightWorkoutExists([FromRoute] DateTime date)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_context.WeightWorkouts.Any(x => x.OwnerUserName == user.UserName && x.WorkoutDate.Year == date.Year && x.WorkoutDate.DayOfYear == date.DayOfYear));
+            }
+            catch (Exception ex)
+            {
                 // Internal Server Error
                 return StatusCode(StatusCodes.Status500InternalServerError);
             }
@@ -275,6 +368,38 @@ namespace TrainingManager.WebApi.Controllers
                     return NotFound();
 
                 if (_context.WorkoutImages.Any(x => x.OwnerUserName == user.UserName && x.WorkoutId == id))
+                    await RemoveImages(weightWorkout.Id);
+
+                await RemoveExercises(weightWorkout.Id);
+                _context.WeightWorkouts.Remove(weightWorkout);
+                await _context.SaveChangesAsync();
+
+                return Ok(weightWorkout);
+            }
+            catch
+            {
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
+        // DELETE: api/WeightWorkouts/5
+        [HttpDelete("{guid}")]
+        public async Task<IActionResult> DeleteWeightWorkout([FromRoute] string guid)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                var weightWorkout = _context.WeightWorkouts.Single(x => x.OwnerUserName == user.UserName && x.WorkoutGuid.ToString() == guid);
+
+                if (weightWorkout == null)
+                    return NotFound();
+
+                if (_context.WorkoutImages.Any(x => x.OwnerUserName == user.UserName && x.WorkoutId == weightWorkout.Id))
                     await RemoveImages(weightWorkout.Id);
 
                 await RemoveExercises(weightWorkout.Id);
