@@ -13,6 +13,8 @@ namespace TrainingManager.ViewModel
 {
     public class WeightHistoryVM : WorkoutManagerBaseVM
     {
+        private Dictionary<DateTime, Guid> _workoutGuids;
+
         public WeightHistoryVM(IApiServices apiServices)
         {
             ApiServices = apiServices;
@@ -32,17 +34,20 @@ namespace TrainingManager.ViewModel
                 SetMovedWeightsInTheMonth();
                 var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
                 WorkoutDates = new ObservableCollection<SpecialDate>();
+                _workoutGuids = new Dictionary<DateTime, Guid>();
                 var items = new List<HistoryItemVM>();
 
                 foreach (var workout in workouts)
                 {
-                    WorkoutDates.Add(new SpecialDate(workout.WorkoutDate)
+                    var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
+                    WorkoutDates.Add(new SpecialDate(date)
                     {
                         TextColor = Color.FromHex(workout.WorkoutDate.ToUniversalTime() < DateTime.Now.ToUniversalTime() ? "#03A9F9" : "#ff6961"),
                         Selectable = true,
                         FontAttributes = FontAttributes.Bold,
                     });
 
+                    _workoutGuids.Add(date, workout.WorkoutGuid);
                     items.Add(new HistoryItemVM(workout));
                 }
 
@@ -90,36 +95,8 @@ namespace TrainingManager.ViewModel
 
                 if (WorkoutDates.Any(x => x.Date.Year == selectedDateUTC.Year && x.Date.DayOfYear == selectedDateUTC.DayOfYear))
                 {
-                    WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync(selectedDateUTC);
-
-                    NewWeightWorkout = new WeightWorkoutVM()
-                    {
-                        Id = workout.Id,
-                        WorkoutName = workout.WorkoutName,
-                        WorkoutDate = workout.WorkoutDate,
-                        TotalWeight = workout.TotalWeight,
-                        WorkoutGuid = workout.WorkoutGuid,
-                        WorkoutType = workout.WorkoutType,
-                        Note = workout.Note,
-                        WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
-                        {
-                            ExerciseGuid = x.ExerciseGuid,
-                            ExerciseName = x.ExerciseName,
-                            ExerciseNote = x.Note,
-                            TotalExerciseWeight = x.TotalExerciseWeight,
-                            TotalExerciseRounds = x.WeightRoundsDto.Count(),
-                            ExerciseColor = x.Color,
-                            MainMuscle = x.MainMuscleGroup,
-                            WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
-                            {
-                                RoundGuid = y.RoundGuid,
-                                RoundNumber = y.RoundNumber,
-                                Reps = y.Reps,
-                                WeightOfExercise = y.WeightOfExercise,
-                                RoundColor = y.Color
-                            })),
-                        }))
-                    };
+                    WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync(_workoutGuids[selectedDateUTC].ToString());
+                    NewWeightWorkout = WeightWorkoutHelper.WorkoutDTOToVM(workout);
                 }
                 else
                 {

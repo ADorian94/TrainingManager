@@ -5,7 +5,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
@@ -272,7 +271,7 @@ namespace TrainingManager.WebApi.Controllers
                 weightWorkout.Note = weightWorkoutDTO.Note;
                 weightWorkout.TotalWeight = weightWorkoutDTO.TotalWeight;
                 weightWorkout.WorkoutType = weightWorkoutDTO.WorkoutType;
-                weightWorkout.WorkoutDate = weightWorkoutDTO.WorkoutDate;
+                weightWorkout.WorkoutDate = new DateTime(weightWorkoutDTO.WorkoutDate.Date.Year, weightWorkoutDTO.WorkoutDate.Month, weightWorkoutDTO.WorkoutDate.Date.Day);
 
                 List<WeightExercise> weightExercises = _context.WeightExercises.Where(x => x.WorkoutId == weightWorkoutDTO.Id).ToList();
 
@@ -327,7 +326,7 @@ namespace TrainingManager.WebApi.Controllers
                     Note = weightWorkoutDTO.Note,
                     TotalWeight = weightWorkoutDTO.TotalWeight,
                     WorkoutType = weightWorkoutDTO.WorkoutType,
-                    WorkoutDate = weightWorkoutDTO.WorkoutDate.Date,
+                    WorkoutDate = new DateTime(weightWorkoutDTO.WorkoutDate.Date.Year, weightWorkoutDTO.WorkoutDate.Month, weightWorkoutDTO.WorkoutDate.Date.Day),
                     OwnerUserName = user.UserName,
                 };
 
