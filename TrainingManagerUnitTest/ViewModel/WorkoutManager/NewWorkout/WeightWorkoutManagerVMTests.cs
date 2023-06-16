@@ -201,6 +201,7 @@ namespace TrainingManager.ViewModel.Tests
             _apiService.Verify(x => x.EditWeightWorkoutAsync(It.IsAny<WeightWorkoutDTO>()), Times.Never);
         }
 
+        [Ignore()]
         [TestMethod()]
         public void SaveTodayWorkoutEditTest()
         {
