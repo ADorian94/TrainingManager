@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NLog.LayoutRenderers.Wrappers;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -82,48 +83,56 @@ namespace TrainingManager.ViewModel
         //COMMAND FUNCTIONS
         private async void WorkoutDateSelectedFunction(object obj)
         {
-            DateTime selectedDateUTC = new DateTime(((DateTime)obj).Ticks, DateTimeKind.Utc);
-
-            if (WorkoutDates.Any(x => x.Date.Year == selectedDateUTC.Year && x.Date.DayOfYear == selectedDateUTC.DayOfYear))
+            try
             {
-                WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync(selectedDateUTC);
 
-                NewWeightWorkout = new WeightWorkoutVM()
+                DateTime selectedDateUTC = new DateTime(((DateTime)obj).Ticks, DateTimeKind.Utc);
+
+                if (WorkoutDates.Any(x => x.Date.Year == selectedDateUTC.Year && x.Date.DayOfYear == selectedDateUTC.DayOfYear))
                 {
-                    Id = workout.Id,
-                    WorkoutName = workout.WorkoutName,
-                    WorkoutDate = workout.WorkoutDate,
-                    TotalWeight = workout.TotalWeight,
-                    WorkoutGuid = workout.WorkoutGuid,
-                    WorkoutType = workout.WorkoutType,
-                    Note = workout.Note,
-                    WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
-                    {
-                        ExerciseGuid = x.ExerciseGuid,
-                        ExerciseName = x.ExerciseName,
-                        ExerciseNote = x.Note,
-                        TotalExerciseWeight = x.TotalExerciseWeight,
-                        TotalExerciseRounds = x.WeightRoundsDto.Count(),
-                        ExerciseColor = x.Color,
-                        MainMuscle = x.MainMuscleGroup,
-                        WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
-                        {
-                            RoundGuid = y.RoundGuid,
-                            RoundNumber = y.RoundNumber,
-                            Reps = y.Reps,
-                            WeightOfExercise = y.WeightOfExercise,
-                            RoundColor = y.Color
-                        })),
-                    }))
-                };
-            }
-            else
-            {
-                NewWeightWorkout = new WeightWorkoutVM(selectedDateUTC);
-            }
+                    WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync(selectedDateUTC);
 
-            WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
-            WeightWorkoutDateSelected?.Invoke(this, selectedDateUTC);
+                    NewWeightWorkout = new WeightWorkoutVM()
+                    {
+                        Id = workout.Id,
+                        WorkoutName = workout.WorkoutName,
+                        WorkoutDate = workout.WorkoutDate,
+                        TotalWeight = workout.TotalWeight,
+                        WorkoutGuid = workout.WorkoutGuid,
+                        WorkoutType = workout.WorkoutType,
+                        Note = workout.Note,
+                        WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
+                        {
+                            ExerciseGuid = x.ExerciseGuid,
+                            ExerciseName = x.ExerciseName,
+                            ExerciseNote = x.Note,
+                            TotalExerciseWeight = x.TotalExerciseWeight,
+                            TotalExerciseRounds = x.WeightRoundsDto.Count(),
+                            ExerciseColor = x.Color,
+                            MainMuscle = x.MainMuscleGroup,
+                            WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
+                            {
+                                RoundGuid = y.RoundGuid,
+                                RoundNumber = y.RoundNumber,
+                                Reps = y.Reps,
+                                WeightOfExercise = y.WeightOfExercise,
+                                RoundColor = y.Color
+                            })),
+                        }))
+                    };
+                }
+                else
+                {
+                    NewWeightWorkout = new WeightWorkoutVM(selectedDateUTC);
+                }
+
+                WeightWorkoutBookmark = new WeightWorkoutVM(NewWeightWorkout);
+                WeightWorkoutDateSelected?.Invoke(this, selectedDateUTC);
+            }
+            catch (Exception ex)
+            {
+                OnExeptionOccured(new ExceptionArgs(ex));
+            }
         }
 
         private async void HistoryWorkoutItemSelectedFunction(object obj)
