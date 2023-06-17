@@ -68,16 +68,13 @@ namespace TrainingManager.WebApi.Controllers
                     return BadRequest(ModelState);
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                int activityId = _context.WeightActivities.Single(x => x.OwnerUserName == user.UserName && x.ActivityGuid == id).Id;
 
-                var maximums = _statFunctions.FindMaxMovedWeightsByActivites(
-                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
-                        _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)
-                        .Where(x => x.ActivityGuid == id));
-
-                if (maximums == null || maximums.Count() == 0)
-                    return NotFound();
-
-                return Ok(maximums.FirstOrDefault());
+                return Ok(
+                    _statFunctions.FindMaxMovedWeightsOfActivity(
+                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName && u.ActivityId == activityId)
+                        )
+                    );
             }
             catch
             {
