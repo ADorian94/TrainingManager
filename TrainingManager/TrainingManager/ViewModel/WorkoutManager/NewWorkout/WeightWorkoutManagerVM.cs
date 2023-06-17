@@ -27,9 +27,9 @@ namespace TrainingManager.ViewModel
         /// <summary>
         /// A szerverről lekérdezzük a mai naphoz tartozó edzést. 
         /// </summary>
-        private void SetupTodayWeightWorkoutDetails(IEnumerable<WeightWorkoutDTO> workoutsFromServer)
+        private async void SetupTodayWeightWorkoutDetails(int year, int dayOfYear)
         {
-            WeightWorkoutDTO weightWorkoutDTO = workoutsFromServer.FirstOrDefault(x => x.WorkoutDate.Date == DateTime.Now.Date);
+            var weightWorkoutDTO = await ApiServices.GetWeightWorkoutAsync(year, dayOfYear);
 
             NewWeightWorkout = new WeightWorkoutVM()
             {
@@ -77,10 +77,10 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                IEnumerable<WeightWorkoutDTO> weightWorkoutDTOs = await ApiServices.GetWeightWorkoutsAsync();
+                var today = DateTime.Now.ToUniversalTime();
 
-                if (weightWorkoutDTOs != null && weightWorkoutDTOs.Any(x => x.WorkoutDate.Date == DateTime.Now.Date))
-                    SetupTodayWeightWorkoutDetails(weightWorkoutDTOs);
+                if (await ApiServices.IsWeightWorkoutExitsAsync(today.Year, today.DayOfYear))
+                    SetupTodayWeightWorkoutDetails(today.Year, today.DayOfYear);
                 else
                 {
                     NewWeightWorkout = new WeightWorkoutVM();
@@ -101,73 +101,21 @@ namespace TrainingManager.ViewModel
             if (!IsReadyReadyToSave())
                 return;
 
-            //Meglévő edzés szerkesztése
-            if (await ApiServices.IsWeightWorkoutExitsAsync(DateTime.Now.Date))
-            {
-                await ApiServices.EditWeightWorkoutAsync(new WeightWorkoutDTO
-                {
-                    Id = NewWeightWorkout.Id,
-                    WorkoutDate = DateTime.Now.ToUniversalTime(),
-                    TotalWeight = NewWeightWorkout.TotalWeight,
-                    WorkoutName = NewWeightWorkout.WorkoutName,
-                    WorkoutGuid = NewWeightWorkout.WorkoutGuid,
-                    Note = NewWeightWorkout.Note,
-                    WorkoutType = WorkoutType.WeightWorkout,
-                    WorkoutImages = null,
-                    WeightExercisesDto = new List<WeightExerciseDTO>(NewWeightWorkout.WeightExercises.Select(x => new WeightExerciseDTO()
-                    {
-                        ExerciseGuid = x.ExerciseGuid,
-                        ExerciseName = x.ExerciseName,
-                        Note = x.ExerciseNote,
-                        TotalExerciseWeight = x.TotalExerciseWeight,
-                        Color = x.ExerciseColor,
-                        MainMuscleGroup = x.MainMuscle,
-                        WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
-                        {
-                            Reps = y.Reps,
-                            RoundGuid = y.RoundGuid,
-                            RoundNumber = y.RoundNumber,
-                            WeightOfExercise = y.WeightOfExercise,
-                            Color = y.RoundColor
-                        })),
-                    })),
-                });
+            var workoutToSave = WeightWorkoutHelper.WorkoutVMToDTO(NewWeightWorkout);
 
+            //Meglévő edzés szerkesztése
+            if (await ApiServices.IsWeightWorkoutExitsAsync(NewWeightWorkout.WorkoutGuid.ToString()))
+            {
+                workoutToSave.Id = NewWeightWorkout.Id;
+                await ApiServices.EditWeightWorkoutAsync(workoutToSave);
                 LogHandler.Instance.Nlog.Info("Existing workout edited.");
             }
             //Új edzés létrehozása
             else
             {
                 //ha még nincs a mai naphoz workout, akkor létrehozzuk és feltöltjük
-                var newWorkout = new WeightWorkoutDTO
-                {
-                    WorkoutDate = DateTime.Now.ToUniversalTime(),
-                    TotalWeight = NewWeightWorkout.TotalWeight,
-                    WorkoutGuid = Guid.NewGuid(),
-                    WorkoutName = NewWeightWorkout.WorkoutName,
-                    Note = NewWeightWorkout.Note,
-                    WorkoutType = WorkoutType.WeightWorkout,
-                    WorkoutImages = null,
-                    WeightExercisesDto = new List<WeightExerciseDTO>(NewWeightWorkout.WeightExercises.Select(x => new WeightExerciseDTO()
-                    {
-                        ExerciseGuid = x.ExerciseGuid,
-                        ExerciseName = x.ExerciseName,
-                        Note = x.ExerciseNote,
-                        TotalExerciseWeight = x.TotalExerciseWeight,
-                        Color = x.ExerciseColor,
-                        MainMuscleGroup = x.MainMuscle,
-                        WeightRoundsDto = new List<WeightRoundDTO>(x.WeightRounds.Select(y => new WeightRoundDTO()
-                        {
-                            Reps = y.Reps,
-                            RoundGuid = y.RoundGuid,
-                            RoundNumber = y.RoundNumber,
-                            WeightOfExercise = y.WeightOfExercise,
-                            Color = y.RoundColor
-                        })),
-                    })),
-                };
-                await ApiServices.AddWeightWorkoutAsync(newWorkout);
-                NewWeightWorkout.Id = newWorkout.Id;
+                await ApiServices.AddWeightWorkoutAsync(workoutToSave);
+                NewWeightWorkout.Id = workoutToSave.Id;
                 LogHandler.Instance.Nlog.Info("New workout saved.");
             }
 

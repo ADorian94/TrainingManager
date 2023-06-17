@@ -11,6 +11,7 @@ using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
+using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace TrainingManager.WebApi.Controllers
 {
@@ -157,6 +158,61 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("{year}/{dayOfYear}")]
+        public IActionResult GetWeightWorkout([FromRoute] int year, int dayOfYear)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+
+                return Ok(_context.WeightWorkouts.AsNoTracking().Where(x => x.WorkoutDate.Year == year && x.WorkoutDate.DayOfYear == dayOfYear && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
+                {
+                    Id = weightWorkout.Id,
+                    WorkoutName = weightWorkout.WorkoutName,
+                    WorkoutGuid = weightWorkout.WorkoutGuid,
+                    Note = weightWorkout.Note,
+                    TotalWeight = weightWorkout.TotalWeight,
+                    WorkoutType = weightWorkout.WorkoutType,
+                    WorkoutDate = weightWorkout.WorkoutDate,
+                    WorkoutImages = _context.WorkoutImages.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id).Select(i => new ImageDTO()
+                    {
+                        Id = i.Id,
+                        WorkoutId = weightWorkout.Id,
+                        ImageLarge = i.ImageLarge,
+                        ImageSmall = i.ImageSmall,
+                    }).ToList(),
+                    WeightExercisesDto = _context.WeightExercises.AsNoTracking().Where(x => x.WorkoutId == weightWorkout.Id && x.TotalExerciseWeight > 0.0).Select(x => new WeightExerciseDTO()
+                    {
+                        ExerciseGuid = x.ExerciseGuid,
+                        Id = x.Id,
+                        ExerciseName = _context.WeightActivities.AsNoTracking().Single(a => a.Id == x.ActivityId).ActivityName,
+                        Note = x.Note,
+                        TotalExerciseWeight = x.TotalExerciseWeight,
+                        Color = x.Color,
+                        MainMuscleGroup = _statFunctions.TryGetMuscle(_context.WeightActivities.Single(a => a.Id == x.ActivityId)),
+                        WeightRoundsDto = _context.WeightRounds.AsNoTracking().Where(r => r.ExerciseId == x.Id).Select(r => new WeightRoundDTO()
+                        {
+                            Id = r.Id,
+                            Reps = r.Reps,
+                            RoundGuid = r.RoundGuid,
+                            RoundNumber = r.RoundNumber,
+                            WeightOfExercise = r.WeightOfExercise,
+                            Color = r.Color
+                        }).ToList()
+                    }).ToList(),
+                }).Single());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetWeightWorkoutByGuid/{guid}")]
         public IActionResult GetWeightWorkout([FromRoute] string guid)
         {
@@ -248,10 +304,30 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("IsWeightWorkoutExistsByYearAndDay/{year}/{dayOfYear}")]
+        public IActionResult IsWeightWorkoutExists([FromRoute] int year, int dayOfYear)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(_context.WeightWorkouts.Any(x => x.OwnerUserName == user.UserName && x.WorkoutDate.Year == year && x.WorkoutDate.DayOfYear == dayOfYear));
+            }
+            catch (Exception ex)
+            {
+                // Internal Server Error
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         // PUT: api/WeightWorkouts/5
         [HttpPut]
         public async Task<IActionResult> PutWeightWorkout([FromBody] WeightWorkoutDTO weightWorkoutDTO)
         {
+            //var transaction = _context.Database.BeginTransaction();
+
             try
             {
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
@@ -260,11 +336,11 @@ namespace TrainingManager.WebApi.Controllers
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
-                if (weightWorkout.Id != weightWorkoutDTO.Id)
-                    return BadRequest();
-
                 if (weightWorkout == null)
                     return NotFound();
+
+                if (weightWorkout.Id != weightWorkoutDTO.Id)
+                    return BadRequest();
 
                 weightWorkout.WorkoutGuid = weightWorkoutDTO.WorkoutGuid;
                 weightWorkout.WorkoutName = weightWorkoutDTO.WorkoutName;
@@ -294,6 +370,7 @@ namespace TrainingManager.WebApi.Controllers
                 }
 
                 await _context.SaveChangesAsync();
+
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
 
                 if (weightWorkoutDTO.WorkoutImages != null)

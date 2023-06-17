@@ -141,7 +141,7 @@ namespace TrainingManager.ViewModel
         {
             var workoutToSave = WeightWorkoutHelper.WorkoutVMToDTO(NewWeightWorkout);
 
-            if (await ApiServices.IsWeightWorkoutExitsAsync(NewWeightWorkout.WorkoutDate.Date))
+            if (await ApiServices.IsWeightWorkoutExitsAsync(NewWeightWorkout.WorkoutDate.Year, NewWeightWorkout.WorkoutDate.DayOfYear))
             {
                 workoutToSave.Id = NewWeightWorkout.Id;
                 workoutToSave.WorkoutGuid = NewWeightWorkout.WorkoutGuid;

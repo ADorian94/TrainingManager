@@ -62,6 +62,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<WeightWorkoutDTO> GetWeightWorkoutAsync(int year, int dayOfYear)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/{year}/{dayOfYear}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<WeightWorkoutDTO>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<WeightWorkoutDTO> GetWeightWorkoutAsync(string guid)
         {
             try
@@ -103,6 +121,24 @@ namespace TrainingManager.Model.Services
             try
             {
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/IsWeightWorkoutExistsByDate/{date}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<bool>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> IsWeightWorkoutExitsAsync(int year, int dayOfYear)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/IsWeightWorkoutExistsByYearAndDay/{year}/{dayOfYear}");
 
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<bool>();
