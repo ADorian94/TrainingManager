@@ -70,6 +70,7 @@ namespace TrainingManager.ViewModel
                 Date = DateTime.Now;
                 WellcomeMessage = $"Hello{Environment.NewLine}{await ApiServices.GetNameOfTheUser()}";
                 await SetupManagerAsync();
+                await InitializeProfilePicture();
                 LogHandler.Instance.Nlog.Info("Setup home vm finished.");
             }
             catch (Exception ex)
@@ -117,10 +118,9 @@ namespace TrainingManager.ViewModel
         {
             var initializeTasks = new Task[]
             {
-                    UpdateRecentWorkoutsAsync(),
-                    InitializeWeeklyMuscleDataAsync(),
-                    InitPersonalRecords(),
-                    InitializeProfilePicture(),
+                UpdateRecentWorkoutsAsync(),
+                InitializeWeeklyMuscleDataAsync(),
+                InitPersonalRecords(),
             };
 
             await Task.WhenAll(initializeTasks);
