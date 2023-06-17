@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Data;
@@ -26,14 +25,14 @@ namespace TrainingManager.WebApi.Controllers.Functions
             {
                 var relatedExercises = exercises.Where(x => x.ActivityId == item.Id);
 
-                if(relatedExercises.Count() > 0)
+                if (relatedExercises.Count() > 0)
                 {
                     List<WeightRound> weightRounds = new List<WeightRound>();
 
                     foreach (var exercise in relatedExercises)
                         weightRounds = weightRounds.Concat(_context.WeightRounds.Where(x => x.ExerciseId == exercise.Id)).ToList();
-                    
-                    if(weightRounds.Count() > 0)
+
+                    if (weightRounds.Count() > 0)
                     {
                         (double weight, int reps) max = (weightRounds[0].WeightOfExercise, weightRounds[0].Reps);
 
@@ -46,7 +45,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
                         }
 
                         result.Add((new WeightActivityDTO()
-                        { 
+                        {
                             ActivityName = item.ActivityName,
                             MainMuscleGroup = item.MainMuscleGroup,
                             ActivityGuid = item.ActivityGuid,
@@ -135,7 +134,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
         public IEnumerable<(Muscle muscle, double weight)> CollectRecentMovedWeightsGroupByMuscle(IQueryable<WeightWorkout> workouts, IQueryable<WeightExercise> exercises, IQueryable<WeightActivity> activities)
         {
-            var thisWeeksWorkoutsIds = workouts.Where(x => IsThisWorkoutInThisWeek(x.WorkoutDate)).Select(x => x.Id);
+            var thisWeeksWorkoutsIds = workouts.Where(x => IsThisWorkoutInThisWeek(x.WorkoutDate.ToUniversalTime())).Select(x => x.Id);
             var relatedExercises = exercises.Where(x => thisWeeksWorkoutsIds.Contains(x.WorkoutId));
             var resutWeights = new List<(Muscle muscle, double weight)>();
 
@@ -159,10 +158,10 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
         private bool IsThisWorkoutInThisWeek(DateTime workoutDate)
         {
-            var actualDate = DateTime.Now;
+            var actualDate = DateTime.Now.ToUniversalTime();
             var actualDay = actualDate.DayOfWeek;
-            
-            if(actualDate.Year == workoutDate.Year)
+
+            if (actualDate.Year == workoutDate.Year)
             {
                 var days = new List<DayOfWeek>() { DayOfWeek.Monday, DayOfWeek.Tuesday, DayOfWeek.Wednesday, DayOfWeek.Thursday, DayOfWeek.Friday, DayOfWeek.Saturday, DayOfWeek.Sunday };
                 int dayIndex = days.IndexOf(actualDay);
@@ -186,7 +185,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
                          Where(x => x.Item2 != null).
                          Take(take);
 
-            var result = new List<WeightRoundDTO>(); 
+            var result = new List<WeightRoundDTO>();
 
             foreach (var exercise in exerciseWithDate)
             {
