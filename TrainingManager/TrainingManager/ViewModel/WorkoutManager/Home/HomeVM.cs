@@ -78,22 +78,25 @@ namespace TrainingManager.ViewModel
             }
         }
 
-        private async Task InitPersonalRecords()
+        private Task InitPersonalRecords() =>
+        Task.Run(async () =>
         {
             var records = await ApiServices.GetWatchedWeightActivitiesAsync();
             WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x, _recordSelection)));
             LogHandler.Instance.Nlog.Info("Personal records initialized.");
-        }
+        });
 
-        private async Task InitializeWeeklyMuscleDataAsync()
+        private Task InitializeWeeklyMuscleDataAsync() =>
+        Task.Run(async () =>
         {
             var muslceData = await ApiServices.GetWeeklyMuscleDataAsync();
             MovedWeightByMuscle = new ObservableCollection<(Muscle muscle, double weight)>(muslceData);
             muslceData.Aggregate(0.0, (weight, data) => weight += data.weight, (weight) => WeeklyWeight = weight);
             LogHandler.Instance.Nlog.Info("Weekly muscle data initialized.");
-        }
+        });
 
-        private async Task InitializeProfilePicture()
+        private Task InitializeProfilePicture() =>
+        Task.Run(async () =>
         {
             if (_profileService.IsProfilePictureStored())
             {
@@ -108,7 +111,7 @@ namespace TrainingManager.ViewModel
             }
 
             ProfilePicture = ImageSource.FromStream(() => new MemoryStream(_originalImage));
-        }
+        });
 
         protected override async Task SetupManagerAsync()
         {
@@ -117,6 +120,7 @@ namespace TrainingManager.ViewModel
                     UpdateRecentWorkoutsAsync(),
                     InitializeWeeklyMuscleDataAsync(),
                     InitPersonalRecords(),
+                    InitializeProfilePicture(),
             };
 
             await Task.WhenAll(initializeTasks);
@@ -127,42 +131,17 @@ namespace TrainingManager.ViewModel
         }
 
         //PRIVATES
-        private async Task UpdateRecentWorkoutsAsync()
+        private Task UpdateRecentWorkoutsAsync() =>
+        Task.Run(async () =>
         {
             IEnumerable<WeightWorkoutDTO> recentWorkouts = await ApiServices.GetRecentWeightWorkoutsAsync();
             RecentWorkouts = new ObservableCollection<HistoryItemVM>(recentWorkouts.Select(w => new HistoryItemVM(w)));
-        }
+        });
 
         private async void WeightWorkoutMenuSelectedFunction(object obj)
         {
             WeightWorkoutDTO workout = await ApiServices.GetWeightWorkoutAsync((string)obj);
-
-            NewWeightWorkout = new WeightWorkoutVM()
-            {
-                Id = workout.Id,
-                WorkoutName = workout.WorkoutName,
-                WorkoutDate = workout.WorkoutDate,
-                TotalWeight = workout.TotalWeight,
-                WorkoutGuid = workout.WorkoutGuid,
-                WorkoutType = workout.WorkoutType,
-                Note = workout.Note,
-                WeightExercises = new ObservableCollection<WeightExerciseVM>(workout.WeightExercisesDto.Select(x => new WeightExerciseVM()
-                {
-                    ExerciseGuid = x.ExerciseGuid,
-                    ExerciseName = x.ExerciseName,
-                    ExerciseNote = x.Note,
-                    TotalExerciseWeight = x.TotalExerciseWeight,
-                    TotalExerciseRounds = x.WeightRoundsDto.Count(),
-                    WeightRounds = new ObservableCollection<WeightRoundVM>(x.WeightRoundsDto.Select(y => new WeightRoundVM()
-                    {
-                        RoundGuid = y.RoundGuid,
-                        RoundNumber = y.RoundNumber,
-                        Reps = y.Reps,
-                        WeightOfExercise = y.WeightOfExercise
-                    })),
-                }))
-            };
-
+            NewWeightWorkout = WeightWorkoutHelper.WorkoutDTOToVM(workout);
             RecentWorkoutItemSelected?.Invoke(this, new MessageEventArgs(NewWeightWorkout.WorkoutName, NewWeightWorkout.WorkoutGuid.ToString()));
         }
 
