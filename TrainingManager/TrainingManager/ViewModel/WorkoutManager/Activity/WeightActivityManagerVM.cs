@@ -84,7 +84,7 @@ namespace TrainingManager.ViewModel
             NeedToRefresh?.Invoke(this, EventArgs.Empty);
         }
 
-        private void MuscleSetupFunctions(object obj) 
+        private void MuscleSetupFunctions(object obj)
         {
             InitializeMuscleVM();
             MuscleSetup?.Invoke(this, EventArgs.Empty);
@@ -124,8 +124,8 @@ namespace TrainingManager.ViewModel
             try
             {
                 var activityDetails = await _apiServices.GetWeightActivityPRAsync(id);
-                SelectedActivityReps = activityDetails.reps;
-                SelectedActivityWeight = activityDetails.weight;
+                SelectedActivityReps = activityDetails.Reps;
+                SelectedActivityWeight = activityDetails.Weight;
             }
             catch
             {
@@ -153,7 +153,7 @@ namespace TrainingManager.ViewModel
         }
 
         //EVENT HANDLERS
-        private void OnMuscleSelected(object sender, Muscle muscle) 
+        private void OnMuscleSelected(object sender, Muscle muscle)
         {
             SelectedActivity.MainMuscleGroup = muscle;
             MuscleVM.ItemSelected -= OnMuscleSelected;

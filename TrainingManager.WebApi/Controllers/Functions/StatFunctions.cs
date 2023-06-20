@@ -59,7 +59,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
             return result.OrderByDescending(x => x.weight);
         }
 
-        public (double weight, int reps) FindMaxMovedWeightsOfActivity(IQueryable<WeightExercise> exercisesOfActivity)
+        public PersonalRecordDTO FindMaxMovedWeightsOfActivity(IQueryable<WeightExercise> exercisesOfActivity)
         {
             if (exercisesOfActivity.Count() > 0)
             {
@@ -70,14 +70,17 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
                 if (weightRounds.Count() > 0)
                 {
-                    return weightRounds
+
+                    (double weight, int reps) pr = weightRounds
                         .Select(x => (x.WeightOfExercise, x.Reps))
                         .Aggregate((0.0, 0), (record, next) =>
                             next.WeightOfExercise > record.Item1 ? next : record);
+
+                    return new PersonalRecordDTO() { Weight = pr.weight, Reps = pr.reps };
                 }
             }
 
-            return (0.0, 0);
+            return new PersonalRecordDTO() { Weight = 0.0, Reps = 0 };
         }
 
         public IEnumerable<(WeightActivityDTO activity, double weight, int reps)> FindWatchedMaxMovedWeightsByActivites(IQueryable<WeightExercise> exercises, IQueryable<WeightActivity> activities)

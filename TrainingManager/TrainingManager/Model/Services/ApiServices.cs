@@ -301,14 +301,14 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        public async Task<(double weight, int reps)> GetWeightActivityPRAsync(Guid id)
+        public async Task<PersonalRecordDTO> GetWeightActivityPRAsync(Guid id)
         {
             try
             {
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/MaxWeightActivity/{id}");
 
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadAsAsync<(double weight, int reps)>();
+                    return await response.Content.ReadAsAsync<PersonalRecordDTO>();
                 else
                     throw new Exception("Server respond is not success.");
             }
