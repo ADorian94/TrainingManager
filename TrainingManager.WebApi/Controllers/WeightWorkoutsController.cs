@@ -167,7 +167,6 @@ namespace TrainingManager.WebApi.Controllers
                     return BadRequest(ModelState);
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-
                 return Ok(_context.WeightWorkouts.AsNoTracking().Where(x => x.WorkoutDate.Year == year && x.WorkoutDate.DayOfYear == dayOfYear && x.OwnerUserName == user.UserName).Select(weightWorkout => new WeightWorkoutDTO
                 {
                     Id = weightWorkout.Id,

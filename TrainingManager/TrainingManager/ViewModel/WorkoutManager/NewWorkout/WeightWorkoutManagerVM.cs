@@ -102,9 +102,10 @@ namespace TrainingManager.ViewModel
                 return;
 
             var workoutToSave = WeightWorkoutHelper.WorkoutVMToDTO(NewWeightWorkout);
+            bool isWorkoutExitsToday = await ApiServices.IsWeightWorkoutExitsAsync(workoutToSave.WorkoutDate.Year, workoutToSave.WorkoutDate.DayOfYear);
 
             //Meglévő edzés szerkesztése
-            if (await ApiServices.IsWeightWorkoutExitsAsync(NewWeightWorkout.WorkoutGuid.ToString()))
+            if (isWorkoutExitsToday)
             {
                 workoutToSave.Id = NewWeightWorkout.Id;
                 await ApiServices.EditWeightWorkoutAsync(workoutToSave);
