@@ -46,9 +46,9 @@ namespace TrainingManager.ViewModel
 
                 await InitializeHistoryItems();
 
-                workoutsInMonth.Concat(workoutsInPrevMonth);
-                workoutsInMonth.Concat(workoutsInNextMonth);
-                foreach (var workout in workoutsInMonth)
+                var sum = workoutsInMonth.Concat(workoutsInPrevMonth);
+                var sumSum = sum.Concat(workoutsInNextMonth);
+                foreach (var workout in sumSum)
                 {
                     var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
                     WorkoutDates.Add(new SpecialDate(date)
