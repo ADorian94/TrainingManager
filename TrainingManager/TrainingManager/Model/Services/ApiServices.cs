@@ -188,6 +188,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<CalendarItemDTO>> GetCalendarItemsInMonth(int year, int month)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/GetCalendarItemsInMonth/{year}/{month}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<CalendarItemDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync()
         {
             try

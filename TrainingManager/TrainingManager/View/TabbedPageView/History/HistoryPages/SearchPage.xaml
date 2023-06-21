@@ -20,27 +20,10 @@
     <ContentPage.Content>
         <StackLayout>
             <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" />
-            <!--<ListView x:Name="ExerciseList" ItemsSource="{Binding Path=HistoryWorkoutItems}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
-                <ListView.ItemTemplate >
-                    <DataTemplate>
-                        <ViewCell>
-                            <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
-                                                      ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
-                                                      CloseCardMainLabel="{Binding WorkoutName}"
-                                                      OpenCardFirstLabel="Weight" 
-                                                      OpenCardFirstValue="{Binding TotalWeight}"
-                                                      ButtonCommand="{Binding BindingContext.HistoryWorkoutItemSelectedCommand, Source={x:Reference Search}}"
-                                                      ButtonCommandParameter="{Binding WorkoutGuid}"
-                                                      ButtonVisibility="True"/>
-                        </ViewCell>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>-->
-
             <CollectionView x:Name="ExerciseList" ItemsSource="{Binding HistoryWorkoutItems}"
-                            RemainingItemsThreshold="10"
+                            RemainingItemsThreshold="4"
                             RemainingItemsThresholdReachedCommand="{Binding LoadMoreHistoryItemsCommand}"
-                            RemainingItemsThresholdReached="ExerciseList_RemainingItemsThresholdReached"
+                            Scrolled="OnScrolled"
                             SelectionMode="None" VerticalOptions="FillAndExpand">
                 <CollectionView.ItemTemplate >
                     <DataTemplate>

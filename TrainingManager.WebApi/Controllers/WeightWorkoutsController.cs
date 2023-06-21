@@ -579,6 +579,21 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetCalendarItemsInMonth/{year}/{month}")]
+        public IActionResult GetCalendarItems([FromRoute] int year, int month)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(GetCalendarItemDTOs((WeightWorkout x) => x.OwnerUserName == user.UserName && x.WorkoutDate.Year == year && x.WorkoutDate.Month == month)
+                    .OrderByDescending(x => x.WorkoutDate.Date));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetThisweekWeightsByMuscle")]
         public IActionResult GetThisweekWeightsByMuscle()
         {
@@ -904,6 +919,15 @@ namespace TrainingManager.WebApi.Controllers
                         WorkoutName = weightWorkout.WorkoutName,
                         WorkoutGuid = weightWorkout.WorkoutGuid,
                         TotalWeight = weightWorkout.TotalWeight,
+                        WorkoutDate = weightWorkout.WorkoutDate,
+                    });
+
+        private IEnumerable<CalendarItemDTO> GetCalendarItemDTOs(Func<WeightWorkout, bool> predicate) =>
+            _context.WeightWorkouts
+                    .Where(x => predicate.Invoke(x))
+                    .Select(weightWorkout => new CalendarItemDTO()
+                    {
+                        WorkoutGuid = weightWorkout.WorkoutGuid,
                         WorkoutDate = weightWorkout.WorkoutDate,
                     });
     }

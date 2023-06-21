@@ -13,8 +13,9 @@ namespace TrainingManager.ViewModel
     public class WeightHistoryVM : WorkoutManagerBaseVM
     {
         private Dictionary<DateTime, Guid> _workoutGuids;
-        int _batch = 0, _numberOfElements = 20;
-        bool _isBusy = false;
+        private int _batch = 0, _numberOfElements = 10;
+        private bool _isBusy = false;
+        private DateTime _leftEnd, _rightEnd;
 
         public WeightHistoryVM(IApiServices apiServices)
         {
@@ -34,14 +35,20 @@ namespace TrainingManager.ViewModel
                 CurrentDate = DateTime.Now.ToUniversalTime();
                 MovedWeightsByMonth = new ObservableCollection<(int Year, int Month, double Weight)>(await ApiServices.GetMovedWorkoutsGroupByMonth());
                 SetMovedWeightsInTheMonth();
-                var workouts = new List<WeightWorkoutDTO>(await ApiServices.GetWeightWorkoutsAsync());
+
+                var workoutsInMonth = await ApiServices.GetCalendarItemsInMonth(CurrentDate.Year, CurrentDate.Month);
+                var workoutsInPrevMonth = await ApiServices.GetCalendarItemsInMonth(CurrentDate.Year, CurrentDate.Month + 1);
+                var workoutsInNextMonth = await ApiServices.GetCalendarItemsInMonth(CurrentDate.Year, CurrentDate.Month - 1);
+                _leftEnd = CurrentDate.AddMonths(-1);
+                _rightEnd = CurrentDate.AddMonths(1);
                 WorkoutDates = new ObservableCollection<SpecialDate>();
                 _workoutGuids = new Dictionary<DateTime, Guid>();
-                var items = new List<HistoryItemVM>();
 
                 await InitializeHistoryItems();
 
-                foreach (var workout in workouts)
+                workoutsInMonth.Concat(workoutsInPrevMonth);
+                workoutsInMonth.Concat(workoutsInNextMonth);
+                foreach (var workout in workoutsInMonth)
                 {
                     var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
                     WorkoutDates.Add(new SpecialDate(date)
@@ -52,10 +59,7 @@ namespace TrainingManager.ViewModel
                     });
 
                     _workoutGuids.Add(date, workout.WorkoutGuid);
-                    items.Add(new HistoryItemVM(workout));
                 }
-
-                //HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(items.OrderByDescending(x => x.WorkoutDate.Date));
             }
             catch (Exception ex)
             {
@@ -159,10 +163,50 @@ namespace TrainingManager.ViewModel
         //PRIVATE
         private void UpdateMonthData() => SetMovedWeightsInTheMonth();
 
-        private void SetMovedWeightsInTheMonth() =>
+        private async void SetMovedWeightsInTheMonth()
+        {
+            if (CurrentDate.Year == _leftEnd.Year && CurrentDate.Month == _leftEnd.Month)
+            {
+                _leftEnd = _leftEnd.AddMonths(-1);
+                var workoutsInMonth = await ApiServices.GetCalendarItemsInMonth(_leftEnd.Year, _leftEnd.Month);
+
+                foreach (var workout in workoutsInMonth)
+                {
+                    var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
+                    WorkoutDates.Add(new SpecialDate(date)
+                    {
+                        TextColor = Color.FromHex(workout.WorkoutDate.ToUniversalTime() < DateTime.Now.ToUniversalTime() ? "#03A9F9" : "#ff6961"),
+                        Selectable = true,
+                        FontAttributes = FontAttributes.Bold,
+                    });
+
+                    _workoutGuids.Add(date, workout.WorkoutGuid);
+                }
+            }
+
+            if (CurrentDate.Year == _rightEnd.Year && CurrentDate.Month == _rightEnd.Month)
+            {
+                _leftEnd = _leftEnd.AddMonths(1);
+                var workoutsInMonth = await ApiServices.GetCalendarItemsInMonth(_rightEnd.Year, _rightEnd.Month);
+
+                foreach (var workout in workoutsInMonth)
+                {
+                    var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
+                    WorkoutDates.Add(new SpecialDate(date)
+                    {
+                        TextColor = Color.FromHex(workout.WorkoutDate.ToUniversalTime() < DateTime.Now.ToUniversalTime() ? "#03A9F9" : "#ff6961"),
+                        Selectable = true,
+                        FontAttributes = FontAttributes.Bold,
+                    });
+
+                    _workoutGuids.Add(date, workout.WorkoutGuid);
+                }
+            }
+
             MovedWeightsInTheMonth = MovedWeightsByMonth != null && MovedWeightsByMonth.Any(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month) ?
                 MovedWeightsByMonth.Single(x => x.Year == CurrentDate.Year && x.Month == CurrentDate.Month).Weight :
                 0.0;
+        }
 
         //PROTETED
         protected override async void SaveWorkoutFunctionAsync(object obj)
