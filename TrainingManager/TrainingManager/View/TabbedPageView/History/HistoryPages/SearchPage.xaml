@@ -20,7 +20,7 @@
     <ContentPage.Content>
         <StackLayout>
             <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" />
-            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=HistoryWorkoutItems}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
+            <!--<ListView x:Name="ExerciseList" ItemsSource="{Binding Path=HistoryWorkoutItems}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
                 <ListView.ItemTemplate >
                     <DataTemplate>
                         <ViewCell>
@@ -35,7 +35,26 @@
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
-            </ListView>
+            </ListView>-->
+
+            <CollectionView x:Name="ExerciseList" ItemsSource="{Binding HistoryWorkoutItems}"
+                            RemainingItemsThreshold="10"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreHistoryItemsCommand}"
+                            RemainingItemsThresholdReached="ExerciseList_RemainingItemsThresholdReached"
+                            SelectionMode="None" VerticalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate >
+                    <DataTemplate>
+                        <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
+                                                ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
+                                                CloseCardMainLabel="{Binding WorkoutName}"
+                                                OpenCardFirstLabel="Weight" 
+                                                OpenCardFirstValue="{Binding TotalWeight}"
+                                                ButtonCommand="{Binding BindingContext.HistoryWorkoutItemSelectedCommand, Source={x:Reference Search}}"
+                                                ButtonCommandParameter="{Binding WorkoutGuid}"
+                                                ButtonVisibility="True"/>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

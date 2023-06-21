@@ -10,5 +10,10 @@ namespace TrainingManager.View.TabbedPageView.History.HistoryPages
         {
             InitializeComponent();
         }
+
+        private void ExerciseList_RemainingItemsThresholdReached(object sender, System.EventArgs e)
+        {
+
+        }
     }
 }

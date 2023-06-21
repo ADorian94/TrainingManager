@@ -19,6 +19,7 @@ namespace TrainingManager.Model
         Task<bool> IsWeightWorkoutExitsAsync(DateTime date);
         Task<bool> IsWeightWorkoutExitsAsync(int year, int dayOfYear);
         Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync();
+        Task<IEnumerable<HistoryItemDTO>> LoadMoreWorkouts(int batch, int number);
         Task<bool> UploadProfilePicture(byte[] image);
         Task<byte[]> DownloadProfilePictureAsync();
         Task<string> GetNameOfTheUser();

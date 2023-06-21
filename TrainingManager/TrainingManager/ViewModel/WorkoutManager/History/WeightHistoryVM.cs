@@ -1,5 +1,4 @@
-﻿using NLog.LayoutRenderers.Wrappers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -14,6 +13,8 @@ namespace TrainingManager.ViewModel
     public class WeightHistoryVM : WorkoutManagerBaseVM
     {
         private Dictionary<DateTime, Guid> _workoutGuids;
+        int _batch = 0, _numberOfElements = 20;
+        bool _isBusy = false;
 
         public WeightHistoryVM(IApiServices apiServices)
         {
@@ -22,6 +23,7 @@ namespace TrainingManager.ViewModel
             SetupManagerAsync();
             WorkoutDateSelected = new DelegateCommand(WorkoutDateSelectedFunction);
             HistoryWorkoutItemSelectedCommand = new DelegateCommand(HistoryWorkoutItemSelectedFunction);
+            LoadMoreHistoryItemsCommand = new DelegateCommand(LoadMoreHistoryItemsFunction);
             SearchCommand = new DelegateCommand(SearchFunction);
         }
 
@@ -37,6 +39,8 @@ namespace TrainingManager.ViewModel
                 _workoutGuids = new Dictionary<DateTime, Guid>();
                 var items = new List<HistoryItemVM>();
 
+                await InitializeHistoryItems();
+
                 foreach (var workout in workouts)
                 {
                     var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
@@ -51,12 +55,35 @@ namespace TrainingManager.ViewModel
                     items.Add(new HistoryItemVM(workout));
                 }
 
-                HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(items.OrderByDescending(x => x.WorkoutDate.Date));
+                //HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(items.OrderByDescending(x => x.WorkoutDate.Date));
             }
             catch (Exception ex)
             {
                 OnExeptionOccured(new ExceptionArgs(ex));
             }
+        }
+
+        private Task InitializeHistoryItems() =>
+            Task.Run(async () =>
+            {
+                var recent = await ApiServices.LoadMoreWorkouts(_batch, _numberOfElements);
+                _batch += _numberOfElements;
+                HistoryWorkoutItems = new ObservableCollection<HistoryItemVM>(recent.Select(x => new HistoryItemVM(x)));
+            });
+
+        private async void LoadMoreHistoryItemsFunction(object obj)
+        {
+            if (_isBusy)
+                return;
+
+            _isBusy = true;
+            var recent = await ApiServices.LoadMoreWorkouts(_batch, _numberOfElements);
+
+            foreach (var item in recent)
+                HistoryWorkoutItems.Add(new HistoryItemVM(item));
+
+            _batch += _numberOfElements;
+            _isBusy = false;
         }
 
         //PROPERTIES
@@ -78,6 +105,7 @@ namespace TrainingManager.ViewModel
         //COMMANDS
         public DelegateCommand WorkoutDateSelected { get; private set; }
         public DelegateCommand HistoryWorkoutItemSelectedCommand { get; private set; }
+        public DelegateCommand LoadMoreHistoryItemsCommand { get; private set; }
         public DelegateCommand SearchCommand { get; private set; }
 
         //EVENTS

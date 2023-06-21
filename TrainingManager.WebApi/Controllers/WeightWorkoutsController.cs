@@ -562,6 +562,23 @@ namespace TrainingManager.WebApi.Controllers
             }
         }
 
+        [HttpGet("GetRangeOfHistoryItems/{batch}/{number}")]
+        public IActionResult GetRecentWorkouts([FromRoute] int batch, int number)
+        {
+            try
+            {
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                return Ok(GetHistoryItemDTOs((WeightWorkout x) => x.OwnerUserName == user.UserName && x.WorkoutDate.Year <= DateTime.Now.Year && x.WorkoutDate.DayOfYear <= DateTime.Now.DayOfYear)
+                    .OrderByDescending(x => x.WorkoutDate.Date)
+                    .Skip(batch)
+                    .Take(number));
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
+
         [HttpGet("GetThisweekWeightsByMuscle")]
         public IActionResult GetThisweekWeightsByMuscle()
         {
@@ -878,5 +895,16 @@ namespace TrainingManager.WebApi.Controllers
                 }).ToList(),
             });
         }
+
+        private IEnumerable<HistoryItemDTO> GetHistoryItemDTOs(Func<WeightWorkout, bool> predicate) =>
+            _context.WeightWorkouts
+                    .Where(x => predicate.Invoke(x))
+                    .Select(weightWorkout => new HistoryItemDTO()
+                    {
+                        WorkoutName = weightWorkout.WorkoutName,
+                        WorkoutGuid = weightWorkout.WorkoutGuid,
+                        TotalWeight = weightWorkout.TotalWeight,
+                        WorkoutDate = weightWorkout.WorkoutDate,
+                    });
     }
 }

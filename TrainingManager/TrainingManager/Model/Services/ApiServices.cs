@@ -170,6 +170,24 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<HistoryItemDTO>> LoadMoreWorkouts(int batch, int number)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/GetRangeOfHistoryItems/{batch}/{number}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<HistoryItemDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync()
         {
             try
