@@ -39,7 +39,6 @@ namespace TrainingManager.ViewModel
                 TotalWeight = weightWorkoutDTO.TotalWeight,
                 WorkoutDate = weightWorkoutDTO.WorkoutDate,
                 WorkoutGuid = Guid.Empty.ToString() == weightWorkoutDTO.WorkoutGuid.ToString() ? Guid.NewGuid() : weightWorkoutDTO.WorkoutGuid,
-                //WorkoutGuid = weightWorkoutDTO.WorkoutGuid,
                 WorkoutName = weightWorkoutDTO.WorkoutName,
                 WorkoutType = WorkoutType.WeightWorkout,
                 WeightExercises = new ObservableCollection<WeightExerciseVM>(),
