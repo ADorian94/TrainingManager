@@ -691,7 +691,7 @@ namespace TrainingManager.WebApi.Controllers
                         ActivityId = actId,
                         Note = weightExerciseDto.Note,
                         TotalExerciseWeight = weightExerciseDto.TotalExerciseWeight,
-                        WorkoutId = _context.WeightWorkouts.Single(x => x.WorkoutGuid == workoutGuid).Id,
+                        WorkoutId = _context.WeightWorkouts.Single(x => x.WorkoutGuid.ToString() == workoutGuid.ToString()).Id,
                         OwnerUserName = user.UserName,
                         Color = weightExerciseDto.Color
                     };

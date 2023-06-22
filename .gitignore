@@ -263,3 +263,4 @@ __pycache__/
 TrainingManager.WebApi/TrainingManager.db
 TrainingManager.WebApi/TrainingManager.db
 *.db
+TrainingManager.WebApi/TrainingManager.db-journal
