@@ -102,6 +102,7 @@ namespace TrainingManager.ViewModel
                 return;
 
             var workoutToSave = WeightWorkoutHelper.WorkoutVMToDTO(NewWeightWorkout);
+            workoutToSave.WorkoutGuid = NewWeightWorkout.WorkoutGuid;
             bool isWorkoutExitsToday = await ApiServices.IsWeightWorkoutExitsAsync(workoutToSave.WorkoutDate.Year, workoutToSave.WorkoutDate.DayOfYear);
 
             //Meglévő edzés szerkesztése
