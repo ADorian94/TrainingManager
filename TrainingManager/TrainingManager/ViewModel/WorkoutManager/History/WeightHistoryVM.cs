@@ -34,20 +34,19 @@ namespace TrainingManager.ViewModel
             {
                 CurrentDate = DateTime.Now.ToUniversalTime();
                 MovedWeightsByMonth = new ObservableCollection<(int Year, int Month, double Weight)>(await ApiServices.GetMovedWorkoutsGroupByMonth());
-                SetMovedWeightsInTheMonth();
+                WorkoutDates = new ObservableCollection<SpecialDate>();
+                _workoutGuids = new Dictionary<DateTime, Guid>();
 
                 var workoutsInMonth = await ApiServices.GetCalendarItemsInMonth(CurrentDate.Year, CurrentDate.Month);
                 var workoutsInPrevMonth = await ApiServices.GetCalendarItemsInMonth(CurrentDate.Year, CurrentDate.Month + 1);
                 var workoutsInNextMonth = await ApiServices.GetCalendarItemsInMonth(CurrentDate.Year, CurrentDate.Month - 1);
                 _leftEnd = CurrentDate.AddMonths(-1);
                 _rightEnd = CurrentDate.AddMonths(1);
-                WorkoutDates = new ObservableCollection<SpecialDate>();
-                _workoutGuids = new Dictionary<DateTime, Guid>();
 
                 await InitializeHistoryItems();
-
                 var sum = workoutsInMonth.Concat(workoutsInPrevMonth);
                 var sumSum = sum.Concat(workoutsInNextMonth);
+
                 foreach (var workout in sumSum)
                 {
                     var date = new DateTime(workout.WorkoutDate.Year, workout.WorkoutDate.Month, workout.WorkoutDate.Day);
@@ -60,6 +59,8 @@ namespace TrainingManager.ViewModel
 
                     _workoutGuids.Add(date, workout.WorkoutGuid);
                 }
+
+                SetMovedWeightsInTheMonth();
             }
             catch (Exception ex)
             {
