@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TrainingManager.Data.DTO;
 using TrainingManager.Model;
 
 namespace TrainingManager.ViewModel
@@ -54,19 +55,19 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<MaximumMethod> _recomendedMaximums;
         public ObservableCollection<MaximumMethod> RecomendedMaximums { get => _recomendedMaximums; set { _recomendedMaximums = value; OnPropertyChanged(); } }
 
-        public void Refresh(object sender, EventArgs e) 
-        { 
+        public void Refresh(object sender, EventArgs e)
+        {
             GetWorkoutDetailsFromServer();
             InitPersonalRecords();
         }
-        
+
         //PRIVATES
         private async void GetWorkoutDetailsFromServer()
         {
-            IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)> workouts = (await _apiServices.GetMovedWeightsGroupByMonth()).Reverse();
+            IEnumerable<YearMonthWorkoutGroupDTO> workouts = (await _apiServices.GetMovedWeightsGroupByMonth());
             GroupedWorkouts = new ObservableCollection<ObservableCollection<(DateTime date, double Weight)>>(
                 workouts.Select(
-                    workout => new ObservableCollection<(DateTime date, double Weight)>(workout.Item3)
+                    workout => new ObservableCollection<(DateTime date, double Weight)>(workout.WorkoutsInMonth.Select(w => (w.Date, w.Weight)))
                 ));
         }
 

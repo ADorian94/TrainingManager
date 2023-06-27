@@ -130,31 +130,22 @@ namespace TrainingManager.WebApi.Controllers.Functions
                            .Select(w => new Tuple<DateTime, double>(w.WorkoutDate, w.TotalWeight));
         }
 
-        public IEnumerable<(int year, int month, IEnumerable<(DateTime, double)> weight)> CollectMovedWeightsGroupByMonth(IQueryable<WeightWorkout> workouts)
-        {
-            var allWorkouts = workouts.GroupBy(w => w.WorkoutDate.Year).ToList();
-            var resutWeights = new List<(int, int, IEnumerable<(DateTime, double)>)>();
-
-            foreach (var yearWorkouts in allWorkouts)
-            {
-                var monthWorkouts = yearWorkouts.GroupBy(m => m.WorkoutDate.Month);
-
-                foreach (var monthWorkout in monthWorkouts)
+        public IEnumerable<YearMonthWorkoutGroupDTO> CollectMovedWeightsGroupByMonth(IQueryable<WeightWorkout> workouts)
+            => workouts.GroupBy(w => new { w.WorkoutDate.Year, w.WorkoutDate.Month })
+                .OrderByDescending(x => x.Key.Year)
+                .ThenByDescending(x => x.Key.Month)
+                .Take(5)
+                .Select(r => new YearMonthWorkoutGroupDTO()
                 {
-                    var workoutsInTheMonth = new List<(DateTime, double)>();
-
-                    foreach (var workout in monthWorkout)
-                    {
-                        if (workout.WorkoutDate < DateTime.Now)
-                            workoutsInTheMonth.Add((workout.WorkoutDate, workout.TotalWeight));
-                    }
-
-                    resutWeights.Add((yearWorkouts.Key, monthWorkout.Key, workoutsInTheMonth));
-                }
-            }
-
-            return resutWeights;
-        }
+                    Year = r.Key.Year,
+                    Month = r.Key.Month,
+                    WorkoutsInMonth = r.Where(w => w.WorkoutDate < DateTime.Now)
+                            .Select(i => new MovedWeightsInMonthDTO()
+                            {
+                                Date = i.WorkoutDate,
+                                Weight = i.TotalWeight
+                            })
+                });
 
         public IEnumerable<(Muscle muscle, double weight)> CollectRecentMovedWeightsGroupByMuscle(IQueryable<WeightWorkout> workouts, IQueryable<WeightExercise> exercises, IQueryable<WeightActivity> activities)
         {

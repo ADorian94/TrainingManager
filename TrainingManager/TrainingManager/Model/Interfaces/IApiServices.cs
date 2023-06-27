@@ -35,7 +35,7 @@ namespace TrainingManager.Model
         Task<bool> UpdateWeightExerciseAsync(WeightExerciseDTO weigthExerciseDto);
         Task<IEnumerable<(int year, int month, double weight)>> GetMovedWorkoutsGroupByMonth();
         Task<IEnumerable<(DateTime date, double weight)>> GetMovedWeightsInTheMonth(int year, int month);
-        Task<IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)>> GetMovedWeightsGroupByMonth();
+        Task<IEnumerable<YearMonthWorkoutGroupDTO>> GetMovedWeightsGroupByMonth();
         Task<IEnumerable<(Muscle muscle, double weight)>> GetWeeklyMuscleDataAsync();
         Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetMaxMovedWeightsByActivites();
         Task<PersonalRecordDTO> GetWeightActivityPRAsync(Guid id);
