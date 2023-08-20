@@ -7,7 +7,7 @@ namespace TrainingManager.ViewModel.WorkoutManager
     public class WeightActivityVM : ViewModelBase
     {
         //PROPERTIES
-        public Guid Id { get; private set; } 
+        public Guid Id { get; private set; }
 
         private string _activityName;
         public string ActivityName { get => _activityName; set { _activityName = value; OnPropertyChanged(); } }

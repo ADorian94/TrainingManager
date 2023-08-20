@@ -18,9 +18,9 @@
                 <!--<Label Text="Calendar" Style="{StaticResource Title0}"/>-->
                 <calendar:WeightCalendar DateSelectedCommand="{Binding WorkoutDateSelected}" Dates="{Binding WorkoutDates}" ActualDate="{Binding CurrentDate}"/>
                 <controls:SimpleCard
-                Margin="15, 5"
-                CardMainText="Moved weights"
-                CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
+                    Margin="15, 5"
+                    CardMainText="Moved weights"
+                    CardSecondaryText="{Binding MovedWeightsInTheMonth}"/>
             </StackLayout>
         </ScrollView>
     </ContentPage.Content>

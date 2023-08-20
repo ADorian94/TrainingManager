@@ -15,4 +15,15 @@
         Quadriceps,
         Abdominals,
     }
+
+    public enum BodyPart
+    {
+        Unknown,
+        Chest,
+        Arm,
+        Sholder,
+        Back,
+        Leg,
+        Core,
+    }
 }

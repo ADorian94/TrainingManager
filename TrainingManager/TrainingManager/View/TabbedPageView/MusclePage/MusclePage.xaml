@@ -26,7 +26,7 @@
                     <DataTemplate>
                         <ViewCell>
                             <controls:LowSimpleCard CardMainText="{Binding }" IsButtonVisible="False"
-                                                    CardFrameTapped="{Binding BindingContext.MuscleSelectedCommand, Source={x:Reference MusclePg}}"
+                                                    CardFrameTapped="{Binding BindingContext.ItemSelectedCommand, Source={x:Reference MusclePg}}"
                                                     CardFrameTappedParameter="{Binding}"/>
                         </ViewCell>
                     </DataTemplate>

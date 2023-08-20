@@ -19,24 +19,25 @@
     </ContentPage.Resources>
     <ContentPage.Content>
         <StackLayout>
-            <!--<Label Text="History" Style="{StaticResource Title0}"/>-->
             <controls:CardWithSearchBar CardMainText="Search" CardSearchCommand="{Binding SearchCommand}" />
-            <ListView x:Name="ExerciseList" ItemsSource="{Binding Path=HistoryWorkoutItems}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand">
-                <ListView.ItemTemplate >
+            <CollectionView x:Name="ExerciseList" ItemsSource="{Binding HistoryWorkoutItems}"
+                            RemainingItemsThreshold="4"
+                            RemainingItemsThresholdReachedCommand="{Binding LoadMoreHistoryItemsCommand}"
+                            Scrolled="OnScrolled"
+                            SelectionMode="None" VerticalOptions="FillAndExpand">
+                <CollectionView.ItemTemplate >
                     <DataTemplate>
-                        <ViewCell>
-                            <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
-                                                      ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
-                                                      CloseCardMainLabel="{Binding WorkoutName}"
-                                                      OpenCardFirstLabel="Weight" 
-                                                      OpenCardFirstValue="{Binding TotalWeight}"
-                                                      ButtonCommand="{Binding BindingContext.HistoryWorkoutItemSelectedCommand, Source={x:Reference Search}}"
-                                                      ButtonCommandParameter="{Binding WorkoutGuid}"
-                                                      ButtonVisibility="True"/>
-                        </ViewCell>
+                        <controls:HistoryCard LongDate="{Binding WorkoutDate, Converter={StaticResource DateToStringConverter}}"
+                                                ShortDate="{Binding WorkoutDate, Converter={StaticResource DateToShortStringConverter}}"
+                                                CloseCardMainLabel="{Binding WorkoutName}"
+                                                OpenCardFirstLabel="Weight" 
+                                                OpenCardFirstValue="{Binding TotalWeight}"
+                                                ButtonCommand="{Binding BindingContext.HistoryWorkoutItemSelectedCommand, Source={x:Reference Search}}"
+                                                ButtonCommandParameter="{Binding WorkoutGuid}"
+                                                ButtonVisibility="True"/>
                     </DataTemplate>
-                </ListView.ItemTemplate>
-            </ListView>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

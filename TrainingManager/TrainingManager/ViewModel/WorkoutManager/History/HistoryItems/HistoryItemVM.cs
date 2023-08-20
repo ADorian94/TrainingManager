@@ -30,6 +30,14 @@ namespace TrainingManager.ViewModel
             WorkoutGuid = weightWorkout.WorkoutGuid;
         }
 
+        public HistoryItemVM(HistoryItemDTO historyItem)
+        {
+            WorkoutName = historyItem.WorkoutName;
+            TotalWeight = historyItem.TotalWeight;
+            WorkoutDate = historyItem.WorkoutDate;
+            WorkoutGuid = historyItem.WorkoutGuid;
+        }
+
         public override bool Equals(object obj)
         {
             var otherItem = (HistoryItemVM)obj;

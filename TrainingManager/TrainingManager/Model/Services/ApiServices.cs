@@ -44,6 +44,114 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<WeightWorkoutDTO> GetWeightWorkoutAsync(DateTime date)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/{date}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<WeightWorkoutDTO>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<WeightWorkoutDTO> GetWeightWorkoutAsync(int year, int dayOfYear)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/{year}/{dayOfYear}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<WeightWorkoutDTO>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<WeightWorkoutDTO> GetWeightWorkoutAsync(string guid)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/GetWeightWorkoutByGuid/{guid}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<WeightWorkoutDTO>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> IsWeightWorkoutExitsAsync(string guid)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/IsWeightWorkoutExistsByGuid/{guid}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<bool>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> IsWeightWorkoutExitsAsync(DateTime date)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/IsWeightWorkoutExistsByDate/{date}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<bool>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> IsWeightWorkoutExitsAsync(int year, int dayOfYear)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/IsWeightWorkoutExistsByYearAndDay/{year}/{dayOfYear}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<bool>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<WeightWorkoutDTO>> GetRecentWeightWorkoutsAsync()
         {
             try
@@ -52,6 +160,42 @@ namespace TrainingManager.Model.Services
 
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<HistoryItemDTO>> LoadMoreWorkouts(int batch, int number)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/GetRangeOfHistoryItems/{batch}/{number}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<HistoryItemDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                LogHandler.Instance.Nlog.Error(ex.Message);
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<CalendarItemDTO>> GetCalendarItemsInMonth(int year, int month)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/GetCalendarItemsInMonth/{year}/{month}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<CalendarItemDTO>>();
                 else
                     throw new Exception("Server respond is not success.");
             }
@@ -142,12 +286,26 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<bool> DeleteWeightWorkoutAsync(string guid)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.DeleteAsync($"api/WeightWorkouts/{guid}");
+                return response.IsSuccessStatusCode;
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<WeightWorkoutDTO>> SearchWorkoutAsync(string keyWords)
         {
             try
             {
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightWorkouts/SearchWorkout/{keyWords}");
-                
+
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<ICollection<WeightWorkoutDTO>>();
                 else
@@ -179,14 +337,14 @@ namespace TrainingManager.Model.Services
             }
         }
 
-        public async Task<(WeightActivityDTO activity, double weight, int reps)> GetWeightActivityPRAsync(Guid id)
+        public async Task<PersonalRecordDTO> GetWeightActivityPRAsync(Guid id)
         {
             try
             {
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/MaxWeightActivity/{id}");
 
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadAsAsync<(WeightActivityDTO activity, double weight, int reps)>();
+                    return await response.Content.ReadAsAsync<PersonalRecordDTO>();
                 else
                     throw new Exception("Server respond is not success.");
             }
@@ -204,7 +362,7 @@ namespace TrainingManager.Model.Services
                 HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/GetWatchedMaxWeightActivities");
 
                 if (response.IsSuccessStatusCode)
-                    return await response.Content.ReadAsAsync< ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
+                    return await response.Content.ReadAsAsync<ICollection<(WeightActivityDTO activity, double weight, int reps)>>();
                 else
                     throw new Exception("Server respond is not success.");
             }
@@ -237,6 +395,24 @@ namespace TrainingManager.Model.Services
 
                 if (response.IsSuccessStatusCode)
                     return await response.Content.ReadAsAsync<ICollection<WeightActivityDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                //todo: saját exception dobása
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<IEnumerable<WeightRoundDTO>> GetPreviousRoundsAsync(Guid id, int take)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/WeightActivities/LastRounds/{id}/{take}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<WeightRoundDTO>>();
                 else
                     throw new Exception("Server respond is not success.");
             }
@@ -405,12 +581,12 @@ namespace TrainingManager.Model.Services
                 throw new Exception("Server respond is not success.");
         }
 
-        public async Task<IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)>> GetMovedWeightsGroupByMonth()
+        public async Task<IEnumerable<YearMonthWorkoutGroupDTO>> GetMovedWeightsGroupByMonth()
         {
             HttpResponseMessage response = await _client.GetAsync("api/WeightWorkouts/GetMovedWeightsGroupByMonth");
 
             if (response.IsSuccessStatusCode)
-                return await response.Content.ReadAsAsync<IEnumerable<(int year, int month, IEnumerable<(DateTime date, double weight)>)>>();
+                return await response.Content.ReadAsAsync<IEnumerable<YearMonthWorkoutGroupDTO>>();
             else
                 throw new Exception("Server respond is not success.");
         }
@@ -424,5 +600,7 @@ namespace TrainingManager.Model.Services
             else
                 throw new Exception("Server respond is not success.");
         }
+
+
     }
 }

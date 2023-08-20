@@ -1,11 +1,10 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
 using TrainingManager.WebApi.Data;
@@ -63,22 +62,41 @@ namespace TrainingManager.WebApi.Controllers
         [HttpGet("MaxWeightActivity/{id}")]
         public IActionResult GetMaxWeightActivity([FromRoute] Guid id)
         {
-            try 
+            try
             {
                 if (!ModelState.IsValid)
                     return BadRequest(ModelState);
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                int activityId = _context.WeightActivities.Single(x => x.OwnerUserName == user.UserName && x.ActivityGuid == id).Id;
 
-                var maximums = _statFunctions.FindMaxMovedWeightsByActivites(
-                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
-                        _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)
-                        .Where(x => x.ActivityGuid == id));
+                return Ok(
+                    _statFunctions.FindMaxMovedWeightsOfActivity(
+                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName && u.ActivityId == activityId)
+                        )
+                    );
+            }
+            catch
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+        }
 
-                if (maximums == null || maximums.Count() == 0)
+        [HttpGet("LastRounds/{id}/{take}")]
+        public IActionResult GetLastRounds([FromRoute] Guid id, int take)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+
+                ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+                var lastRounds = _statFunctions.GetLastRoundsOfActivity(_context.WeightActivities.Single(x => x.ActivityGuid == id).Id, user, take);
+
+                if (lastRounds == null || lastRounds.Count() == 0)
                     return NotFound();
-            
-                return Ok(maximums.FirstOrDefault());
+
+                return Ok(lastRounds);
             }
             catch
             {
@@ -129,7 +147,7 @@ namespace TrainingManager.WebApi.Controllers
 
                     foreach (var item in foundElements)
                     {
-                        if (!uniqueFoundElements.Any(x => x.ActivityGuid  == item.ActivityGuid))
+                        if (!uniqueFoundElements.Any(x => x.ActivityGuid == item.ActivityGuid))
                             uniqueFoundElements.Add(item);
                     }
 
