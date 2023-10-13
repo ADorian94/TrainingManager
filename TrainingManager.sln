@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30717.126
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingManager.Android", "TrainingManager\TrainingManager.Android\TrainingManager.Android.csproj", "{7D73FF56-812E-4822-8DA5-28F22D942909}"
 EndProject
@@ -18,6 +18,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{D0955D8D-A822-4CC1-ADE1-7E7D9033D0E1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainingManagerUnitTest", "TrainingManagerUnitTest\TrainingManagerUnitTest.csproj", "{92BEBF19-CBD4-4922-BDC2-1E79615FDEC4}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ServerSide", "ServerSide", "{61FD7EC0-030D-4CA6-9A46-A111D3A18BA9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiftItAPI", "LiftItAPI\LiftItAPI.csproj", "{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -167,12 +171,29 @@ Global
 		{92BEBF19-CBD4-4922-BDC2-1E79615FDEC4}.Release|x64.Build.0 = Release|Any CPU
 		{92BEBF19-CBD4-4922-BDC2-1E79615FDEC4}.Release|x86.ActiveCfg = Release|Any CPU
 		{92BEBF19-CBD4-4922-BDC2-1E79615FDEC4}.Release|x86.Build.0 = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|ARM.Build.0 = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|x64.Build.0 = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Debug|x86.Build.0 = Debug|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|ARM.Build.0 = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|x64.ActiveCfg = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|x64.Build.0 = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|x86.ActiveCfg = Release|Any CPU
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{92BEBF19-CBD4-4922-BDC2-1E79615FDEC4} = {D0955D8D-A822-4CC1-ADE1-7E7D9033D0E1}
+		{DDEE985D-B16D-4F8F-8832-C6E4DD836F4D} = {61FD7EC0-030D-4CA6-9A46-A111D3A18BA9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {D8C6AB52-D3EB-4C98-8EE9-CB4B1A5264AE}

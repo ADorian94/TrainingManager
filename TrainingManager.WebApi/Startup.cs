@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +24,6 @@ namespace TrainingManager.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             //adatábzis beállítása
             services.AddDbContext<TrainingManagerContext>(options => options.UseSqlite("Data Source=TrainingManager.db"));
@@ -34,7 +32,7 @@ namespace TrainingManager.WebApi
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TrainingManagerContext>()
                 .AddDefaultTokenProviders();
-
+            services.AddMvc();
             services.Configure<IdentityOptions>(options =>
             {
                 // Jelszó komplexitására vonatkozó konfiguráció
@@ -72,7 +70,7 @@ namespace TrainingManager.WebApi
             app.UseStaticFiles();
             app.UseHttpsRedirection();
             app.UseAuthentication();
-            app.UseMvc();
         }
     }
 }
+
