@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Identity;
 
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
+using TrainingManager.WebApi.Utility;
 
 namespace TrainingManager.WebApi
 {
@@ -73,6 +74,8 @@ namespace TrainingManager.WebApi
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseMvc();
+
+            PersonalRecordUpdater.Update(app);
         }
     }
 }

@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingManager.WebApi.Data;
 
 namespace TrainingManager.WebApi.Migrations
 {
     [DbContext(typeof(TrainingManagerContext))]
-    partial class TrainingManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20240413083859_PersonalRecords2")]
+    partial class PersonalRecords2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

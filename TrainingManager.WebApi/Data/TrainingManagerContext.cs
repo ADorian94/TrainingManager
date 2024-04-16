@@ -21,5 +21,6 @@ namespace TrainingManager.WebApi.Data
         public DbSet<WeightActivity> WeightActivities { get; set; }
         public DbSet<WeightRound> WeightRounds { get; set; }
         public DbSet<WorkoutImage> WorkoutImages { get; set; }
+        public DbSet<PersonalRecord> PersonalRecords { get; set; }
     }
 }

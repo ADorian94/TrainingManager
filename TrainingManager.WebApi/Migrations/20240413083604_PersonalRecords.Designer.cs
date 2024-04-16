@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TrainingManager.WebApi.Data;
 
 namespace TrainingManager.WebApi.Migrations
 {
     [DbContext(typeof(TrainingManagerContext))]
-    partial class TrainingManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20240413083604_PersonalRecords")]
+    partial class PersonalRecords
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,30 +180,6 @@ namespace TrainingManager.WebApi.Migrations
                         .HasName("UserNameIndex");
 
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("TrainingManager.WebApi.Model.PersonalRecord", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<int>("ActivityId");
-
-                    b.Property<string>("OwnerUserName");
-
-                    b.Property<DateTime>("PersonalRecordDate");
-
-                    b.Property<Guid>("PersonalRecordGuid");
-
-                    b.Property<int>("RepsOfPersonalRecord");
-
-                    b.Property<double>("WeightOfPersonalRecord");
-
-                    b.Property<int>("WorkoutId");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("PersonalRecords");
                 });
 
             modelBuilder.Entity("TrainingManager.WebApi.Model.WeightActivity", b =>
