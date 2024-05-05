@@ -60,8 +60,12 @@ namespace TrainingManager.WebApi.Utility
                             .OrderByDescending(y => y.WeightOfPersonalRecord)
                             .FirstOrDefault();
 
-                        if (record.WeightOfPersonalRecord < roundWithMaxweight.WeightOfExercise)
+                        if (record.WeightOfPersonalRecord < roundWithMaxweight.WeightOfExercise ||
+                            (record.WeightOfPersonalRecord == roundWithMaxweight.WeightOfExercise &&
+                            record.RepsOfPersonalRecord < roundWithMaxweight.Reps))
+                        {
                             await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);
+                        }
                     }
                     else
                         await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);

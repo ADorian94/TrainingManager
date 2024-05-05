@@ -1,12 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace TrainingManager.Data.DTO
 {
     public class PersonalRecordDTO
     {
-        public double Weight { get; set; }
-        public int Reps { get; set; }
+        public int Id { get; set; }
+        public Guid PersonalRecordGuid { get; set; }
+        public string OwnerUserName { get; set; }
+        public double WeightOfPersonalRecord { get; set; }
+        public int RepsOfPersonalRecord { get; set; }
+        public int ActivityId { get; set; }
+        public int WorkoutId { get; set; }
+        public DateTime PersonalRecordDate { get; set; }
     }
 }

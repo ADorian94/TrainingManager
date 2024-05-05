@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
+using TrainingManager.WebApi.Controllers.Functions.Interfaces;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
@@ -17,12 +18,14 @@ namespace TrainingManager.WebApi.Controllers
     public class WeightActivitiesController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
-        private readonly StatFunctions _statFunctions;
+        private readonly IStatFunctions _statFunctions;
+        private readonly IPersonalRecordHelperFunctions _personalRecordFunctions;
 
-        public WeightActivitiesController(TrainingManagerContext context)
+        public WeightActivitiesController(TrainingManagerContext context, IPersonalRecordHelperFunctions personalRecordFunctions, IStatFunctions statFunctions)
         {
             _context = context;
-            _statFunctions = new StatFunctions(context);
+            _statFunctions = statFunctions;
+            _personalRecordFunctions = personalRecordFunctions;
         }
 
         // GET: api/WeightActivities
@@ -68,11 +71,9 @@ namespace TrainingManager.WebApi.Controllers
                     return BadRequest(ModelState);
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                int activityId = _context.WeightActivities.Single(x => x.OwnerUserName == user.UserName && x.ActivityGuid == id).Id;
-
                 return Ok(
-                    _statFunctions.FindMaxMovedWeightsOfActivity(
-                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName && u.ActivityId == activityId)
+                    _personalRecordFunctions.FindMaxMovedWeightsOfActivity(
+                        _context.WeightActivities.Single(x => x.OwnerUserName == user.UserName && x.ActivityGuid == id).Id
                         )
                     );
             }
@@ -114,9 +115,7 @@ namespace TrainingManager.WebApi.Controllers
 
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
 
-                return Ok(_statFunctions.FindWatchedMaxMovedWeightsByActivites(
-                        _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
-                        _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
+                return Ok(_personalRecordFunctions.FindMaxMovedWeightsByActivites(user));
             }
             catch
             {

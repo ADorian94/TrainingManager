@@ -124,8 +124,8 @@ namespace TrainingManager.ViewModel
             try
             {
                 var activityDetails = await _apiServices.GetWeightActivityPRAsync(id);
-                SelectedActivityReps = activityDetails.Reps;
-                SelectedActivityWeight = activityDetails.Weight;
+                SelectedActivityReps = activityDetails.RepsOfPersonalRecord;
+                SelectedActivityWeight = activityDetails.WeightOfPersonalRecord;
             }
             catch
             {

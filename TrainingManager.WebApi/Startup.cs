@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
 using TrainingManager.WebApi.Utility;
+using TrainingManager.WebApi.Controllers.Functions;
+using TrainingManager.WebApi.Controllers.Functions.Interfaces;
 
 namespace TrainingManager.WebApi
 {
@@ -29,12 +31,15 @@ namespace TrainingManager.WebApi
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             //adatábzis beállítása
-            services.AddDbContext<TrainingManagerContext>(options => options.UseSqlite("Data Source=TrainingManager.db"));
+            services.AddDbContext<TrainingManagerContext>(options => options.UseSqlite("Data Source=TrainingManager.db"), ServiceLifetime.Scoped);
 
             //autentikáció beállítása
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TrainingManagerContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddScoped<IPersonalRecordHelperFunctions, PersonalRecordHelperFunctions>();
+            services.AddScoped<IStatFunctions, StatFunctions>();
 
             services.Configure<IdentityOptions>(options =>
             {

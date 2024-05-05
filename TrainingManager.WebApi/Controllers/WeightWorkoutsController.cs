@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 using TrainingManager.WebApi.Controllers.Functions;
+using TrainingManager.WebApi.Controllers.Functions.Interfaces;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
-using static Microsoft.AspNetCore.Hosting.Internal.HostingApplication;
 
 namespace TrainingManager.WebApi.Controllers
 {
@@ -22,12 +22,14 @@ namespace TrainingManager.WebApi.Controllers
     public class WeightWorkoutsController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
-        private readonly StatFunctions _statFunctions;
+        private readonly IStatFunctions _statFunctions;
+        private readonly IPersonalRecordHelperFunctions _personalRecordFunctions;
 
-        public WeightWorkoutsController(TrainingManagerContext context)
+        public WeightWorkoutsController(TrainingManagerContext context, IPersonalRecordHelperFunctions personalRecordFunctions, IStatFunctions statFunctions)
         {
             _context = context;
-            _statFunctions = new StatFunctions(context);
+            _statFunctions = statFunctions;
+            _personalRecordFunctions = personalRecordFunctions;
         }
 
         // GET: api/WeightWorkouts
@@ -369,8 +371,8 @@ namespace TrainingManager.WebApi.Controllers
                 }
 
                 await _context.SaveChangesAsync();
-
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
+                await _personalRecordFunctions.UpdatePersonalRecordsByWorkout(weightWorkout);
 
                 if (weightWorkoutDTO.WorkoutImages != null)
                     await AddImagesForWorkoutAsync(weightWorkoutDTO.WorkoutImages, weightWorkoutDTO.WorkoutGuid);
@@ -415,6 +417,7 @@ namespace TrainingManager.WebApi.Controllers
 
                 await AddWeightExercisesAsync(weightWorkoutDTO.WeightExercisesDto, weightWorkoutDTO.WorkoutGuid);
                 await MergeMultipleActivities();
+                await _personalRecordFunctions.AddNewPersonalRecordsIfNeeded(newWeightWorkout);
 
                 return CreatedAtAction("GetWeightWorkout", new { id = addedWorkout.Entity.Id }, weightWorkoutDTO);
             }
@@ -446,6 +449,7 @@ namespace TrainingManager.WebApi.Controllers
                     await RemoveImages(weightWorkout.Id);
 
                 await RemoveExercises(weightWorkout.Id);
+                await _personalRecordFunctions.RemovePersonalRecordsByWorkout(weightWorkout);
                 _context.WeightWorkouts.Remove(weightWorkout);
                 await _context.SaveChangesAsync();
 
@@ -478,6 +482,7 @@ namespace TrainingManager.WebApi.Controllers
                     await RemoveImages(weightWorkout.Id);
 
                 await RemoveExercises(weightWorkout.Id);
+                await _personalRecordFunctions.RemovePersonalRecordsByWorkout(weightWorkout);
                 _context.WeightWorkouts.Remove(weightWorkout);
                 await _context.SaveChangesAsync();
 
@@ -510,9 +515,7 @@ namespace TrainingManager.WebApi.Controllers
             try
             {
                 ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-                return Ok(_statFunctions.FindMaxMovedWeightsByActivites(
-                    _context.WeightExercises.Where(u => u.OwnerUserName == user.UserName),
-                    _context.WeightActivities.Where(u => u.OwnerUserName == user.UserName)));
+                return Ok(_personalRecordFunctions.FindMaxMovedWeightsByActivites(user));
             }
             catch
             {
