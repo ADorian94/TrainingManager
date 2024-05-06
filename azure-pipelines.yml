@@ -31,7 +31,7 @@ steps:
 - task: XamarinAndroid@1
   displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
   inputs:
-    projectFile: '**/*Droid*.csproj'
+    projectFile: '**/*Android*.csproj'
     outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
     configuration: '$(BuildConfiguration)'
     msbuildVersionOption: latest
