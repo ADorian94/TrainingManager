@@ -25,12 +25,6 @@ steps:
     echo "Current directory: $(pwd)"
     ls **/*.csproj
   displayName: 'Check for .csproj files'
-
-- task: XamarinComponentInstaller@1
-  displayName: 'Install Xamarin.Android'
-  inputs:
-    xamarinVersion: 'latest'
-
 - task: XamarinAndroid@1
   displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
   inputs:
@@ -39,6 +33,7 @@ steps:
     configuration: '$(BuildConfiguration)'
     msbuildVersionOption: latest
     msbuildArchitectureOption: x64
+    jdkOption: 'JDKVersion'
 
 - task: MSBuild@1
   displayName: 'Unit tests'
