@@ -1,54 +1,64 @@
-# Universal Windows Platform
-# Build a Universal Windows Platform project using Visual Studio.
-# Add steps that test and distribute an app, save build artifacts, and more:
-# https://aka.ms/yaml
-
-trigger:
-- master
-
 pool:
-  vmImage: 'windows-latest'
+  name: Azure Pipelines
+  demands:
+  - MSBuild
+  - Xamarin.Android
+  - msbuild
+  - vstest
+  - JDK
 
+#Your build pipeline references a secret variable named ‘KeyStore.Password’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
+#Your build pipeline references a secret variable named ‘KeyStore.Password’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'x86|x64|ARM'
-  buildConfiguration: 'Release'
-  appxPackageDir: '$(build.artifactStagingDirectory)\AppxPackages\\'
+  restorePkgSolution: '**\*.sln'
 
 steps:
-- task: NuGetToolInstaller@1
+- task: NuGetToolInstaller@0
+  displayName: 'Use NuGet 4.4.1'
+  inputs:
+    versionSpec: 4.4.1
 
 - task: NuGetCommand@2
+  displayName: 'NuGet restore'
   inputs:
-    restoreSolution: '$(solution)'
+    restoreSolution: '$(Parameters.restorePkgSolution)'
 
-- task: VSBuild@1
+- task: XamarinAndroid@1
+  displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
   inputs:
-    platform: 'x86'
-    solution: '$(solution)'
-    configuration: '$(buildConfiguration)'
-    msbuildArgs: '/p:AppxBundlePlatforms="$(buildPlatform)" 
-                  /p:AppxPackageDir="$(appxPackageDir)" 
-                  /p:AppxBundle=Always 
-                  /p:UapAppxPackageBuildMode=StoreUpload 
-                  /p:AppxPackageSigningEnabled=true
-                  /p:PackageCertificateThumbprint="" 
-                  /p:PackageCertificateKeyFile="$(signingCert.secureFilePath)"'
+    projectFile: '**/*Droid*.csproj'
+    outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
+    configuration: '$(BuildConfiguration)'
+    msbuildVersionOption: latest
+    msbuildArchitectureOption: x64
 
-- task: DownloadSecureFile@1
-  name: signingCert
-  displayName: 'Download CA certificate'
+- task: MSBuild@1
+  displayName: 'Unit tests'
   inputs:
-    secureFile: 'TrainingManager.UWP_TemporaryKey.pfx'
+    solution: TrainingManagerUnitTest/TrainingManagerUnitTest.csproj
+    configuration: '$(BuildConfiguration)'
+    msbuildArguments: '/p:OutputPath="$(build.binariesdirectory)/$(BuildConfiguration)/test-assembly"'
 
-- task: CopyFiles@2
-  displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
+- task: VSTest@2
+  displayName: 'VsTest - testAssemblies'
   inputs:
-    SourceFolder: '$(system.defaultworkingdirectory)'
-    Contents: '**\bin\$(BuildConfiguration)\**'
-    TargetFolder: '$(build.artifactstagingdirectory)'
+    testAssemblyVer2: |
+     **\*test*.dll
+     !**\*TestAdapter.dll
+     !**\obj\**
+    searchFolder: '$(build.binariesdirectory)\$(BuildConfiguration)\test-assembly'
+
+- task: AndroidSigning@3
+  displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+  inputs:
+    apkFiles: '$(Parameters.appFiles)'
+    apksignerKeystoreFile: '24ee6cce-2fca-4670-96ba-64f6d7d6feb1'
+    apksignerKeystorePassword: '$(KeyStore.Password)'
+    apksignerKeystoreAlias: '$(KeyStore.Alias)'
+    apksignerKeyPassword: '$(KeyStore.Password)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
-    PathtoPublish: '$(build.artifactstagingdirectory)'
+    PathtoPublish: '$(build.binariesdirectory)/$(BuildConfiguration)'
+  condition: succeededOrFailed()
