@@ -3,14 +3,12 @@ pool:
   demands:
   - MSBuild
   - Xamarin.Android
-  - msbuild
   - vstest
   - JDK
 
-#Your build pipeline references a secret variable named ‘KeyStore.Password’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
-#Your build pipeline references a secret variable named ‘KeyStore.Password’. Create or edit the build pipeline for this YAML file, define the variable on the Variables tab, and then select the option to make it secret. See https://go.microsoft.com/fwlink/?linkid=865972
 variables:
   restorePkgSolution: '**\*.sln'
+  binariesDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
 
 steps:
 - task: NuGetToolInstaller@0
@@ -21,18 +19,23 @@ steps:
 - task: NuGetCommand@2
   displayName: 'NuGet restore'
   inputs:
-    restoreSolution: '$(Parameters.restorePkgSolution)'
+    restoreSolution: '$(restorePkgSolution)'
 
 - script: |
     echo "Current directory: $(pwd)"
     ls **/*.csproj
   displayName: 'Check for .csproj files'
 
+- task: XamarinComponentInstaller@1
+  displayName: 'Install Xamarin.Android'
+  inputs:
+    xamarinVersion: 'latest'
+
 - task: XamarinAndroid@1
   displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
   inputs:
     projectFile: '**/*Android*.csproj'
-    outputDirectory: '$(build.binariesdirectory)/$(BuildConfiguration)'
+    outputDirectory: '$(binariesDirectory)'
     configuration: '$(BuildConfiguration)'
     msbuildVersionOption: latest
     msbuildArchitectureOption: x64
@@ -42,7 +45,7 @@ steps:
   inputs:
     solution: TrainingManagerUnitTest/TrainingManagerUnitTest.csproj
     configuration: '$(BuildConfiguration)'
-    msbuildArguments: '/p:OutputPath="$(build.binariesdirectory)/$(BuildConfiguration)/test-assembly"'
+    msbuildArguments: '/p:OutputPath="$(binariesDirectory)/test-assembly"'
 
 - task: VSTest@2
   displayName: 'VsTest - testAssemblies'
@@ -51,10 +54,10 @@ steps:
      **\*test*.dll
      !**\*TestAdapter.dll
      !**\obj\**
-    searchFolder: '$(build.binariesdirectory)\$(BuildConfiguration)\test-assembly'
+    searchFolder: '$(binariesDirectory)/test-assembly'
 
 - task: AndroidSigning@3
-  displayName: 'Signing and aligning APK file(s) $(build.binariesdirectory)/$(BuildConfiguration)/*.apk'
+  displayName: 'Signing and aligning APK file(s)'
   inputs:
     apkFiles: '$(Parameters.appFiles)'
     apksignerKeystoreFile: '24ee6cce-2fca-4670-96ba-64f6d7d6feb1'
@@ -65,5 +68,5 @@ steps:
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact: drop'
   inputs:
-    PathtoPublish: '$(build.binariesdirectory)/$(BuildConfiguration)'
+    PathtoPublish: '$(binariesDirectory)'
   condition: succeededOrFailed()
