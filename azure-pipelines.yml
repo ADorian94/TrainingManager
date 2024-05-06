@@ -23,7 +23,7 @@ steps:
 
 - script: |
     echo "Current directory: $(pwd)"
-    ls **/*.csproj
+    ls **/*droid*.csproj
   displayName: 'Check for .csproj files'
 - task: XamarinAndroid@1
   displayName: 'Build Xamarin.Android project **/*Droid*.csproj'
