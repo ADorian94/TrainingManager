@@ -25,6 +25,7 @@ namespace TrainingManager
         {
             try
             {
+                //build trigger command
                 LogHandler.InitializeLogPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
                 LogHandler.Instance.Nlog.Info("**********NEW RUN**********");
                 DebugSettingsJSONHandler.InitializeJSONPath(DependencyService.Get<IDataAcess>().GetExternalStorage());
