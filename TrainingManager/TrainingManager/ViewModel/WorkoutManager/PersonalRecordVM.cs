@@ -1,49 +1,39 @@
 ﻿using System;
-using TrainingManager.Data;
 using TrainingManager.Data.DTO;
 
-namespace TrainingManager.ViewModel
+namespace TrainingManager.ViewModel.WorkoutManager
 {
     public class PersonalRecordVM : ViewModelBase
     {
         //FIELDS
-        private Action<PersonalRecordVM> _recordSelection;
+        private Guid _personalRecordGuid;
+        private string _ownerUserName;
+        private int _activityId;
+        private int _workoutId;
 
         //PROPERTIES
-        private Guid _id;
-        public Guid Id { get => _id; set { _id = value; OnPropertyChanged(); } }
+        public double _weightOfPersonalRecord;
+        public double WeightOfPersonalRecord { get => _weightOfPersonalRecord; set { _weightOfPersonalRecord = value; OnPropertyChanged(); } }
 
-        private string _activityName;
-        public string ActivityName { get => _activityName; set { _activityName = value; OnPropertyChanged(); } }
-        
-        public Muscle _mainMuscleGroup;
-        public Muscle MainMuscleGroup { get => _mainMuscleGroup; set { _mainMuscleGroup = value; OnPropertyChanged(); } }
-        
-        public double _weight;
-        public double Weight { get => _weight; set { _weight = value; OnPropertyChanged(); } }
-        
-        private int _reps;
-        public int Reps { get => _reps; set { _reps = value; OnPropertyChanged(); } }
+        public int _repsOfPersonalRecord;
+        public int RepsOfPersonalRecord { get => _repsOfPersonalRecord; set { _repsOfPersonalRecord = value; OnPropertyChanged(); } }
 
-        public PersonalRecordVM((WeightActivityDTO activity, double weight, int reps) personalRecord, Action<PersonalRecordVM> recordSelection)
+        private DateTime _personalRecordDate;
+        public DateTime PersonalRecordDate { get => _personalRecordDate; set { _personalRecordDate = value; OnPropertyChanged(); } }
+
+        public PersonalRecordVM(PersonalRecordDTO _personalRecordDTO)
         {
-            Id = personalRecord.activity.ActivityGuid;
-            ActivityName = personalRecord.activity.ActivityName;
-            MainMuscleGroup = personalRecord.activity.MainMuscleGroup;
-            Weight = personalRecord.weight;
-            Reps = personalRecord.reps;
-            _recordSelection = recordSelection;
+            WeightOfPersonalRecord = _personalRecordDTO.WeightOfPersonalRecord;
+            RepsOfPersonalRecord = _personalRecordDTO.RepsOfPersonalRecord;
+            PersonalRecordDate = _personalRecordDTO.PersonalRecordDate;
+            _personalRecordGuid = _personalRecordDTO.PersonalRecordGuid;
+            _ownerUserName = _personalRecordDTO.OwnerUserName;
+            _activityId = _personalRecordDTO.ActivityId;
+            _workoutId = _personalRecordDTO.WorkoutId;
         }
-
-        //COMMANDS
-        public DelegateCommand PersonalRecordSelectedCommand { get; private set; }
 
         protected override void InitializeCommands()
         {
-            PersonalRecordSelectedCommand = new DelegateCommand(PersonalRecordSelectedFunction);
         }
-
-        //COMMAND FUNCTION
-        private void PersonalRecordSelectedFunction(object obj) => _recordSelection?.Invoke(this);
     }
 }

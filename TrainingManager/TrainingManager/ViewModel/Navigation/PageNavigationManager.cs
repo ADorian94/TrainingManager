@@ -471,7 +471,7 @@ namespace TrainingManager.ViewModel.Navigation
             await _mainNavigationPage.PushAsync(_muscleSelectPage);
         }
 
-        private void WeightRecordSelected(PersonalRecordVM record) => _weightActivityManagerVM.SetupRecord(record);
+        private void WeightRecordSelected(PersonalRecordCardVM record) => _weightActivityManagerVM.SetupRecord(record);
         private async Task Estimate1RMDialog(Page page, WorkoutManagerBaseVM viewModel, string id)
         {
             (double weight, double reps) round = viewModel.Estimate1RM(id);

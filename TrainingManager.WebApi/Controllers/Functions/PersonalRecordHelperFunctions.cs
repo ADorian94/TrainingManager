@@ -36,6 +36,7 @@ namespace TrainingManager.WebApi.Controllers.Functions
                     {
                         WorkoutId = workout.Id,
                         ActivityId = actualActivity.Id,
+                        ActivityGuid = actualActivity.ActivityGuid,
                         PersonalRecordGuid = Guid.NewGuid(),
                         OwnerUserName = workout.OwnerUserName,
                         PersonalRecordDate = workout.WorkoutDate,

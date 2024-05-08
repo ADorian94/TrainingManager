@@ -1,0 +1,49 @@
+﻿using System;
+using TrainingManager.Data;
+using TrainingManager.Data.DTO;
+
+namespace TrainingManager.ViewModel
+{
+    public class PersonalRecordCardVM : ViewModelBase
+    {
+        //FIELDS
+        private Action<PersonalRecordCardVM> _recordSelection;
+
+        //PROPERTIES
+        private Guid _id;
+        public Guid Id { get => _id; set { _id = value; OnPropertyChanged(); } }
+
+        private string _activityName;
+        public string ActivityName { get => _activityName; set { _activityName = value; OnPropertyChanged(); } }
+        
+        public Muscle _mainMuscleGroup;
+        public Muscle MainMuscleGroup { get => _mainMuscleGroup; set { _mainMuscleGroup = value; OnPropertyChanged(); } }
+        
+        public double _weight;
+        public double Weight { get => _weight; set { _weight = value; OnPropertyChanged(); } }
+        
+        private int _reps;
+        public int Reps { get => _reps; set { _reps = value; OnPropertyChanged(); } }
+
+        public PersonalRecordCardVM((WeightActivityDTO activity, double weight, int reps) personalRecord, Action<PersonalRecordCardVM> recordSelection)
+        {
+            Id = personalRecord.activity.ActivityGuid;
+            ActivityName = personalRecord.activity.ActivityName;
+            MainMuscleGroup = personalRecord.activity.MainMuscleGroup;
+            Weight = personalRecord.weight;
+            Reps = personalRecord.reps;
+            _recordSelection = recordSelection;
+        }
+
+        //COMMANDS
+        public DelegateCommand PersonalRecordSelectedCommand { get; private set; }
+
+        protected override void InitializeCommands()
+        {
+            PersonalRecordSelectedCommand = new DelegateCommand(PersonalRecordSelectedFunction);
+        }
+
+        //COMMAND FUNCTION
+        private void PersonalRecordSelectedFunction(object obj) => _recordSelection?.Invoke(this);
+    }
+}

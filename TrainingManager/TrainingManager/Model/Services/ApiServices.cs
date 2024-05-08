@@ -355,6 +355,60 @@ namespace TrainingManager.Model.Services
             }
         }
 
+        public async Task<IEnumerable<PersonalRecordDTO>> GetPersonalRecordHistory(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/PersonalRecords/GetPersonalRecordHistory/{id}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<PersonalRecordDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<IEnumerable<PersonalRecordDTO>> GetPersonalRecordHistory(Guid id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/PersonalRecords/GetPersonalRecordHistory/{id}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<ICollection<PersonalRecordDTO>>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+        public async Task<PersonalRecordDTO> GetPersonalRecordByActivityGuid(Guid id)
+        {
+            try
+            {
+                HttpResponseMessage response = await _client.GetAsync($"api/PersonalRecords/{id}");
+
+                if (response.IsSuccessStatusCode)
+                    return await response.Content.ReadAsAsync<PersonalRecordDTO>();
+                else
+                    throw new Exception("Server respond is not success.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
         public async Task<IEnumerable<(WeightActivityDTO activity, double weight, int reps)>> GetWatchedWeightActivitiesAsync()
         {
             try

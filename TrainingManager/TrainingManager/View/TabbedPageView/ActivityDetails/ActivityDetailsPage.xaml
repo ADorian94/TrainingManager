@@ -44,7 +44,7 @@
                                             CardSecondaryText="{Binding SelectedActivity.MainMuscleGroup}"
                                             CardFrameTapped="{Binding MuscleSetupCommand}"/>
                 </Grid>
-                <ListView Grid.Row="2" ItemsSource="{Binding PreviousRounds}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
+                <ListView Grid.Row="2" ItemsSource="{Binding PersonalRecordHistory}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
                     <ListView.Header>
                         <StackLayout>
                             <Label Text="Personal record" Style="{StaticResource Title1}" />
@@ -52,20 +52,24 @@
                                             CardMainEntry="{Binding SelectedActivityWeight}"
                                             CardSecondaryText="Reps"
                                             CardSecondaryEntry="{Binding SelectedActivityReps}"/>
-                            <Label Text="Last time you did it" Style="{StaticResource Title1}" />
+                            <Label Text="Personal Record History" Style="{StaticResource Title1}" />
                         </StackLayout>
                     </ListView.Header>
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
                                 <controls:LowCardWithLabels CardMainText="Weight"
-                                        CardMainEntry="{Binding WeightOfExercise}"
+                                        CardMainEntry="{Binding WeightOfPersonalRecord}"
                                         CardSecondaryText="Reps"
-                                        CardSecondaryEntry="{Binding Reps}"
-                                        CardColor="{Binding RoundColor}"/>
+                                        CardSecondaryEntry="{Binding RepsOfPersonalRecord}"/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.Footer>
+                        <StackLayout>
+                            <controls:PersonalRecordLinearChart CardMainText="Weight chart" HeightRequest="400" VerticalOptions="FillAndExpand" HorizontalOptions="FillAndExpand" ChartEntries="{Binding RecordWeight}" />
+                        </StackLayout>
+                    </ListView.Footer>
                 </ListView>
                 <Button Grid.Row="3" Text="Update" Command="{Binding UpdateExerciseCommand}" Style="{StaticResource RedButton}" VerticalOptions="EndAndExpand"/>
             </Grid>

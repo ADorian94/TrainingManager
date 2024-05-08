@@ -12,7 +12,7 @@ namespace TrainingManager.ViewModel
         //FIELDS
         private IApiServices _apiServices;
         private OneRepetitionMaximumModel _model;
-        private Action<PersonalRecordVM> _recordSelection;
+        private Action<PersonalRecordCardVM> _recordSelection;
 
         //EVENTS
         public event EventHandler CalculationStartEvent;
@@ -24,13 +24,13 @@ namespace TrainingManager.ViewModel
         private DateTime _date;
         public DateTime Date { get => _date; set { _date = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<PersonalRecordVM> _personalRecords;
-        public ObservableCollection<PersonalRecordVM> PersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
+        private ObservableCollection<PersonalRecordCardVM> _personalRecords;
+        public ObservableCollection<PersonalRecordCardVM> PersonalRecords { get => _personalRecords; set { _personalRecords = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand CalculateMaximumCommand { get; private set; }
 
-        public OneRepetitionMaximumVM(IApiServices apiServices, Action<PersonalRecordVM> recordSelection)
+        public OneRepetitionMaximumVM(IApiServices apiServices, Action<PersonalRecordCardVM> recordSelection)
         {
             _model = new OneRepetitionMaximumModel();
             _apiServices = apiServices;
@@ -103,7 +103,7 @@ namespace TrainingManager.ViewModel
         private async void InitPersonalRecords()
         {
             var records = await _apiServices.GetMaxMovedWeightsByActivites();
-            PersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x, _recordSelection)));
+            PersonalRecords = new ObservableCollection<PersonalRecordCardVM>(records.Select(x => new PersonalRecordCardVM(x, _recordSelection)));
         }
     }
 }

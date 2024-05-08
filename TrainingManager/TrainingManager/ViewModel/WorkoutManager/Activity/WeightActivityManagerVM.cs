@@ -34,8 +34,11 @@ namespace TrainingManager.ViewModel
         private EnumeratorVM<Muscle> _muscleVM;
         public EnumeratorVM<Muscle> MuscleVM { get => _muscleVM; set { _muscleVM = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<WeightRoundVM> _previousRounds;
-        public ObservableCollection<WeightRoundVM> PreviousRounds { get => _previousRounds; set { _previousRounds = value; OnPropertyChanged(); } }
+        private ObservableCollection<PersonalRecordVM> _personalRecordHistory;
+        public ObservableCollection<PersonalRecordVM> PersonalRecordHistory { get => _personalRecordHistory; set { _personalRecordHistory = value; OnPropertyChanged(); } }
+
+        private ObservableCollection<(DateTime date, double weight)> _recordWeight;
+        public ObservableCollection<(DateTime date, double weight)> RecordWeight { get => _recordWeight; set { _recordWeight = value; OnPropertyChanged(); } }
 
         //COMMANDS
         public DelegateCommand ActivitiySelectedCommand { get; private set; }
@@ -95,27 +98,22 @@ namespace TrainingManager.ViewModel
             var index = int.Parse((string)obj);
             SelectedActivity = new WeightActivityVM(Activites[index - 1]);
             await SetPrOfActvity(SelectedActivity.Id);
-            await SetLAtestRoundsOfActivity(SelectedActivity.Id);
+            await GetPersonalRecordHistory(SelectedActivity.Id);
             WeightActivitySelected?.Invoke(this, EventArgs.Empty);
         }
 
-        private async Task SetLAtestRoundsOfActivity(Guid id)
+        private async Task GetPersonalRecordHistory(Guid avtivityGuid)
         {
             try
             {
-                var lastRounds = await _apiServices.GetPreviousRoundsAsync(id, 5);
-                PreviousRounds = new ObservableCollection<WeightRoundVM>(lastRounds.Select(x => new WeightRoundVM()
-                {
-                    Reps = x.Reps,
-                    WeightOfExercise = x.WeightOfExercise,
-                    RoundNumber = x.RoundNumber,
-                    RoundGuid = x.RoundGuid,
-                    RoundColor = x.Color
-                }));
+                var recordHistory = await _apiServices.GetPersonalRecordHistory(avtivityGuid);
+                PersonalRecordHistory = new ObservableCollection<PersonalRecordVM>(recordHistory.OrderByDescending(x => x.PersonalRecordDate).Select(x => new PersonalRecordVM(x)));
+                RecordWeight = new ObservableCollection<(DateTime date, double weight)>(recordHistory.OrderBy(x => x.PersonalRecordDate).Select(x => (x.PersonalRecordDate, x.WeightOfPersonalRecord)));
             }
             catch
             {
-                PreviousRounds = new ObservableCollection<WeightRoundVM>();
+                PersonalRecordHistory = new ObservableCollection<PersonalRecordVM>();
+                RecordWeight = new ObservableCollection<(DateTime date, double weight)>();
             }
         }
 
@@ -123,7 +121,7 @@ namespace TrainingManager.ViewModel
         {
             try
             {
-                var activityDetails = await _apiServices.GetWeightActivityPRAsync(id);
+                var activityDetails = await _apiServices.GetPersonalRecordByActivityGuid(id);
                 SelectedActivityReps = activityDetails.RepsOfPersonalRecord;
                 SelectedActivityWeight = activityDetails.WeightOfPersonalRecord;
             }
@@ -160,11 +158,11 @@ namespace TrainingManager.ViewModel
             MuscleVM = null;
         }
 
-        public async void SetupRecord(PersonalRecordVM record)
+        public async void SetupRecord(PersonalRecordCardVM record)
         {
             SelectedActivity = new WeightActivityVM(Activites.Single(x => x.Id == record.Id));
             await SetPrOfActvity(SelectedActivity.Id);
-            await SetLAtestRoundsOfActivity(SelectedActivity.Id);
+            await GetPersonalRecordHistory(SelectedActivity.Id);
             WeightActivitySelected?.Invoke(this, EventArgs.Empty);
         }
     }

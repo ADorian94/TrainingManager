@@ -1,7 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TrainingManager.Data.DTO;
+using TrainingManager.WebApi.Controllers.Functions.Interfaces;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
 
@@ -9,80 +13,65 @@ namespace TrainingManager.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class PersonalRecordsController : ControllerBase
     {
         private readonly TrainingManagerContext _context;
+        private readonly IPersonalRecordHelperFunctions _personalRecordFunctions;
 
-        public PersonalRecordsController(TrainingManagerContext context)
+        public PersonalRecordsController(TrainingManagerContext context, IPersonalRecordHelperFunctions personalRecordFunctions)
         {
             _context = context;
+            _personalRecordFunctions = personalRecordFunctions;
         }
 
         // GET: api/PersonalRecords
         [HttpGet]
-        public IActionResult GetPersonalRecords()
+        public async Task<IActionResult> GetPersonalRecords()
         {
-            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             var activityGroups = _context.PersonalRecords.Where(u => u.OwnerUserName == user.UserName).GroupBy(x => x.ActivityId);
             return Ok(activityGroups.Select(x => CreatePersonalRecordDTO(x.OrderBy(y => y.PersonalRecordDate).FirstOrDefault())));
         }
 
         // GET: api/PersonalRecordHistory
         [HttpGet("PersonalRecordHistories")]
-        public IActionResult PersonalRecordHistories()
+        public async Task<IActionResult> PersonalRecordHistories()
         {
-            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
+            ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
             return Ok(_context.PersonalRecords.Where(u => u.OwnerUserName == user.UserName).Select(x => CreatePersonalRecordDTO(x)));
         }
 
         // GET: api/PersonalRecords/5
         [HttpGet("{id}")]
-        public IActionResult GetPersonalRecord([FromRoute] int id)
+        public async Task<IActionResult> GetPersonalRecord([FromRoute] Guid id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            var personalRecord = _context.PersonalRecords.Where(u => u.OwnerUserName == User.Identity.Name).Single(x => x.Id == id);
+            ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            var personalRecordDTO = _personalRecordFunctions.FindMaxMovedWeightsOfActivity(_context.PersonalRecords.Where(u => u.OwnerUserName == User.Identity.Name).FirstOrDefault(x => x.ActivityGuid == id).ActivityId);
 
-            if (personalRecord == null)
+            if (personalRecordDTO == null)
                 return NotFound();
 
-            return Ok(CreatePersonalRecordDTO(personalRecord));
+            return Ok(personalRecordDTO);
         }
 
         // GET: api/PersonalRecords/5
-        [HttpGet("GetPersonalRecordHistory/{id}")]
-        public IActionResult GetPersonalRecordHistory([FromRoute] int activityId)
+        [HttpGet("GetPersonalRecordHistory/{activityGuid}")]
+        public async Task<IActionResult> GetPersonalRecordHistoryById([FromRoute] Guid activityGuid)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            ApplicationUser user = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-            var personalRecords = _context.PersonalRecords.Where(x => x.OwnerUserName == user.UserName && x.ActivityId == activityId).Select(r => CreatePersonalRecordDTO(r));
+            ApplicationUser user = await _context.Users.FirstOrDefaultAsync(u => u.UserName == User.Identity.Name);
+            var personalRecords = _context.PersonalRecords.Where(x => x.OwnerUserName == user.UserName && x.ActivityGuid == activityGuid).Select(r => CreatePersonalRecordDTO(r));
 
             if (personalRecords == null)
                 return NotFound();
 
             return Ok(personalRecords);
-        }
-
-        // DELETE: api/PersonalRecords/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeletePersonalRecord([FromRoute] int id)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            var personalRecord = await _context.PersonalRecords.FindAsync(id);
-
-            if (personalRecord == null)
-                return NotFound();
-
-            _context.PersonalRecords.Remove(personalRecord);
-            await _context.SaveChangesAsync();
-
-            return Ok(personalRecord);
         }
 
         private PersonalRecordDTO CreatePersonalRecordDTO(PersonalRecord record) => new PersonalRecordDTO()

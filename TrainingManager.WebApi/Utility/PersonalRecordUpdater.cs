@@ -64,23 +64,24 @@ namespace TrainingManager.WebApi.Utility
                             (record.WeightOfPersonalRecord == roundWithMaxweight.WeightOfExercise &&
                             record.RepsOfPersonalRecord < roundWithMaxweight.Reps))
                         {
-                            await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);
+                            await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, activity.ActivityGuid, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);
                         }
                     }
                     else
-                        await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);
+                        await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, activity.ActivityGuid, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);
                 }
             }
         }
 
         private static bool IsUpdateRequired(bool hasAnyWorkouts, string workoutOwner) => hasAnyWorkouts && !_context.PersonalRecords.Where(x => x.OwnerUserName == workoutOwner).Any();
 
-        private static async Task AddAndSavePersonslRecordToDBAsync(int workoutId, int activityId, string ownerUserName, DateTime workoutDate, int reps, double weightOfExercise)
+        private static async Task AddAndSavePersonslRecordToDBAsync(int workoutId, int activityId, Guid activityGuid, string ownerUserName, DateTime workoutDate, int reps, double weightOfExercise)
         {
             await _context.PersonalRecords.AddAsync(new PersonalRecord()
             {
                 WorkoutId = workoutId,
                 ActivityId = activityId,
+                ActivityGuid = activityGuid,
                 PersonalRecordGuid = Guid.NewGuid(),
                 OwnerUserName = ownerUserName,
                 PersonalRecordDate = workoutDate,

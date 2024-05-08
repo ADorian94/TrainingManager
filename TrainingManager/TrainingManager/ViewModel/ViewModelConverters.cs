@@ -169,7 +169,7 @@ namespace TrainingManager.ViewModel
             if (value == null)
                 return false;
 
-            var collection = (ObservableCollection<PersonalRecordVM>)value;
+            var collection = (ObservableCollection<PersonalRecordCardVM>)value;
 
             return collection.Count > 0;
         }

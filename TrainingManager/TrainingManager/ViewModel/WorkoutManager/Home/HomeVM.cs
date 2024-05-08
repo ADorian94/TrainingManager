@@ -18,9 +18,9 @@ namespace TrainingManager.ViewModel
         //FIELDS
         private IProfileService _profileService;
         private byte[] _originalImage;
-        private Action<PersonalRecordVM> _recordSelection;
+        private Action<PersonalRecordCardVM> _recordSelection;
 
-        public HomeVM(IApiServices apiServices, IProfileService profileService, Action<PersonalRecordVM> recordSelection)
+        public HomeVM(IApiServices apiServices, IProfileService profileService, Action<PersonalRecordCardVM> recordSelection)
         {
             ApiServices = apiServices;
             _profileService = profileService;
@@ -49,8 +49,8 @@ namespace TrainingManager.ViewModel
         private ObservableCollection<(Muscle muscle, double weight)> _movedWeightByMuscle;
         public ObservableCollection<(Muscle muscle, double weight)> MovedWeightByMuscle { get => _movedWeightByMuscle; set { _movedWeightByMuscle = value; OnPropertyChanged(); } }
 
-        private ObservableCollection<PersonalRecordVM> _watchedPersonalRecords;
-        public ObservableCollection<PersonalRecordVM> WatchedPersonalRecords { get => _watchedPersonalRecords; set { _watchedPersonalRecords = value; OnPropertyChanged(); } }
+        private ObservableCollection<PersonalRecordCardVM> _watchedPersonalRecords;
+        public ObservableCollection<PersonalRecordCardVM> WatchedPersonalRecords { get => _watchedPersonalRecords; set { _watchedPersonalRecords = value; OnPropertyChanged(); } }
 
         //ACTIONS
         public Action<Guid> SelectPersonalRecord;
@@ -83,7 +83,7 @@ namespace TrainingManager.ViewModel
         Task.Run(async () =>
         {
             var records = await ApiServices.GetWatchedWeightActivitiesAsync();
-            WatchedPersonalRecords = new ObservableCollection<PersonalRecordVM>(records.Select(x => new PersonalRecordVM(x, _recordSelection)));
+            WatchedPersonalRecords = new ObservableCollection<PersonalRecordCardVM>(records.Select(x => new PersonalRecordCardVM(x, _recordSelection)));
             LogHandler.Instance.Nlog.Info("Personal records initialized.");
         });
 
