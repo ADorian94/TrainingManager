@@ -47,11 +47,11 @@
                 <ListView Grid.Row="2" ItemsSource="{Binding PersonalRecordHistory}" SeparatorVisibility="None" HasUnevenRows="True" SelectionMode="None" VerticalOptions="FillAndExpand" >
                     <ListView.Header>
                         <StackLayout>
-                            <Label Text="Personal record" Style="{StaticResource Title1}" />
+                            <!--<Label Text="Personal record" Style="{StaticResource Title1}" />
                             <controls:LowCardWithLabels CardMainText="Weight"
                                             CardMainEntry="{Binding SelectedActivityWeight}"
                                             CardSecondaryText="Reps"
-                                            CardSecondaryEntry="{Binding SelectedActivityReps}"/>
+                                            CardSecondaryEntry="{Binding SelectedActivityReps}"/>-->
                             <Label Text="Personal Record History" Style="{StaticResource Title1}" />
                         </StackLayout>
                     </ListView.Header>
