@@ -25,7 +25,6 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="20"/>
                 </Grid.ColumnDefinitions>
@@ -40,11 +39,11 @@
                        Style="{StaticResource CardTitle}" VerticalOptions="Center" HorizontalOptions="End"/>
                 <Label Grid.Row="0" Grid.Column="4" Text="{x:Binding Source={x:Reference this}, Path=CardSecondContent}"
                        Style="{StaticResource LowCardEntryContent}" VerticalOptions="Center" HorizontalOptions="Start"/>
-                <Label Grid.Row="0" Grid.Column="5" Text="{x:Binding Source={x:Reference this}, Path=CardThirdLabel}"
-                       Style="{StaticResource CardTitle}" VerticalOptions="Center" HorizontalOptions="End"/>
-                <Label Grid.Row="0" Grid.Column="6" Text="{x:Binding Source={x:Reference this}, Path=CardThirdContent}"
-                       Style="{StaticResource LowCardEntryContent}" VerticalOptions="Center" HorizontalOptions="Start"/>
-                <ImageButton Grid.Row="0" Grid.Column="7" Padding="0,10,0,10" BackgroundColor="Transparent"
+                <!--<Label Grid.Row="0" Grid.Column="5" Text="{x:Binding Source={x:Reference this}, Path=CardThirdLabel}"
+                       Style="{StaticResource CardTitle}" VerticalOptions="Center" HorizontalOptions="End"/>-->
+                <Label Grid.Row="0" Grid.Column="5" Text="{x:Binding Source={x:Reference this}, Path=CardThirdContent}"
+                       Style="{StaticResource LowCardEntryContent}" VerticalOptions="Center" HorizontalOptions="Center"/>
+                <ImageButton Grid.Row="0" Grid.Column="6" Padding="0,10,0,10" BackgroundColor="Transparent"
                              Source="sharp_more_vert_white_24.png" HeightRequest="20"
                              IsVisible="{x:Binding Source={x:Reference this}, Path=IsButtonVisible}"
                              Command="{x:Binding Source={x:Reference this}, Path=ButtonCommand}"
