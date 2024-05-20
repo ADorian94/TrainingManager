@@ -58,10 +58,10 @@
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <ViewCell>
-                                <controls:LowCardWithLabels CardMainText="Weight"
-                                        CardMainEntry="{Binding WeightOfPersonalRecord}"
-                                        CardSecondaryText="Reps"
-                                        CardSecondaryEntry="{Binding RepsOfPersonalRecord}"/>
+                                <controls:LowCardWithThreeLabels
+                                    CardFirstLabel="Weight" CardFirstContent="{Binding WeightOfPersonalRecord}"
+                                    CardSecondLabel="Reps" CardSecondContent="{Binding RepsOfPersonalRecord}"
+                                    CardThirdLabel="Date" CardThirdContent="{Binding PersonalRecordDate, Converter={StaticResource DateToStringConverter}}"/>
                             </ViewCell>
                         </DataTemplate>
                     </ListView.ItemTemplate>

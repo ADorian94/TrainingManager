@@ -135,4 +135,18 @@ namespace TrainingManager.View.Controls
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException("The converter is not implemeted.");
     }
+
+    public class DateToSTring : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            if (value == null)
+                return "N/A";
+
+            return ((DateTime)value).ToString("yyyy.mm.dd");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture) => throw new NotImplementedException();
+    }
+
 }

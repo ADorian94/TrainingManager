@@ -34,6 +34,9 @@
     <Compile Update="View\Charts\PersonalRecordLinearChart.xaml.cs">
       <DependentUpon>PersonalRecordLinearChart.xaml</DependentUpon>
     </Compile>
+    <Compile Update="View\Controls\LowCardWithThreeLabels.xaml.cs">
+      <DependentUpon>LowCardWithThreeLabels.xaml</DependentUpon>
+    </Compile>
     <Compile Update="View\Controls\OpenableCard.xaml.cs">
       <DependentUpon>OpenableCard.xaml</DependentUpon>
     </Compile>
