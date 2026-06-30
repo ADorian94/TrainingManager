@@ -25,7 +25,7 @@ jobs:
         run: dotnet build TrainingManager.WebApi/TrainingManager.WebApi.csproj --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish TrainingManager.WebApi/TrainingManager.WebApi.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp"
+        run: dotnet publish TrainingManager.WebApi/TrainingManager.WebApi.csproj -c Release -o "${{env.DOTNET_ROOT}}/myapp" --self-contained true -r win-x86
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
