@@ -61,6 +61,8 @@ namespace TrainingManager.WebApi
                 app.UseHsts();
             }
 
+            app.UseCookiePolicy();
+
             app.UseForwardedHeaders(new ForwardedHeadersOptions
             {
                 ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
