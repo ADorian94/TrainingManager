@@ -50,6 +50,11 @@ namespace TrainingManager.WebApi
 
                 options.User.RequireUniqueEmail = true;
             });
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -69,7 +74,6 @@ namespace TrainingManager.WebApi
             });
 
             app.UseStaticFiles();
-            app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
