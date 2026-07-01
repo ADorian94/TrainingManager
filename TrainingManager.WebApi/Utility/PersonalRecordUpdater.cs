@@ -55,22 +55,17 @@ namespace TrainingManager.WebApi.Utility
 
                     if (_context.PersonalRecords.Any(x => x.ActivityId == activity.Id))
                     {
-                        var allTimeMaxRecord = _context.PersonalRecords
+                        var record = _context.PersonalRecords
                             .Where(x => x.ActivityId == activity.Id)
                             .OrderByDescending(y => y.WeightOfPersonalRecord)
                             .FirstOrDefault();
 
-                        bool isNewWeightRecord = roundWithMaxweight.WeightOfExercise > allTimeMaxRecord.WeightOfPersonalRecord;
-
-                        var recordAtSameWeight = _context.PersonalRecords
-                            .Where(x => x.ActivityId == activity.Id && x.WeightOfPersonalRecord == roundWithMaxweight.WeightOfExercise)
-                            .OrderByDescending(y => y.RepsOfPersonalRecord)
-                            .FirstOrDefault();
-
-                        bool isNewRepsRecordAtSameWeight = recordAtSameWeight != null && recordAtSameWeight.RepsOfPersonalRecord < roundWithMaxweight.Reps;
-
-                        if (isNewWeightRecord || isNewRepsRecordAtSameWeight)
+                        if (record.WeightOfPersonalRecord < roundWithMaxweight.WeightOfExercise ||
+                            (record.WeightOfPersonalRecord == roundWithMaxweight.WeightOfExercise &&
+                            record.RepsOfPersonalRecord < roundWithMaxweight.Reps))
+                        {
                             await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, activity.ActivityGuid, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);
+                        }
                     }
                     else
                         await AddAndSavePersonslRecordToDBAsync(wrokoutId, activity.Id, activity.ActivityGuid, ownerUser, workoutDate, roundWithMaxweight.Reps, roundWithMaxweight.WeightOfExercise);

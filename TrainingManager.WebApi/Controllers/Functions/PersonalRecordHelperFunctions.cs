@@ -117,25 +117,21 @@ namespace TrainingManager.WebApi.Controllers.Functions
 
         private bool IsPersonalRecord(WeightExercise exercise, WeightActivity activity)
         {
-            if (!_context.PersonalRecords.Any(x => x.ActivityId == activity.Id))
+            if (_context.PersonalRecords.Any(x => x.ActivityId == activity.Id))
+            {
+                WeightRound maxWeightRound = GetRoundByMaxWeight(_context.WeightRounds.Where(x => x.ExerciseId == exercise.Id).ToList());
+
+                var record = _context.PersonalRecords
+                            .Where(x => x.ActivityId == activity.Id)
+                            .OrderByDescending(y => y.WeightOfPersonalRecord)
+                            .FirstOrDefault();
+
+                return record.WeightOfPersonalRecord < maxWeightRound.WeightOfExercise ||
+                       (record.WeightOfPersonalRecord == maxWeightRound.WeightOfExercise &&
+                       record.RepsOfPersonalRecord < maxWeightRound.Reps);
+            }
+            else
                 return true;
-
-            WeightRound maxWeightRound = GetRoundByMaxWeight(_context.WeightRounds.Where(x => x.ExerciseId == exercise.Id).ToList());
-
-            var allTimeMaxRecord = _context.PersonalRecords
-                        .Where(x => x.ActivityId == activity.Id)
-                        .OrderByDescending(y => y.WeightOfPersonalRecord)
-                        .FirstOrDefault();
-
-            if (maxWeightRound.WeightOfExercise > allTimeMaxRecord.WeightOfPersonalRecord)
-                return true;
-
-            var recordAtSameWeight = _context.PersonalRecords
-                        .Where(x => x.ActivityId == activity.Id && x.WeightOfPersonalRecord == maxWeightRound.WeightOfExercise)
-                        .OrderByDescending(y => y.RepsOfPersonalRecord)
-                        .FirstOrDefault();
-
-            return recordAtSameWeight != null && recordAtSameWeight.RepsOfPersonalRecord < maxWeightRound.Reps;
         }
 
         private WeightRound GetRoundByMaxWeight(IList<WeightRound> rounds)
