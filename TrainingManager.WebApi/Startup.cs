@@ -1,7 +1,5 @@
-using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -54,17 +52,6 @@ namespace TrainingManager.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.Use(async (context, next) =>
-            {
-                try { await next(); }
-                catch (Exception ex)
-                {
-                    context.Response.StatusCode = 500;
-                    context.Response.ContentType = "text/plain";
-                    await context.Response.WriteAsync(ex.ToString());
-                }
-            });
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
