@@ -59,9 +59,9 @@ namespace TrainingManager.WebApi
                 try { await next(); }
                 catch (Exception ex)
                 {
-                    context.Response.StatusCode = 200;
+                    context.Response.StatusCode = 500;
                     context.Response.ContentType = "text/plain";
-                    await context.Response.WriteAsync("DIAG_ERROR: " + ex.ToString());
+                    await context.Response.WriteAsync(ex.ToString());
                 }
             });
 
