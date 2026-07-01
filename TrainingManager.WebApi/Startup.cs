@@ -27,10 +27,13 @@ namespace TrainingManager.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
 
             services.AddDbContext<TrainingManagerContext>(options =>
-                options.UseSqlite("Data Source=TrainingManager.db"), ServiceLifetime.Scoped);
+                options.UseSqlite(
+                    Configuration.GetConnectionString("DefaultConnection")
+                    ?? "Data Source=TrainingManager.db"),
+                ServiceLifetime.Scoped);
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TrainingManagerContext>()
