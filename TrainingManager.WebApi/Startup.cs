@@ -1,16 +1,18 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpOverrides;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using TrainingManager.WebApi.Controllers.Functions;
-using TrainingManager.WebApi.Controllers.Functions.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using TrainingManager.WebApi.Data;
 using TrainingManager.WebApi.Model;
+using Microsoft.AspNetCore.Identity;
+
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using TrainingManager.WebApi.Utility;
+using TrainingManager.WebApi.Controllers.Functions;
+using TrainingManager.WebApi.Controllers.Functions.Interfaces;
 
 namespace TrainingManager.WebApi
 {
@@ -23,13 +25,15 @@ namespace TrainingManager.WebApi
 
         public IConfiguration Configuration { get; }
 
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddDbContext<TrainingManagerContext>(options =>
-                options.UseSqlite("Data Source=TrainingManager.db"), ServiceLifetime.Scoped);
+            //adatábzis beállítása
+            services.AddDbContext<TrainingManagerContext>(options => options.UseSqlite("Data Source=TrainingManager.db"), ServiceLifetime.Scoped);
 
+            //autentikáció beállítása
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<TrainingManagerContext>()
                 .AddDefaultTokenProviders();
@@ -39,6 +43,7 @@ namespace TrainingManager.WebApi
 
             services.Configure<IdentityOptions>(options =>
             {
+                // Jelszó komplexitására vonatkozó konfiguráció
                 options.Password.RequireDigit = true;
                 options.Password.RequiredLength = 8;
                 options.Password.RequireNonAlphanumeric = false;
@@ -46,11 +51,13 @@ namespace TrainingManager.WebApi
                 options.Password.RequireLowercase = false;
                 options.Password.RequiredUniqueChars = 3;
 
+                // Felhasználókezelésre vonatkozó konfiguráció
                 options.User.RequireUniqueEmail = true;
             });
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -70,10 +77,8 @@ namespace TrainingManager.WebApi
 
             app.UseStaticFiles();
             app.UseHttpsRedirection();
-            app.UseRouting();
             app.UseAuthentication();
-            app.UseAuthorization();
-            app.UseEndpoints(endpoints => endpoints.MapControllers());
+            app.UseMvc();
 
             PersonalRecordUpdater.Update(app);
         }
