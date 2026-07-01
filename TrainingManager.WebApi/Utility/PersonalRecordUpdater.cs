@@ -15,21 +15,14 @@ namespace TrainingManager.WebApi.Utility
 
         public async static void Update(IApplicationBuilder builder)
         {
-            try
-            {
-                var scope = builder.ApplicationServices.CreateScope();
-                _context = scope.ServiceProvider.GetRequiredService<TrainingManagerContext>();
-                var workoutsByUsers = _context.WeightWorkouts.GroupBy(x => x.OwnerUserName);
+            var scope = builder.ApplicationServices.CreateScope();
+            _context = scope.ServiceProvider.GetRequiredService<TrainingManagerContext>();
+            var workoutsByUsers = _context.WeightWorkouts.GroupBy(x => x.OwnerUserName);
 
-                foreach (var workoutsByUser in workoutsByUsers)
-                {
-                    var workouts = workoutsByUser.OrderBy(x => x.WorkoutDate);
-                    await UpdateUsersPersonalRecords(workouts, workoutsByUser.Key);
-                }
-            }
-            catch (Exception ex)
+            foreach (var workoutsByUser in workoutsByUsers)
             {
-                Console.WriteLine($"PersonalRecordUpdater.Update failed: {ex.Message}");
+                var workouts = workoutsByUser.OrderBy(x => x.WorkoutDate);
+                await UpdateUsersPersonalRecords(workouts, workoutsByUser.Key);
             }
         }
 

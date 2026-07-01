@@ -54,6 +54,17 @@ namespace TrainingManager.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.Use(async (context, next) =>
+            {
+                try { await next(); }
+                catch (Exception ex)
+                {
+                    context.Response.StatusCode = 200;
+                    context.Response.ContentType = "text/plain";
+                    await context.Response.WriteAsync("DIAG_ERROR: " + ex.ToString());
+                }
+            });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -74,12 +85,6 @@ namespace TrainingManager.WebApi
             app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints => endpoints.MapControllers());
-
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = scope.ServiceProvider.GetRequiredService<TrainingManagerContext>();
-                dbContext.Database.Migrate();
-            }
 
             PersonalRecordUpdater.Update(app);
         }
